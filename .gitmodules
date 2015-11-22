@@ -1,3 +1,4 @@
+# https://git-scm.com/book/en/v2/Git-Tools-Submodules
 [submodule "src/libgraphqlparser"]
 	path = src/libgraphqlparser
 	url = https://github.com/graphql/libgraphqlparser
