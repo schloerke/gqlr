@@ -12,3 +12,8 @@
 vignettes/*.html
 vignettes/*.pdf
 .Rproj.user
+
+
+# c files
+src/*.so
+src/*.o
