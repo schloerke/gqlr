@@ -1,0 +1,21 @@
+Package: graphqlr
+Title: GraphQL in R
+Version: 0.0.0.9000
+Authors@R: person("Barret", "Schloerke", email = "schloerke@gmail.com", role = c("aut", "cre"))
+Description: Implementation of GraphQL, a query language created by Facebook for describing data requirements on complex application data models.
+Depends: R (>= 3.2.2)
+License: MIT
+LazyData: true
+Imports:
+  stringr,
+  base,
+  magrittr,
+  rjson,
+  Rcpp
+Suggests:
+  roxygen2 (>= 5.0.0),
+  testthat
+LinkingTo:
+  Rcpp
+Roxygen: list(wrap = FALSE)
+RoxygenNote: 5.0.0
