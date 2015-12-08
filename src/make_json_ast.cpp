@@ -12,9 +12,6 @@
 #include <AstNode.h>
 #include <GraphQLParser.h>
 #include <c/GraphQLAstToJSON.h>
-// # include "libgraphqlparser/AstNode.h"
-// # include "libgraphqlparser/GraphQLParser.h"
-// # include "libgraphqlparser/c/GraphQLAstToJSON.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -26,7 +23,6 @@ using std::endl;
 using std::free;
 
 
-// int main(int argc, char **argv) {
 // [[Rcpp::export]]
 Rcpp::CharacterVector make_json_ast(Rcpp::String queryString) {
   const char *error;
