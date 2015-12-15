@@ -24,6 +24,7 @@ language_ast_type <- (function() {
 
     ret
   }
+
   cat_spaces <- function(spaces, ...) {
     cat(rep(" ", spaces), ..., "\n", sep = "")
   }
