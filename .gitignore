@@ -14,6 +14,10 @@ vignettes/*.pdf
 .Rproj.user
 
 
+# npm files
+node_modules/
+JS/build.js
+
 # c files
 src/*.so
 src/*.o
