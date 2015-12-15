@@ -10,6 +10,7 @@ Imports:
   stringr,
   base,
   magrittr,
+  memoise,
   rjson,
   Rcpp
 Suggests:
