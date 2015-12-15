@@ -22,7 +22,11 @@ test_string <- function(pos = 0) {
     # has error. (expected)
     "8" =   " {\n    hero {\n      id\n      name\n      friends {\n        name\n      }\n    }\n  } query HeroNameAndFriendsQuery2 {\n    hero {\n      id\n      name\n      friends {\n        name\n      }\n    }\n  }",
 
-    "{\n    name\n    relationship {\n      name\n    }\n  }"
+    "{\n    name\n    relationship {\n      name\n    }\n  }",
+
+    "kitchen" = "query queryName($foo: ComplexType, $site: Site = MOBILE) {\n  whoever123is: node(id: [123, 456]) {\n    id ,\n    ... on User @defer {\n      field2 {\n        id ,\n        alias: field1(first:10, after:$foo,) @include(if: $foo) {\n          id,\n          ...frag\n        }\n      }\n    }\n    ... @skip(unless: $foo) {\n      id\n    }\n    ... {\n      id\n    }\n  }\n}\n\nmutation likeStory {\n  like(story: 123) @defer {\n    story {\n      id\n    }\n  }\n}\n\nsubscription StoryLikeSubscription($input: StoryLikeSubscribeInput) {\n  storyLikeSubscribe(input: $input) {\n    story {\n      likers {\n        count\n      }\n      likeSentence {\n        text\n      }\n    }\n  }\n}\n\nfragment frag on Friend {\n  foo(size: $size, bar: $b, obj: {key: \"value\"})\n}\n\n{\n  unnamed(truthy: true, falsey: false),\n  query\n}"
+
+
   )
 }
 
