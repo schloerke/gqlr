@@ -46,14 +46,6 @@ build_js <- function(force = FALSE) {
 }
 # build_js()
 
-eval_json <- function(str = test_string()) {
-  ct <- javascript_context()
-  ret <- ct$call("stringify", str)
-  rjson::fromJSON(ret)
-}
-
-# eval_json()
-# eval_json(test_string("kitchen"))
 
 
 #' @export
@@ -67,3 +59,34 @@ javascript_context <- #memoise::memoise(
     ct
   }
 #)
+
+
+# load_all(); test_string() %>% eval_json()
+clean_json <- function(obj, ...) {
+  UseMethod("clean_json")
+}
+
+clean_json.list <- function(obj, ...) {
+  # remove all "loc" variables.  take up space
+  obj$loc <- NULL
+  kind <- obj$kind
+  ret <- lapply(obj, clean_json)
+  if (! is.null(kind)) {
+    class(ret) <- kind
+  }
+  ret
+}
+clean_json.default <- function(obj, ...) {
+  obj
+}
+
+eval_json <- function(str = test_string()) {
+  ct <- javascript_context()
+  ct$call("stringify", str) %>%
+    rjson::fromJSON() %>%
+    clean_json()
+}
+
+
+# eval_json()
+# eval_json(test_string("kitchen"))
