@@ -45,5 +45,114 @@ GetFieldEntry <- function(objectType, object, fields) {
 
 
 GetFieldTypeFromObjectType <- function(objectType, firstField) {
-  
+  # Call the method provided by the type system for determining the field type on a given object type.
+
+}
+
+
+ResolveFieldOnObject <- function(objectType, object, firstField) {
+  # Call the method provided by the type system for determining the resolution of a field on a given object.
+}
+
+MergeSelectionSets <- function(fields) {
+  # Let {selectionSet} be an empty list.
+
+  # For each {field} in {fields}:
+  selectionSet <- lapply(fields, function(field) {
+    # Let {fieldSelectionSet} be the selection set of {field}.
+    fieldSelectionSet <- field$selectionSet
+    # If {fieldSelectionSet} is null or empty, continue to the next field.
+    if (is.null(fieldSelectionSet)) { return(NULL) }
+    if (length(fieldSelectionSet) == 0) { return(NULL) }
+    # Append all selections in {fieldSelectionSet} to {selectionSet}.
+    fieldSelectionSet
+  })
+
+  # TODO flatten selectionSet properly
+
+  # Return {selectionSet}.
+  return(selectionSet)
+}
+
+
+is_non_null_type <- function(fieldType) {
+  stop("TODO implement")
+}
+is_list_type <- function(fieldType) {
+  stop("TODO implement")
+}
+
+CompleteValue <- function(fieldType, result, subSelectionSet) {
+  # If the {fieldType} is a Non-Null type:
+  if (is_non_null_type(fieldType)) {
+    # Let {innerType} be the inner type of {fieldType}.
+    # TODO make this work
+    innterType <- fieldType$innerType
+
+    # Let {completedResult} be the result of calling {CompleteValue(innerType, result)}.
+    completedResult <- CompleteValue(innerType, result)
+
+    # If {completedResult} is {null}, throw a field error.
+    if (is.null(completedResult)) {
+      stop("Non-Null element returned as NULL")
+    }
+
+    # Return {completedResult}.
+    return(completedResult)
+  }
+
+  # If {result} is {null} or a value similar to {null} such as {undefined} or {NaN}, return {null}.
+  if (is.null(result) || is.na(result) || length(result) == 0) {
+    return(NULL)
+  }
+
+  # If {fieldType} is a List type:
+  if (is_list_type(fieldType)) {
+    # If {result} is not a collection of values, throw a field error.
+    if (!is.list(result)) {
+      stop("List Type element returned as non list")
+    }
+    # Let {innerType} be the inner type of {fieldType}.
+    # TODO make this work
+    innerType <- fieldType$innerType
+
+    # Return a list where each item is the result of calling {CompleteValue(innerType, resultItem)}, where {resultItem} is each item in {result}.
+    res <- lapply(result, function(resultItem){
+      CompleteValue(innerType, resultItem)
+    })
+    return(res)
+  }
+
+  # If {fieldType} is a Scalar or Enum type:
+  if (is_enum_or_scalar_type(fieldType)) {
+    # Return the result of "coercing" {result}, ensuring it is a legal value of {fieldType}, otherwise {null}.
+    # TODO implement
+    return(stop("TODO implement"))
+  }
+
+  # If {fieldType} is an Object, Interface, or Union type:
+  if (is_object_interface_or_union_type(fieldType)) {
+    # If {fieldType} is an Object type.
+    if (is_object_type(fieldType)) {
+      # Let {objectType} be {fieldType}.
+      objectType <- fieldType
+
+    # Otherwise if {fieldType} is an Interface or Union type.
+    } else if (is_interface_or_union_type(fieldType)) {
+      # Let {objectType} be ResolveAbstractType(fieldType, result).
+      objectType <- ResolveAbstractType(fieldType, result)
+    }
+
+    # Return the result of evaluating {subSelectionSet} on {objectType} normally.
+    res <- eval_on_object_type(objectType, subSelectionSet)
+    return(stop("TODO implement"))
+  }
+
+  stop("Unknown field type reached!")
+}
+
+
+ResolveAbstractType <- function(abstractType, objectValue) {
+  # Return the result of calling the internal method provided by the type system for determining the Object type of {abstractType} given the value { objectValue }.
+  stop("TODO implement")
 }
