@@ -1,4 +1,3 @@
-#' @include wrappers.R
 
 # _queryType: GraphQLObjectType;
 # _mutationType: ?GraphQLObjectType;
@@ -135,7 +134,7 @@ check_if_gqlr_object <- function(x, kind = class(x)) {
 
 #' Generic method to parse graphql json objects
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' gqlr_parse(test_json("simple-film-schema"))
 gqlr_parse <- function(obj, ...) {
   if (is.null(obj)) {
@@ -153,7 +152,7 @@ gqlr_parse.default <- function(obj, ...) {
 
 #' parse graphql Document
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' gqlr_parse(test_json("simple-film-schema"))
 gqlr_parse.Document <- function(obj, ...) {
   # kind = "Document",
@@ -168,7 +167,7 @@ gqlr_parse.Document <- function(obj, ...) {
 
 #' parse graphql Name
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' nameObj <- test_json("simple-film-schema")$definitions[[1]]$name
 #' gqlr_parse(nameObj)
 gqlr_parse.Name <- function(obj, ...) {
@@ -183,7 +182,7 @@ gqlr_parse.Name <- function(obj, ...) {
 
 #' parse graphql EnumTypeDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' enumObj <- test_json("kitchen_schema")$definitions[[5]]
 #' gqlr_parse(enumObj)
 gqlr_parse.EnumTypeDefinition <- function(obj, ...) {
@@ -201,7 +200,7 @@ gqlr_parse.EnumTypeDefinition <- function(obj, ...) {
 
 #' parse graphql EnumValueDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' enumValueObj <- test_json("kitchen_schema")$definitions[[5]]$values[[1]]
 #' gqlr_parse(enumValueObj)
 gqlr_parse.EnumValueDefinition <- function(x) {
@@ -217,7 +216,7 @@ gqlr_parse.EnumValueDefinition <- function(x) {
 
 #' parse graphql InputObjectTypeDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' inputObj <- test_json("kitchen_schema")$definitions[[6]]
 #' gqlr_parse(inputObj)
 gqlr_parse.InputObjectTypeDefinition <- function(x) {
@@ -238,7 +237,7 @@ gqlr_parse.InputObjectTypeDefinition <- function(x) {
 
 #' parse graphql Type NamedType
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' namedTypeObj <- test_json("simple-film-schema")$definitions[[1]]$fields[[1]]$type
 #' gqlr_parse(namedTypeObj)
 gqlr_parse.NamedType <- function(obj, ...) {
@@ -255,7 +254,7 @@ gqlr_parse.NamedType <- function(obj, ...) {
 
 #' parse graphql Type NonNullType
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' nonNullObj <- test_json("simple-film-schema")$definitions[[1]]$fields[[2]]$type
 #' gqlr_parse(nonNullObj)
 gqlr_parse.NonNullType <- function(obj, ...) {
@@ -269,7 +268,7 @@ gqlr_parse.NonNullType <- function(obj, ...) {
 
 #' parse graphql Type NonNullType
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' listObj <- test_json("simple-film-schema")$definitions[[1]]$fields[[3]]$type
 #' gqlr_parse(listObj)
 gqlr_parse.ListType <- function(obj, ...) {
@@ -292,7 +291,7 @@ gqlr_parse.ListType <- function(obj, ...) {
 
 #' parse graphql Definition UnionTypeDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' unionObj <- test_json("kitchen_schema")$definitions[[3]]
 #' gqlr_parse(unionObj)
 gqlr_parse.UnionTypeDefinition <- function(obj, ...) {
@@ -309,7 +308,7 @@ gqlr_parse.UnionTypeDefinition <- function(obj, ...) {
 
 #' parse graphql Definition ScalarTypeDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' scalarObj <- test_json("kitchen_schema")$definitions[[4]]
 #' gqlr_parse(scalarObj)
 gqlr_parse.ScalarTypeDefinition <- function(obj, ...) {
@@ -324,7 +323,7 @@ gqlr_parse.ScalarTypeDefinition <- function(obj, ...) {
 
 #' parse graphql Definition ObjectTypeDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' objObj <- test_json("kitchen_schema")$definitions[[1]]
 #' gqlr_parse(objObj)
 gqlr_parse.ObjectTypeDefinition <- function(obj, ...) {
@@ -344,7 +343,7 @@ gqlr_parse.ObjectTypeDefinition <- function(obj, ...) {
 
 #' parse graphql Definition FieldDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' objObj <- test_json("kitchen_schema")$definitions[[1]]
 #' fieldObj <- objObj$fields[[1]]
 #' gqlr_parse(fieldObj)
@@ -365,7 +364,7 @@ gqlr_parse.FieldDefinition <- function(obj, ...) {
 
 #' parse graphql Definition InputValueDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' inputValObj <- test_json("kitchen_schema")$definitions[[6]]$fields[[1]]
 #' gqlr_parse(inputValObj)
 gqlr_parse.InputValueDefinition <- function(obj, ...) {
@@ -387,7 +386,7 @@ gqlr_parse.InputValueDefinition <- function(obj, ...) {
 
 #' parse graphql Definition InterfaceTypeDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' interfaceObj <- test_json("kitchen_schema")$definitions[[2]]
 #' gqlr_parse(interfaceObj)
 gqlr_parse.InterfaceTypeDefinition <- function(obj, ...) {
@@ -405,7 +404,7 @@ gqlr_parse.InterfaceTypeDefinition <- function(obj, ...) {
 
 #' parse graphql Definition TypeExtensionDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' typeExtObj <- test_json("kitchen_schema")$definitions[[7]]
 #' gqlr_parse(typeExtObj)
 gqlr_parse.TypeExtensionDefinition <- function(obj, ...) {
@@ -485,7 +484,7 @@ gqlr_parse.TypeExtensionDefinition <- function(obj, ...) {
 # Query
 #' parse graphql Definition OperationDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' typeExtObj <- test_json("kitchen_schema")$definitions[[7]]
 #' gqlr_parse(typeExtObj)
 gqlr_parse.OperationDefinition <- function(obj, ...) {
@@ -511,7 +510,7 @@ gqlr_parse.OperationDefinition <- function(obj, ...) {
 
 #' parse graphql Definition VariableDefinition
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' typeExtObj <- test_json("kitchen_schema")$definitions[[7]]
 #' gqlr_parse(typeExtObj)
 gqlr_parse.VariableDefinition <- function(obj, ...) {
@@ -531,7 +530,7 @@ gqlr_parse.VariableDefinition <- function(obj, ...) {
 
 #' parse graphql Variable
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' typeExtObj <- test_json("kitchen_schema")$definitions[[7]]
 #' gqlr_parse(typeExtObj)
 gqlr_parse.Variable <- function(obj, ...) {
@@ -544,7 +543,7 @@ gqlr_parse.Variable <- function(obj, ...) {
 
 #' parse graphql EnumValue
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' typeExtObj <- test_json("kitchen_schema")$definitions[[7]]
 #' gqlr_parse(typeExtObj)
 gqlr_parse.EnumValue <- function(obj, ...) {
@@ -556,7 +555,7 @@ gqlr_parse.EnumValue <- function(obj, ...) {
 
 #' parse graphql SelectionSet
 #' @template gqlr_parse_args
-#' @example
+#' @examples
 #' typeExtObj <- test_json("kitchen_schema")$definitions[[7]]
 #' gqlr_parse(typeExtObj)
 gqlr_parse.SelectionSet <- function(obj, ...) {

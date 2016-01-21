@@ -15,7 +15,7 @@
 #'
 #' Note: Numeric integer values larger than 32-bit should either use String or a custom-defined Scalar type, as not all platforms and transports support encoding integer numbers larger than 32-bit.
 #' @param x variable in question
-#' @url https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#int
+#' @seealso \url{https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#int}
 #' @rdname scalar_intput_int
 #' @export
 scalar_input_int <- (function() {
@@ -54,7 +54,7 @@ scalar_result_int <- scalar_input_int
 #'
 #' When expected as an input type, both integer and float input values are accepted. Integer input values are coerced to Float by adding an empty fractional part, for example 1.0 for the integer input value 1. All other input values, including strings with numeric content, must raise a query error indicating an incorrect type. If the integer input value represents a value not representable by IEEE 754, a query error should be raised.
 #' @param x variable in question
-#' @url https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#float
+#' @seealso \url{https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#float}
 #' @rdname scalar_intput_float
 #' @export
 scalar_input_float <- function(x) {
@@ -83,7 +83,7 @@ scalar_result_float <- scalar_input_float
 #' Input Coercion
 #'
 #' When expected as an input type, only valid UTF-8 string input values are accepted. All other input values must raise a query error indicating an incorrect type.
-#' @url https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#string
+#' @seealso \url{https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#string}
 #' @param x varible in question
 #' @rdname scalar_intput_string
 #' @export
@@ -116,7 +116,7 @@ scalar_result_string <- scalar_input_string
 #'
 #' When expected as an input type, only boolean input values are accepted. All other input values must raise a query error indicating an incorrect type.
 #'
-#' @url https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#boolean
+#' @seealso \url{https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#boolean}
 #' @param x variable in question
 #' @rdname scalar_input_boolean
 #' @export
@@ -148,7 +148,7 @@ scalar_result_boolean <- scalar_input_boolean
 #' Input Coercion
 #'
 #' When expected as an input type, any string (such as "4") or integer (such as 4) input value should be coerced to ID as appropriate for the ID formats a given GraphQL server expects. Any other input value, including float input values (such as 4.0), must raise a query error indicating an incorrect type.
-#' @url https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#id
+#' @seealso \url{https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#id}
 #' @rdname scalar_input_id
 #' @export
 scalar_input_id <- function(x) {

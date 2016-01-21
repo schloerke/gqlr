@@ -17,7 +17,7 @@
 #' GraphQL has a constant literal to represent enum input values. GraphQL string literals must not be accepted as an enum input and instead raise a query error.
 #'
 #' Query variable transport serializations which have a different representation for non-string symbolic values (for example, EDN) should only allow such values as enum input values. Otherwise, for most transport serializations that do not, strings may be interpreted as the enum input value with the same name.
-#' @url https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#enums
+#' @seealso \url{https://github.com/facebook/graphql/blob/master/spec/Section%203%20--%20Type%20System.md#enums}
 schema_enum <- function(values) {
 
   result_coercion <- function(value) {
