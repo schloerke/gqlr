@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+man-roxygen
+\.git
+\.DS_Store
+^node_modules
