@@ -522,7 +522,7 @@ gqlr_init_schema <- function() {
 #' @param obj parsed object to add to the schemaObj
 #' @examples
 #' defs <- test_json("kitchen_schema")$definitions
-#' cat(test_string("kitchen_schema"))
+#' cat(test_string("kitchen_schema"), "\n")
 #' schemaObj <- gqlr_init_schema() %>%
 #'   gqlr_add_to_schema(gqlr_parse(defs[[1]])) %>%
 #'   gqlr_add_to_schema(gqlr_parse(defs[[2]])) %>%
@@ -643,6 +643,26 @@ gqlr_validate_schema <- function(schemaObj) {
   schemaObj$interfaces <- NULL
 
   schemaObj$isDone <- TRUE
+  schemaObj
+}
+
+
+
+#' kitchenSchemaJson <- test_json("kitchen_schema")
+#' cat(test_string("kitchen_schema"), "\n")
+#' schemaObj <- gqlr_validate_json(kitchenSchemaJson)
+#' str(schemaObj, 3)
+gqlr_validate_json <- function(jsonObj) {
+  check_if_gqlr_object(jsonObj, "Document")
+
+  parsedObj <- gqlr_parse(jsonObj)
+  defs <- parsedObj$definitions
+
+  schemaObj <- gqlr_init_schema()
+  for (i in seq_along(defs)) {
+    schemaObj <- gqlr_add_to_schema(schemaObj, defs[[i]])
+  }
+  schemaObj <- gqlr_validate_schema(schemaObj)
   schemaObj
 }
 
