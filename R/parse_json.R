@@ -115,6 +115,7 @@ gql_type_input_obect <- function() {
 #' formal function to make sure all of the objects are gqlr objects
 check_if_gqlr_object <- function(x, kind = class(x)) {
   if (!is.list(x)) {
+    cat("this object is not a list. look at it\n")
     print(x)
     browser()
     stop("object is not a list")
@@ -144,6 +145,49 @@ gqlr_parse <- function(obj, ...) {
   UseMethod("gqlr_parse")
 }
 
+u_na <- unlist_and_replace_null_with_na <- function(x) {
+  isNull <- lapply(x, is.null) %>% unlist()
+  x[isNull] <- NA
+  unlist(x)
+}
+
+
+argument_mat_from_input_value_definitions <- function(arguments) {
+  fieldKeys = lapply(arguments, "[[", "key") %>% unlist()
+  types = lapply(arguments, "[[", "type")
+  defaultValues = lapply(arguments, "[[", "defaultValue")
+
+  data.frame(
+    keys = fieldKeys,
+    isNonNull = lapply(types, "[[", "isNonNull") %>% u_na(),
+    isList = lapply(types, "[[", "isList") %>% u_na(),
+    type = lapply(types, "[[", "type") %>% u_na(),
+    defaultValue = lapply(defaultValues, "[[", "value") %>% u_na(),
+    defaultValueKind = lapply(defaultValues, "[[", "kind") %>% u_na()
+  )
+}
+
+
+field_arguments_and_types = function(fields) {
+  fieldNames <- lapply(fields, "[[", "name") %>% unlist()
+
+  fieldTypes <- lapply(fields, "[[", "type")
+  names(fieldTypes) <- fieldNames
+  fieldArguments <- lapply(fields, "[[", "arguments")
+  names(fieldArguments) <- fieldNames
+
+  list(
+    types = fieldTypes,
+    arguments = fieldArguments
+  )
+}
+
+
+
+
+
+
+
 #' default method to help with implementing new types
 gqlr_parse.default <- function(obj, ...) {
   str(obj, 3)
@@ -151,6 +195,12 @@ gqlr_parse.default <- function(obj, ...) {
 }
 
 #' parse graphql Document
+#'
+#' Evaluating requests
+#'
+#' To evaluate a request, the executor must have a parsed Document (as defined in the “Query Language” part of this spec) and a selected operation name to run if the document defines multiple operations.
+#'
+#' The executor should find the Operation in the Document with the given operation name. If no such operation exists, the executor should throw an error. If the operation is found, then the result of evaluating the request should be the result of evaluating the operation according to the “Evaluating operations” section.
 #' @template gqlr_parse_args
 #' @examples
 #' gqlr_parse(test_json("simple-film-schema"))
@@ -158,6 +208,11 @@ gqlr_parse.Document <- function(obj, ...) {
   # kind = "Document",
   # loc = "?Location",
   # definitions = "array_Definition"
+
+  if (length(obj$definitions) == 0) {
+    print(obj)
+    stop("no definitions found in Document object")
+  }
 
   list(
     "_kind" = "Document",
@@ -191,9 +246,11 @@ gqlr_parse.EnumTypeDefinition <- function(obj, ...) {
   # name   = "Name",
   # values = "[EnumValueDefinition]"
 
+  name = gqlr_parse(obj$name)
   list(
     "_kind" = "EnumTypeDefinition",
-    key = gqlr_parse(obj$name),
+    name = name,
+    key = name,
     values = lapply(obj$values, gqlr_parse) %>% unlist()
   )
 }
@@ -224,10 +281,14 @@ gqlr_parse.InputObjectTypeDefinition <- function(x) {
   # loc    = "?Location",
   # name   = "Name",
   # fields = "[InputValueDefinition]"
+
+  fields = lapply(x$fields, gqlr_parse)
+
   list(
     "_kind" = "InputObjectTypeDefinition",
     name = gqlr_parse(x$name),
-    fields = lapply(x$fields, gqlr_parse)
+    # fields = fields,
+    fieldMat = argument_mat_from_input_value_definitions(fields)
   )
 }
 
@@ -333,11 +394,15 @@ gqlr_parse.ObjectTypeDefinition <- function(obj, ...) {
   # interfaces = "?[NamedType]",
   # fields     = "[FieldDefinition]"
 
+  fields <- lapply(obj$fields, gqlr_parse)
+  fieldTypeArgList <- field_arguments_and_types(fields)
+
   list(
     "_kind" = "ObjectTypeDefinition",
     name = gqlr_parse(obj$name),
     interfaces = lapply(obj$interfaces, gqlr_parse),
-    fields = lapply(obj$fields, gqlr_parse)
+    fieldTypes = fieldTypeArgList$types,
+    fieldArguments = fieldTypeArgList$arguments
   )
 }
 
@@ -354,11 +419,13 @@ gqlr_parse.FieldDefinition <- function(obj, ...) {
   # arguments = "[InputValueDefinition]",
   # type      = "Type"
 
+  inputValuesDefs <- lapply(obj$arguments, gqlr_parse)
+
   list(
     "_kind" = "FieldDefinition",
     name = gqlr_parse(obj$name),
     type = gqlr_parse(obj$type),
-    arguments = lapply(obj$arguments, gqlr_parse)
+    arguments = argument_mat_from_input_value_definitions(inputValuesDefs)
   )
 }
 
@@ -375,12 +442,14 @@ gqlr_parse.InputValueDefinition <- function(obj, ...) {
   # defaultValue = "?Value"
 
   if (length(obj$arguments) > 0) {
+    cat("this obj has arguments. look at it")
     browser()
   }
   list(
     "_kind" = "InputValueDefinition",
     key = gqlr_parse(obj$name),
-    type = gqlr_parse(obj$type)
+    type = gqlr_parse(obj$type),
+    defaultValue = gqlr_parse(obj$defaultValue)
   )
 }
 
@@ -395,10 +464,14 @@ gqlr_parse.InterfaceTypeDefinition <- function(obj, ...) {
   # name   = "Name",
   # fields = "[FieldDefinition]"
 
+  fields <- lapply(obj$fields, gqlr_parse)
+  fieldTypeArgList <- field_arguments_and_types(fields)
+
   list(
     "_kind" = "InterfaceTypeDefinition",
     name = gqlr_parse(obj$name),
-    fields = lapply(obj$fields, gqlr_parse)
+    fieldTypes = fieldTypeArgList$types,
+    fieldArguments = fieldTypeArgList$arguments
   )
 }
 
@@ -420,6 +493,158 @@ gqlr_parse.TypeExtensionDefinition <- function(obj, ...) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+gqlr_init_schema <- function() {
+  list(
+    isDone = FALSE,
+    objects = list(),
+    interfaces = list(),
+    inputs = list()
+  )
+}
+
+
+#' Add item to schema
+#'
+#' @param schemaObj schema object to add to
+#' @param obj parsed object to add to the schemaObj
+#' @examples
+#' defs <- test_json("kitchen_schema")$definitions
+#' cat(test_string("kitchen_schema"))
+#' schemaObj <- gqlr_init_schema() %>%
+#'   gqlr_add_to_schema(gqlr_parse(defs[[1]])) %>%
+#'   gqlr_add_to_schema(gqlr_parse(defs[[2]])) %>%
+#'   gqlr_add_to_schema(gqlr_parse(defs[[3]])) %>%
+#'   gqlr_add_to_schema(gqlr_parse(defs[[4]])) %>%
+#'   gqlr_add_to_schema(gqlr_parse(defs[[5]])) %>%
+#'   gqlr_add_to_schema(gqlr_parse(defs[[6]])) %>%
+#'   gqlr_add_to_schema(gqlr_parse(defs[[7]])) %>%
+#'   gqlr_validate_schema()
+#' str(schemaObj, 3)
+gqlr_add_to_schema <- function(schemaObj, obj) {
+
+  schemaObj$isDone <- FALSE
+
+  groups = list(
+    "ObjectTypeDefinition" = "objects",
+    "InterfaceTypeDefinition" = "interfaces",
+    "UnionTypeDefinition" = "objects",
+    "ScalarTypeDefinition" = "objects",
+    "EnumTypeDefinition" = "objects",
+    "InputObjectTypeDefinition" = "inputs"
+  )
+
+  objKind = obj[["_kind"]]
+  objName = obj[["name"]]
+  objGroup = groups[[objKind]]
+
+  if (objKind != "TypeExtensionDefinition") {
+    if (is.null(objGroup)) {
+      print(obj)
+      stop0("Unknown object type requested to be added to schema. Type: ", objKind)
+    }
+    if ( !is.null(schemaObj[[objGroup]][[objName]])) {
+      print(schemaObj)
+      cat('\n')
+      print(obj)
+      stop0(objKind, " already defined. ", objKind, ": ", objName)
+    }
+
+    schemaObj[[objGroup]][[objName]] <- obj
+  } else {
+
+    extObj <- obj$definition
+    extObjName <- extObj$name
+
+    isInterface <- extObjName %in% names(schemaObj$interfaces)
+    isObject <- extObjName %in% names(schemaObj$objects)
+
+    extObjType <- NULL
+    if (isInterface && isObject) {
+      print(obj)
+      stop0("object with name: ", extObjName, " can not be extended as it is both an interface and an object")
+    } else if (isInterface) {
+      extObjType <- "interfaces"
+    } else if (isObject) {
+      extObjType <- "objects"
+    } else {
+      print(obj)
+      stop0("object with name: ", extObjName, " can not be extended as it does not exist")
+    }
+
+    extObjFieldNames <- extObj$fieldTypeMat$name
+    originalObject <- schemaObj[[extObjType]][[extObjName]]
+    objFieldNames <- originalObject$fieldMat$name
+    if (any(extObjFieldNames %in% objFieldNames)) {
+      print(obj)
+      stop0("object with name: ", extObjName, " can not stomp prior names")
+    }
+
+    originalObject$fieldTypes <- append(originalObject$fieldTypes, extObj$fieldTypes)
+    originalObject$fieldArguments <- append(originalObject$fieldArguments, extObj$fieldArguments)
+
+    schemaObj[[extObjType]][[extObjName]] <- originalObject
+  }
+
+  schemaObj
+}
+
+
+gqlr_validate_schema <- function(schemaObj) {
+  # get the names for each group
+  schemaNames <- lapply(schemaObj, names)
+
+  allNames <- unlist(schemaNames)
+  # make sure none of the names are duplicated
+  if (any(isDuplicated <- duplicated(allNames))) {
+    duplicatedNames <- allNames[isDuplicated]
+    print(duplicatedNames)
+    stop0("duplicated names are above.  Schema names may only be supplied once")
+  }
+
+  interfaceNames <- schemaNames$interfaces
+  # for every schema object
+  schemaObj$objects <- lapply(schemaObj$objects, function(objectObj) {
+    # for each interface of the object
+    lapply(objectObj$interfaces, function(objectInterfaceObj) {
+      interfaceType <- objectInterfaceObj$type
+      # make sure the interface exists
+      if (!(interfaceType %in% interfaceNames)) {
+        print(objectObj)
+        stop0("Schema object '", objectObj$name, "' is trying to implement a missing interface '", interfaceType, "'")
+      }
+
+      # for each field of the interface, make sure it's added or stomped
+      interfaceObj <- schemaObj$interfaces[[interfaceType]]
+      for (name in names(interfaceObj$fieldTypes)) {
+        # if the field doesn't exist, add it
+        if (is.null(objectObj$fieldTypes[[name]])) {
+          objectObj$fieldTypes[[name]] <<- interfaceObj$fieldTypes[[name]]
+          objectObj$fieldArguments[[name]] <<- interfaceObj$fieldArguments[[name]]
+        }
+      }
+    })
+
+    objectObj
+  })
+
+  schemaObj$interfaces <- NULL
+
+  schemaObj$isDone <- TRUE
+  schemaObj
+}
 
 
 
@@ -541,16 +766,51 @@ gqlr_parse.Variable <- function(obj, ...) {
   gqlr_parse(obj$name)
 }
 
-#' parse graphql EnumValue
+#' parse graphql Value
 #' @template gqlr_parse_args
 #' @examples
 #' typeExtObj <- test_json("kitchen_schema")$definitions[[7]]
 #' gqlr_parse(typeExtObj)
+gqlr_parse.IntValue <-
+gqlr_parse.FloatValue <-
+gqlr_parse.StringValue <-
+gqlr_parse.BooleanValue <-
+gqlr_parse.EnumValue <-
 gqlr_parse.EnumValue <- function(obj, ...) {
   # kind  = "EnumValue",
   # loc   = "?Location",
   # value = "string"
-  obj$value
+  list("_kind" = obj$kind, kind = obj$kind, value = obj$value)
+}
+
+gqlr_parse.ListValue <- function(obj, ...) {
+  # kind = "ListValue",
+  # loc = "?Location",
+  # values = "[Value]"
+  list("_kind" = "ListValue", values = lapply(obj$values, gqlr_parse))
+}
+gqlr_parse.ObjectValue <- function(obj, ...) {
+  # kind   = "ObjectValue",
+  # loc    = "?Location",
+  # fields = "[ObjectField]"
+  fields = lapply(obj$fields, gqlr_parse)
+  fields = lapply(fields, function(field) {
+    list(
+      key = field$key,
+      value = field$value$value,
+      valueKind = field$value$kind
+    )
+  })
+  names(fields) <- lapply(fields, "[[", "key") %>% unlist()
+  list("_kind" = "ObjectValue", fields = fields)
+}
+gqlr_parse.ObjectField <- function(obj, ...) {
+  # kind  = "ObjectField",
+  # loc   = "?Location",
+  # name  = "Name",
+  # value = "Value"
+  list("_kind" = "ObjectField", key = gqlr_parse(obj$name), value = gqlr_parse(obj$value))
+
 }
 
 #' parse graphql SelectionSet
@@ -569,6 +829,7 @@ gqlr_parse.SelectionSet <- function(obj, ...) {
 
 
 
+# does everything that gqlr_parse does, without formating
 gqlr_parse2 <- function(obj, layer = 0, ...) {
   if (is.null(obj)) {
     return(NULL)
