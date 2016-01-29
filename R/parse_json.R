@@ -152,19 +152,22 @@ u_na <- unlist_and_replace_null_with_na <- function(x) {
 }
 
 
-argument_mat_from_input_value_definitions <- function(arguments) {
+argument_list_from_input_value_definitions <- function(arguments) {
   fieldKeys = lapply(arguments, "[[", "key") %>% unlist()
-  types = lapply(arguments, "[[", "type")
-  defaultValues = lapply(arguments, "[[", "defaultValue")
 
-  data.frame(
-    keys = fieldKeys,
-    isNonNull = lapply(types, "[[", "isNonNull") %>% u_na(),
-    isList = lapply(types, "[[", "isList") %>% u_na(),
-    type = lapply(types, "[[", "type") %>% u_na(),
-    defaultValue = lapply(defaultValues, "[[", "value") %>% u_na(),
-    defaultValueKind = lapply(defaultValues, "[[", "kind") %>% u_na()
-  )
+  ret <- lapply(arguments, function(argObj) {
+    list(
+      "_kind" = argObj[["_kind"]],
+      key = argObj$key,
+      isNonNull = argObj$type$isNonNull,
+      isList = argObj$type$isList,
+      type = argObj$type$type,
+      defaultValue = argObj$defaultValue$value,
+      defaultValueKind = argObj$defaultValue$"_kind"
+    )
+  })
+  names(ret) <- fieldKeys
+  ret
 }
 
 
@@ -288,7 +291,7 @@ gqlr_parse.InputObjectTypeDefinition <- function(x) {
     "_kind" = "InputObjectTypeDefinition",
     name = gqlr_parse(x$name),
     # fields = fields,
-    fieldMat = argument_mat_from_input_value_definitions(fields)
+    fields = argument_list_from_input_value_definitions(fields)
   )
 }
 
@@ -425,7 +428,7 @@ gqlr_parse.FieldDefinition <- function(obj, ...) {
     "_kind" = "FieldDefinition",
     name = gqlr_parse(obj$name),
     type = gqlr_parse(obj$type),
-    arguments = argument_mat_from_input_value_definitions(inputValuesDefs)
+    arguments = argument_list_from_input_value_definitions(inputValuesDefs)
   )
 }
 
@@ -505,7 +508,8 @@ gqlr_parse.TypeExtensionDefinition <- function(obj, ...) {
 
 
 
-
+#' @examples
+#' example("gqlr_add_to_schema")
 gqlr_init_schema <- function() {
   list(
     isDone = FALSE,
@@ -584,9 +588,9 @@ gqlr_add_to_schema <- function(schemaObj, obj) {
       stop0("object with name: ", extObjName, " can not be extended as it does not exist")
     }
 
-    extObjFieldNames <- extObj$fieldTypeMat$name
+    extObjFieldNames <- names(extObj$fieldTypes)
     originalObject <- schemaObj[[extObjType]][[extObjName]]
-    objFieldNames <- originalObject$fieldMat$name
+    objFieldNames <- originalObject$fields$name
     if (any(extObjFieldNames %in% objFieldNames)) {
       print(obj)
       stop0("object with name: ", extObjName, " can not stomp prior names")
@@ -602,6 +606,9 @@ gqlr_add_to_schema <- function(schemaObj, obj) {
 }
 
 
+
+#' @examples
+#' example("gqlr_add_to_schema")
 gqlr_validate_schema <- function(schemaObj) {
   # get the names for each group
   schemaNames <- lapply(schemaObj, names)
@@ -615,19 +622,75 @@ gqlr_validate_schema <- function(schemaObj) {
   }
 
   interfaceNames <- schemaNames$interfaces
+  objectNames <- schemaNames$objects
+  check_is_valid_type_obj <- function(typeObj) {
+    if (typeObj$'_kind' != "Type" ) {
+      stop0("object fieldType is not 'Type'. Received: ", typeObj[['_kind']])
+    }
+
+    type <- typeObj$type
+    if (type %in% c("Type", "Int", "String")) {
+      # good
+    } else {
+      stop0("Invalid field type received: |", type, "|. Known field types: |", paste(objectNames, collapse = ", "), "|")
+    }
+  }
+
   # for every schema object
   schemaObj$objects <- lapply(schemaObj$objects, function(objectObj) {
-    # for each interface of the object
+
+    # for UnionTypeDefinition
+    lapply(objectObj$types, check_is_valid_type_obj)
+
+    # for ObjectTypeDefinition
+    lapply(objectObj$fieldTypes, check_is_valid_type_obj)
+
+    # for ObjectTypeDefinition arguments
+    lapply(objectObj$fieldArguments, function(fieldArgObj) {
+      # fieldArgObj = three(argument: InputType, other: String = "string"): Int
+
+      lapply(fieldArgObj, function(argObj) {
+        # argObj = {argument: InputType, other: String = "string"}
+
+        lapply(argObj, function(argValObj) {
+          argValObj <- as.list(argValObj)
+          # argObj = {String = "string"}
+          argType <- argValObj$type
+
+          defaultValueKind <- argValObj$defaultValueKind
+
+          # TODO. find proper types
+        })
+
+      })
+    })
+
+    # lapply(objectObj$fieldArguments, function(argObj) {
+    #
+    # })
+
+
+
+    # // Assert each interface field is implemented.
     lapply(objectObj$interfaces, function(objectInterfaceObj) {
       interfaceType <- objectInterfaceObj$type
-      # make sure the interface exists
+
+      # // Assert interface field exists on object.
       if (!(interfaceType %in% interfaceNames)) {
         print(objectObj)
         stop0("Schema object '", objectObj$name, "' is trying to implement a missing interface '", interfaceType, "'")
       }
+      interfaceObj <- schemaObj$interfaces[[interfaceType]]
+
+      # // Assert interface field type is satisfied by object field type,
+      # by being a valid subtype. (covariant)
+      lapply(names(interfaceObj$fieldTypes), function(interfaceFieldName) {
+        interFieldObj <- interfaceObj$fieldTypes[[interfaceFieldName]]
+
+      })
+
 
       # for each field of the interface, make sure it's added or stomped
-      interfaceObj <- schemaObj$interfaces[[interfaceType]]
       for (name in names(interfaceObj$fieldTypes)) {
         # if the field doesn't exist, add it
         if (is.null(objectObj$fieldTypes[[name]])) {
@@ -648,6 +711,10 @@ gqlr_validate_schema <- function(schemaObj) {
 
 
 
+# load_all(); kitchenSchemaJson <- test_json("kitchen_schema"); schemaObj <- gqlr_validate_json(kitchenSchemaJson); str(schemaObj, 3)
+
+#' @export
+#' @examples
 #' kitchenSchemaJson <- test_json("kitchen_schema")
 #' cat(test_string("kitchen_schema"), "\n")
 #' schemaObj <- gqlr_validate_json(kitchenSchemaJson)
