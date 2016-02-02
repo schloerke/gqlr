@@ -1,7 +1,10 @@
 Package: graphqlr
 Title: GraphQL in R
 Version: 0.0.0.9000
-Authors@R: person("Barret", "Schloerke", email = "schloerke@gmail.com", role = c("aut", "cre"))
+Authors@R: c(
+    person("Barret", "Schloerke", email = "schloerke@gmail.com", role = c("aut", "cre")),
+    person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("ths"))
+  )
 Description: Implementation of GraphQL, a query language created by Facebook for
     describing data requirements on complex application data models.
 Depends:
