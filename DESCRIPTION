@@ -16,26 +16,10 @@ Imports:
     base,
     magrittr,
     memoise,
-    rjson,
-    rjson,
-    Rcpp
+    R6,
+    rjson
 Suggests:
     roxygen2 (>= 5.0.0),
     testthat
-LinkingTo: Rcpp
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 5.0.1
-Collate:
-    'execution-document.R'
-    'execution-field.R'
-    'graphqlr.R'
-    'js.R'
-    'language-ast.R'
-    'language-kinds.R'
-    'language-source.R'
-    'wrappers.R'
-    'parse_json.R'
-    'schema-enum.R'
-    'schema-object.R'
-    'schema-scalars.R'
-    'z_utils.R'
