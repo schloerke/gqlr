@@ -9,7 +9,4 @@ parse_selection_set(selectionSetObj, fragmentList, contextObj)
 \description{
 Parse a Selection Set
 }
-\seealso{
-\url{https://github.com/facebook/graphql/blob/master/spec/}
-}
 
