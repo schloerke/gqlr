@@ -2,13 +2,12 @@
 m <- base::missing
 self_value <- function(key, classVal, selfObj, value, isMissing) {
   if (isMissing) {
-    selfObj[[key]]
-    return(selfObj)
+    return(selfObj[[key]])
   }
 
   if (is.null(value)) {
     selfObj[[key]] <- value
-    return(selfObj)
+    return(value)
   }
 
   if (!inherits(value, classVal)) {
@@ -18,8 +17,7 @@ self_value <- function(key, classVal, selfObj, value, isMissing) {
 }
 self_array_value <- function(key, classVal, selfObj, value, isMissing) {
   if (isMissing) {
-    selfObj[[key]]
-    return(selfObj)
+    return(selfObj[[key]])
   }
 
   if (inherits(value, "R6")) {
