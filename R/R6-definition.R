@@ -182,8 +182,23 @@ AST <- R6Class("AST",
     # print = function(...) {
     #   cat()
     # }
-    does_inherit = function(type) {
-      inherits(self, type)
+    # initialize = function(obj) {
+    #   selfKind <- self$kind
+    #
+    #   classObj = get_class_obj(kind)
+    #
+    #   ret <- classObj$new()
+    #
+    #   for (key in names(classObj$active)) {
+    #     ret[[key]] <- classObj$init_from_obj(obj[[key]])
+    #   }
+    #   ret
+    #   browser()
+    # }
+  ),
+  active = list(
+    kind = function() {
+      class(self)[1]
     }
   )
 )
@@ -276,9 +291,6 @@ GQLR_HasLocation <- R6Class("GQLR_HasLocation",
     "_loc" = NULL
   ),
   active = list(
-    kind = function() {
-      self$classname
-    },
     loc = function(v) { self_value("_loc", "Location", self, v, m(v)) }
   )
 )
