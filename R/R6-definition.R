@@ -25,17 +25,22 @@ self_array_value <- function(key, classVal, selfObj, value, isMissing) {
   }
 
   if (inherits(value, "R6")) {
+    print(value)
     stop0(
       "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
-      "Expected value should be an array of ", classVal, " objects."
+      "Expected value should be an array of ", classVal, " objects.\n",
+      "Received ", paste(class(value), collapse = ", "),
+      "Received object above."
     )
   }
   lapply(value, function(valItem) {
     if (!inherits(valItem, classVal)) {
+      print(valItem)
       stop0(
         "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
         "Expected value with class of |", classVal, "|.\n",
-        "Received ", paste(class(valItem), collapse = ", ")
+        "Received ", paste(class(valItem), collapse = ", "),
+        "Received object above.",
       )
     }
   })
@@ -93,7 +98,7 @@ r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
   if (is.null(objPos)) {
     keys <- append(keys, objClass)
   } else {
-    keys <- append(keys, str_c(objClass, "-", objPos))
+    keys <- append(keys, str_c(objPos, "-", objClass))
   }
   level <- level + 1
 
@@ -491,7 +496,7 @@ Field = R6Class("Field",
   ),
   active = list(
     alias = function(v) {
-      self_value("_alias", "Alias", self, v, m(v))
+      self_value("_alias", "Name", self, v, m(v))
     },
     arguments = function(v) {
       self_array_value("_arguments", "Argument", self, v, m(v))
@@ -686,7 +691,7 @@ ObjectField = R6Class("ObjectField",
   # value: Value;
   public = list("_value" = NULL),
   active = list(
-    value = function(v) { self_array_value("_value", "Value", self, v, m(v)) }
+    value = function(v) { self_value("_value", "Value", self, v, m(v)) }
   )
 )
 
