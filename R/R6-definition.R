@@ -77,6 +77,104 @@ self_boolean_value <- function(key, selfObj, value, isMissing) {
 # s$z <- xObj
 
 
+r6_from_json <- function(obj, level = 0, keys = c()) {
+  objClass <- obj$kind
+  keys <- append(keys, objClass)
+  level <- level + 1
+
+  cat(level, "-", paste(keys, collapse = ","), "\n")
+
+  r6Obj <- get_class_obj(objClass)
+
+  ret <- r6Obj$new()
+
+  fieldNames <- names(ret)
+  fieldNames <- fieldNames[str_detect(fieldNames, "^_")] %>% str_replace("_", "")
+
+  for (activeKey in fieldNames) {
+    print(activeKey)
+    objVal <- obj[[activeKey]]
+
+    if (is.list(objVal)) {
+      if (length(objVal) == 0) {
+        ret[[activeKey]] <- NULL
+      } else {
+        if (identical(class(objVal), "list")) {
+          ret[[activeKey]] <- lapply(objVal, r6_from_json, keys = keys, level = level)
+        } else {
+          ret[[activeKey]] <- r6_from_json(objVal, keys = keys, level = level)
+        }
+      }
+    } else {
+      ret[[activeKey]] <- objVal
+    }
+  }
+  ret
+}
+
+
+gqlr_str <- (function() {
+  cat_ret_spaces <- function(spaces, ...) {
+    cat("\n", rep(" ", spaces), ..., sep = "")
+  }
+
+  str_obj <- function(x, spaceCount = 0, showNull) {
+
+    r6ObjClass <- class(x)[1]
+
+    cat("<", r6ObjClass, ">", sep = "")
+
+    fieldNames <- names(x)
+    fieldNames <- fieldNames[str_detect(fieldNames, "^_")] %>% str_replace("_", "")
+
+    for (fieldName in fieldNames) {
+      if (fieldName %in% c("loc")) {
+        next
+      }
+
+      fieldVal <- x[[fieldName]]
+
+      if (!inherits(fieldVal, "R6")) {
+        if (is.list(fieldVal)) {
+          # is list
+          cat_ret_spaces(spaceCount + 2, fieldName, ":")
+          for (itemPos in seq_along(fieldVal)) {
+            fieldItem <- fieldVal[[itemPos]]
+            cat_ret_spaces(spaceCount + 4, itemPos, " - ")
+            str_obj(fieldItem, spaceCount + 4, showNull)
+          }
+
+        } else {
+          # is value
+          if (is.null(fieldVal)) {
+            fieldVal <- "NULL"
+            if (showNull) {
+              cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+            }
+          } else if (is.numeric(fieldVal)) {
+            cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+          } else if (is.character(fieldVal)) {
+            cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
+          }
+        }
+        
+      } else {
+        # recursive call to_string
+        cat_ret_spaces(spaceCount + 2, fieldName, ": ")
+        str_obj(fieldVal, spaceCount + 2, showNull)
+      }
+
+    }
+  }
+
+  function(x, showNull = FALSE) {
+    str_obj(x, 0, showNull)
+    cat("\n")
+  }
+})()
+
+
+
 
 
 AST <- R6Class("AST",
