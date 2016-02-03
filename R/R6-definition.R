@@ -295,7 +295,7 @@ GQLR_HasLocation <- R6Class("GQLR_HasLocation",
   )
 )
 Node <- R6Class("GQLR_HasLocation",
-  inherit = HasLocation
+  inherit = GQLR_HasLocation
 )
 
 
@@ -369,10 +369,13 @@ OperationDefinition <- R6Class("OperationDefinition",
   ),
   active = list(
     operation = function(value) {
+      if (missing(value)) {
+        return(self$"_operation")
+      }
       if (! (value %in% c("query", "mutation", "subscription"))) {
         stop0("invalid value supplied to operation: |", value, "|.")
       }
-      self$"_value" <- value
+      self$"_operation" <- value
     },
     variableDefinitions = function(v) {
       self_array_value(
@@ -435,11 +438,18 @@ Selection = R6Class("Selection",
   #                       | InlineFragment
   inherit = Node
 )
+GQLR_SelectionWithName <- R6Class("GQLR_SelectionWithName",
+  inherit = Selection,
+  public = list("_name" = NULL),
+  active = list(
+    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
+  )
+)
 
 
 
 Field = R6Class("Field",
-  inherit = Selection,
+  inherit = GQLR_SelectionWithName,
   # alias?: ?Name;
   # name: Name;
   # arguments?: ?Array<Argument>;
@@ -482,7 +492,7 @@ Argument = R6Class("Argument",
 
 
 FragmentSpread = R6Class("FragmentSpread",
-  inherit = Selection,
+  inherit = GQLR_SelectionWithName,
   # loc?: ?Location;
   # name: Name;
   # directives?: ?Array<Directive>;
@@ -717,7 +727,6 @@ FieldDefinition = R6Class("FieldDefinition",
     },
     type = function(v) { self_value("_type", "Type", self, v, m(v)) }
   )
-
 )
 
 
