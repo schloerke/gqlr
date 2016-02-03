@@ -11,7 +11,11 @@ self_value <- function(key, classVal, selfObj, value, isMissing) {
   }
 
   if (!inherits(value, classVal)) {
-    stop0("expected value with class of |", classVal, "|. Received ", paste(class(value), collapse = ", "))
+    stop0(
+      "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
+      "Expected value with class of |", classVal, "|.\n",
+      "Received ", paste(class(value), collapse = ", ")
+    )
   }
   selfObj[[key]] <- value
 }
@@ -21,11 +25,18 @@ self_array_value <- function(key, classVal, selfObj, value, isMissing) {
   }
 
   if (inherits(value, "R6")) {
-    stop0("expected value should be an array of ", classVal, " objects.")
+    stop0(
+      "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
+      "Expected value should be an array of ", classVal, " objects."
+    )
   }
   lapply(value, function(valItem) {
     if (!inherits(valItem, classVal)) {
-      stop0("expected value with class of |", classVal, "|. Received ", paste(class(valItem), collapse = ", "))
+      stop0(
+        "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
+        "Expected value with class of |", classVal, "|.\n",
+        "Received ", paste(class(valItem), collapse = ", ")
+      )
     }
   })
 
