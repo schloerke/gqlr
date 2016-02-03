@@ -797,3 +797,63 @@ TypeExtensionDefinition = R6Class("TypeExtensionDefinition",
     definition = function(v) { self_value("_definition", "ObjectTypeDefinition", self, v, m(v)) }
   )
 )
+
+
+
+
+
+
+
+
+
+
+
+
+get_class_obj <- (function(){
+  classList <- list(
+    AST = AST,
+    Source = Source,
+    Location = Location,
+    Name = Name,
+    Document = Document,
+    OperationDefinition = OperationDefinition,
+    VariableDefinition = VariableDefinition,
+    Variable = Variable,
+    SelectionSet = SelectionSet,
+    Field = Field,
+    Argument = Argument,
+    FragmentSpread = FragmentSpread,
+    InlineFragment = InlineFragment,
+    FragmentDefinition = FragmentDefinition,
+    IntValue = IntValue,
+    FloatValue = FloatValue,
+    StringValue = StringValue,
+    BooleanValue = BooleanValue,
+    EnumValue = EnumValue,
+    ListValue = ListValue,
+    ObjectValue = ObjectValue,
+    ObjectField = ObjectField,
+    Directive = Directive,
+    NamedType = NamedType,
+    ListType = ListType,
+    NonNullType = NonNullType,
+    ObjectTypeDefinition = ObjectTypeDefinition,
+    FieldDefinition = FieldDefinition,
+    InputValueDefinition = InputValueDefinition,
+    InterfaceTypeDefinition = InterfaceTypeDefinition,
+    UnionTypeDefinition = UnionTypeDefinition,
+    ScalarTypeDefinition = ScalarTypeDefinition,
+    EnumTypeDefinition = EnumTypeDefinition,
+    EnumValueDefinition = EnumValueDefinition,
+    InputObjectTypeDefinition = InputObjectTypeDefinition,
+    TypeExtensionDefinition = TypeExtensionDefinition
+  )
+
+  function(classVal) {
+    obj = classList[[classVal]]
+    if (is.null(obj)) {
+      stop0("Could not find object with class: ", classVal)
+    }
+    obj
+  }
+})()
