@@ -157,7 +157,7 @@ gqlr_str <- (function() {
             cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
           }
         }
-        
+
       } else {
         # recursive call to_string
         cat_ret_spaces(spaceCount + 2, fieldName, ": ")
@@ -376,6 +376,7 @@ OperationDefinition <- R6Class("OperationDefinition",
         stop0("invalid value supplied to operation: |", value, "|.")
       }
       self$"_operation" <- value
+      value
     },
     variableDefinitions = function(v) {
       self_array_value(
