@@ -88,12 +88,15 @@ self_boolean_value <- function(key, selfObj, value, isMissing) {
 # s$z <- xObj
 
 
-r6_from_json <- function(obj, level = 0, keys = c()) {
+r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
   objClass <- obj$kind
-  keys <- append(keys, objClass)
+  if (is.null(objPos)) {
+    keys <- append(keys, objClass)
+  } else {
+    keys <- append(keys, str_c(objClass, "-", objPos))
+  }
   level <- level + 1
 
-  cat(level, "-", paste(keys, collapse = ","), "\n")
 
   r6Obj <- get_class_obj(objClass)
 
@@ -103,7 +106,7 @@ r6_from_json <- function(obj, level = 0, keys = c()) {
   fieldNames <- fieldNames[str_detect(fieldNames, "^_")] %>% str_replace("_", "")
 
   for (activeKey in fieldNames) {
-    print(activeKey)
+    cat(level, "-", paste(keys, collapse = ","), "-", activeKey, "\n")
     objVal <- obj[[activeKey]]
 
     if (is.list(objVal)) {
@@ -111,7 +114,10 @@ r6_from_json <- function(obj, level = 0, keys = c()) {
         ret[[activeKey]] <- NULL
       } else {
         if (identical(class(objVal), "list")) {
-          ret[[activeKey]] <- lapply(objVal, r6_from_json, keys = keys, level = level)
+          # lapply(objVal, r6_from_json, keys = keys, level = level)
+          ret[[activeKey]] <- lapply(seq_along(objVal), function(i) {
+            r6_from_json(objVal[[i]], keys = keys, level = level, objPos = i)
+          })
         } else {
           ret[[activeKey]] <- r6_from_json(objVal, keys = keys, level = level)
         }
