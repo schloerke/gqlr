@@ -1,5 +1,5 @@
 
-m <- missing
+m <- base::missing
 self_value <- function(key, classVal, selfObj, value, isMissing) {
   if (isMissing) {
     selfObj[[key]]
