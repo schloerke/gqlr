@@ -222,7 +222,16 @@ AST <- R6Class("AST",
 
 
 
+
+# /**
+#  * A representation of source input to GraphQL. The name is optional,
+#  * but is mostly useful for clients who store GraphQL documents in
+#  * source files; for example, if the GraphQL input is in a file Foo.graphql,
+#  * it might be useful for name to be "Foo.graphql".
+#  */
 Source <- R6Class("Source",
+  # body: string;
+  # name: string;
   public = list(
     "_body" = NULL, "_name" = NULL,
     initialize = function(body, name) {
@@ -261,7 +270,15 @@ Location <- R6Class("Location",
 )
 
 
-
+class_with_name <- function(className, inheritR6Obj) {
+  R6Class(className,
+    inherit = inheritR6Obj,
+    public = list("_name" = NULL),
+    active = list(
+      name = function(v) { self_value("_name", "Name", self, v, m(v)) }
+    )
+  )
+}
 
 
 
@@ -311,7 +328,7 @@ GQLR_HasLocation <- R6Class("GQLR_HasLocation",
     loc = function(v) { self_value("_loc", "Location", self, v, m(v)) }
   )
 )
-Node <- R6Class("GQLR_HasLocation",
+Node <- R6Class("Node",
   inherit = GQLR_HasLocation
 )
 
@@ -319,6 +336,7 @@ Node <- R6Class("GQLR_HasLocation",
 
 Name <- R6Class("Name",
   inherit = Node,
+  # kind: 'Name';
   # loc?: ?Location;
   # value: string;
   public = list(
@@ -328,11 +346,19 @@ Name <- R6Class("Name",
     value = function(v) { self_string_value("_value", self, v, m(v)) }
   )
 )
+GQLR_NodeWithName <- R6Class("GQLR_NodeWithName",
+  inherit = Node,
+  public = list("_name" = NULL),
+  active = list(
+    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
+  )
+)
 
 
 
 Document <- R6Class("Document",
   inherit = Node,
+  # kind: 'Document';
   # loc?: ?Location;
   # definitions: Array<Definition>;
   public = list(
@@ -345,13 +371,6 @@ Document <- R6Class("Document",
   )
 )
 
-GQLR_NodeWithName <- R6Class("GQLR_NodeWithName",
-  inherit = Node,
-  public = list("_name" = NULL),
-  active = list(
-    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
-  )
-)
 
 Definition <- R6Class("Definition",
   inherit = Node,
@@ -361,18 +380,13 @@ Definition <- R6Class("Definition",
   #                        | TypeExtensionDefinition
 )
 
-GQLR_DefinitionWithName <- R6Class("GQLR_DefinitionWithName",
-  inherit = Definition,
-  # name: Name;
-  public = list("_name" = NULL),
-  active = list(
-    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
-  )
-)
+GQLR_DefinitionWithName <- class_with_name("GQLR_DefinitionWithName", Definition)
 
 
 OperationDefinition <- R6Class("OperationDefinition",
   inherit = Definition,
+  # kind: 'OperationDefinition';
+  # loc?: ?Location;
   # operation: 'query' | 'mutation' | 'subscription';
   # name?: ?Name;
   # variableDefinitions?: ?Array<VariableDefinition>;
@@ -415,6 +429,8 @@ OperationDefinition <- R6Class("OperationDefinition",
 
 VariableDefinition <- R6Class("VariableDefinition",
   inherit = Node,
+  # kind: 'VariableDefinition';
+  # loc?: ?Location;
   # variable: Variable;
   # type: Type;
   # defaultValue?: ?Value;
@@ -438,6 +454,7 @@ VariableDefinition <- R6Class("VariableDefinition",
 
 SelectionSet <- R6Class("SelectionSet",
   inherit = Node,
+  # kind: 'SelectionSet';
   # loc?: ?Location;
   # selections: Array<Selection>;
   public = list("_selections" = NULL),
@@ -456,18 +473,14 @@ Selection = R6Class("Selection",
   #                       | InlineFragment
   inherit = Node
 )
-GQLR_SelectionWithName <- R6Class("GQLR_SelectionWithName",
-  inherit = Selection,
-  public = list("_name" = NULL),
-  active = list(
-    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
-  )
-)
+GQLR_SelectionWithName <- class_with_name("GQLR_SelectionWithName", Selection)
 
 
 
 Field = R6Class("Field",
   inherit = GQLR_SelectionWithName,
+  # kind: 'Field';
+  # loc?: ?Location;
   # alias?: ?Name;
   # name: Name;
   # arguments?: ?Array<Argument>;
@@ -496,6 +509,8 @@ Field = R6Class("Field",
 
 Argument = R6Class("Argument",
   inherit = Node,
+  # kind: 'Argument';
+  # loc?: ?Location;
   # name: Name;
   # value: Value;
   public = list(
@@ -511,6 +526,7 @@ Argument = R6Class("Argument",
 
 FragmentSpread = R6Class("FragmentSpread",
   inherit = GQLR_SelectionWithName,
+  # kind: 'FragmentSpread';
   # loc?: ?Location;
   # name: Name;
   # directives?: ?Array<Directive>;
@@ -525,6 +541,8 @@ FragmentSpread = R6Class("FragmentSpread",
 
 InlineFragment = R6Class("InlineFragment",
   inherit = Selection,
+  # kind: 'InlineFragment';
+  # loc?: ?Location;
   # typeCondition?: ?NamedType;
   # directives?: ?Array<Directive>;
   # selectionSet: SelectionSet;
@@ -546,7 +564,10 @@ InlineFragment = R6Class("InlineFragment",
 
 FragmentDefinition = R6Class("FragmentDefinition",
   inherit = GQLR_DefinitionWithName,
-  # typeCondition?: ?NamedType;
+  # kind: 'FragmentDefinition';
+  # loc?: ?Location;
+  # name: Name;
+  # typeCondition: NamedType;
   # directives?: ?Array<Directive>;
   # selectionSet: SelectionSet;
   public = list("_typeCondition" = NULL,"_directives" = NULL, "_selectionSet" = NULL),
@@ -570,7 +591,6 @@ FragmentDefinition = R6Class("FragmentDefinition",
 
 Value <- R6Class("Value",
   inherit = Node
-  # loc?: ?Location;
   # export type Value = Variable
   #                   | IntValue
   #                   | FloatValue
@@ -584,6 +604,7 @@ Value <- R6Class("Value",
 
 Variable <- R6Class("Variable",
   inherit = Value,
+  # kind: 'Variable';
   # loc?: ?Location;
   # name: Name;
   public = list("_name" = NULL),
@@ -595,6 +616,7 @@ Variable <- R6Class("Variable",
 
 GQLR_ValueIsString = R6Class("IntValue",
   inherit = Value,
+  # loc?: ?Location;
   # value: string;
   public = list("_value" = NULL),
   active = list(
@@ -603,18 +625,26 @@ GQLR_ValueIsString = R6Class("IntValue",
 )
 IntValue = R6Class("IntValue",
   inherit = GQLR_ValueIsString,
+  # kind: 'IntValue';
+  # loc?: ?Location;
   # value: string;
 )
 FloatValue = R6Class("FloatValue",
   inherit = GQLR_ValueIsString,
+  # kind: 'FloatValue';
+  # loc?: ?Location;
   # value: string;
 )
 StringValue = R6Class("StringValue",
   inherit = GQLR_ValueIsString,
+  # kind: 'StringValue';
+  # loc?: ?Location;
   # value: string;
 )
 BooleanValue = R6Class("BooleanValue",
   inherit = Value,
+  # kind: 'BooleanValue';
+  # loc?: ?Location;
   # value: boolean;
   public = list("_value" = NULL),
   active = list(
@@ -623,10 +653,14 @@ BooleanValue = R6Class("BooleanValue",
 )
 EnumValue = R6Class("EnumValue",
   inherit = GQLR_ValueIsString,
+  # kind: 'EnumValue';
+  # loc?: ?Location;
   # value: string;
 )
 ListValue = R6Class("ListValue",
   inherit = Value,
+  # kind: 'ListValue';
+  # loc?: ?Location;
   # values: Array<Value>;
   public = list("_values" = NULL),
   active = list(
@@ -635,6 +669,8 @@ ListValue = R6Class("ListValue",
 )
 ObjectValue = R6Class("ObjectValue",
   inherit = Value,
+  # kind: 'ObjectValue';
+  # loc?: ?Location;
   # fields: Array<ObjectField>;
   public = list("_fields" = NULL),
   active = list(
@@ -644,6 +680,9 @@ ObjectValue = R6Class("ObjectValue",
 
 ObjectField = R6Class("ObjectField",
   inherit = GQLR_NodeWithName,
+  # kind: 'ObjectField';
+  # loc?: ?Location;
+  # name: Name;
   # value: Value;
   public = list("_value" = NULL),
   active = list(
@@ -657,6 +696,9 @@ ObjectField = R6Class("ObjectField",
 
 Directive = R6Class("Directive",
   inherit = GQLR_NodeWithName,
+  # kind: 'Directive';
+  # loc?: ?Location;
+  # name: Name;
   # arguments?: ?Array<Argument>;
   public = list("_arguments" = NULL),
   active = list(
@@ -678,6 +720,8 @@ Type = R6Class("Type",
 
 NamedType = R6Class("NamedType",
   inherit = Type,
+  # kind: 'NamedType';
+  # loc?: ?Location;
   # name: Name;
   public = list("_name" = NULL),
   active = list(
@@ -686,6 +730,8 @@ NamedType = R6Class("NamedType",
 )
 ListType = R6Class("ListType",
   inherit = Type,
+  # kind: 'ListType';
+  # loc?: ?Location;
   # type: Type;
   public = list("_type" = NULL),
   active = list(
@@ -694,10 +740,15 @@ ListType = R6Class("ListType",
 )
 NonNullType = R6Class("NonNullType",
   inherit = Type,
+  # kind: 'NonNullType';
+  # loc?: ?Location;
   # type: NamedType | ListType;
   public = list("_type" = NULL),
   active = list(
     type = function(v) {
+      if (missing(v)) {
+        return(self$"_type")
+      }
       if (!(inherits(v, "NamedType") || inherits(v, "ListType"))) {
         stop0("expected value with class of NamedType or ListType. Received ", value$kind)
       }
@@ -710,7 +761,7 @@ NonNullType = R6Class("NonNullType",
 
 # // Type Definition
 TypeDefinition = R6Class("TypeDefinition",
-  inherit = GQLR_NodeWithName
+  inherit = GQLR_DefinitionWithName
   # export type TypeDefinition = ObjectTypeDefinition
   #                            | InterfaceTypeDefinition
   #                            | UnionTypeDefinition
@@ -723,6 +774,9 @@ TypeDefinition = R6Class("TypeDefinition",
 
 ObjectTypeDefinition = R6Class("ObjectTypeDefinition",
   inherit = TypeDefinition,
+  # kind: 'ObjectTypeDefinition';
+  # loc?: ?Location;
+  # name: Name;
   # interfaces?: ?Array<NamedType>;
   # fields: Array<FieldDefinition>;
   public = list("_interfaces" = NULL, "_fields" = NULL),
@@ -736,6 +790,9 @@ ObjectTypeDefinition = R6Class("ObjectTypeDefinition",
 
 FieldDefinition = R6Class("FieldDefinition",
   inherit = TypeDefinition,
+  # kind: 'FieldDefinition';
+  # loc?: ?Location;
+  # name: Name;
   # arguments: Array<InputValueDefinition>;
   # type: Type;
   public = list("_arguments" = NULL, "_type" = NULL),
@@ -751,6 +808,9 @@ FieldDefinition = R6Class("FieldDefinition",
 
 InputValueDefinition = R6Class("InputValueDefinition",
   inherit = GQLR_NodeWithName,
+  # kind: 'InputValueDefinition';
+  # loc?: ?Location;
+  # name: Name;
   # type: Type;
   # defaultValue?: ?Value;
   public = list("_type" = NULL, "_defaultValue" = NULL),
@@ -762,6 +822,9 @@ InputValueDefinition = R6Class("InputValueDefinition",
 
 InterfaceTypeDefinition = R6Class("InputValueDefinition",
   inherit = TypeDefinition,
+  # kind: 'InterfaceTypeDefinition';
+  # loc?: ?Location;
+  # name: Name;
   # fields: Array<FieldDefinition>;
   public = list("_fields" = NULL),
   active = list(
@@ -772,6 +835,9 @@ InterfaceTypeDefinition = R6Class("InputValueDefinition",
 
 UnionTypeDefinition = R6Class("UnionTypeDefinition",
   inherit = TypeDefinition,
+  # kind: 'UnionTypeDefinition';
+  # loc?: ?Location;
+  # name: Name;
   # types: Array<NamedType>;
   public = list("_types" = NULL),
   active = list(
@@ -781,10 +847,16 @@ UnionTypeDefinition = R6Class("UnionTypeDefinition",
 
 ScalarTypeDefinition = R6Class("ScalarTypeDefinition",
   inherit = TypeDefinition,
+  # kind: 'ScalarTypeDefinition';
+  # loc?: ?Location;
+  # name: Name;
 )
 
 EnumTypeDefinition = R6Class("EnumTypeDefinition",
   inherit = TypeDefinition,
+  # kind: 'EnumTypeDefinition';
+  # loc?: ?Location;
+  # name: Name;
   # values: Array<EnumValueDefinition>;
   public = list("_values" = NULL),
   active = list(
@@ -793,10 +865,16 @@ EnumTypeDefinition = R6Class("EnumTypeDefinition",
 )
 EnumValueDefinition = R6Class("EnumValueDefinition",
   inherit = GQLR_NodeWithName,
+  # kind: 'EnumValueDefinition';
+  # loc?: ?Location;
+  # name: Name;
 )
 
 InputObjectTypeDefinition = R6Class("InputObjectTypeDefinition",
   inherit = TypeDefinition,
+  # kind: 'InputObjectTypeDefinition';
+  # loc?: ?Location;
+  # name: Name;
   # fields: Array<InputValueDefinition>;
   public = list("_fields" = NULL),
   active = list(
@@ -809,6 +887,8 @@ InputObjectTypeDefinition = R6Class("InputObjectTypeDefinition",
 
 TypeExtensionDefinition = R6Class("TypeExtensionDefinition",
   inherit = Definition,
+  # kind: 'TypeExtensionDefinition';
+  # loc?: ?Location;
   # definition: ObjectTypeDefinition;
   public = list("_definition" = NULL),
   active = list(
@@ -830,19 +910,22 @@ TypeExtensionDefinition = R6Class("TypeExtensionDefinition",
 get_class_obj <- (function(){
   classList <- list(
     AST = AST,
-    Source = Source,
     Location = Location,
+    Node = Node,
     Name = Name,
     Document = Document,
+    Definition = Definition,
     OperationDefinition = OperationDefinition,
     VariableDefinition = VariableDefinition,
     Variable = Variable,
     SelectionSet = SelectionSet,
+    Selection = Selection,
     Field = Field,
     Argument = Argument,
     FragmentSpread = FragmentSpread,
     InlineFragment = InlineFragment,
     FragmentDefinition = FragmentDefinition,
+    Value = Value,
     IntValue = IntValue,
     FloatValue = FloatValue,
     StringValue = StringValue,
@@ -852,9 +935,11 @@ get_class_obj <- (function(){
     ObjectValue = ObjectValue,
     ObjectField = ObjectField,
     Directive = Directive,
+    Type = Type,
     NamedType = NamedType,
     ListType = ListType,
     NonNullType = NonNullType,
+    TypeDefinition = TypeDefinition,
     ObjectTypeDefinition = ObjectTypeDefinition,
     FieldDefinition = FieldDefinition,
     InputValueDefinition = InputValueDefinition,
