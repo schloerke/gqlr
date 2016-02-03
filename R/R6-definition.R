@@ -23,13 +23,14 @@ self_array_value <- function(key, classVal, selfObj, value, isMissing) {
   if (inherits(value, "R6")) {
     stop0("expected value should be an array of ", classVal, " objects.")
   }
-  lapply(seq_along(value), function(valItem) {
+  lapply(value, function(valItem) {
     if (!inherits(valItem, classVal)) {
-      stop0("expected value with class of |", classVal, "|. Received ", paste(class(value), collapse = ", "))
+      stop0("expected value with class of |", classVal, "|. Received ", paste(class(valItem), collapse = ", "))
     }
   })
 
   selfObj[[key]] <- value
+  value
 }
 
 self_base_value <- function(key, parse_fn, selfObj, value, isMissing) {
@@ -38,6 +39,7 @@ self_base_value <- function(key, parse_fn, selfObj, value, isMissing) {
   }
   value <- parse_fn(value)
   selfObj[[key]] <- value
+  value
 }
 
 
