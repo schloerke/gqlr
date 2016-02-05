@@ -23,3 +23,22 @@ Suggests:
     testthat
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 5.0.1
+Collate:
+    'z_utils.R'
+    'R6-definition.R'
+    'R6-introspection.R'
+    'R6-scalar.R'
+    'execution-document.R'
+    'execution-field.R'
+    'graphqlr.R'
+    'js.R'
+    'language-ast.R'
+    'language-kinds.R'
+    'language-source.R'
+    'parse_json.R'
+    'schema-enum.R'
+    'schema-object.R'
+    'schema-scalars.R'
+    'start-tmp.R'
+    'type-scalars.R'
+    'wrappers.R'
