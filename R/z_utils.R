@@ -1,5 +1,10 @@
 
 
+str_trim <- function(x) {
+  x <- str_replace(x, "^\\s*", "")
+  x <- str_replace(x, "\\s*$", "")
+  x
+}
 
 str_c <- function (..., sep = "", collapse = NULL) {
   paste(..., sep = sep, collapse = collapse)
