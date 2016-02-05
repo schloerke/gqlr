@@ -1,12 +1,193 @@
 
+#' @include z_utils.R
+NULL
+
+
+parse_args <- function(txt) {
+  # txt = "kind: 'Document';
+  # loc?: ?Location;
+  # definitions: Array<Definition>;"
+
+  kvPairs <- strsplit(txt, ";")[[1]] %>%
+    lapply(function(txtItem) {
+      keyValue <- strsplit(txtItem, ":")[[1]]
+      key <- str_trim(keyValue[1]) %>%
+        str_replace("\\?$", "")
+
+      value <- str_trim(keyValue[2]) %>%
+        str_replace(";", "")
+
+      if (str_detect(value, "^'") && str_detect(value, "'$")) {
+        # is literal value
+        values <- strsplit(value, ",")[[1]] %>%
+          str_replace("'", "") %>%
+          str_replace("'", "") %>%
+          str_trim()
+        retItem <- list(type = "string", isArray = FALSE, canBeNull = FALSE, possibleValues = values)
+      } else {
+        canBeNull <- FALSE
+        isArray <- FALSE
+        if (str_detect(value, "^\\?")) {
+          canBeNull <- TRUE
+          value <- str_replace(value, "^\\?", "")
+        }
+        if (str_detect(value, "^Array<")) {
+          isArray <- TRUE
+          value <- str_replace(value, "^Array<", "") %>% str_replace(">$", "")
+        }
+
+        retItem <- list(type = value, isArray = isArray, canBeNull = canBeNull, value = NULL)
+      }
+
+      list(key = key, value = retItem)
+    })
+
+
+  keys <- lapply(kvPairs, "[[", "key") %>% unlist()
+  ret <- lapply(kvPairs, "[[", "value")
+  if (keys[length(keys)] == "") {
+    removeBadPos <- -1 * length(keys)
+    keys <- keys[removeBadPos]
+    ret <- ret[removeBadPos]
+  }
+  names(ret) <- keys
+  ret
+}
+
+
+
+
+R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = list(), active = list()) {
+  # R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;")
+
+  self_value_wrapper <- function(key, classVal) {
+    function(value) {
+      if (missing(value)) {
+        return(self[["_args"]][[key]]$value)
+      }
+
+      if (is.null(value)) {
+        if (! self[["_args"]][[key]]$canBeNull) {
+          stop0("Can not set value to NULL for ", classVal, "$", key)
+        }
+        self[["_args"]][[key]]$value <- value
+        return(value)
+      }
+
+      if (!inherits(value, classVal)) {
+        stop0(
+          "Attempting to set ", class(self)[1], ".", key, ".\n",
+          "Expected value with class of |", classVal, "|.\n",
+          "Received ", paste(class(value), collapse = ", ")
+        )
+      }
+      self[["_args"]][[key]]$value <- value
+      value
+    }
+  }
+
+
+  self_array_wrapper <- function(key, classVal) {
+    function(value) {
+      if (missing(value)) {
+        return(self[["_args"]][[key]]$value)
+      }
+
+      if (inherits(value, "R6")) {
+        print(value)
+        stop0(
+          "Attempting to set ", class(self)[1], ".", key, ".\n",
+          "Expected value should be an array of ", classVal, " objects.\n",
+          "Received ", paste(class(value), collapse = ", "),
+          "Received object above."
+        )
+      }
+      lapply(value, function(valItem) {
+        if (!inherits(valItem, classVal)) {
+          print(valItem)
+          stop0(
+            "Attempting to set ", class(self)[1], ".", key, ".\n",
+            "Expected value with class of |", classVal, "|.\n",
+            "Received ", paste(class(valItem), collapse = ", "),
+            "Received object above.",
+          )
+        }
+      })
+
+      selfObj[["_args"]][[key]]$value <- value
+      value
+    }
+  }
+
+  self_base_wrapper <- function(key, parse_fn) {
+    fn <- function(value) {
+      if (missing(value)) {
+        return(self[["_args"]][[key]])
+      }
+      value <- parse_fn(value)
+      self[["_args"]][[key]]$value <- value
+      value
+    }
+    fn
+  }
+
+  args <- parse_args(txt)
+  args$kind <- NULL
+
+  activeList <- active
+
+  for (argName in names(args)) {
+    argItem <- args[[argName]]
+    argType <- argItem$type
+    if (argType %in% c("string", "number", "boolean")) {
+      type_fn <- switch(argType,
+        string = as.character,
+        number = as.numeric,
+        boolean = as.logical
+      )
+
+      fn <- self_base_wrapper(argName, type_fn)
+
+    } else {
+      if (argItem$isArray) {
+        fn <- self_array_wrapper(argName, argType)
+
+      } else {
+        fn <- self_value_wrapper(argName, argType)
+
+      }
+    }
+
+    # replace all "argName" and "type_fn" or "argType" with the actual values
+    # this allows R6 to work with functions that should be closures,
+    # after unenclose'ing the function, it is no long a closure
+    fn <- pryr::unenclose(pryr::unenclose(fn))
+
+    activeList[[argName]] <- fn
+  }
+
+  publicList <- public
+  publicList[["_args"]] <- args
+
+  r6Class <- R6Class(type,
+    public = publicList,
+    active = activeList
+  )
+  r6Class$inherit <- substitute(inherit)
+
+  r6Class
+}
+
+
+
 m <- base::missing
 self_value <- function(key, classVal, selfObj, value, isMissing) {
   if (isMissing) {
-    return(selfObj[[key]])
+    return(selfObj[["_args"]][[key]]$value)
   }
 
   if (is.null(value)) {
-    selfObj[[key]] <- value
+    selfObj[["_args"]][[key]]$value <- value
     return(value)
   }
 
@@ -17,11 +198,12 @@ self_value <- function(key, classVal, selfObj, value, isMissing) {
       "Received ", paste(class(value), collapse = ", ")
     )
   }
-  selfObj[[key]] <- value
+  selfObj[["_args"]][[key]]$value <- value
+  value
 }
 self_array_value <- function(key, classVal, selfObj, value, isMissing) {
   if (isMissing) {
-    return(selfObj[[key]])
+    return(selfObj[["_args"]][[key]]$value)
   }
 
   if (inherits(value, "R6")) {
@@ -45,7 +227,7 @@ self_array_value <- function(key, classVal, selfObj, value, isMissing) {
     }
   })
 
-  selfObj[[key]] <- value
+  selfObj[["_args"]][[key]]$value <- value
   value
 }
 
@@ -54,7 +236,7 @@ self_base_value <- function(key, parse_fn, selfObj, value, isMissing) {
     return(selfObj[[key]])
   }
   value <- parse_fn(value)
-  selfObj[[key]] <- value
+  selfObj[["_args"]][[key]]$value <- value
   value
 }
 
@@ -217,8 +399,14 @@ AST <- R6Class("AST",
     #   ret
     #   browser()
     # }
+    # is_valid = function() {
+    #   stop0(self$kind, " did not implement 'is_valid()'")
+    # }
   ),
   active = list(
+    "_argNames" = function() {
+      names(self$"_args")
+    },
     kind = function() {
       class(self)[1]
     }
@@ -235,50 +423,37 @@ AST <- R6Class("AST",
 #  * it might be useful for name to be "Foo.graphql".
 #  */
 Source <- R6Class("Source",
-  # body: string;
-  # name: string;
+  inherit = AST,
   public = list(
-    "_body" = NULL, "_name" = NULL,
-    initialize = function(body, name) {
-      if (!missing(body)) self$body <- body
-      if (!missing(name)) self$name <- name else self$name <- "GraphQLR"
-    }
+    "_args" = parse_args("
+      body: string;
+      name: string;
+    ")
+    # initialize = function(body, name) {
+    #   if (!missing(body)) self$body <- body
+    #   if (!missing(name)) self$name <- name else self$name <- "GraphQLR"
+    # }
   ),
   active = list(
-    body = function(v) { self_string_value("_body", self, v, m(v)) },
-    name = function(v) { self_string_value("_name", self, v, m(v)) }
+    body = function(v) { self_string_value("body", self, v, m(v)) },
+    name = function(v) { self_string_value("name", self, v, m(v)) }
   )
 )
 
 
 
-Location <- R6Class("Location",
+Location <- R6_from_args(
   inherit = AST,
-  # export type Location = {
-  #   start: number;
-  #   end: number;
-  #   source?: ?Source
-  # }
-  public = list(
-    "_start" = NULL, "_end" = NULL, "_source" = NULL,
-    initialize = function(start, end, source) {
-      if(!missing(start)) self$start = start
-      if(!missing(end)) self$end = end
-      if(!missing(source)) self$source = source
-    }
-  ),
-  active = list(
-    start = function(v) { self_integer_value("_start", self, v, m(v)) },
-    end = function(v) { self_integer_value("_end", self, v, m(v)) },
-    source = function(v) { self_value("_source", "Source", self, v, m(v)) }
-  )
+  "Location",
+  " start: number;
+    end: number;
+    source?: ?Source"
 )
 
 
 class_with_name <- function(className, inheritR6Obj) {
   R6Class(className,
     inherit = inheritR6Obj,
-    public = list("_name" = NULL),
     active = list(
       name = function(v) { self_value("_name", "Name", self, v, m(v)) }
     )
@@ -341,21 +516,32 @@ Node <- R6Class("Node",
 
 Name <- R6Class("Name",
   inherit = Node,
-  # kind: 'Name';
-  # loc?: ?Location;
-  # value: string;
   public = list(
-    "_value" = NULL
+    args = parse_args("
+      kind: 'Name';
+      loc?: ?Location;
+      value: string;
+    ")
   ),
   active = list(
-    value = function(v) { self_string_value("_value", self, v, m(v)) }
+    value = function(v) {
+      isMissingValue <- m(v)
+      if (isMissingValue) {
+        return(self$"_value")
+      }
+      if (!str_detect(v, "^[_A-Za-z][_0-9A-Za-z]*$")) {
+        stop0("Name value must match the regex of: /[_A-Za-z][_0-9A-Za-z]*/. Received value: '", v, "'")
+      }
+      self$args$value$value <- v
+      v
+      # self_string_value("_value", self, v, m(v))
+    }
   )
 )
 GQLR_NodeWithName <- R6Class("GQLR_NodeWithName",
   inherit = Node,
-  public = list("_name" = NULL),
   active = list(
-    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
+    name = function(v) { self_value("name", "Name", self, v, m(v)) }
   )
 )
 
@@ -363,15 +549,20 @@ GQLR_NodeWithName <- R6Class("GQLR_NodeWithName",
 
 Document <- R6Class("Document",
   inherit = Node,
-  # kind: 'Document';
-  # loc?: ?Location;
-  # definitions: Array<Definition>;
   public = list(
-    "_definitions" = NULL
+    "_args" = parse_args("
+      kind: 'Document';
+      loc?: ?Location;
+      definitions: Array<Definition>;
+    ")#,
+    # initialize = function(defintions, loc = NULL) {
+    #   self$defintions = defintions
+    #   self$loc = loc
+    # }
   ),
   active = list(
     definitions = function(v) {
-      self_array_value("_definitions", "Definition", self, v, m(v))
+      self_array_value("definitions", "Definition", self, v, m(v))
     }
   )
 )
@@ -390,41 +581,39 @@ GQLR_DefinitionWithName <- class_with_name("GQLR_DefinitionWithName", Definition
 
 OperationDefinition <- R6Class("OperationDefinition",
   inherit = Definition,
-  # kind: 'OperationDefinition';
-  # loc?: ?Location;
-  # operation: 'query' | 'mutation' | 'subscription';
-  # name?: ?Name;
-  # variableDefinitions?: ?Array<VariableDefinition>;
-  # directives?: ?Array<Directive>;
-  # selectionSet: SelectionSet;
   public = list(
-    "_operation" = NULL,
-    "_variableDefinitions" = NULL,
-    "_directives" = NULL,
-    "_selectionSet" = NULL
+    "_args" = parse_args("
+      kind: 'OperationDefinition';
+      loc?: ?Location;
+      operation: 'query' | 'mutation' | 'subscription';
+      name?: ?Name;
+      variableDefinitions?: ?Array<VariableDefinition>;
+      directives?: ?Array<Directive>;
+      selectionSet: SelectionSet;
+    ")
   ),
   active = list(
     operation = function(value) {
       if (missing(value)) {
-        return(self$"_operation")
+        return(self[["_args"]]$operation$value)
       }
       if (! (value %in% c("query", "mutation", "subscription"))) {
         stop0("invalid value supplied to operation: |", value, "|.")
       }
-      self$"_operation" <- value
+      self[["_args"]]$operation$value <- value
       value
     },
     variableDefinitions = function(v) {
       self_array_value(
-        "_variableDefinitions", "VariableDefinition",
+        "variableDefinitions", "VariableDefinition",
         self, v, m(v)
       )
     },
     directives = function(v) {
-      self_array_value("_directives", "Directive", self, v, m(v))
+      self_array_value("directives", "Directive", self, v, m(v))
     },
     selectionSet = function(v) {
-      self_value("_selectionSet", "SelectionSet", self, v, m(v))
+      self_value("selectionSet", "SelectionSet", self, v, m(v))
     }
   )
 
@@ -434,13 +623,14 @@ OperationDefinition <- R6Class("OperationDefinition",
 
 VariableDefinition <- R6Class("VariableDefinition",
   inherit = Node,
-  # kind: 'VariableDefinition';
-  # loc?: ?Location;
-  # variable: Variable;
-  # type: Type;
-  # defaultValue?: ?Value;
   public = list(
-    "_variable" = NULL, "_type" = NULL, "_defaultValue" = NULL
+    "_args" = parse_args("
+      kind: 'VariableDefinition';
+      loc?: ?Location;
+      variable: Variable;
+      type: Type;
+      defaultValue?: ?Value;
+    ")
   ),
   active = list(
     variable = function(v) {
