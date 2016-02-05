@@ -19,10 +19,11 @@ parse_args <- function(txt) {
 
       if (str_detect(value, "^'") && str_detect(value, "'$")) {
         # is literal value
-        values <- strsplit(value, ",")[[1]] %>%
+        values <- strsplit(value, "\\|")[[1]] %>%
           str_replace("'", "") %>%
           str_replace("'", "") %>%
           str_trim()
+
         retItem <- list(type = "string", isArray = FALSE, canBeNull = FALSE, possibleValues = values)
       } else {
         canBeNull <- FALSE
@@ -58,7 +59,7 @@ parse_args <- function(txt) {
 
 
 R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = list(), active = list()) {
-  # R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;")
+  # R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;", inherit = AST)
 
   self_value_wrapper <- function(key, classVal) {
     function(value) {
@@ -114,7 +115,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         }
       })
 
-      selfObj[["_args"]][[key]]$value <- value
+      self[["_args"]][[key]]$value <- value
       value
     }
   }
@@ -122,7 +123,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   self_base_wrapper <- function(key, parse_fn) {
     fn <- function(value) {
       if (missing(value)) {
-        return(self[["_args"]][[key]])
+        return(self[["_args"]][[key]]$value)
       }
       value <- parse_fn(value)
       self[["_args"]][[key]]$value <- value
@@ -130,11 +131,26 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
     }
     fn
   }
+  self_base_values_wrapper <- function(key, parse_fn, values) {
+    fn <- function(value) {
+      if (missing(value)) {
+        return(self[["_args"]][[key]]$value)
+      }
+      value <- parse_fn(value)
+      if (! (value %in% values)) {
+        stop0("Value supplied to key '", key, "' not in accepted values: ", str_c(values, collapse = ", "), ".")
+      }
+      self[["_args"]][[key]]$value <- value
+      value
+    }
+    fn
+  }
+
 
   args <- parse_args(txt)
   args$kind <- NULL
 
-  activeList <- active
+  activeList <- list()
 
   for (argName in names(args)) {
     argItem <- args[[argName]]
@@ -146,7 +162,12 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         boolean = as.logical
       )
 
-      fn <- self_base_wrapper(argName, type_fn)
+      possibleValues <- argItem$possibleValues
+      if (! is.null(possibleValues)) {
+        fn <- self_base_values_wrapper(argName, type_fn, possibleValues)
+      } else {
+        fn <- self_base_wrapper(argName, type_fn)
+      }
 
     } else {
       if (argItem$isArray) {
@@ -166,113 +187,40 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
     activeList[[argName]] <- fn
   }
 
-  publicList <- public
+  publicList <- list()
   publicList[["_args"]] <- args
+
+  if (is.null(public)) {
+    public <- list()
+  }
+  for (nameVal in names(public)) {
+    publicList[[nameVal]] <- public[[nameVal]]
+  }
+
+  if (is.null(active)) {
+    active <- list()
+  }
+  for (nameVal in names(active)) {
+    activeList[[nameVal]] <- active[[nameVal]]
+  }
+
+  privateList <- list()
+  if (is.null(private)) {
+    private <- list()
+  }
+  for (nameVal in names(private)) {
+    privateList[[nameVal]] <- private[[nameVal]]
+  }
 
   r6Class <- R6Class(type,
     public = publicList,
+    private = privateList,
     active = activeList
   )
   r6Class$inherit <- substitute(inherit)
 
   r6Class
 }
-
-
-
-m <- base::missing
-self_value <- function(key, classVal, selfObj, value, isMissing) {
-  if (isMissing) {
-    return(selfObj[["_args"]][[key]]$value)
-  }
-
-  if (is.null(value)) {
-    selfObj[["_args"]][[key]]$value <- value
-    return(value)
-  }
-
-  if (!inherits(value, classVal)) {
-    stop0(
-      "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
-      "Expected value with class of |", classVal, "|.\n",
-      "Received ", paste(class(value), collapse = ", ")
-    )
-  }
-  selfObj[["_args"]][[key]]$value <- value
-  value
-}
-self_array_value <- function(key, classVal, selfObj, value, isMissing) {
-  if (isMissing) {
-    return(selfObj[["_args"]][[key]]$value)
-  }
-
-  if (inherits(value, "R6")) {
-    print(value)
-    stop0(
-      "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
-      "Expected value should be an array of ", classVal, " objects.\n",
-      "Received ", paste(class(value), collapse = ", "),
-      "Received object above."
-    )
-  }
-  lapply(value, function(valItem) {
-    if (!inherits(valItem, classVal)) {
-      print(valItem)
-      stop0(
-        "Attempting to set ", class(selfObj)[1], ".", str_replace(key, "_", ""), ".\n",
-        "Expected value with class of |", classVal, "|.\n",
-        "Received ", paste(class(valItem), collapse = ", "),
-        "Received object above.",
-      )
-    }
-  })
-
-  selfObj[["_args"]][[key]]$value <- value
-  value
-}
-
-self_base_value <- function(key, parse_fn, selfObj, value, isMissing) {
-  if (isMissing) {
-    return(selfObj[[key]])
-  }
-  value <- parse_fn(value)
-  selfObj[["_args"]][[key]]$value <- value
-  value
-}
-
-
-self_numeric_value <- function(key, selfObj, value, isMissing) {
-  self_base_value(key, as.numeric, selfObj, value, isMissing)
-}
-self_integer_value <- function(key, selfObj, value, isMissing) {
-  self_base_value(key, as.integer, selfObj, value, isMissing)
-}
-self_string_value <- function(key, selfObj, value, isMissing) {
-  self_base_value(key, as.character, selfObj, value, isMissing)
-}
-self_boolean_value <- function(key, selfObj, value, isMissing) {
-  self_base_value(key, as.logical, selfObj, value, isMissing)
-}
-
-# XClass <- R6Class("XClass", public = list(kind = "XClass", y = 2))
-# YClass <- R6Class("YClass", public = list(kind = "YClass", y = 2))
-# Simple <- R6Class("SimpleActive",
-#   public = list("_w" = NULL, "_z" = NULL),
-#   active = list(
-#     w = function(value) {
-#       self_value(self, "_w", value, missing(value), "YClass")
-#     },
-#     z = function(v) {self_value("_z", "YClass", self, v, m(v))}
-#   )
-# )
-# xObj <- XClass$new()
-# yObj <- YClass$new()
-# s <- Simple$new()
-# s
-# s$w <- yObj
-# s$z <- yObj
-# s
-# s$z <- xObj
 
 
 r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
@@ -289,8 +237,7 @@ r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
 
   ret <- r6Obj$new()
 
-  fieldNames <- names(ret)
-  fieldNames <- fieldNames[str_detect(fieldNames, "^_")] %>% str_replace("_", "")
+  fieldNames <- ret$"_argNames"
 
   for (activeKey in fieldNames) {
     cat(level, "-", paste(keys, collapse = ","), "-", activeKey, "\n")
@@ -328,8 +275,7 @@ gqlr_str <- (function() {
 
     cat("<", r6ObjClass, ">", sep = "")
 
-    fieldNames <- names(x)
-    fieldNames <- fieldNames[str_detect(fieldNames, "^_")] %>% str_replace("_", "")
+    fieldNames <- x$"_argNames"
 
     for (fieldName in fieldNames) {
       if (fieldName %in% c("loc")) {
@@ -383,25 +329,6 @@ gqlr_str <- (function() {
 
 AST <- R6Class("AST",
   public = list(
-    # print = function(...) {
-    #   cat()
-    # }
-    # initialize = function(obj) {
-    #   selfKind <- self$kind
-    #
-    #   classObj = get_class_obj(kind)
-    #
-    #   ret <- classObj$new()
-    #
-    #   for (key in names(classObj$active)) {
-    #     ret[[key]] <- classObj$init_from_obj(obj[[key]])
-    #   }
-    #   ret
-    #   browser()
-    # }
-    # is_valid = function() {
-    #   stop0(self$kind, " did not implement 'is_valid()'")
-    # }
   ),
   active = list(
     "_argNames" = function() {
@@ -422,21 +349,23 @@ AST <- R6Class("AST",
 #  * source files; for example, if the GraphQL input is in a file Foo.graphql,
 #  * it might be useful for name to be "Foo.graphql".
 #  */
-Source <- R6Class("Source",
+Source <- R6_from_args(
   inherit = AST,
-  public = list(
-    "_args" = parse_args("
-      body: string;
-      name: string;
-    ")
-    # initialize = function(body, name) {
-    #   if (!missing(body)) self$body <- body
-    #   if (!missing(name)) self$name <- name else self$name <- "GraphQLR"
-    # }
-  ),
+  "Source",
+  " name: string;
+    body: string;",
   active = list(
-    body = function(v) { self_string_value("body", self, v, m(v)) },
-    name = function(v) { self_string_value("name", self, v, m(v)) }
+    name = function(value) {
+      if (missing(value)) {
+        return(self[["_args"]]$name$value)
+      }
+
+      if (is.null(value)) {
+        value <- "GraphQL"
+      }
+      self[["_args"]]$name$value <- value
+      value
+    }
   )
 )
 
@@ -447,19 +376,8 @@ Location <- R6_from_args(
   "Location",
   " start: number;
     end: number;
-    source?: ?Source"
+    source?: ?Source;"
 )
-
-
-class_with_name <- function(className, inheritR6Obj) {
-  R6Class(className,
-    inherit = inheritR6Obj,
-    active = list(
-      name = function(v) { self_value("_name", "Name", self, v, m(v)) }
-    )
-  )
-}
-
 
 
 # /**
@@ -499,284 +417,140 @@ class_with_name <- function(className, inheritR6Obj) {
 #                  | InputObjectTypeDefinition
 #                  | TypeExtensionDefinition
 
-GQLR_HasLocation <- R6Class("GQLR_HasLocation",
-  inherit = AST,
-  public = list(
-    "_loc" = NULL
-  ),
-  active = list(
-    loc = function(v) { self_value("_loc", "Location", self, v, m(v)) }
-  )
-)
-Node <- R6Class("Node",
-  inherit = GQLR_HasLocation
-)
+# GQLR_HasLocation <- R6Class("GQLR_HasLocation",
+#   inherit = AST,
+#   public = list(
+#     "_loc" = NULL
+#   ),
+#   active = list(
+#     loc = function(v) { self_value("_loc", "Location", self, v, m(v)) }
+#   )
+# )
+Node <- R6Class("Node", inherit = AST)
 
 
 
-Name <- R6Class("Name",
+Name <- R6_from_args(
   inherit = Node,
-  public = list(
-    args = parse_args("
-      kind: 'Name';
-      loc?: ?Location;
-      value: string;
-    ")
-  ),
+  "Name",
+  " loc?: ?Location;
+    value: string;",
   active = list(
-    value = function(v) {
-      isMissingValue <- m(v)
-      if (isMissingValue) {
-        return(self$"_value")
-      }
-      if (!str_detect(v, "^[_A-Za-z][_0-9A-Za-z]*$")) {
-        stop0("Name value must match the regex of: /[_A-Za-z][_0-9A-Za-z]*/. Received value: '", v, "'")
-      }
-      self$args$value$value <- v
-      v
-      # self_string_value("_value", self, v, m(v))
-    }
-  )
-)
-GQLR_NodeWithName <- R6Class("GQLR_NodeWithName",
-  inherit = Node,
-  active = list(
-    name = function(v) { self_value("name", "Name", self, v, m(v)) }
-  )
-)
-
-
-
-Document <- R6Class("Document",
-  inherit = Node,
-  public = list(
-    "_args" = parse_args("
-      kind: 'Document';
-      loc?: ?Location;
-      definitions: Array<Definition>;
-    ")#,
-    # initialize = function(defintions, loc = NULL) {
-    #   self$defintions = defintions
-    #   self$loc = loc
-    # }
-  ),
-  active = list(
-    definitions = function(v) {
-      self_array_value("definitions", "Definition", self, v, m(v))
-    }
-  )
-)
-
-
-Definition <- R6Class("Definition",
-  inherit = Node,
-  # export type Definition = OperationDefinition
-  #                        | FragmentDefinition
-  #                        | TypeDefinition
-  #                        | TypeExtensionDefinition
-)
-
-GQLR_DefinitionWithName <- class_with_name("GQLR_DefinitionWithName", Definition)
-
-
-OperationDefinition <- R6Class("OperationDefinition",
-  inherit = Definition,
-  public = list(
-    "_args" = parse_args("
-      kind: 'OperationDefinition';
-      loc?: ?Location;
-      operation: 'query' | 'mutation' | 'subscription';
-      name?: ?Name;
-      variableDefinitions?: ?Array<VariableDefinition>;
-      directives?: ?Array<Directive>;
-      selectionSet: SelectionSet;
-    ")
-  ),
-  active = list(
-    operation = function(value) {
+    value = function(value) {
       if (missing(value)) {
-        return(self[["_args"]]$operation$value)
+        return(self[["_args"]]$value$value)
       }
-      if (! (value %in% c("query", "mutation", "subscription"))) {
-        stop0("invalid value supplied to operation: |", value, "|.")
+      if (!str_detect(value, "^[_A-Za-z][_0-9A-Za-z]*$")) {
+        stop0("Name value must match the regex of: /[_A-Za-z][_0-9A-Za-z]*/. Received value: '", value, "'")
       }
-      self[["_args"]]$operation$value <- value
+      self[["_args"]]$value$value <- value
       value
-    },
-    variableDefinitions = function(v) {
-      self_array_value(
-        "variableDefinitions", "VariableDefinition",
-        self, v, m(v)
-      )
-    },
-    directives = function(v) {
-      self_array_value("directives", "Directive", self, v, m(v))
-    },
-    selectionSet = function(v) {
-      self_value("selectionSet", "SelectionSet", self, v, m(v))
     }
   )
-
 )
 
 
 
-VariableDefinition <- R6Class("VariableDefinition",
+Document <- R6_from_args(
   inherit = Node,
-  public = list(
-    "_args" = parse_args("
-      kind: 'VariableDefinition';
-      loc?: ?Location;
-      variable: Variable;
-      type: Type;
-      defaultValue?: ?Value;
-    ")
-  ),
-  active = list(
-    variable = function(v) {
-      self_value("_variable", "Variable", self, v, m(v))
-    },
-    type = function(v) {
-      self_value("_type", "Type", self, v, m(v))
-    },
-    defaultValue = function(v) {
-      self_value("_defaultValue", "Value", self, v, m(v))
-    }
-  )
+  "Document",
+  " loc?: ?Location;
+    definitions: Array<Definition>;"
 )
 
 
+# export type Definition = OperationDefinition
+#                        | FragmentDefinition
+#                        | TypeDefinition
+#                        | TypeExtensionDefinition
+Definition <- R6Class("Definition", inherit = Node)
 
-SelectionSet <- R6Class("SelectionSet",
+OperationDefinition <- R6_from_args(
+  inherit = Definition,
+  "OperationDefinition",
+  " loc?: ?Location;
+    operation: 'query' | 'mutation' | 'subscription';
+    name?: ?Name;
+    variableDefinitions?: ?Array<VariableDefinition>;
+    directives?: ?Array<Directive>;
+    selectionSet: SelectionSet;"
+)
+
+
+VariableDefinition <- R6_from_args(
   inherit = Node,
-  # kind: 'SelectionSet';
-  # loc?: ?Location;
-  # selections: Array<Selection>;
-  public = list("_selections" = NULL),
-  active = list(
-    selections = function(v) {
-      self_array_value("_selections", "Selection", self, v, m(v))
-    }
-  )
+  "VariableDefinition",
+  " loc?: ?Location;
+    variable: Variable;
+    type: Type;
+    defaultValue?: ?Value;"
 )
 
-
-
-Selection = R6Class("Selection",
-  # export type Selection = Field
-  #                       | FragmentSpread
-  #                       | InlineFragment
-  inherit = Node
-)
-GQLR_SelectionWithName <- class_with_name("GQLR_SelectionWithName", Selection)
-
-
-
-Field = R6Class("Field",
-  inherit = GQLR_SelectionWithName,
-  # kind: 'Field';
-  # loc?: ?Location;
-  # alias?: ?Name;
-  # name: Name;
-  # arguments?: ?Array<Argument>;
-  # directives?: ?Array<Directive>;
-  # selectionSet?: ?SelectionSet;
-  public = list(
-    "_alias" = NULL, "_arguments" = NULL, "_directives" = NULL, "_selectionSet" = NULL
-  ),
-  active = list(
-    alias = function(v) {
-      self_value("_alias", "Name", self, v, m(v))
-    },
-    arguments = function(v) {
-      self_array_value("_arguments", "Argument", self, v, m(v))
-    },
-    directives = function(v) {
-      self_array_value("_directives", "Directive", self, v, m(v))
-    },
-    selectionSet = function(v) {
-      self_value("_selectionSet", "SelectionSet", self, v, m(v))
-    }
-  )
-)
-
-
-
-Argument = R6Class("Argument",
+SelectionSet <- R6_from_args(
   inherit = Node,
-  # kind: 'Argument';
-  # loc?: ?Location;
-  # name: Name;
-  # value: Value;
-  public = list(
-    "_value" = NULL
-  ),
-  active = list(
-    value = function(v) {
-      self_value("_value", "Value", self, v, m(v))
-    }
-  )
+  "SelectionSet",
+  " loc?: ?Location;
+    selections: Array<Selection>;"
 )
 
 
-FragmentSpread = R6Class("FragmentSpread",
-  inherit = GQLR_SelectionWithName,
-  # kind: 'FragmentSpread';
-  # loc?: ?Location;
-  # name: Name;
-  # directives?: ?Array<Directive>;
-  public = list("_directives" = NULL),
-  active = list(
-    directives = function(v) {
-      self_array_value("_directives", "Directive", self, v, m(v))
-    }
-  )
-)
+
+# export type Selection = Field
+#                       | FragmentSpread
+#                       | InlineFragment
+Selection = R6Class("Selection", inherit = Node)
 
 
-InlineFragment = R6Class("InlineFragment",
+
+Field = R6_from_args(
   inherit = Selection,
-  # kind: 'InlineFragment';
-  # loc?: ?Location;
-  # typeCondition?: ?NamedType;
-  # directives?: ?Array<Directive>;
-  # selectionSet: SelectionSet;
-  public = list("_typeCondition" = NULL,"_directives" = NULL, "_selectionSet" = NULL),
-  active = list(
-    typeCondition = function(v) {
-      self_value("_typeCondition", "NamedType", self, v, m(v))
-    },
-    directives = function(v) {
-      self_array_value("_directives", "Directive", self, v, m(v))
-    },
-    selectionSet = function(v) {
-      self_value("_selectionSet", "SelectionSet", self, v, m(v))
-    }
-  )
+  "Field",
+  " loc?: ?Location;
+    alias?: ?Name;
+    name: Name;
+    arguments?: ?Array<Argument>;
+    directives?: ?Array<Directive>;
+    selectionSet?: ?SelectionSet;"
+)
+
+
+Argument = R6_from_args(
+  inherit = Node,
+  "Argument",
+  " loc?: ?Location;
+    name: Name;
+    value: Value;"
+)
+
+
+FragmentSpread = R6_from_args(
+  inherit = Selection,
+  "FragmentSpread",
+  " loc?: ?Location;
+    name: Name;
+    directives?: ?Array<Directive>;"
+)
+
+
+InlineFragment = R6_from_args(
+  inherit = Selection,
+  "InlineFragment",
+  " loc?: ?Location;
+    typeCondition?: ?NamedType;
+    directives?: ?Array<Directive>;
+    selectionSet: SelectionSet;"
 )
 
 
 
-FragmentDefinition = R6Class("FragmentDefinition",
-  inherit = GQLR_DefinitionWithName,
-  # kind: 'FragmentDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # typeCondition: NamedType;
-  # directives?: ?Array<Directive>;
-  # selectionSet: SelectionSet;
-  public = list("_typeCondition" = NULL,"_directives" = NULL, "_selectionSet" = NULL),
-  active = list(
-    typeCondition = function(v) {
-      self_value("_typeCondition", "NamedType", self, v, m(v))
-    },
-    directives = function(v) {
-      self_array_value("_directives", "Directive", self, v, m(v))
-    },
-    selectionSet = function(v) {
-      self_value("_selectionSet", "SelectionSet", self, v, m(v))
-    }
-  )
+FragmentDefinition = R6_from_args(
+  inherit = Definition,
+  "FragmentDefinition",
+  " loc?: ?Location;
+    name: Name;
+    typeCondition: NamedType;
+    directives?: ?Array<Directive>;
+    selectionSet: SelectionSet;"
 )
 
 
@@ -784,170 +558,126 @@ FragmentDefinition = R6Class("FragmentDefinition",
 
 # // Values
 
-Value <- R6Class("Value",
-  inherit = Node
-  # export type Value = Variable
-  #                   | IntValue
-  #                   | FloatValue
-  #                   | StringValue
-  #                   | BooleanValue
-  #                   | EnumValue
-  #                   | ListValue
-  #                   | ObjectValue
+# export type Value = Variable
+#                   | IntValue
+#                   | FloatValue
+#                   | StringValue
+#                   | BooleanValue
+#                   | EnumValue
+#                   | ListValue
+#                   | ObjectValue
+Value <- R6Class("Value", inherit = Node)
+
+
+Variable <- R6_from_args(
+  inherit = Value,
+  "Variable",
+  " loc?: ?Location;
+    name: Name; "
 )
 
 
-Variable <- R6Class("Variable",
+IntValue = R6_from_args(
   inherit = Value,
-  # kind: 'Variable';
-  # loc?: ?Location;
-  # name: Name;
-  public = list("_name" = NULL),
-  active = list(
-    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
-  )
+  "IntValue",
+  " loc?: ?Location;
+    value: string;"
+)
+FloatValue = R6_from_args(
+  inherit = Value,
+  "FloatValue",
+  " loc?: ?Location;
+    value: string;"
+)
+StringValue = R6_from_args(
+  inherit = Value,
+  "StringValue",
+  " loc?: ?Location;
+    value: string;"
+)
+BooleanValue = R6_from_args(
+  inherit = Value,
+  "BooleanValue",
+  " loc?: ?Location;
+    value: boolean;"
+)
+EnumValue = R6_from_args(
+  inherit = Value,
+  "EnumValue",
+  " loc?: ?Location;
+    value: string;"
+)
+ListValue = R6_from_args(
+  inherit = Value,
+  "ListValue",
+  " loc?: ?Location;
+    values: Array<Value>;"
+)
+ObjectValue = R6_from_args(
+  inherit = Value,
+  "ObjectValue",
+  " loc?: ?Location;
+    fields: Array<ObjectField>;"
 )
 
-
-GQLR_ValueIsString = R6Class("IntValue",
-  inherit = Value,
-  # loc?: ?Location;
-  # value: string;
-  public = list("_value" = NULL),
-  active = list(
-    value = function(v) { self_string_value("_value", self, v, m(v)) }
-  )
-)
-IntValue = R6Class("IntValue",
-  inherit = GQLR_ValueIsString,
-  # kind: 'IntValue';
-  # loc?: ?Location;
-  # value: string;
-)
-FloatValue = R6Class("FloatValue",
-  inherit = GQLR_ValueIsString,
-  # kind: 'FloatValue';
-  # loc?: ?Location;
-  # value: string;
-)
-StringValue = R6Class("StringValue",
-  inherit = GQLR_ValueIsString,
-  # kind: 'StringValue';
-  # loc?: ?Location;
-  # value: string;
-)
-BooleanValue = R6Class("BooleanValue",
-  inherit = Value,
-  # kind: 'BooleanValue';
-  # loc?: ?Location;
-  # value: boolean;
-  public = list("_value" = NULL),
-  active = list(
-    value = function(v) { self_boolean_value("_value", self, v, m(v)) }
-  )
-)
-EnumValue = R6Class("EnumValue",
-  inherit = GQLR_ValueIsString,
-  # kind: 'EnumValue';
-  # loc?: ?Location;
-  # value: string;
-)
-ListValue = R6Class("ListValue",
-  inherit = Value,
-  # kind: 'ListValue';
-  # loc?: ?Location;
-  # values: Array<Value>;
-  public = list("_values" = NULL),
-  active = list(
-    values = function(v) { self_array_value("_values", "Value", self, v, m(v)) }
-  )
-)
-ObjectValue = R6Class("ObjectValue",
-  inherit = Value,
-  # kind: 'ObjectValue';
-  # loc?: ?Location;
-  # fields: Array<ObjectField>;
-  public = list("_fields" = NULL),
-  active = list(
-    fields = function(v) { self_array_value("_fields", "ObjectField", self, v, m(v)) }
-  )
-)
-
-ObjectField = R6Class("ObjectField",
-  inherit = GQLR_NodeWithName,
-  # kind: 'ObjectField';
-  # loc?: ?Location;
-  # name: Name;
-  # value: Value;
-  public = list("_value" = NULL),
-  active = list(
-    value = function(v) { self_value("_value", "Value", self, v, m(v)) }
-  )
+ObjectField = R6_from_args(
+  inherit = Node,
+  "ObjectField",
+  " loc?: ?Location;
+    name: Name;
+    value: Value;
+  "
 )
 
 
 
 # // Directives
 
-Directive = R6Class("Directive",
-  inherit = GQLR_NodeWithName,
-  # kind: 'Directive';
-  # loc?: ?Location;
-  # name: Name;
-  # arguments?: ?Array<Argument>;
-  public = list("_arguments" = NULL),
-  active = list(
-    arguments = function(v) { self_array_value("_arguments", "Argument", self, v, m(v)) }
-  )
+Directive = R6_from_args(
+  inherit = Node,
+  "Directive",
+  " loc?: ?Location;
+    name: Name;
+    arguments?: ?Array<Argument>;"
 )
 
 
 
 # // Type Reference
 
-Type = R6Class("Type",
-  inherit = Node
-  # export type Type = NamedType
-  #                  | ListType
-  #                  | NonNullType
-)
+# export type Type = NamedType
+#                  | ListType
+#                  | NonNullType
+Type = R6Class("Type",inherit = Node)
 
 
-NamedType = R6Class("NamedType",
+NamedType = R6_from_args(
   inherit = Type,
-  # kind: 'NamedType';
-  # loc?: ?Location;
-  # name: Name;
-  public = list("_name" = NULL),
-  active = list(
-    name = function(v) { self_value("_name", "Name", self, v, m(v)) }
-  )
+  "NamedType",
+  " loc?: ?Location;
+    name: Name;"
 )
-ListType = R6Class("ListType",
+ListType = R6_from_args(
   inherit = Type,
-  # kind: 'ListType';
-  # loc?: ?Location;
-  # type: Type;
-  public = list("_type" = NULL),
-  active = list(
-    type = function(v) { self_value("_type", "Type", self, v, m(v)) }
-  )
+  "ListType",
+  " loc?: ?Location;
+    type: Type;"
 )
-NonNullType = R6Class("NonNullType",
+NonNullType = R6_from_args(
   inherit = Type,
-  # kind: 'NonNullType';
-  # loc?: ?Location;
-  # type: NamedType | ListType;
-  public = list("_type" = NULL),
+  "NonNullType",
+  " loc?: ?Location;
+    type: NamedType | ListType;",
   active = list(
-    type = function(v) {
-      if (missing(v)) {
-        return(self$"_type")
+    type = function(value) {
+      if (missing(value)) {
+        return(self[["_args"]]$type$value)
       }
-      if (!(inherits(v, "NamedType") || inherits(v, "ListType"))) {
+      if (!(inherits(value, "NamedType") || inherits(value, "ListType"))) {
         stop0("expected value with class of NamedType or ListType. Received ", value$kind)
       }
-      self_value("_type", "Type", self, v, m(v))
+      self[["_args"]]$type$value <- value
+      value
     }
   )
 )
@@ -955,140 +685,101 @@ NonNullType = R6Class("NonNullType",
 
 
 # // Type Definition
-TypeDefinition = R6Class("TypeDefinition",
-  inherit = GQLR_DefinitionWithName
-  # export type TypeDefinition = ObjectTypeDefinition
-  #                            | InterfaceTypeDefinition
-  #                            | UnionTypeDefinition
-  #                            | ScalarTypeDefinition
-  #                            | EnumTypeDefinition
-  #                            | InputObjectTypeDefinition
-)
+
+# export type TypeDefinition = ObjectTypeDefinition
+#                            | InterfaceTypeDefinition
+#                            | UnionTypeDefinition
+#                            | ScalarTypeDefinition
+#                            | EnumTypeDefinition
+#                            | InputObjectTypeDefinition
+TypeDefinition = R6Class("TypeDefinition", inherit = Definition)
 
 
-
-ObjectTypeDefinition = R6Class("ObjectTypeDefinition",
+ObjectTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
-  # kind: 'ObjectTypeDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # interfaces?: ?Array<NamedType>;
-  # fields: Array<FieldDefinition>;
-  public = list("_interfaces" = NULL, "_fields" = NULL),
-  active = list(
-    interfaces = function(v) { self_array_value("_interfaces", "NamedType", self, v, m(v)) },
-    fields = function(v) { self_array_value("_fields", "FieldDefinition", self, v, m(v)) }
-  )
+  "ObjectTypeDefinition",
+  " loc?: ?Location;
+    name: Name;
+    interfaces?: ?Array<NamedType>;
+    fields: Array<FieldDefinition>;"
 )
 
 
 
-FieldDefinition = R6Class("FieldDefinition",
+FieldDefinition = R6_from_args(
   inherit = TypeDefinition,
-  # kind: 'FieldDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # arguments: Array<InputValueDefinition>;
-  # type: Type;
-  public = list("_arguments" = NULL, "_type" = NULL),
-  active = list(
-    arguments = function(v) {
-      self_array_value("_arguments", "InputValueDefinition", self, v, m(v))
-    },
-    type = function(v) { self_value("_type", "Type", self, v, m(v)) }
-  )
+  "FieldDefinition",
+  " loc?: ?Location;
+    name: Name;
+    arguments: Array<InputValueDefinition>;
+    type: Type;"
 )
 
 
 
-InputValueDefinition = R6Class("InputValueDefinition",
-  inherit = GQLR_NodeWithName,
-  # kind: 'InputValueDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # type: Type;
-  # defaultValue?: ?Value;
-  public = list("_type" = NULL, "_defaultValue" = NULL),
-  active = list(
-    type = function(v) { self_value("_type", "Type", self, v, m(v)) },
-    defaultValue = function(v) { self_value("_defaultValue", "Value", self, v, m(v)) }
-  )
+InputValueDefinition = R6_from_args(
+  inherit = Node,
+  "InputValueDefinition",
+  " loc?: ?Location;
+    name: Name;
+    type: Type;
+    defaultValue?: ?Value;"
 )
 
-InterfaceTypeDefinition = R6Class("InputValueDefinition",
+InterfaceTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
-  # kind: 'InterfaceTypeDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # fields: Array<FieldDefinition>;
-  public = list("_fields" = NULL),
-  active = list(
-    fields = function(v) { self_array_value("_fields", "FieldDefinition", self, v, m(v)) }
-  )
+  "InputValueDefinition",
+  " loc?: ?Location;
+    name: Name;
+    fields: Array<FieldDefinition>;"
 )
 
 
-UnionTypeDefinition = R6Class("UnionTypeDefinition",
+UnionTypeDefinition = R6_from_args(
+  "UnionTypeDefinition",
   inherit = TypeDefinition,
-  # kind: 'UnionTypeDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # types: Array<NamedType>;
-  public = list("_types" = NULL),
-  active = list(
-    types = function(v) { self_array_value("_types", "NamedType", self, v, m(v)) }
-  )
+  " loc?: ?Location;
+    name: Name;
+    types: Array<NamedType>;"
 )
 
-ScalarTypeDefinition = R6Class("ScalarTypeDefinition",
+ScalarTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
-  # kind: 'ScalarTypeDefinition';
-  # loc?: ?Location;
-  # name: Name;
+  "ScalarTypeDefinition",
+  " loc?: ?Location;
+    name: Name;"
 )
 
-EnumTypeDefinition = R6Class("EnumTypeDefinition",
+EnumTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
-  # kind: 'EnumTypeDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # values: Array<EnumValueDefinition>;
-  public = list("_values" = NULL),
-  active = list(
-    values = function(v) { self_array_value("_values", "EnumValueDefinition", self, v, m(v)) }
-  )
+  "EnumTypeDefinition",
+  " loc?: ?Location;
+    name: Name;
+    values: Array<EnumValueDefinition>;"
 )
-EnumValueDefinition = R6Class("EnumValueDefinition",
-  inherit = GQLR_NodeWithName,
-  # kind: 'EnumValueDefinition';
-  # loc?: ?Location;
-  # name: Name;
-)
-
-InputObjectTypeDefinition = R6Class("InputObjectTypeDefinition",
+EnumValueDefinition = R6_from_args(
   inherit = TypeDefinition,
-  # kind: 'InputObjectTypeDefinition';
-  # loc?: ?Location;
-  # name: Name;
-  # fields: Array<InputValueDefinition>;
-  public = list("_fields" = NULL),
-  active = list(
-    fields = function(v) { self_array_value("_fields", "InputValueDefinition", self, v, m(v)) }
-  )
+  "EnumValueDefinition",
+  " loc?: ?Location;
+    name: Name;"
+)
+
+InputObjectTypeDefinition = R6_from_args(
+  inherit = TypeDefinition,
+  "InputObjectTypeDefinition",
+  " loc?: ?Location;
+    name: Name;
+    fields: Array<InputValueDefinition>;"
 )
 
 
 
 
-TypeExtensionDefinition = R6Class("TypeExtensionDefinition",
+TypeExtensionDefinition = R6_from_args(
   inherit = Definition,
-  # kind: 'TypeExtensionDefinition';
-  # loc?: ?Location;
-  # definition: ObjectTypeDefinition;
-  public = list("_definition" = NULL),
-  active = list(
-    definition = function(v) { self_value("_definition", "ObjectTypeDefinition", self, v, m(v)) }
-  )
+  "TypeExtensionDefinition",
+  " loc?: ?Location;
+    definition: ObjectTypeDefinition;"
 )
 
 
