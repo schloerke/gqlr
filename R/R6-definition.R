@@ -789,10 +789,6 @@ TypeExtensionDefinition = R6_from_args(
 
 
 
-
-
-
-
 get_class_obj <- (function(){
   classList <- list(
     AST = AST,
