@@ -155,7 +155,10 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   for (argName in names(args)) {
     argItem <- args[[argName]]
     argType <- argItem$type
-    if (argType %in% c("string", "number", "boolean")) {
+    if (argType == "any") {
+      activeList[[argName]] <- I
+
+    } else if (argType %in% c("string", "number", "boolean")) {
       type_fn <- switch(argType,
         string = as.character,
         number = as.numeric,
@@ -223,45 +226,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
 }
 
 
-r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
-  objClass <- obj$kind
-  if (is.null(objPos)) {
-    keys <- append(keys, objClass)
-  } else {
-    keys <- append(keys, str_c(objPos, "-", objClass))
-  }
-  level <- level + 1
 
-
-  r6Obj <- get_class_obj(objClass)
-
-  ret <- r6Obj$new()
-
-  fieldNames <- ret$"_argNames"
-
-  for (activeKey in fieldNames) {
-    cat(level, "-", paste(keys, collapse = ","), "-", activeKey, "\n")
-    objVal <- obj[[activeKey]]
-
-    if (is.list(objVal)) {
-      if (length(objVal) == 0) {
-        ret[[activeKey]] <- NULL
-      } else {
-        if (identical(class(objVal), "list")) {
-          # lapply(objVal, r6_from_json, keys = keys, level = level)
-          ret[[activeKey]] <- lapply(seq_along(objVal), function(i) {
-            r6_from_json(objVal[[i]], keys = keys, level = level, objPos = i)
-          })
-        } else {
-          ret[[activeKey]] <- r6_from_json(objVal, keys = keys, level = level)
-        }
-      }
-    } else {
-      ret[[activeKey]] <- objVal
-    }
-  }
-  ret
-}
 
 
 gqlr_str <- (function() {
@@ -556,80 +521,6 @@ FragmentDefinition = R6_from_args(
 
 
 
-# // Values
-
-# export type Value = Variable
-#                   | IntValue
-#                   | FloatValue
-#                   | StringValue
-#                   | BooleanValue
-#                   | EnumValue
-#                   | ListValue
-#                   | ObjectValue
-Value <- R6Class("Value", inherit = Node)
-
-
-Variable <- R6_from_args(
-  inherit = Value,
-  "Variable",
-  " loc?: ?Location;
-    name: Name; "
-)
-
-
-IntValue = R6_from_args(
-  inherit = Value,
-  "IntValue",
-  " loc?: ?Location;
-    value: string;"
-)
-FloatValue = R6_from_args(
-  inherit = Value,
-  "FloatValue",
-  " loc?: ?Location;
-    value: string;"
-)
-StringValue = R6_from_args(
-  inherit = Value,
-  "StringValue",
-  " loc?: ?Location;
-    value: string;"
-)
-BooleanValue = R6_from_args(
-  inherit = Value,
-  "BooleanValue",
-  " loc?: ?Location;
-    value: boolean;"
-)
-EnumValue = R6_from_args(
-  inherit = Value,
-  "EnumValue",
-  " loc?: ?Location;
-    value: string;"
-)
-ListValue = R6_from_args(
-  inherit = Value,
-  "ListValue",
-  " loc?: ?Location;
-    values: Array<Value>;"
-)
-ObjectValue = R6_from_args(
-  inherit = Value,
-  "ObjectValue",
-  " loc?: ?Location;
-    fields: Array<ObjectField>;"
-)
-
-ObjectField = R6_from_args(
-  inherit = Node,
-  "ObjectField",
-  " loc?: ?Location;
-    name: Name;
-    value: Value;
-  "
-)
-
-
 
 # // Directives
 
@@ -781,64 +672,3 @@ TypeExtensionDefinition = R6_from_args(
   " loc?: ?Location;
     definition: ObjectTypeDefinition;"
 )
-
-
-
-
-
-
-
-
-get_class_obj <- (function(){
-  classList <- list(
-    AST = AST,
-    Location = Location,
-    Node = Node,
-    Name = Name,
-    Document = Document,
-    Definition = Definition,
-    OperationDefinition = OperationDefinition,
-    VariableDefinition = VariableDefinition,
-    Variable = Variable,
-    SelectionSet = SelectionSet,
-    Selection = Selection,
-    Field = Field,
-    Argument = Argument,
-    FragmentSpread = FragmentSpread,
-    InlineFragment = InlineFragment,
-    FragmentDefinition = FragmentDefinition,
-    Value = Value,
-    IntValue = IntValue,
-    FloatValue = FloatValue,
-    StringValue = StringValue,
-    BooleanValue = BooleanValue,
-    EnumValue = EnumValue,
-    ListValue = ListValue,
-    ObjectValue = ObjectValue,
-    ObjectField = ObjectField,
-    Directive = Directive,
-    Type = Type,
-    NamedType = NamedType,
-    ListType = ListType,
-    NonNullType = NonNullType,
-    TypeDefinition = TypeDefinition,
-    ObjectTypeDefinition = ObjectTypeDefinition,
-    FieldDefinition = FieldDefinition,
-    InputValueDefinition = InputValueDefinition,
-    InterfaceTypeDefinition = InterfaceTypeDefinition,
-    UnionTypeDefinition = UnionTypeDefinition,
-    ScalarTypeDefinition = ScalarTypeDefinition,
-    EnumTypeDefinition = EnumTypeDefinition,
-    EnumValueDefinition = EnumValueDefinition,
-    InputObjectTypeDefinition = InputObjectTypeDefinition,
-    TypeExtensionDefinition = TypeExtensionDefinition
-  )
-
-  function(classVal) {
-    obj = classList[[classVal]]
-    if (is.null(obj)) {
-      stop0("Could not find object with class: ", classVal)
-    }
-    obj
-  }
-})()
