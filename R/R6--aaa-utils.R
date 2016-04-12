@@ -215,12 +215,13 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
 
   args <- parse_args(txt)
   args$kind <- NULL
+  args$.kind <- NULL
 
   activeList <- list(
     .argNames = function() {
       names(self$.args)
     },
-    kind = function() {
+    .kind = function() {
       class(self)[1]
     }
   )
@@ -271,11 +272,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   publicList$.args <- args
 
 
-  symbolList <- alist(required =, notRequired = NULL)
-  initArgs <- list()
-  txt = ""
   canBeNull <- lapply(args, "[[", "canBeNull") %>% unlist()
-
   canBeNullTxt <- rep("", length(canBeNull))
   canBeNullTxt[canBeNull] <- "NULL"
   initTxt <- str_c(
@@ -283,11 +280,13 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
       str_c(names(args), canBeNullTxt, sep = " = ", collapse = ", "),
     ")"
   )
+
   initArgs <- eval(parse(text = initTxt))
 
   publicList[["initialize"]] <- make_function(
-    initArgs,
-    quote({
+    args = initArgs,
+    env = environment(),
+    body = quote({
       args <- self$.args
       for (argName in names(args)) {
         argItem <- args[[argName]]
@@ -298,7 +297,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         } else {
           # must be supplied
           err_fn <- function(e) {
-            stop0("Did not receive: '", argName, "'. '", argName, "' must be supplied to object of class: ", self$kind)
+            stop0("Did not receive: '", argName, "'. '", argName, "' must be supplied to object of class: ", self$.kind)
           }
         }
         argVal <- tryCatch(
@@ -313,29 +312,23 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   )
 
 
-  if (is.null(public)) {
-    public <- list()
-  }
-  for (nameVal in names(public)) {
-    publicList[[nameVal]] <- public[[nameVal]]
+  upgrade_and_overwrite <- function(x, y) {
+    if (is.null(y)) {
+      return(x)
+    }
+    x[names(y)] <- y
+    x
   }
 
-  if (is.null(active)) {
-    active <- list()
-  }
-  for (nameVal in names(active)) {
-    activeList[[nameVal]] <- active[[nameVal]]
-  }
+
+  publicList <- upgrade_and_overwrite(publicList, public)
+  activeList <- upgrade_and_overwrite(activeList, active)
 
   privateList <- list()
-  if (is.null(private)) {
-    private <- list()
-  }
-  for (nameVal in names(private)) {
-    privateList[[nameVal]] <- private[[nameVal]]
-  }
+  privateList <- upgrade_and_overwrite(privateList, private)
 
-  r6Class <- R6Class(type,
+  r6Class <- R6Class(
+    type,
     public = publicList,
     private = privateList,
     active = activeList

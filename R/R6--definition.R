@@ -274,7 +274,7 @@ FragmentDefinition = R6_from_args(
 Value <- R6Class("Value", inherit = Node,
   public = list(
     parse_literal = function(astObj) {
-      if (astObj$kind == self$kind) {
+      if (astObj$kind == self$.kind) {
         self$parse_value(astObj$value)
       } else {
         NULL
