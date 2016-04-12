@@ -63,13 +63,13 @@ Source <- R6_from_args(
   active = list(
     name = function(value) {
       if (missing(value)) {
-        return(self[["_args"]]$name$value)
+        return(self$.args$name$value)
       }
 
       if (is.null(value)) {
         value <- "GraphQL"
       }
-      self[["_args"]]$name$value <- value
+      self$.args$name$value <- value
       value
     }
   )
@@ -144,12 +144,12 @@ Name <- R6_from_args(
   active = list(
     value = function(value) {
       if (missing(value)) {
-        return(self[["_args"]]$value$value)
+        return(self$.args$value$value)
       }
       if (!str_detect(value, "^[_A-Za-z][_0-9A-Za-z]*$")) {
         stop0("Name value must match the regex of: /[_A-Za-z][_0-9A-Za-z]*/. Received value: '", value, "'")
       }
-      self[["_args"]]$value$value <- value
+      self$.args$value$value <- value
       value
     }
   )

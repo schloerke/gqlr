@@ -13,7 +13,7 @@ r6_from_list <- function(obj, level = 0, keys = c(), objPos = NULL) {
   retList <- list()
 
   # fieldNames <- ret$"_argNames"
-  fieldNames <- names(r6Obj$public_fields$"_args")
+  fieldNames <- names(r6Obj$public_fields$.args)
 
   for (activeKey in fieldNames) {
     cat(level, "-", paste(keys, collapse = ","), "-", activeKey, "\n")

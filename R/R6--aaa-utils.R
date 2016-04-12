@@ -68,14 +68,14 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
     possibleClassValues <- strsplit(classVal, "\\|")[[1]] %>% lapply(str_trim) %>% unlist()
     function(value) {
       if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
+        return(self$.args[[key]]$value)
       }
 
       if (is.null(value)) {
-        if (! self[["_args"]][[key]]$canBeNull) {
+        if (! self$.args[[key]]$canBeNull) {
           stop0("Can not set value to NULL for ", classVal, "$", key)
         }
-        self[["_args"]][[key]]$value <- value
+        self$.args[[key]]$value <- value
         return(value)
       }
 
@@ -106,7 +106,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         }
       }
 
-      self[["_args"]][[key]]$value <- value
+      self$.args[[key]]$value <- value
       value
     }
   }
@@ -115,7 +115,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   self_array_wrapper <- function(key, classVal, hasNames = FALSE) {
     function(value) {
       if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
+        return(self$.args[[key]]$value)
       }
 
       if (inherits(value, "R6")) {
@@ -161,7 +161,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         }
       })
 
-      self[["_args"]][[key]]$value <- value
+      self$.args[[key]]$value <- value
       value
     }
   }
@@ -169,10 +169,10 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   self_base_wrapper <- function(key, parse_fn) {
     fn <- function(value) {
       if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
+        return(self$.args[[key]]$value)
       }
       value <- parse_fn(value)
-      self[["_args"]][[key]]$value <- value
+      self$.args[[key]]$value <- value
       value
     }
     fn
@@ -180,13 +180,13 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   self_base_values_wrapper <- function(key, parse_fn, values) {
     fn <- function(value) {
       if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
+        return(self$.args[[key]]$value)
       }
       value <- parse_fn(value)
       if (! (value %in% values)) {
         stop0("Value supplied to key '", key, "' not in accepted values: ", str_c(values, collapse = ", "), ".")
       }
-      self[["_args"]][[key]]$value <- value
+      self$.args[[key]]$value <- value
       value
     }
     fn
@@ -197,8 +197,8 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   args$kind <- NULL
 
   activeList <- list(
-    "_argNames" = function() {
-      names(self$"_args")
+    .argNames = function() {
+      names(self$.args)
     },
     kind = function() {
       class(self)[1]
@@ -248,7 +248,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   }
 
   publicList <- list()
-  publicList[["_args"]] <- args
+  publicList$.args <- args
 
 
   symbolList <- alist(required =, notRequired = NULL)
@@ -268,7 +268,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   publicList[["initialize"]] <- make_function(
     initArgs,
     quote({
-      args <- self$"_args"
+      args <- self$.args
       for (argName in names(args)) {
         argItem <- args[[argName]]
         # values that may be not supplied, will default to NULL from function def
@@ -347,7 +347,7 @@ gqlr_str <- (function() {
       return()
     }
 
-    fieldNames <- x$"_argNames"
+    fieldNames <- x$.argNames
 
     for (fieldName in fieldNames) {
       if (fieldName %in% c("loc")) {
