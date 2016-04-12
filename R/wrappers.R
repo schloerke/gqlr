@@ -22,15 +22,16 @@ test_string <- function(pos = 0) {
     # has error. (expected)
     "8" =   " {\n    hero {\n      id\n      name\n      friends {\n        name\n      }\n    }\n  } query HeroNameAndFriendsQuery2 {\n    hero {\n      id\n      name\n      friends {\n        name\n      }\n    }\n  }",
 
+    "kitchen-query" = ,
     "kitchen" = "query queryName($foo: ComplexType, $site: Site = MOBILE) {\n  whoever123is: node(id: [123, 456]) {\n    id ,\n    ... on User @defer {\n      field2 {\n        id ,\n        alias: field1(first:10, after:$foo,) @include(if: $foo) {\n          id,\n          ...frag\n        }\n      }\n    }\n    ... @skip(unless: $foo) {\n      id\n    }\n    ... {\n      id\n    }\n  }\n}\n\nmutation likeStory {\n  like(story: 123) @defer {\n    story {\n      id\n    }\n  }\n}\n\nsubscription StoryLikeSubscription($input: StoryLikeSubscribeInput) {\n  storyLikeSubscribe(input: $input) {\n    story {\n      likers {\n        count\n      }\n      likeSentence {\n        text\n      }\n    }\n  }\n}\n\nfragment frag on Friend {\n  foo(size: $size, bar: $b, obj: {key: \"value\"})\n}\n\n{\n  unnamed(truthy: true, falsey: false),\n  query\n}",
 
     "kitchen-schema" = "# Copyright (c) 2015, Facebook, Inc.\n# All rights reserved.\n#\n# This source code is licensed under the BSD-style license found in the\n# LICENSE file in the root directory of this source tree. An additional grant\n# of patent rights can be found in the PATENTS file in the same directory.\n\ntype Foo implements Bar {\n  one: Type\n  two(argument: InputType!): Type\n  three(argument: InputType, other: String): Int\n  four(argument: String = \"string\"): String\n  five(argument: [String] = [\"string\", \"string\"]): String\n  six(argument: InputType = {key: \"value\"}): Type\n}\n\ninterface Bar {\n  one: Type\n  four(argument: String = \"string\"): String\n}\n\nunion Feed = Story | Article | Advert\n\nscalar CustomScalar\n\nenum Site {\n  DESKTOP\n  MOBILE\n}\n\ninput InputType {\n  key: String!\n  answer: Int = 42\n}\n\nextend type Bar {\n  seven(argument: [String]): Type\n\n}",
 
     "simple-schema" = "type Film {\n  title: String\n}\n\ntype Query {\n  film(id: Int): Film\n}\n",
-    "simple-query" = "{\n  title: String\n  id: Int!\n  cast: [String]\n}\n",
+    # "simple-query" = "{\n  title: String\n  id: Int\n  cast: [String]\n}\n",
 
     "film-schema" = "  scalar Date\n  type Person {\n    name: String\n    films: [Film]\n  }\n  type Film {\n    title: String,\n    producers: [String]\n    characters(limit: Int): [Person]\n    release_date: Date\n  }\n  type Query {\n    film(id: Int): Film\n    person(id: Int): Person\n  }\n",
-    "file-query" = "  query fetch_film($id: Int) {\n    film(id: $id) {\n      title\n      producers\n      release_date\n      characters {\n        name\n        films {\n          title\n        }\n      }\n    }\n  }",
+    "film-query" = "  query fetch_film($id: Int) {\n    film(id: $id) {\n      title\n      producers\n      release_date\n      characters {\n        name\n        films {\n          title\n        }\n      }\n    }\n  }",
 
     "{\n    name\n    relationship {\n      name\n    }\n  }"
   )
