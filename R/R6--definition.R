@@ -1,292 +1,39 @@
 
-#' @include z_utils.R
-NULL
 
-
-parse_args <- function(txt) {
-  # txt = "kind: 'Document';
-  # loc?: ?Location;
-  # definitions: Array<Definition>;"
-
-  kvPairs <- strsplit(txt, ";")[[1]] %>%
-    lapply(function(txtItem) {
-      keyValue <- strsplit(txtItem, ":")[[1]]
-      key <- str_trim(keyValue[1]) %>%
-        str_replace("\\?$", "")
-
-      value <- str_trim(keyValue[2]) %>%
-        str_replace(";", "")
-
-      if (str_detect(value, "^'") && str_detect(value, "'$")) {
-        # is literal value
-        values <- strsplit(value, "\\|")[[1]] %>%
-          str_replace("'", "") %>%
-          str_replace("'", "") %>%
-          str_trim()
-
-        retItem <- list(type = "string", isArray = FALSE, canBeNull = FALSE, possibleValues = values)
-      } else {
-        canBeNull <- FALSE
-        isArray <- FALSE
-        if (str_detect(value, "^\\?")) {
-          canBeNull <- TRUE
-          value <- str_replace(value, "^\\?", "")
-        }
-        if (str_detect(value, "^Array<")) {
-          isArray <- TRUE
-          value <- str_replace(value, "^Array<", "") %>% str_replace(">$", "")
-        }
-
-        retItem <- list(type = value, isArray = isArray, canBeNull = canBeNull, value = NULL)
-      }
-
-      list(key = key, value = retItem)
-    })
-
-
-  keys <- lapply(kvPairs, "[[", "key") %>% unlist()
-  ret <- lapply(kvPairs, "[[", "value")
-  if (keys[length(keys)] == "") {
-    removeBadPos <- -1 * length(keys)
-    keys <- keys[removeBadPos]
-    ret <- ret[removeBadPos]
-  }
-  names(ret) <- keys
-  ret
-}
-
-
-
-
-R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = list(), active = list()) {
-  # R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;", inherit = AST)
-
-  self_value_wrapper <- function(key, classVal) {
-    function(value) {
-      if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
-      }
-
-      if (is.null(value)) {
-        if (! self[["_args"]][[key]]$canBeNull) {
-          stop0("Can not set value to NULL for ", classVal, "$", key)
-        }
-        self[["_args"]][[key]]$value <- value
-        return(value)
-      }
-
-      if (!inherits(value, classVal)) {
-        stop0(
-          "Attempting to set ", class(self)[1], ".", key, ".\n",
-          "Expected value with class of |", classVal, "|.\n",
-          "Received ", paste(class(value), collapse = ", ")
-        )
-      }
-      self[["_args"]][[key]]$value <- value
-      value
-    }
-  }
-
-
-  self_array_wrapper <- function(key, classVal) {
-    function(value) {
-      if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
-      }
-
-      if (inherits(value, "R6")) {
-        print(value)
-        stop0(
-          "Attempting to set ", class(self)[1], ".", key, ".\n",
-          "Expected value should be an array of ", classVal, " objects.\n",
-          "Received ", paste(class(value), collapse = ", "),
-          "Received object above."
-        )
-      }
-      lapply(value, function(valItem) {
-        if (!inherits(valItem, classVal)) {
-          print(valItem)
-          stop0(
-            "Attempting to set ", class(self)[1], ".", key, ".\n",
-            "Expected value with class of |", classVal, "|.\n",
-            "Received ", paste(class(valItem), collapse = ", "),
-            "Received object above.",
-          )
-        }
-      })
-
-      self[["_args"]][[key]]$value <- value
-      value
-    }
-  }
-
-  self_base_wrapper <- function(key, parse_fn) {
-    fn <- function(value) {
-      if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
-      }
-      value <- parse_fn(value)
-      self[["_args"]][[key]]$value <- value
-      value
-    }
-    fn
-  }
-  self_base_values_wrapper <- function(key, parse_fn, values) {
-    fn <- function(value) {
-      if (missing(value)) {
-        return(self[["_args"]][[key]]$value)
-      }
-      value <- parse_fn(value)
-      if (! (value %in% values)) {
-        stop0("Value supplied to key '", key, "' not in accepted values: ", str_c(values, collapse = ", "), ".")
-      }
-      self[["_args"]][[key]]$value <- value
-      value
-    }
-    fn
-  }
-
-
-  args <- parse_args(txt)
-  args$kind <- NULL
-
-  activeList <- list()
-
-  for (argName in names(args)) {
-    argItem <- args[[argName]]
-    argType <- argItem$type
-    if (argType == "any") {
-      activeList[[argName]] <- I
-
-    } else if (argType %in% c("string", "number", "boolean")) {
-      type_fn <- switch(argType,
-        string = as.character,
-        number = as.numeric,
-        boolean = as.logical
-      )
-
-      possibleValues <- argItem$possibleValues
-      if (! is.null(possibleValues)) {
-        fn <- self_base_values_wrapper(argName, type_fn, possibleValues)
-      } else {
-        fn <- self_base_wrapper(argName, type_fn)
-      }
-
-    } else {
-      if (argItem$isArray) {
-        fn <- self_array_wrapper(argName, argType)
-
-      } else {
-        fn <- self_value_wrapper(argName, argType)
-
-      }
-    }
-
-    # replace all "argName" and "type_fn" or "argType" with the actual values
-    # this allows R6 to work with functions that should be closures,
-    # after unenclose'ing the function, it is no long a closure
-    fn <- pryr::unenclose(pryr::unenclose(fn))
-
-    activeList[[argName]] <- fn
-  }
-
-  publicList <- list()
-  publicList[["_args"]] <- args
-
-  if (is.null(public)) {
-    public <- list()
-  }
-  for (nameVal in names(public)) {
-    publicList[[nameVal]] <- public[[nameVal]]
-  }
-
-  if (is.null(active)) {
-    active <- list()
-  }
-  for (nameVal in names(active)) {
-    activeList[[nameVal]] <- active[[nameVal]]
-  }
-
-  privateList <- list()
-  if (is.null(private)) {
-    private <- list()
-  }
-  for (nameVal in names(private)) {
-    privateList[[nameVal]] <- private[[nameVal]]
-  }
-
-  r6Class <- R6Class(type,
-    public = publicList,
-    private = privateList,
-    active = activeList
-  )
-  r6Class$inherit <- substitute(inherit)
-
-  r6Class
-}
+# 4.1.4
+# http://facebook.github.io/graphql/#sec-Type-Name-Introspection
+# Type Name Introspection
+#
+# GraphQL supports type name introspection at any point within a query by the meta field __typename: String! when querying against any Object, Interface, or Union. It returns the name of the object type currently being queried.
+#
+# This is most often used when querying against Interface or Union types to identify which actual type of the possible types has been returned.
+#
+# This field is implicit and does not appear in the fields list in any defined type.
+# introspection_typename = function() {
+#   return(self$type)
+# }
 
 
 
 
 
-gqlr_str <- (function() {
-  cat_ret_spaces <- function(spaces, ...) {
-    cat("\n", rep(" ", spaces), ..., sep = "")
-  }
 
-  str_obj <- function(x, spaceCount = 0, showNull) {
 
-    r6ObjClass <- class(x)[1]
 
-    cat("<", r6ObjClass, ">", sep = "")
 
-    fieldNames <- x$"_argNames"
 
-    for (fieldName in fieldNames) {
-      if (fieldName %in% c("loc")) {
-        next
-      }
 
-      fieldVal <- x[[fieldName]]
 
-      if (!inherits(fieldVal, "R6")) {
-        if (is.list(fieldVal)) {
-          # is list
-          cat_ret_spaces(spaceCount + 2, fieldName, ":")
-          for (itemPos in seq_along(fieldVal)) {
-            fieldItem <- fieldVal[[itemPos]]
-            cat_ret_spaces(spaceCount + 4, itemPos, " - ")
-            str_obj(fieldItem, spaceCount + 4, showNull)
-          }
 
-        } else {
-          # is value
-          if (is.null(fieldVal)) {
-            fieldVal <- "NULL"
-            if (showNull) {
-              cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-            }
-          } else if (is.numeric(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-          } else if (is.character(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
-          }
-        }
 
-      } else {
-        # recursive call to_string
-        cat_ret_spaces(spaceCount + 2, fieldName, ": ")
-        str_obj(fieldVal, spaceCount + 2, showNull)
-      }
 
-    }
-  }
 
-  function(x, showNull = FALSE) {
-    str_obj(x, 0, showNull)
-    cat("\n")
-  }
-})()
+
+
+
+
+
+
 
 
 
@@ -296,12 +43,6 @@ AST <- R6Class("AST",
   public = list(
   ),
   active = list(
-    "_argNames" = function() {
-      names(self$"_args")
-    },
-    kind = function() {
-      class(self)[1]
-    }
   )
 )
 
@@ -520,6 +261,85 @@ FragmentDefinition = R6_from_args(
 
 
 
+# // Values
+
+# export type Value = Variable
+#                   | IntValue
+#                   | FloatValue
+#                   | StringValue
+#                   | BooleanValue
+#                   | EnumValue
+#                   | ListValue
+#                   | ObjectValue
+Value <- R6Class("Value", inherit = Node,
+  public = list(
+    parse_literal = function(astObj) {
+      if (astObj$kind == self$kind) {
+        self$parse_value(astObj$value)
+      } else {
+        NULL
+      }
+    }
+  )
+)
+
+Variable <- R6_from_args(
+  inherit = Value,
+  "Variable",
+  " loc?: ?Location;
+    name: Name; "
+)
+IntValue = R6_from_args(
+  inherit = Value,
+  "IntValue",
+  " loc?: ?Location;
+    value: string;"
+)
+FloatValue = R6_from_args(
+  inherit = Value,
+  "FloatValue",
+  " loc?: ?Location;
+    value: string;"
+)
+StringValue = R6_from_args(
+  inherit = Value,
+  "StringValue",
+  " loc?: ?Location;
+    value: string;"
+)
+BooleanValue = R6_from_args(
+  inherit = Value,
+  "BooleanValue",
+  " loc?: ?Location;
+    value: boolean;"
+)
+EnumValue = R6_from_args(
+  inherit = Value,
+  "EnumValue",
+  " loc?: ?Location;
+    value: string;"
+)
+ListValue = R6_from_args(
+  inherit = Value,
+  "ListValue",
+  " loc?: ?Location;
+    values: Array<Value>;"
+)
+ObjectValue = R6_from_args(
+  inherit = Value,
+  "ObjectValue",
+  " loc?: ?Location;
+    fields: Array<ObjectField>;"
+)
+ObjectField = R6_from_args(
+  inherit = Node,
+  "ObjectField",
+  " loc?: ?Location;
+    name: Name;
+    value: Value;
+  "
+)
+
 
 
 # // Directives
@@ -548,31 +368,20 @@ NamedType = R6_from_args(
   " loc?: ?Location;
     name: Name;"
 )
+
 ListType = R6_from_args(
   inherit = Type,
   "ListType",
   " loc?: ?Location;
     type: Type;"
 )
+
 NonNullType = R6_from_args(
   inherit = Type,
   "NonNullType",
   " loc?: ?Location;
-    type: NamedType | ListType;",
-  active = list(
-    type = function(value) {
-      if (missing(value)) {
-        return(self[["_args"]]$type$value)
-      }
-      if (!(inherits(value, "NamedType") || inherits(value, "ListType"))) {
-        stop0("expected value with class of NamedType or ListType. Received ", value$kind)
-      }
-      self[["_args"]]$type$value <- value
-      value
-    }
-  )
+    type: NamedType | ListType;"
 )
-
 
 
 # // Type Definition
@@ -585,7 +394,6 @@ NonNullType = R6_from_args(
 #                            | InputObjectTypeDefinition
 TypeDefinition = R6Class("TypeDefinition", inherit = Definition)
 
-
 ObjectTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "ObjectTypeDefinition",
@@ -594,8 +402,6 @@ ObjectTypeDefinition = R6_from_args(
     interfaces?: ?Array<NamedType>;
     fields: Array<FieldDefinition>;"
 )
-
-
 
 FieldDefinition = R6_from_args(
   inherit = TypeDefinition,
@@ -606,8 +412,6 @@ FieldDefinition = R6_from_args(
     type: Type;"
 )
 
-
-
 InputValueDefinition = R6_from_args(
   inherit = Node,
   "InputValueDefinition",
@@ -615,6 +419,14 @@ InputValueDefinition = R6_from_args(
     name: Name;
     type: Type;
     defaultValue?: ?Value;"
+)
+
+InputObjectTypeDefinition = R6_from_args(
+  inherit = TypeDefinition,
+  "InputObjectTypeDefinition",
+  " loc?: ?Location;
+    name: Name;
+    fields: Array<InputValueDefinition>;"
 )
 
 InterfaceTypeDefinition = R6_from_args(
@@ -625,10 +437,9 @@ InterfaceTypeDefinition = R6_from_args(
     fields: Array<FieldDefinition>;"
 )
 
-
 UnionTypeDefinition = R6_from_args(
-  "UnionTypeDefinition",
   inherit = TypeDefinition,
+  "UnionTypeDefinition",
   " loc?: ?Location;
     name: Name;
     types: Array<NamedType>;"
@@ -648,23 +459,13 @@ EnumTypeDefinition = R6_from_args(
     name: Name;
     values: Array<EnumValueDefinition>;"
 )
+
 EnumValueDefinition = R6_from_args(
-  inherit = TypeDefinition,
+  inherit = Node,
   "EnumValueDefinition",
   " loc?: ?Location;
     name: Name;"
 )
-
-InputObjectTypeDefinition = R6_from_args(
-  inherit = TypeDefinition,
-  "InputObjectTypeDefinition",
-  " loc?: ?Location;
-    name: Name;
-    fields: Array<InputValueDefinition>;"
-)
-
-
-
 
 TypeExtensionDefinition = R6_from_args(
   inherit = Definition,

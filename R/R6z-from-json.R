@@ -10,9 +10,10 @@ r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
 
   r6Obj <- get_class_obj(objClass)
 
-  ret <- r6Obj$new()
+  retList <- list()
 
-  fieldNames <- ret$"_argNames"
+  # fieldNames <- ret$"_argNames"
+  fieldNames <- names(r6Obj$public_fields$"_args")
 
   for (activeKey in fieldNames) {
     cat(level, "-", paste(keys, collapse = ","), "-", activeKey, "\n")
@@ -20,22 +21,23 @@ r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
 
     if (is.list(objVal)) {
       if (length(objVal) == 0) {
-        ret[[activeKey]] <- NULL
+        retList[[activeKey]] <- NULL
       } else {
         if (identical(class(objVal), "list")) {
           # lapply(objVal, r6_from_json, keys = keys, level = level)
-          ret[[activeKey]] <- lapply(seq_along(objVal), function(i) {
+          retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
             r6_from_json(objVal[[i]], keys = keys, level = level, objPos = i)
           })
         } else {
-          ret[[activeKey]] <- r6_from_json(objVal, keys = keys, level = level)
+          retList[[activeKey]] <- r6_from_json(objVal, keys = keys, level = level)
         }
       }
     } else {
-      ret[[activeKey]] <- objVal
+      retList[[activeKey]] <- objVal
     }
   }
-  ret
+
+  do.call(r6Obj$new, retList)
 }
 
 
