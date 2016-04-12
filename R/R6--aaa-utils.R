@@ -1,4 +1,24 @@
 
+RegisterClassObj <- R6Class(
+  "RegisterdR6Classes",
+  public = list(
+    classList = list(),
+    add = function(key, value) {
+      self$classList[[key]] <- value
+    },
+    get_class_obj = function(key) {
+      obj = self$classList[[key]]
+      if (is.null(obj)) {
+        stop0("Could not find object with class: ", classVal)
+      }
+      obj
+    }
+  )
+  # private = privateList,
+  # active = activeList
+)$new()
+
+
 
 
 parse_args <- function(txt) {
@@ -322,10 +342,10 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   )
   r6Class$inherit <- substitute(inherit)
 
+  RegisterClassObj$add(type, r6Class)
+
   r6Class
 }
-
-
 
 
 
