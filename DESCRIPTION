@@ -16,6 +16,7 @@ Imports:
     base,
     magrittr,
     memoise,
+    pryr,
     R6,
     rjson
 Suggests:
