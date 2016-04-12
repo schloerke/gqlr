@@ -21,7 +21,7 @@ r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
 
     if (is.list(objVal)) {
       if (length(objVal) == 0) {
-        retList[[activeKey]] <- NULL
+        retList[[activeKey]] <- list()
       } else {
         if (identical(class(objVal), "list")) {
           # lapply(objVal, r6_from_json, keys = keys, level = level)
