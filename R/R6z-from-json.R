@@ -1,4 +1,4 @@
-r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
+r6_from_list <- function(obj, level = 0, keys = c(), objPos = NULL) {
   objClass <- obj$kind
   if (is.null(objPos)) {
     keys <- append(keys, objClass)
@@ -24,12 +24,12 @@ r6_from_json <- function(obj, level = 0, keys = c(), objPos = NULL) {
         retList[[activeKey]] <- list()
       } else {
         if (identical(class(objVal), "list")) {
-          # lapply(objVal, r6_from_json, keys = keys, level = level)
+          # lapply(objVal, r6_from_list, keys = keys, level = level)
           retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
-            r6_from_json(objVal[[i]], keys = keys, level = level, objPos = i)
+            r6_from_list(objVal[[i]], keys = keys, level = level, objPos = i)
           })
         } else {
-          retList[[activeKey]] <- r6_from_json(objVal, keys = keys, level = level)
+          retList[[activeKey]] <- r6_from_list(objVal, keys = keys, level = level)
         }
       }
     } else {
