@@ -65,6 +65,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   # R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;", inherit = AST)
 
   self_value_wrapper <- function(key, classVal) {
+    possibleClassValues <- strsplit(classVal, "\\|")[[1]] %>% lapply(str_trim) %>% unlist()
     function(value) {
       if (missing(value)) {
         return(self[["_args"]][[key]]$value)
@@ -78,13 +79,33 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         return(value)
       }
 
-      if (!inherits(value, classVal)) {
+      bad_inherits <- function() {
         stop0(
           "Attempting to set ", class(self)[1], ".", key, ".\n",
           "Expected value with class of |", classVal, "|.\n",
           "Received ", paste(class(value), collapse = ", ")
         )
       }
+
+      posClassValues <- possibleClassValues
+      if (length(posClassValues) == 1) {
+        if (!inherits(value, posClassValues[1])) {
+          bad_inherits()
+        }
+      } else {
+        mayInherit <- length(posClassValues)
+        while(mayInherit > 0) {
+          if (inherits(value, posClassValues[mayInherit])) {
+            # found it
+            break
+          }
+          mayInherit <- mayInherit - 1
+        }
+        if (mayInherit == 0) {
+          bad_inherits()
+        }
+      }
+
       self[["_args"]][[key]]$value <- value
       value
     }
@@ -247,14 +268,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   publicList[["initialize"]] <- make_function(
     initArgs,
     quote({
-
-      if (self$kind %in% "Field") {
-        browser()
-      }
-
       args <- self$"_args"
-
-
       for (argName in names(args)) {
         argItem <- args[[argName]]
         # values that may be not supplied, will default to NULL from function def
@@ -264,7 +278,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         } else {
           # must be supplied
           err_fn <- function(e) {
-            stop0(argName, " must be supplied to object of class: ", self$kind)
+            stop0("'", argName, "' must be supplied to object of class: ", self$kind)
           }
         }
         argVal <- tryCatch(
