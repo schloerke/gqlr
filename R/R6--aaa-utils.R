@@ -278,7 +278,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         } else {
           # must be supplied
           err_fn <- function(e) {
-            stop0("'", argName, "' must be supplied to object of class: ", self$kind)
+            stop0("Did not receive: '", argName, "'. '", argName, "' must be supplied to object of class: ", self$kind)
           }
         }
         argVal <- tryCatch(
