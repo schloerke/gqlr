@@ -24,27 +24,3 @@ Suggests:
     testthat
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 5.0.1
-Collate:
-    'z_utils.R'
-    'R6--definition.R'
-    'R6-3.1.1-types-scalars.R'
-    'R6-3.1.2-types-objects.R'
-    'R6-3.1.3-types-interfaces.R'
-    'R6-3.1.4-types-unions.R'
-    'R6-3.1.5-types-enums.R'
-    'R6-3.1.6-types-input-objects.R'
-    'R6-3.1.7-types-lists.R'
-    'R6-3.1.8-types-non-null.R'
-    'R6-Schema.R'
-    'R6-execution-document.R'
-    'R6-execution-field.R'
-    'R6-introspection.R'
-    'R6z-from-json.R'
-    'graphqlr.R'
-    'js.R'
-    'schema-enum.R'
-    'schema-object.R'
-    'schema-scalars.R'
-    'start-tmp.R'
-    'type-scalars.R'
-    'wrappers.R'
