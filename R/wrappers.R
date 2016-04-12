@@ -26,7 +26,11 @@ test_string <- function(pos = 0) {
 
     "kitchen-schema" = "# Copyright (c) 2015, Facebook, Inc.\n# All rights reserved.\n#\n# This source code is licensed under the BSD-style license found in the\n# LICENSE file in the root directory of this source tree. An additional grant\n# of patent rights can be found in the PATENTS file in the same directory.\n\ntype Foo implements Bar {\n  one: Type\n  two(argument: InputType!): Type\n  three(argument: InputType, other: String): Int\n  four(argument: String = \"string\"): String\n  five(argument: [String] = [\"string\", \"string\"]): String\n  six(argument: InputType = {key: \"value\"}): Type\n}\n\ninterface Bar {\n  one: Type\n  four(argument: String = \"string\"): String\n}\n\nunion Feed = Story | Article | Advert\n\nscalar CustomScalar\n\nenum Site {\n  DESKTOP\n  MOBILE\n}\n\ninput InputType {\n  key: String!\n  answer: Int = 42\n}\n\nextend type Bar {\n  seven(argument: [String]): Type\n\n}",
 
-    "simple-schema" = "type Film {\n  title: String\n  id: Int!\n  cast: [String]\n}\n",
+    "simple-schema" = "type Film {\n  title: String\n}\n\ntype Query {\n  film(id: Int): Film\n}\n",
+    "simple-query" = "{\n  title: String\n  id: Int!\n  cast: [String]\n}\n",
+
+    "film-schema" = "  scalar Date\n  type Person {\n    name: String\n    films: [Film]\n  }\n  type Film {\n    title: String,\n    producers: [String]\n    characters(limit: Int): [Person]\n    release_date: Date\n  }\n  type Query {\n    film(id: Int): Film\n    person(id: Int): Person\n  }\n",
+    "file-query" = "  query fetch_film($id: Int) {\n    film(id: $id) {\n      title\n      producers\n      release_date\n      characters {\n        name\n        films {\n          title\n        }\n      }\n    }\n  }",
 
     "{\n    name\n    relationship {\n      name\n    }\n  }"
   )
