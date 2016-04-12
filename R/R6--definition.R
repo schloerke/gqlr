@@ -431,7 +431,7 @@ InputObjectTypeDefinition = R6_from_args(
 
 InterfaceTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
-  "InputValueDefinition",
+  "InterfaceTypeDefinition",
   " loc?: ?Location;
     name: Name;
     fields: Array<FieldDefinition>;"
