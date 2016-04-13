@@ -3,6 +3,9 @@ RegisterClassObj <- R6Class(
   "RegisterdR6Classes",
   public = list(
     classList = list(),
+    is_registered = function(key) {
+      !is.null(self$classList[[key]])
+    },
     add = function(key, value) {
       self$classList[[key]] <- value
     },
@@ -217,14 +220,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
   args$kind <- NULL
   args$.kind <- NULL
 
-  activeList <- list(
-    .argNames = function() {
-      names(self$.args)
-    },
-    .kind = function() {
-      class(self)[1]
-    }
-  )
+  activeList <- list()
 
   for (argName in names(args)) {
     argItem <- args[[argName]]
@@ -341,72 +337,79 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
 }
 
 
-
-gqlr_str <- (function() {
-  cat_ret_spaces <- function(spaces, ...) {
-    cat("\n", rep(" ", spaces), ..., sep = "")
-  }
-
-  str_obj <- function(x, maxLevel = -1, spaceCount = 0, showNull) {
-    if (maxLevel == 0) {
-      return()
-    }
-
-    r6ObjClass <- class(x)[1]
-
-    cat("<", r6ObjClass, ">", sep = "")
-    if (maxLevel == 1) {
-      cat("...")
-      return()
-    }
-
-    fieldNames <- x$.argNames
-
-    for (fieldName in fieldNames) {
-      if (fieldName %in% c("loc")) {
-        next
-      }
-
-      fieldVal <- x[[fieldName]]
-
-      if (!inherits(fieldVal, "R6")) {
-        if (is.list(fieldVal)) {
-          # is list
-          cat_ret_spaces(spaceCount + 2, fieldName, ":")
-          for (itemPos in seq_along(fieldVal)) {
-            fieldItem <- fieldVal[[itemPos]]
-            cat_ret_spaces(spaceCount + 4, itemPos, " - ")
-            str_obj(fieldItem, maxLevel - 1, spaceCount + 4, showNull)
-          }
-
-        } else {
-          # is value
-          if (is.null(fieldVal)) {
-            fieldVal <- "NULL"
-            if (showNull) {
-              cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-            }
-          } else if (is.numeric(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-          } else if (is.character(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
-          }
-        }
-
-      } else {
-        # recursive call to_string
-        cat_ret_spaces(spaceCount + 2, fieldName, ": ")
-        str_obj(fieldVal, maxLevel - 1, spaceCount + 2, showNull)
-      }
-
-    }
-  }
-
-  function(x, maxLevel, showNull = FALSE) {
-    if (missing(maxLevel)) {
-      maxLevel = -1
-    }
-    str_obj(x, maxLevel, 0, showNull)
-    cat("\n")
-  }
-})()
+gqlr_str <- function(x, ...) {
+  x$.str(...)
+}
+# gqlr_str <- (function() {
+#   cat_ret_spaces <- function(spaces, ...) {
+#     cat("\n", rep(" ", spaces), ..., sep = "")
+#   }
+#
+#   str_obj <- function(x, maxLevel = -1, spaceCount = 0, showNull) {
+#     if (maxLevel == 0) {
+#       return()
+#     }
+#
+#     r6ObjClass <- class(x)[1]
+#
+#     cat("<", r6ObjClass, ">", sep = "")
+#     if (maxLevel == 1) {
+#       cat("...")
+#       return()
+#     }
+#
+#     fieldNames <- x$.argNames
+#
+#     for (fieldName in fieldNames) {
+#       if (fieldName %in% c("loc")) {
+#         next
+#       }
+#
+#       fieldVal <- x[[fieldName]]
+#
+#       if (!inherits(fieldVal, "R6")) {
+#         if (is.list(fieldVal)) {
+#           # is list
+#           if (length(fieldVal) == 0) {
+#             if (showNull) {
+#               cat_ret_spaces(spaceCount + 2, fieldName, ":")
+#               cat(" []")
+#             }
+#           } else {
+#             cat_ret_spaces(spaceCount + 2, fieldName, ":")
+#             for (itemPos in seq_along(fieldVal)) {
+#               fieldItem <- fieldVal[[itemPos]]
+#               cat_ret_spaces(spaceCount + 4, itemPos, " - ")
+#               str_obj(fieldItem, maxLevel - 1, spaceCount + 4, showNull)
+#             }
+#           }
+#
+#         } else {
+#           # is value
+#           if (is.null(fieldVal)) {
+#             fieldVal <- "NULL"
+#             if (showNull) {
+#               cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+#             }
+#           } else if (is.numeric(fieldVal)) {
+#             cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+#           } else if (is.character(fieldVal)) {
+#             cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
+#           }
+#         }
+#
+#       } else {
+#         # recursive call to_string
+#         cat_ret_spaces(spaceCount + 2, fieldName, ": ")
+#         str_obj(fieldVal, maxLevel - 1, spaceCount + 2, showNull)
+#       }
+#
+#     }
+#   }
+#
+#   function(x, maxLevel = -1, showNull = FALSE) {
+#     str_obj(x, maxLevel, 0, showNull)
+#     cat("\n")
+#     invisible(x)
+#   }
+# })()

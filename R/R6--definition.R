@@ -17,32 +17,120 @@
 
 
 
+GQLR_STR <- R6Class("GraphQLR Structure",
+  public = list(
+    cat_ret_spaces = function(spaces, ...) {
+      if (spaces > 2) {
+        cat("\n", rep(". ", floor((spaces - 2) / 2)), ". ", ..., sep = "")
+      } else if (spaces == 2) {
+        cat("\n", ". ", ..., sep = "")
+      } else {
+        cat("\n", ..., sep = "")
+      }
+      # cat("\n", rep(" ", spaces), ..., sep = "")
+    },
+    check_if_registered = function(fieldObj) {
+      key = fieldObj$.kind
+      if (is.null(key) ) {
+        stop0("Can not call self$.str() on a unknown AST object")
+      }
+      if (!RegisterClassObj$is_registered(key)) {
+        stop0("'", key, "' is not registered. Do not have 'self$.str' for unknown class: '", key, "'")
+      }
+    },
+    str = function(maxLevel = -1, showNull = FALSE, spaceCount = 0, isFirst = TRUE) {
+      if (maxLevel == 0) {
+        return()
+      }
 
+      cat("<", self$.kind, ">", sep = "")
+      if (maxLevel == 1) {
+        cat("...")
+        return()
+      }
 
+      cat_ret_spaces <- GQLR_STR$cat_ret_spaces
+      check_if_registered <- GQLR_STR$check_if_registered
 
+      fieldNames <- self$.argNames
 
+      for (fieldName in fieldNames) {
+        if (fieldName %in% c("loc")) {
+          next
+        }
 
+        fieldVal <- self[[fieldName]]
 
+        if (!inherits(fieldVal, "R6")) {
+          if (is.list(fieldVal)) {
+            # is list
+            if (length(fieldVal) == 0) {
+              if (showNull) {
+                cat_ret_spaces(spaceCount + 2, fieldName, ":")
+                cat(" []")
+              }
+            } else {
+              cat_ret_spaces(spaceCount + 2, fieldName, ":")
+              for (itemPos in seq_along(fieldVal)) {
+                fieldItem <- fieldVal[[itemPos]]
+                cat_ret_spaces(spaceCount + 2, itemPos, " - ")
 
+                check_if_registered(fieldItem)
+                fieldItem$.str(maxLevel = maxLevel - 1, spaceCount = spaceCount + 2, showNull = showNull, isFirst = FALSE)
+              }
+            }
 
+          } else {
+            # is value
+            if (is.null(fieldVal)) {
+              fieldVal <- "NULL"
+              if (showNull) {
+                cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+              }
+            } else if (is.numeric(fieldVal)) {
+              cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+            } else if (is.character(fieldVal)) {
+              cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
+            } else if (is.logical(fieldVal)) {
+              cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+            } else {
+              print("type unknown (not char or number or bool). Fix this")
+              browser()
+              stop("type unknown (not char or number or bool). Fix this")
+            }
+          }
 
+        } else {
+          # recursive call to_string
+          cat_ret_spaces(spaceCount + 2, fieldName, ": ")
 
+          check_if_registered(fieldVal)
+          fieldVal$.str(maxLevel = maxLevel - 1, spaceCount = spaceCount + 2, showNull = showNull, isFirst = FALSE)
+        }
+      }
 
-
-
-
-
-
-
-
-
+      if (isFirst) {
+        cat("\n")
+      }
+      invisible(self)
+    }
+  )
+)$new()
 
 
 
 AST <- R6Class("AST",
   public = list(
+    .str = GQLR_STR$str
   ),
   active = list(
+    .argNames = function() {
+      names(self$.args)
+    },
+    .kind = function() {
+      class(self)[1]
+    }
+
   )
 )
 
@@ -141,6 +229,14 @@ Name <- R6_from_args(
   "Name",
   " loc?: ?Location;
     value: string;",
+  public = list(
+    .str = function(maxLevel = -1, showNull = FALSE, spaceCount = 0, isFirst = TRUE) {
+      if (maxLevel != 0) {
+        # cat("<Name - ", self$value, ">")
+        cat("`", self$value, "'", sep = "")
+      }
+    }
+  ),
   active = list(
     value = function(value) {
       if (missing(value)) {
