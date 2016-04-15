@@ -20,12 +20,12 @@ build_js <- function(force = FALSE) {
 
     if (!dir.exists(file.path("node_modules", "browserify"))) {
       cat("installing browserify...\n\n")
-      system("npm install browserify")
+      system("npm install browserify@13.0.0")
       cat("\n\nbrowserify installed!\n")
     }
     if (!dir.exists(file.path("node_modules", "graphql"))) {
       cat("installing graphql...\n\n")
-      system("npm install graphql")
+      system("npm install graphql@0.5.0")
       cat("\n\ngraphql installed!\n")
     }
 

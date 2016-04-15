@@ -200,16 +200,19 @@ Location <- R6_from_args(
 #                  | NamedType
 #                  | ListType
 #                  | NonNullType
+#                  | SchemaDefinition
+#                  | OperationTypeDefinition
+#                  | ScalarTypeDefinition
 #                  | ObjectTypeDefinition
 #                  | FieldDefinition
 #                  | InputValueDefinition
 #                  | InterfaceTypeDefinition
 #                  | UnionTypeDefinition
-#                  | ScalarTypeDefinition
 #                  | EnumTypeDefinition
 #                  | EnumValueDefinition
 #                  | InputObjectTypeDefinition
 #                  | TypeExtensionDefinition
+#                  | DirectiveDefinition
 
 # GQLR_HasLocation <- R6Class("GQLR_HasLocation",
 #   inherit = AST,
@@ -263,8 +266,7 @@ Document <- R6_from_args(
 
 # export type Definition = OperationDefinition
 #                        | FragmentDefinition
-#                        | TypeDefinition
-#                        | TypeExtensionDefinition
+#                        | TypeSystemDefinition
 Definition <- R6Class("Definition", inherit = Node)
 
 OperationDefinition <- R6_from_args(
@@ -367,14 +369,17 @@ FragmentDefinition = R6_from_args(
 #                   | EnumValue
 #                   | ListValue
 #                   | ObjectValue
-Value <- R6Class("Value", inherit = Node,
+Value <- R6Class("Value",
+  inherit = Node,
   public = list(
-    parse_literal = function(astObj) {
-      if (astObj$kind == self$.kind) {
-        self$parse_value(astObj$value)
-      } else {
-        NULL
-      }
+    .serialize = function(x) {
+      x
+    },
+    .parse_value = function(x) {
+      x
+    },
+    .parse_literal = function(...) {
+      self$.parse_value(...)
     }
   )
 )
@@ -385,29 +390,78 @@ Variable <- R6_from_args(
   " loc?: ?Location;
     name: Name; "
 )
-IntValue = R6_from_args(
-  inherit = Value,
-  "IntValue",
-  " loc?: ?Location;
-    value: string;"
-)
+IntValue = (function(){
+  coerce_int = function (value) {
+    MAX_INT =  2147483647
+    MIN_INT = -2147483648
+    num <- as.integer(value)
+    if (!is.na(num)) {
+      if (num <= self$MAX_INT && num >= self$MIN_INT) {
+        return(num)
+      }
+    }
+    return(NULL)
+  }
+
+  R6_from_args(
+    inherit = Value,
+    "IntValue",
+    " loc?: ?Location;
+      value: string;",
+    public = list(
+      .parse_literal = coerce_int,
+      .serialize = coerce_int,
+      .parse_value = coerce_int
+    )
+  )
+})()
+
+coerce_helper = function(as_fn, is_fn) {
+  fn <- function(value) {
+    val <- as_fn(value)
+    if (is_fn(val)) {
+      return(val)
+    } else {
+      return(NULL)
+    }
+  }
+  pryr::unenclose(fn)
+}
+
 FloatValue = R6_from_args(
   inherit = Value,
   "FloatValue",
   " loc?: ?Location;
-    value: string;"
+    value: string;",
+  public = list(
+    .parse_literal = coerce_helper(as.numeric, is.numeric),
+    .serialize = coerce_helper(as.numeric, is.numeric),
+    .parse_value = coerce_helper(as.numeric, is.numeric)
+  )
 )
+
 StringValue = R6_from_args(
   inherit = Value,
   "StringValue",
   " loc?: ?Location;
-    value: string;"
+    value: string;",
+  public = list(
+    .parse_literal = coerce_helper(as.character, is.character),
+    .serialize = coerce_helper(as.character, is.character),
+    .parse_value = coerce_helper(as.character, is.character)
+  )
 )
+
 BooleanValue = R6_from_args(
   inherit = Value,
   "BooleanValue",
   " loc?: ?Location;
-    value: boolean;"
+    value: boolean;",
+  public = list(
+    .parse_literal = coerce_helper(as.logical, is.logical),
+    .serialize = coerce_helper(as.logical, is.logical),
+    .parse_value = coerce_helper(as.logical, is.logical)
+  )
 )
 EnumValue = R6_from_args(
   inherit = Value,
@@ -444,6 +498,7 @@ Directive = R6_from_args(
   inherit = Node,
   "Directive",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     arguments?: ?Array<Argument>;"
 )
@@ -462,38 +517,118 @@ NamedType = R6_from_args(
   inherit = Type,
   "NamedType",
   " loc?: ?Location;
-    name: Name;"
+    name: Name;
+    description?: ?string;"
 )
 
 ListType = R6_from_args(
   inherit = Type,
   "ListType",
   " loc?: ?Location;
-    type: Type;"
+    type: Type;
+    description?: ?string;"
 )
 
 NonNullType = R6_from_args(
   inherit = Type,
   "NonNullType",
   " loc?: ?Location;
-    type: NamedType | ListType;"
+    type: NamedType | ListType;
+    description?: ?string;"
 )
 
 
 # // Type Definition
 
-# export type TypeDefinition = ObjectTypeDefinition
+# export type TypeSystemDefinition = | SchemaDefinition
+#                                    | TypeDefinition
+#                                    | TypeExtensionDefinition
+#                                    | DirectiveDefinition
+TypeSystemDefinition = R6Class("TypeSystemDefinition", inherit = Definition)
+
+SchemaDefinition = R6_from_args(
+  inherit = TypeSystemDefinition,
+  "SchemaDefinition",
+  " loc?: ?Location;
+    operationTypes: Array<OperationTypeDefinition>;"
+)
+
+OperationTypeDefinition = R6_from_args(
+  "OperationTypeDefinition",
+  " loc?: ?Location;
+    operation: 'query' | 'mutation' | 'subscription';
+    type: NamedType;"
+)
+
+# export type TypeDefinition = ScalarTypeDefinition
+#                            | ObjectTypeDefinition
 #                            | InterfaceTypeDefinition
 #                            | UnionTypeDefinition
-#                            | ScalarTypeDefinition
 #                            | EnumTypeDefinition
 #                            | InputObjectTypeDefinition
-TypeDefinition = R6Class("TypeDefinition", inherit = Definition)
+TypeDefinition = R6Class("TypeDefinition", inherit = TypeSystemDefinition)
+
+ScalarTypeDefinition = R6_from_args(
+  inherit = TypeDefinition,
+  "ScalarTypeDefinition",
+  " loc?: ?Location;
+    description?: ?string;
+    name: Name;
+    .serialize?: ?fn;
+    .parse_value?: ?fn;
+    .parse_literal?: ?fn;",
+  public = list(
+    initialize = function(
+      loc = NULL,
+      description = NULL,
+      name,
+      .serialize = NULL,
+      .parse_value = NULL,
+      .parse_literal = NULL
+    ) {
+      self$name = name
+      if (!missing(.serialize)) {
+        self$.serialize = .serialize
+      } else {
+        warning(
+          str_c(
+            "Scalar: '", self$name$value,
+            "': Setting 'serialize' to return 'NULL'"
+          )
+        )
+        self$.serialize = function(x){ return(NULL) }
+      }
+
+      if (!missing(description)) {
+        self$description = description
+      }
+
+      if ((!missing(.parse_value)) || (!missing(.parse_literal))) {
+        if (missing(.parse_value) || missing(.parse_literal)) {
+          stop0(self$name, " must provide both .parse_value and .parse_literal functions")
+        }
+        self$.parse_value = .parse_value
+        self$.parse_literal = .parse_literal
+      } else {
+        warning(
+          str_c(
+            "Scalar: '", self$name$value,
+            "': Setting 'parse_value' and 'parse_literal' to return 'NULL'"
+          )
+        )
+        self$.parse_value = function(x) { return(NULL) }
+        self$.parse_literal = function(x) { return(NULL) }
+      }
+
+    }
+  )
+)
 
 ObjectTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "ObjectTypeDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     interfaces?: ?Array<NamedType>;
     fields: Array<FieldDefinition>;"
@@ -503,6 +638,7 @@ FieldDefinition = R6_from_args(
   inherit = TypeDefinition,
   "FieldDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     arguments: Array<InputValueDefinition>;
     type: Type;"
@@ -521,6 +657,7 @@ InputObjectTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "InputObjectTypeDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     fields: Array<InputValueDefinition>;"
 )
@@ -529,6 +666,7 @@ InterfaceTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "InterfaceTypeDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     fields: Array<FieldDefinition>;"
 )
@@ -537,21 +675,16 @@ UnionTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "UnionTypeDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     types: Array<NamedType>;"
-)
-
-ScalarTypeDefinition = R6_from_args(
-  inherit = TypeDefinition,
-  "ScalarTypeDefinition",
-  " loc?: ?Location;
-    name: Name;"
 )
 
 EnumTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "EnumTypeDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     values: Array<EnumValueDefinition>;"
 )
@@ -560,6 +693,7 @@ EnumValueDefinition = R6_from_args(
   inherit = Node,
   "EnumValueDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;"
 )
 
@@ -568,4 +702,15 @@ TypeExtensionDefinition = R6_from_args(
   "TypeExtensionDefinition",
   " loc?: ?Location;
     definition: ObjectTypeDefinition;"
+)
+
+
+DirectiveDefinition = R6_from_args(
+  inherit = Definition,
+  "DirectiveDefinition",
+  " loc?: ?Location;
+    description?: ?string;
+    name: Name;
+    arguments?: ?Array<InputValueDefinition>;
+    locations: Array<Name>;"
 )
