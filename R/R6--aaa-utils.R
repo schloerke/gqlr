@@ -15,7 +15,7 @@ coerce_helper = function(as_fn, is_fn) {
     }
     return(NULL)
   }
-  pryr::unenclose(fn)
+  pryr_unenclose(fn)
 }
 
 
@@ -114,7 +114,6 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         return(self$.args[[key]]$value)
       }
 
-      browser()
 
       if (is.null(value)) {
         if (! self$.args[[key]]$canBeNull) {
@@ -254,7 +253,7 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         number = coerce_helper(as.numeric, is.numeric),
         any = identity,
         boolean = coerce_helper(as.logical, is.logical),
-        fn = pryr::unenclose(function(x) {
+        fn = pryr_unenclose(function(x) {
           if (!is.function(x)) {
             stop0("can not set ", argName, " to a non function value.")
           }
@@ -280,9 +279,10 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
     # replace all "argName" and "type_fn" or "argType" with the actual values
     # this allows R6 to work with functions that should be closures,
     # after unenclose'ing the function, it is no long a closure
-    if (type == "Name") browser()
-    
-    fn <- pryr::unenclose(pryr::unenclose(fn))
+    # if (type == "Name") browser()
+
+    # fn <- pryr::unenclose(pryr::unenclose(fn))
+    fn <- pryr_unenclose(fn)
 
     activeList[[argName]] <- fn
   }
@@ -307,9 +307,6 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
     env = environment(),
     body = quote({
 
-      if (self$.kind == "Name") {
-        browser()
-      }
       # all vars msut start with a "." to avoid stomp arg values
       for (.argName in self$.argNames) {
         # values that may be not supplied, will default to NULL from function def
