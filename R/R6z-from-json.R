@@ -5,6 +5,10 @@ r6_from_list <- function(obj, fnList = list(), level = 0, keys = c(), objPos = N
       cat(..., sep = "")
     }
   }
+  if (typeof(obj) != "list") {
+    return(obj)
+  }
+  # browser()
   objClass <- obj$kind
   if (is.null(objPos)) {
     keys <- append(keys, objClass)
@@ -30,6 +34,7 @@ r6_from_list <- function(obj, fnList = list(), level = 0, keys = c(), objPos = N
         retList[[activeKey]] <- list()
       } else {
         if (identical(class(objVal), "list")) {
+          # browser()
           # lapply(objVal, r6_from_list, keys = keys, level = level)
           retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
             r6_from_list(objVal[[i]], fnList = fnList, keys = keys, level = level, objPos = i, verbose = verbose)
@@ -43,6 +48,6 @@ r6_from_list <- function(obj, fnList = list(), level = 0, keys = c(), objPos = N
     }
   }
 
-  print(retList)
+  # browser()
   do.call(r6Obj$new, retList)
 }
