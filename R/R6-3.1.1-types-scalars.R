@@ -43,7 +43,7 @@ parse_literal = function(kind) {
       NULL
     }
   }
-  pryr::unenclose(fn)
+  pryr_unenclose(fn)
 }
 
 GraphQLScalarType <- R6_from_args(
