@@ -280,7 +280,7 @@ OperationDefinition <- R6_from_args(
   inherit = Definition,
   "OperationDefinition",
   " loc?: ?Location;
-    operation: 'query' | 'mutation' | 'subscription';
+    operation: OperationTypeDefinition;
     name?: ?Name;
     variableDefinitions?: ?Array<VariableDefinition>;
     directives?: ?Array<Directive>;
