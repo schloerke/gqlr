@@ -74,10 +74,6 @@ Schema <- R6_from_args(
 
 
 
-
-
-
-
 SchemaObj <- R6Class(
   "SchemaAllInOne",
   private = list(
@@ -328,6 +324,50 @@ SchemaObj <- R6Class(
   )
 )
 
+
+
+
+#
+# Introspection__Schema <- R6_from_args(
+#   inherit = AST,
+#   "__Schema",
+#   " types: Array<__Type>;
+#     queryType: __Type;
+#     mutationType: ?__Type;
+#     directives: ?Array<__Directive>;"
+# }
+#
+# Introspection__Type <- R6_from_args(
+#   inherit = AST,
+#   "__Type",
+#   " kind: __TypeKind;
+#     name: string;
+#     description: string;"
+# )
+# type __Type {
+#   kind: __TypeKind!
+#   name: String
+#   description: String
+#
+#   # OBJECT and INTERFACE only
+#   fields(includeDeprecated: Boolean = false): [__Field!]
+#
+#   # OBJECT only
+#   interfaces: [__Type!]
+#
+#   # INTERFACE and UNION only
+#   possibleTypes: [__Type!]
+#
+#   # ENUM only
+#   enumValues(includeDeprecated: Boolean = false): [__EnumValue!]
+#
+#   # INPUT_OBJECT only
+#   inputFields: [__InputValue!]
+#
+#   # NON_NULL and LIST only
+#   ofType: __Type
+# }
+#
 
 
 
