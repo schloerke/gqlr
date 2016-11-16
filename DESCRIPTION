@@ -12,6 +12,7 @@ Depends:
 License: MIT
 LazyData: true
 Imports:
+    graphql,
     stringr,
     base,
     magrittr,
