@@ -46,39 +46,40 @@ parse_literal = function(kind) {
   pryr_unenclose(fn)
 }
 
-GraphQLScalarType <- R6_from_args(
-  "GQL_Scalar_Type",
-  " name: string;
-    description?: ?string;
-    serialize: fn;
-    parse_value?: ?fn;
-    parse_literal?: ?fn;",
-  public = list(
-    initialize = function(name, description, serialize, parse_value, parse_literal) {
-      self$name = name
-      self$serialize = serialize
-      if (!missing(description)) {
-        self$description = description
-      }
-      if ((!missing(parse_value)) || (!missing(parse_literal))) {
-        if (missing(parse_value) || missing(parse_literal)) {
-          stop0(self$name, " must provide both parse_value and parse_literal functions")
-        }
-        self$parse_value = parse_value
-        self$parse_literal = parse_literal
-      } else {
-        warning("Setting 'parse_value' and 'parse_literal' to return 'NULL'")
-        self$parse_value = function(x) { return(NULL) }
-        self$parse_literal = function(x) { return(NULL) }
-      }
-    }
-  )
-)
+## Use ScalarTypeDefinition instead!!
+# GraphQLScalarType <- ScalarTypeDefinition$new(
+#   "GQL_Scalar_Type",
+#   " name: string;
+#     description?: ?string;
+#     serialize: fn;
+#     parse_value?: ?fn;
+#     parse_literal?: ?fn;",
+#   public = list(
+#     initialize = function(name, description, serialize, parse_value, parse_literal) {
+#       self$name = name
+#       self$serialize = serialize
+#       if (!missing(description)) {
+#         self$description = description
+#       }
+#       if ((!missing(parse_value)) || (!missing(parse_literal))) {
+#         if (missing(parse_value) || missing(parse_literal)) {
+#           stop0(self$name, " must provide both parse_value and parse_literal functions")
+#         }
+#         self$parse_value = parse_value
+#         self$parse_literal = parse_literal
+#       } else {
+#         warning("Setting 'parse_value' and 'parse_literal' to return 'NULL'")
+#         self$parse_value = function(x) { return(NULL) }
+#         self$parse_literal = function(x) { return(NULL) }
+#       }
+#     }
+#   )
+# )
 
 
 coerce_int = function (value) {
-  MAX_INT =  2147483647
-  MIN_INT = -2147483648
+  MAX_INT =  2147483647L
+  MIN_INT = -2147483648L
   num <- as.integer(value)
   if (!is.na(num)) {
     if (num <= self$MAX_INT && num >= self$MIN_INT) {
@@ -87,15 +88,16 @@ coerce_int = function (value) {
   }
   return(NULL)
 }
-gql_int = GraphQLScalarType$new(
+
+Int <- Integer <- ScalarTypeDefinition$new(
   name = "Int",
   description = paste0(
     "The `Int` scalar type represents non-fractional signed whole numeric ",
     "values. Int can represent values between -(2^31) and 2^31 - 1. "
   ),
-  serialize = coerce_int,
-  parse_value = coerce_int,
-  parse_literal = parse_literal("IntValue")
+  .serialize = coerce_int,
+  .parse_value = coerce_int,
+  .parse_literal = parse_literal("IntValue")
 )
 
 
@@ -108,16 +110,16 @@ coerce_float = function (value) {
     return(NULL)
   }
 }
-GraphQLFloat = GraphQLScalarType$new(
+Float = ScalarTypeDefinition$new(
   name = "Float",
   description = str_c(
     'The `Float` scalar type represents signed double-precision fractional ',
     'values as specified by ',
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).'
   ),
-  serialize = coerce_float,
-  parse_value = coerce_float,
-  parse_literal = function(astObj) {
+  .serialize = coerce_float,
+  .parse_value = coerce_float,
+  .parse_literal = function(astObj) {
     kind = astObj$kind
     if (kind == "IntValue" || kind == "FloatValue") {
       self$parse_value(astObj$value)
@@ -128,16 +130,16 @@ GraphQLFloat = GraphQLScalarType$new(
 )
 
 
-GraphQLString = GraphQLScalarType$new(
+GraphQLString = ScalarTypeDefinition$new(
   name = "String",
   description = str_c(
     'The `String` scalar type represents textual data, represented as UTF-8 ',
     'character sequences. The String type is most often used by GraphQL to ',
     'represent free-form human-readable text.'
   ),
-  serialize = as.character,
-  parse_value = as.character,
-  parse_literal = parse_literal("StringValue")
+  .serialize = as.character,
+  .parse_value = as.character,
+  .parse_literal = parse_literal("StringValue")
 )
 
 
@@ -149,17 +151,17 @@ coerce_boolean = function (value) {
     return(NULL)
   }
 }
-GraphQLBoolean = GraphQLScalarType$new(
+GraphQLBoolean = ScalarTypeDefinition$new(
   name = "Boolean",
   description = 'The `Boolean` scalar type represents `true` or `false`.',
-  serialize = coerce_boolean,
-  parse_value = coerce_boolean,
-  parse_literal = parse_literal("BooleanValue")
+  .serialize = coerce_boolean,
+  .parse_value = coerce_boolean,
+  .parse_literal = parse_literal("BooleanValue")
 )
 
 
 # no literal AST definition, but defining as such
-GraphQLID = GraphQLScalarType$new(
+GraphQLID = ScalarTypeDefinition$new(
   name = "ID",
   description = str_c(
     'The `ID` scalar type represents a unique identifier, often used to ',
@@ -168,10 +170,14 @@ GraphQLID = GraphQLScalarType$new(
     'When expected as an input type, any string (such as `"4"`) or integer ',
     '(such as `4`) input value will be accepted as an ID.'
   ),
-  serialize = as.character,
-  parse_value = as.character,
-  parse_literal = function(astObj) {
-    if (astObj$kind == "StringValue" || astObj$kind == "IntValue") {
+  .serialize = as.character,
+  .parse_value = as.character,
+  .parse_literal = function(astObj) {
+    if (
+      astObj$.kind == "String" ||
+      astObj$.kind == "Integer" ||
+      astObj$.kind == "Int"
+    ) {
       return(astObj$value)
     } else {
       return(NULL)
