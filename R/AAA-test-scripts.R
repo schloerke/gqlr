@@ -11,6 +11,10 @@ if (FALSE) {
   load_all(); test_json("film-schema") %>% r6_from_list() %>% gqlr_str()
   load_all(); test_json("film-query") %>% r6_from_list() %>% gqlr_str()
 
+  load_all(); introspection_spec() %>% eval_json() %>% r6_from_list() %>% gqlr_str()
+  load_all(); introspection_imp()
+
+
 
 filmSchemaTxt = "\nscalar Date\n\n  type Person {\n    name: String\n    films: [Film]\n  }\n\n  type Film {\n    title: String,\n    producers: [String]\n    characters(limit: Int): [Person]\n    release_date: Date\n  }\n\n  type Query {\n    film(id: Int): Film\n    person(id: Int): Person\n  }\n"
 filmFnList = list(
@@ -55,6 +59,9 @@ load_all(); filmSchemaTxt %>% eval_json() %>% r6_from_list() %>% gqlr_str()
 schemaObj <- SchemaObj$new(text = filmSchemaTxt, fnList = filmFnList)
 
 schemaObj <- Schema$new(documentObj = filmSchemaTxt, fnList = filmFnList)
+
+
+
 
 
 } # end FALSE

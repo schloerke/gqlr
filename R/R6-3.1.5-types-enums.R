@@ -17,6 +17,10 @@
 #
 # Query variable transport serializations which have a different representation for non‐string symbolic values (for example, EDN) should only allow such values as enum input values. Otherwise, for most transport serializations that do not, strings may be interpreted as the enum input value with the same name.
 
+
+
+
+
 GraphQLEnumValueDefinition = R6_from_args(
   "GraphQLEnumValueDefinition",
   " name: string;
@@ -24,9 +28,9 @@ GraphQLEnumValueDefinition = R6_from_args(
     deprecationReason?: ?string;
     value: any"
 )
-EnumValue = R6_from_args(
-  inherit = Value,
-  "EnumValue",
+zEnumValue = R6_from_args(
+  inherit = TypeDefinition,
+  "zEnumValue",
   " loc?: ?Location;
     value: string;",
   public = list(

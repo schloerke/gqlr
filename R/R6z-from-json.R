@@ -1,4 +1,10 @@
-r6_from_list <- function(obj, level = 0, keys = c(), objPos = NULL) {
+
+r6_from_list <- function(obj, fnList = list(), level = 0, keys = c(), objPos = NULL, verbose = FALSE) {
+  vcat <- function(...) {
+    if (verbose) {
+      cat(..., sep = "")
+    }
+  }
   objClass <- obj$kind
   if (is.null(objPos)) {
     keys <- append(keys, objClass)
@@ -16,7 +22,7 @@ r6_from_list <- function(obj, level = 0, keys = c(), objPos = NULL) {
   fieldNames <- names(r6Obj$public_fields$.args)
 
   for (activeKey in fieldNames) {
-    cat(level, "-", paste(keys, collapse = ","), "-", activeKey, "\n")
+    vcat("(", level, ") - ", paste(keys, collapse = ","), "-", activeKey, "\n")
     objVal <- obj[[activeKey]]
 
     if (is.list(objVal)) {
@@ -26,10 +32,10 @@ r6_from_list <- function(obj, level = 0, keys = c(), objPos = NULL) {
         if (identical(class(objVal), "list")) {
           # lapply(objVal, r6_from_list, keys = keys, level = level)
           retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
-            r6_from_list(objVal[[i]], keys = keys, level = level, objPos = i)
+            r6_from_list(objVal[[i]], fnList = fnList, keys = keys, level = level, objPos = i, verbose = verbose)
           })
         } else {
-          retList[[activeKey]] <- r6_from_list(objVal, keys = keys, level = level)
+          retList[[activeKey]] <- r6_from_list(objVal, fnList = fnList, keys = keys, level = level, verbose = verbose)
         }
       }
     } else {
@@ -37,5 +43,6 @@ r6_from_list <- function(obj, level = 0, keys = c(), objPos = NULL) {
     }
   }
 
+  print(retList)
   do.call(r6Obj$new, retList)
 }

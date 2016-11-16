@@ -87,12 +87,21 @@ GQLR_STR <- R6Class("GraphQLR Structure",
               if (showNull) {
                 cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
               }
+            } else if (length(fieldVal) == 0) {
+              if (showNull) {
+                cat_ret_spaces(spaceCount + 2, fieldName, ": ", typeof(fieldVal), "(0)")
+              }
             } else if (is.numeric(fieldVal)) {
               cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
             } else if (is.character(fieldVal)) {
+              if (length(fieldVal) == 0) {
+                browser()
+              }
               cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
             } else if (is.logical(fieldVal)) {
               cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
+            } else if (is.function(fieldVal)) {
+              cat_ret_spaces(spaceCount + 2, fieldName, ": ", "fn")
             } else {
               print("type unknown (not char or number or bool). Fix this")
               browser()
@@ -213,18 +222,7 @@ Location <- R6_from_args(
 #                  | InputObjectTypeDefinition
 #                  | TypeExtensionDefinition
 #                  | DirectiveDefinition
-
-# GQLR_HasLocation <- R6Class("GQLR_HasLocation",
-#   inherit = AST,
-#   public = list(
-#     "_loc" = NULL
-#   ),
-#   active = list(
-#     loc = function(v) { self_value("_loc", "Location", self, v, m(v)) }
-#   )
-# )
 Node <- R6Class("Node", inherit = AST)
-
 
 
 Name <- R6_from_args(
@@ -395,9 +393,11 @@ IntValue = (function(){
     MAX_INT =  2147483647
     MIN_INT = -2147483648
     num <- as.integer(value)
-    if (!is.na(num)) {
-      if (num <= self$MAX_INT && num >= self$MIN_INT) {
-        return(num)
+    if (is.integer(num)) {
+      if (length(num) == 1) {
+        if (num <= MAX_INT && num >= MIN_INT) {
+          return(num)
+        }
       }
     }
     return(NULL)
@@ -415,18 +415,6 @@ IntValue = (function(){
     )
   )
 })()
-
-coerce_helper = function(as_fn, is_fn) {
-  fn <- function(value) {
-    val <- as_fn(value)
-    if (is_fn(val)) {
-      return(val)
-    } else {
-      return(NULL)
-    }
-  }
-  pryr::unenclose(fn)
-}
 
 FloatValue = R6_from_args(
   inherit = Value,
@@ -554,6 +542,7 @@ SchemaDefinition = R6_from_args(
 )
 
 OperationTypeDefinition = R6_from_args(
+  inherit = Node,
   "OperationTypeDefinition",
   " loc?: ?Location;
     operation: 'query' | 'mutation' | 'subscription';
@@ -694,7 +683,8 @@ EnumValueDefinition = R6_from_args(
   "EnumValueDefinition",
   " loc?: ?Location;
     description?: ?string;
-    name: Name;"
+    name: Name;
+    isDeprecated: boolean;"
 )
 
 TypeExtensionDefinition = R6_from_args(

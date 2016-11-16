@@ -1,4 +1,24 @@
 
+
+with_description <- function(fn, description = NULL) {
+  attr(fn, "description") <- description
+  fn
+}
+
+coerce_helper = function(as_fn, is_fn) {
+  fn <- function(value) {
+    val <- as_fn(value)
+    if (is_fn(val)) {
+      if (length(val) > 0) {
+        return(val)
+      }
+    }
+    return(NULL)
+  }
+  pryr::unenclose(fn)
+}
+
+
 RegisterClassObj <- R6Class(
   "RegisterdR6Classes",
   public = list(
@@ -93,6 +113,8 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
       if (missing(value)) {
         return(self$.args[[key]]$value)
       }
+
+      browser()
 
       if (is.null(value)) {
         if (! self$.args[[key]]$canBeNull) {
@@ -228,16 +250,16 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
 
     if (argType %in% c("any", "string", "number", "boolean", "fn")) {
       type_fn <- switch(argType,
-        string = as.character,
-        number = as.numeric,
-        any = I,
-        boolean = as.logical,
-        fn = function(x) {
+        string = coerce_helper(as.character, is.character),
+        number = coerce_helper(as.numeric, is.numeric),
+        any = identity,
+        boolean = coerce_helper(as.logical, is.logical),
+        fn = pryr::unenclose(function(x) {
           if (!is.function(x)) {
             stop0("can not set ", argName, " to a non function value.")
           }
           fn
-        }
+        })
       )
 
       possibleValues <- argItem$possibleValues
@@ -252,13 +274,14 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
         fn <- self_array_wrapper(argName, argType, argItem$isNamedArray)
       } else {
         fn <- self_value_wrapper(argName, argType)
-
       }
     }
 
     # replace all "argName" and "type_fn" or "argType" with the actual values
     # this allows R6 to work with functions that should be closures,
     # after unenclose'ing the function, it is no long a closure
+    if (type == "Name") browser()
+    
     fn <- pryr::unenclose(pryr::unenclose(fn))
 
     activeList[[argName]] <- fn
@@ -283,26 +306,27 @@ R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = l
     args = initArgs,
     env = environment(),
     body = quote({
-      args <- self$.args
-      for (argName in names(args)) {
-        argItem <- args[[argName]]
+
+      if (self$.kind == "Name") {
+        browser()
+      }
+      # all vars msut start with a "." to avoid stomp arg values
+      for (.argName in self$.argNames) {
         # values that may be not supplied, will default to NULL from function def
 
-        if (argItem$canBeNull) {
-          err_fn <- function(e) { NULL }
-        } else {
-          # must be supplied
-          err_fn <- function(e) {
-            stop0("Did not receive: '", argName, "'. '", argName, "' must be supplied to object of class: ", self$.kind)
-          }
-        }
-        argVal <- tryCatch(
-          get(argName, inherit = FALSE),
-          error = err_fn
+        # all the active bindings will validate the object being set
+        self[[.argName]] <- tryCatch(
+          get(.argName, inherit = FALSE),
+          error = (
+            if(self$.args[[.argName]]$canBeNull)
+              function(e) { NULL }
+            else
+              function(e) {
+                stop0("Did not receive: '", .argName, "'. '", .argName, "' must be supplied to object of class: ", self$.kind)
+              }
+          )
         )
 
-        # all the active bindings will validate the object being set
-        self[[argName]] <- argVal
       }
     })
   )

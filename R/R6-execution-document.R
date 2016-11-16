@@ -1,61 +1,6 @@
 
 
-check_if_document <- function(documentObj) {
-
-  if (!is.list(documentObj)) {
-    print(documentObj)
-    stop("'documentObj' is not a list")
-  }
-  if (! identical(documentObj$kind, "Document")) {
-    stop("documentObj is not a GraphQL Document object")
-  }
-}
-
-get_name_val <- function(nameObj) {
-  if (is.null(nameObj)) {
-    if (allowNull) {
-      return(NULL)
-    } else {
-      print(definitionObj)
-      stop("a name must be supplied for the definition object")
-    }
-  }
-  if (nameObj$kind != "Name") {
-    print(nameObj)
-    stop("do not know how to parse this name object")
-  }
-
-  nameObj$value
-}
-get_names <- function(definitionObj, stopName, allowNull = TRUE) {
-  lapply(definitionObj, "[[", "name") %>%
-    lapply(get_name_val) ->
-    definitionNames
-
-  if (length(definitionNames) > 1) {
-    isNull <- lapply(definitionNames, is.null) %>% unlist()
-    if (any(isNull)) {
-      stop0("if multiple ", stopName, "s are supplied, each ", stopName, " must have a name")
-    }
-    if (any(duplicated(definitionNames))) {
-      stop0("if multiple ", stopName, " are supplied, each ", stopName, " must have a unique name")
-    }
-  }
-
-  definitionNames
-}
-get_namedtype_name_value <- function(namedTypeObj) {
-  if (nameObj$kind != "NamedType") {
-    print(nameObj)
-    stop("not a NamedType object")
-  }
-  get_name_val(namedTypeObj$name)
-}
-
-
-
 get_document_operations <- function(documentObj) {
-  check_if_document(documentObj)
 
   lapply(documentObj$definitions, "[[", "kind") %>%
     magrittr::equals("OperationDefinition") %>%
@@ -102,24 +47,51 @@ get_document_fragments <- function(documentObj) {
 
 
 
-
-
-
-
 # Evaluating requests
 #
 # To evaluate a request, the executor must have a parsed Document (as defined in the “Query Language” part of this spec) and a selected operation name to run if the document defines multiple operations.
 #
-# The executor should find the Operation in the Document with the given operation name. If no such operation exists, the executor should throw an error. If the operation is found, then the result of evaluating the request should be the result of evaluating the operation according to the “Evaluating operations” section.
 #' @export
-parse_document <- function(documentObj) {
-  operationDefinition <- get_document_operations(documentObj)
-  fragmentDefinitions <- get_document_fragments(documentObj)
+evaluate_request <- function(documentObj, operationName) {
 
+  # The executor should find the Operation in the Document with the given operation name.
+  documentObj$definitions %>%
+    lapply("[[", "kind") %>%
+    magrittr::equals("OperationDefinition") ->
+    operationLocations
 
-  list(operations = operationDefinition, fragments = fragmentDefinitions)
+  documentObj$definitions %>%
+    lapply("[[", "name") %>%
+    lapply("[[", "value") %>%
+    magrittr::equals(operationName) ->
+    definitionNames
+
+  # If no such operation exists, the executor should throw an error.
+  matchesOperationName <- which(operationName == definitionNames[operationLocations])
+  if (! any(matchesOperationName) ) {
+    stop0("No OperationDefinition with name of '", operationName, "' found in documentObj")
+  }
+  if (sum(matchesOperationName) > 1) {
+    stop0("OperationDefinition with name of '", operationName, "' found more than once in documentObj")
+  }
+
+  # If the operation is found, then the result of evaluating the request should be the result of evaluating the operation according to the "Evaluating operations" section.
+  operationObj <- documentObj$definitions[[matchesOperationName]]
+
+  # TODO eval according to evalating operations
+  operationObj
+
 }
 
+
+# Evaluating Operations
+# The type system, as described in the “Type System” part of the spec, must provide a “Query Root” and a “Mutation Root” object.
+evaluate_operation <- function() {
+
+# If the operation is a mutation, the result of the operation is the result of evaluating the mutation’s top level selection set on the “Mutation Root” object. This selection set should be evaluated serially.
+
+# If the operation is a query, the result of the operation is the result of evaluating the query’s top level selection set on the “Query Root” object.
+}
 
 
 #' Parse a Selection Set

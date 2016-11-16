@@ -1,0 +1,11 @@
+
+√ implement the init method
+
+add getters for all Types
+add serializer for all Types
+add type resolvers for Interfaces
+
+
+?make Schema a R6_from_args
+Schema Validation
+implement introspection

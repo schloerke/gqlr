@@ -35,45 +35,50 @@
 # GraphQL has different constant literals to represent integer and floating‐point input values, and coercion rules may apply differently depending on which type of input value is encountered. GraphQL may be parameterized by query variables, the values of which are often serialized when sent over a transport like HTTP. Since some common serializations (ex. JSON) do not discriminate between integer and floating‐point values, they are interpreted as an integer input value if they have an empty fractional part (ex. 1.0) and otherwise as floating‐point input value.
 
 
+parse_literal = function(kind) {
+  fn <- function(astObj) {
+    if (astObj$kind == kind) {
+      self$parse_value(astObj$value)
+    } else {
+      NULL
+    }
+  }
+  pryr::unenclose(fn)
+}
 
-# // Values
-
-# export type Value = Variable
-#                   | IntValue
-#                   | FloatValue
-#                   | StringValue
-#                   | BooleanValue
-#                   | EnumValue
-#                   | ListValue
-#                   | ObjectValue
-Value <- R6Class("Value", inherit = Node,
+GraphQLScalarType <- R6_from_args(
+  "GQL_Scalar_Type",
+  " name: string;
+    description?: ?string;
+    serialize: fn;
+    parse_value?: ?fn;
+    parse_literal?: ?fn;",
   public = list(
-    parse_literal = function(astObj) {
-      if (astObj$kind == self$kind) {
-        self$parse_value(astObj$value)
+    initialize = function(name, description, serialize, parse_value, parse_literal) {
+      self$name = name
+      self$serialize = serialize
+      if (!missing(description)) {
+        self$description = description
+      }
+      if ((!missing(parse_value)) || (!missing(parse_literal))) {
+        if (missing(parse_value) || missing(parse_literal)) {
+          stop0(self$name, " must provide both parse_value and parse_literal functions")
+        }
+        self$parse_value = parse_value
+        self$parse_literal = parse_literal
       } else {
-        NULL
+        warning("Setting 'parse_value' and 'parse_literal' to return 'NULL'")
+        self$parse_value = function(x) { return(NULL) }
+        self$parse_literal = function(x) { return(NULL) }
       }
     }
   )
 )
 
 
-Variable <- R6_from_args(
-  inherit = Value,
-  "Variable",
-  " loc?: ?Location;
-    name: Name; ",
-  public = list(
-    parse_literal = function(x) {
-      stop("TODO implement")
-    }
-  )
-)
-
-
-
 coerce_int = function (value) {
+  MAX_INT =  2147483647
+  MIN_INT = -2147483648
   num <- as.integer(value)
   if (!is.na(num)) {
     if (num <= self$MAX_INT && num >= self$MIN_INT) {
@@ -82,17 +87,15 @@ coerce_int = function (value) {
   }
   return(NULL)
 }
-IntValue = R6_from_args(
-  inherit = Value,
-  "IntValue",
-  " loc?: ?Location;
-    value: string;",
-  public = list(
-    MAX_INT = 2147483647L,
-    MIN_INT = -2147483648L,
-    serialize = coerce_int,
-    parse_value = coerce_int
-  )
+gql_int = GraphQLScalarType$new(
+  name = "Int",
+  description = paste0(
+    "The `Int` scalar type represents non-fractional signed whole numeric ",
+    "values. Int can represent values between -(2^31) and 2^31 - 1. "
+  ),
+  serialize = coerce_int,
+  parse_value = coerce_int,
+  parse_literal = parse_literal("IntValue")
 )
 
 
@@ -105,35 +108,36 @@ coerce_float = function (value) {
     return(NULL)
   }
 }
-FloatValue = R6_from_args(
-  inherit = Value,
-  "FloatValue",
-  " loc?: ?Location;
-    value: string;",
-  public = list(
-    serialize = coerce_float,
-    parse_value = coerce_float,
-    parse_literal = function(astObj) {
-      kind = astObj$kind
-      if (kind == "IntValue" || kind == "FloatValue") {
-        self$parse_value(astObj$value)
-      } else {
-        NULL
-      }
+GraphQLFloat = GraphQLScalarType$new(
+  name = "Float",
+  description = str_c(
+    'The `Float` scalar type represents signed double-precision fractional ',
+    'values as specified by ',
+    '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).'
+  ),
+  serialize = coerce_float,
+  parse_value = coerce_float,
+  parse_literal = function(astObj) {
+    kind = astObj$kind
+    if (kind == "IntValue" || kind == "FloatValue") {
+      self$parse_value(astObj$value)
+    } else {
+      NULL
     }
-  )
+  }
 )
 
 
-StringValue = R6_from_args(
-  inherit = Value,
-  "StringValue",
-  " loc?: ?Location;
-    value: string;",
-  public = list(
-    serialize = as.character,
-    parse_value = as.character
-  )
+GraphQLString = GraphQLScalarType$new(
+  name = "String",
+  description = str_c(
+    'The `String` scalar type represents textual data, represented as UTF-8 ',
+    'character sequences. The String type is most often used by GraphQL to ',
+    'represent free-form human-readable text.'
+  ),
+  serialize = as.character,
+  parse_value = as.character,
+  parse_literal = parse_literal("StringValue")
 )
 
 
@@ -145,55 +149,32 @@ coerce_boolean = function (value) {
     return(NULL)
   }
 }
-BooleanValue = R6_from_args(
-  inherit = Value,
-  "BooleanValue",
-  " loc?: ?Location;
-    value: boolean;",
-  public = list(
-    serialize = coerce_boolean,
-    parse_value = coerce_boolean
-  )
+GraphQLBoolean = GraphQLScalarType$new(
+  name = "Boolean",
+  description = 'The `Boolean` scalar type represents `true` or `false`.',
+  serialize = coerce_boolean,
+  parse_value = coerce_boolean,
+  parse_literal = parse_literal("BooleanValue")
 )
 
 
 # no literal AST definition, but defining as such
-GraphQLID = R6_from_args(
-  inherit = Value,
-  "ID",
-  " loc?: ?Location;
-    value: boolean;",
-  public = list(
-    serialize = as.character,
-    parseValue = as.character,
-    parseLiteral = function(astObj) {
-      if (astObj$kind == "StringValue" || astObj$kind == "IntValue") {
-        return(astObj$value)
-      } else {
-        return(NULL)
-      }
+GraphQLID = GraphQLScalarType$new(
+  name = "ID",
+  description = str_c(
+    'The `ID` scalar type represents a unique identifier, often used to ',
+    'refetch an object or as key for a cache. The ID type appears in a JSON ',
+    'response as a String; however, it is not intended to be human-readable. ',
+    'When expected as an input type, any string (such as `"4"`) or integer ',
+    '(such as `4`) input value will be accepted as an ID.'
+  ),
+  serialize = as.character,
+  parse_value = as.character,
+  parse_literal = function(astObj) {
+    if (astObj$kind == "StringValue" || astObj$kind == "IntValue") {
+      return(astObj$value)
+    } else {
+      return(NULL)
     }
-  )
-)
-
-ListValue = R6_from_args(
-  inherit = Value,
-  "ListValue",
-  " loc?: ?Location;
-    values: Array<Value>;"
-)
-ObjectValue = R6_from_args(
-  inherit = Value,
-  "ObjectValue",
-  " loc?: ?Location;
-    fields: Array<ObjectField>;"
-)
-
-ObjectField = R6_from_args(
-  inherit = Node,
-  "ObjectField",
-  " loc?: ?Location;
-    name: Name;
-    value: Value;
-  "
+  }
 )
