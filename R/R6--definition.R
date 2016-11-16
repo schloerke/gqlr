@@ -55,9 +55,9 @@ GQLR_STR <- R6Class("GraphQLR Structure",
       fieldNames <- self$.argNames
 
       for (fieldName in fieldNames) {
-        if (fieldName %in% c("loc")) {
-          next
-        }
+        # if (fieldName %in% c("loc")) {
+        #   next
+        # }
 
         fieldVal <- self[[fieldName]]
 
@@ -179,7 +179,16 @@ Location <- R6_from_args(
   "Location",
   " start: number;
     end: number;
-    source?: ?Source;"
+    source?: ?Source;",
+  public = list(
+    .str = function(maxLevel = -1, ...) {
+      if (maxLevel == 0) {
+        return()
+      }
+
+      cat("<", self$.kind, "> (", self$start, ", ", self$end, ")", sep = "")
+    }
+  )
 )
 
 
@@ -234,7 +243,7 @@ Name <- R6_from_args(
     .str = function(maxLevel = -1, showNull = FALSE, spaceCount = 0, isFirst = TRUE) {
       if (maxLevel != 0) {
         # cat("<Name - ", self$value, ">")
-        cat("`", self$value, "'", sep = "")
+        cat("<Name> '", self$value, "'", sep = "")
       }
     }
   ),
