@@ -45,6 +45,9 @@ RegisterClassObj <- R6Class(
 
 
 parse_args <- function(txt) {
+  if (is.null(txt)) {
+    return(list())
+  }
   # txt = "kind: 'Document';
   # loc?: ?Location;
   # definitions: Array<Definition>;"
@@ -104,7 +107,7 @@ parse_args <- function(txt) {
 
 
 
-R6_from_args <- function(type, txt, inherit = NULL, public = list(), private = list(), active = list()) {
+R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), private = list(), active = list()) {
   # R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;", inherit = AST)
 
   self_value_wrapper <- function(key, classVal) {
