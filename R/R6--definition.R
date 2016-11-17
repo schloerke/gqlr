@@ -38,7 +38,7 @@ GQLR_STR <- R6Class("GraphQLR Structure",
         stop0("'", key, "' is not registered. Do not have 'self$.str' for unknown class: '", key, "'")
       }
     },
-    str = function(maxLevel = -1, showNull = FALSE, spaceCount = 0, isFirst = TRUE) {
+    str = function(maxLevel = -1, showNull = FALSE, showLoc = FALSE, spaceCount = 0, isFirst = TRUE) {
       if (maxLevel == 0) {
         return()
       }
@@ -55,9 +55,11 @@ GQLR_STR <- R6Class("GraphQLR Structure",
       fieldNames <- self$.argNames
 
       for (fieldName in fieldNames) {
-        # if (fieldName %in% c("loc")) {
-        #   next
-        # }
+        if (fieldName %in% c("loc")) {
+          if (! isTRUE(showLoc)) {
+            next
+          }
+        }
 
         fieldVal <- self[[fieldName]]
 
@@ -76,7 +78,7 @@ GQLR_STR <- R6Class("GraphQLR Structure",
                 cat_ret_spaces(spaceCount + 2, itemPos, " - ")
 
                 check_if_registered(fieldItem)
-                fieldItem$.str(maxLevel = maxLevel - 1, spaceCount = spaceCount + 2, showNull = showNull, isFirst = FALSE)
+                fieldItem$.str(maxLevel = maxLevel - 1, spaceCount = spaceCount + 2, showNull = showNull, showLoc = showLoc, isFirst = FALSE)
               }
             }
 
@@ -114,7 +116,7 @@ GQLR_STR <- R6Class("GraphQLR Structure",
           cat_ret_spaces(spaceCount + 2, fieldName, ": ")
 
           check_if_registered(fieldVal)
-          fieldVal$.str(maxLevel = maxLevel - 1, spaceCount = spaceCount + 2, showNull = showNull, isFirst = FALSE)
+          fieldVal$.str(maxLevel = maxLevel - 1, spaceCount = spaceCount + 2, showNull = showNull, showLoc = showLoc, isFirst = FALSE)
         }
       }
 
