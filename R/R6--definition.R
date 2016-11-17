@@ -135,6 +135,12 @@ AST <- R6Class("AST",
     .str = GQLR_STR$str
   ),
   active = list(
+    .title = function() {
+      if (!is.null(self$name)) {
+        return(self$name$value)
+      }
+      self$.kind
+    },
     .argNames = function() {
       names(self$.args)
     },
