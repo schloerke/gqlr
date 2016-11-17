@@ -239,7 +239,7 @@ Location <- R6_from_args(
 #                  | InputObjectTypeDefinition
 #                  | TypeExtensionDefinition
 #                  | DirectiveDefinition
-Node <- R6Class("Node", inherit = AST)
+Node <- R6_from_args("Node", inherit = AST)
 
 
 Name <- R6_from_args(
@@ -282,7 +282,7 @@ Document <- R6_from_args(
 # export type Definition = OperationDefinition
 #                        | FragmentDefinition
 #                        | TypeSystemDefinition
-Definition <- R6Class("Definition", inherit = Node)
+Definition <- R6_from_args("Definition", inherit = Node)
 
 OperationDefinition <- R6_from_args(
   inherit = Definition,
@@ -317,7 +317,7 @@ SelectionSet <- R6_from_args(
 # export type Selection = Field
 #                       | FragmentSpread
 #                       | InlineFragment
-Selection = R6Class("Selection", inherit = Node)
+Selection = R6_from_args("Selection", inherit = Node)
 
 
 
@@ -384,7 +384,7 @@ FragmentDefinition = R6_from_args(
 #                   | EnumValue
 #                   | ListValue
 #                   | ObjectValue
-Value <- R6Class("Value",
+Value <- R6_from_args("Value",
   inherit = Node,
   public = list(
     .serialize = function(x) {
@@ -515,7 +515,7 @@ Directive = R6_from_args(
 # export type Type = NamedType
 #                  | ListType
 #                  | NonNullType
-Type = R6Class("Type",inherit = Node)
+Type = R6_from_args("Type",inherit = Node)
 
 
 NamedType = R6_from_args(
@@ -549,7 +549,7 @@ NonNullType = R6_from_args(
 #                                    | TypeDefinition
 #                                    | TypeExtensionDefinition
 #                                    | DirectiveDefinition
-TypeSystemDefinition = R6Class("TypeSystemDefinition", inherit = Definition)
+TypeSystemDefinition = R6_from_args("TypeSystemDefinition", inherit = Definition)
 
 SchemaDefinition = R6_from_args(
   inherit = TypeSystemDefinition,
@@ -572,7 +572,7 @@ OperationTypeDefinition = R6_from_args(
 #                            | UnionTypeDefinition
 #                            | EnumTypeDefinition
 #                            | InputObjectTypeDefinition
-TypeDefinition = R6Class("TypeDefinition", inherit = TypeSystemDefinition)
+TypeDefinition = R6_from_args("TypeDefinition", inherit = TypeSystemDefinition)
 
 ScalarTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
