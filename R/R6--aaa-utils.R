@@ -260,7 +260,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
           if (!is.function(x)) {
             stop0("can not set ", argName, " to a non function value.")
           }
-          fn
+          x
         })
       )
 
