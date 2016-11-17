@@ -12,13 +12,15 @@
 
 
 
-# Scalar
+# Scalars
 #
 # As expected by the name, a scalar represents a primitive value in GraphQL. GraphQL responses take the form of a hierarchical tree; the leaves on these trees are GraphQL scalars.
 #
 # All GraphQL scalars are representable as strings, though depending on the response format being used, there may be a more appropriate primitive for the given scalar type, and server should use those types when appropriate.
 #
 # GraphQL provides a number of built‐in scalars, but type systems can add additional scalars with semantic meaning. For example, a GraphQL system could define a scalar called Time which, while serialized as a string, promises to conform to ISO‐8601. When querying a field of type Time, you can then rely on the ability to parse the result with an ISO‐8601 parser and use a client‐specific primitive for time. Another example of a potentially useful custom scalar is Url, which serializes as a string, but is guaranteed by the server to be a valid URL.
+#
+# A server may omit any of the built‐in scalars from its schema, for example if a schema does not refer to a floating‐point number, then it will not include the Float type. However, if a schema includes a type with the name of one of the types described here, it must adhere to the behavior described. As an example, a server must not include a type called Int and use it to represent 128‐bit numbers, or internationalization information.
 #
 # Result Coercion
 #
@@ -33,18 +35,30 @@
 # If a GraphQL server expects a scalar type as input to an argument, coercion is observable and the rules must be well defined. If an input value does not match a coercion rule, a query error must be raised.
 #
 # GraphQL has different constant literals to represent integer and floating‐point input values, and coercion rules may apply differently depending on which type of input value is encountered. GraphQL may be parameterized by query variables, the values of which are often serialized when sent over a transport like HTTP. Since some common serializations (ex. JSON) do not discriminate between integer and floating‐point values, they are interpreted as an integer input value if they have an empty fractional part (ex. 1.0) and otherwise as floating‐point input value.
+#
+# For all types below, with the exception of Non‐Null, if the explicit value null is provided, then the result of input coercion is null.
 
 
-parse_literal = function(kind) {
+
+
+parse_literal = function(kind, parse_value) {
   fn <- function(astObj) {
     if (astObj$kind == kind) {
-      self$parse_value(astObj$value)
+      parse_value(astObj$value)
     } else {
       NULL
     }
   }
   pryr_unenclose(fn)
 }
+
+# do_if_not_null <- function(parse_fn, fn) {
+#   function(value) {
+#     if (is.null(value)) return(NULL)
+#     fn(parse_fn(value))
+#   }
+#   # pryr_unenclose(ret)
+# }
 
 ## Use ScalarTypeDefinition instead!!
 # GraphQLScalarType <- ScalarTypeDefinition$new(
@@ -76,28 +90,30 @@ parse_literal = function(kind) {
 #   )
 # )
 
-
 coerce_int = function (value) {
-  MAX_INT =  2147483647L
-  MIN_INT = -2147483648L
+  MAX_INT =  2147483647
+  MIN_INT = -2147483648
   num <- as.integer(value)
   if (!is.na(num)) {
-    if (num <= self$MAX_INT && num >= self$MIN_INT) {
+    if (num <= MAX_INT && num >= MIN_INT) {
       return(num)
     }
   }
   return(NULL)
 }
 
-Int <- Integer <- ScalarTypeDefinition$new(
+
+
+Int <- ScalarTypeDefinition$new(
   name = "Int",
   description = paste0(
-    "The `Int` scalar type represents non-fractional signed whole numeric ",
-    "values. Int can represent values between -(2^31) and 2^31 - 1. "
+    "The Int scalar type represents a signed 32‐bit numeric non‐fractional value. ",
+    "Response formats that support a 32‐bit integer or a number type should use that ",
+    "type to represent this scalar."
   ),
-  .serialize = coerce_int,
-  .parse_value = coerce_int,
-  .parse_literal = parse_literal("IntValue")
+  serialize = as.character,
+  parse_value = coerce_int,
+  parse_literal = parse_literal("Int", coerce_int)
 )
 
 
@@ -117,12 +133,18 @@ Float = ScalarTypeDefinition$new(
     'values as specified by ',
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).'
   ),
-  .serialize = coerce_float,
-  .parse_value = coerce_float,
-  .parse_literal = function(astObj) {
+  serialize = function(value) {
+    ret <- as.character(value)
+    if (!str_detect(ret, "\\.")) {
+      ret <- str_c(ret, ".0")
+    }
+    ret
+  },
+  parse_value = coerce_float,
+  parse_literal = function(astObj) {
     kind = astObj$kind
-    if (kind == "IntValue" || kind == "FloatValue") {
-      self$parse_value(astObj$value)
+    if (kind == "Int" || kind == "Float") {
+      coerce_float(astObj$value)
     } else {
       NULL
     }
@@ -130,16 +152,16 @@ Float = ScalarTypeDefinition$new(
 )
 
 
-GraphQLString = ScalarTypeDefinition$new(
+String = ScalarTypeDefinition$new(
   name = "String",
   description = str_c(
     'The `String` scalar type represents textual data, represented as UTF-8 ',
     'character sequences. The String type is most often used by GraphQL to ',
     'represent free-form human-readable text.'
   ),
-  .serialize = as.character,
-  .parse_value = as.character,
-  .parse_literal = parse_literal("StringValue")
+  serialize = as.character,
+  parse_value = as.character,
+  parse_literal = parse_literal("String", as.character)
 )
 
 
@@ -151,17 +173,17 @@ coerce_boolean = function (value) {
     return(NULL)
   }
 }
-GraphQLBoolean = ScalarTypeDefinition$new(
+Boolean = ScalarTypeDefinition$new(
   name = "Boolean",
-  description = 'The `Boolean` scalar type represents `true` or `false`.',
-  .serialize = coerce_boolean,
-  .parse_value = coerce_boolean,
-  .parse_literal = parse_literal("BooleanValue")
+  description = 'The `Boolean` scalar type represents `TRUE` or `FALSE`.',
+  serialize = as.character,
+  parse_value = coerce_boolean,
+  parse_literal = parse_literal("Boolean", coerce_boolean)
 )
 
 
 # no literal AST definition, but defining as such
-GraphQLID = ScalarTypeDefinition$new(
+ID = ScalarTypeDefinition$new(
   name = "ID",
   description = str_c(
     'The `ID` scalar type represents a unique identifier, often used to ',
@@ -170,15 +192,14 @@ GraphQLID = ScalarTypeDefinition$new(
     'When expected as an input type, any string (such as `"4"`) or integer ',
     '(such as `4`) input value will be accepted as an ID.'
   ),
-  .serialize = as.character,
-  .parse_value = as.character,
-  .parse_literal = function(astObj) {
+  serialize = as.character,
+  parse_value = as.character,
+  parse_literal = function(astObj) {
     if (
       astObj$.kind == "String" ||
-      astObj$.kind == "Integer" ||
       astObj$.kind == "Int"
     ) {
-      return(astObj$value)
+      return(as.character(astObj$value))
     } else {
       return(NULL)
     }
