@@ -97,6 +97,7 @@ GQLR_STR <- R6Class("GraphQLR Structure",
               cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
             } else if (is.character(fieldVal)) {
               if (length(fieldVal) == 0) {
+                print("this should not happen")
                 browser()
               }
               cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
@@ -248,7 +249,7 @@ Name <- R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
-    .str = function(maxLevel = -1, showNull = FALSE, spaceCount = 0, isFirst = TRUE) {
+    .str = function(maxLevel = -1, showNull = FALSE, showLoc = FALSE, spaceCount = 0, isFirst = TRUE) {
       if (maxLevel != 0) {
         # cat("<Name - ", self$value, ">")
         cat("<Name> '", self$value, "'", sep = "")
@@ -288,7 +289,7 @@ OperationDefinition <- R6_from_args(
   inherit = Definition,
   "OperationDefinition",
   " loc?: ?Location;
-    operation: OperationTypeDefinition;
+    operation: 'query' | 'mutation' | 'subscription';
     name?: ?Name;
     variableDefinitions?: ?Array<VariableDefinition>;
     directives?: ?Array<Directive>;
@@ -387,13 +388,13 @@ FragmentDefinition = R6_from_args(
 Value <- R6_from_args("Value",
   inherit = Node,
   public = list(
-    .serialize = function(x) {
+    serialize = function(x) {
       x
     },
-    .parse_value = function(x) {
+    parse_value = function(x) {
       x
     },
-    .parse_literal = function(...) {
+    parse_literal = function(...) {
       self$.parse_value(...)
     }
   )
@@ -426,9 +427,9 @@ IntValue = (function(){
     " loc?: ?Location;
       value: string;",
     public = list(
-      .parse_literal = coerce_int,
-      .serialize = coerce_int,
-      .parse_value = coerce_int
+      parse_literal = coerce_int,
+      serialize = coerce_int,
+      parse_value = coerce_int
     )
   )
 })()
@@ -439,9 +440,9 @@ FloatValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
-    .parse_literal = coerce_helper(as.numeric, is.numeric),
-    .serialize = coerce_helper(as.numeric, is.numeric),
-    .parse_value = coerce_helper(as.numeric, is.numeric)
+    parse_literal = coerce_helper(as.numeric, is.numeric),
+    serialize = coerce_helper(as.numeric, is.numeric),
+    parse_value = coerce_helper(as.numeric, is.numeric)
   )
 )
 
@@ -451,9 +452,9 @@ StringValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
-    .parse_literal = coerce_helper(as.character, is.character),
-    .serialize = coerce_helper(as.character, is.character),
-    .parse_value = coerce_helper(as.character, is.character)
+    parse_literal = coerce_helper(as.character, is.character),
+    serialize = coerce_helper(as.character, is.character),
+    parse_value = coerce_helper(as.character, is.character)
   )
 )
 
@@ -463,9 +464,9 @@ BooleanValue = R6_from_args(
   " loc?: ?Location;
     value: boolean;",
   public = list(
-    .parse_literal = coerce_helper(as.logical, is.logical),
-    .serialize = coerce_helper(as.logical, is.logical),
-    .parse_value = coerce_helper(as.logical, is.logical)
+    parse_literal = coerce_helper(as.logical, is.logical),
+    serialize = coerce_helper(as.logical, is.logical),
+    parse_value = coerce_helper(as.logical, is.logical)
   )
 )
 EnumValue = R6_from_args(
@@ -554,7 +555,9 @@ TypeSystemDefinition = R6_from_args("TypeSystemDefinition", inherit = Definition
 SchemaDefinition = R6_from_args(
   inherit = TypeSystemDefinition,
   "SchemaDefinition",
+  # Changed default behavior of directives to be optional
   " loc?: ?Location;
+    directives?: ?Array<Directive>;
     operationTypes: Array<OperationTypeDefinition>;"
 )
 
@@ -577,24 +580,30 @@ TypeDefinition = R6_from_args("TypeDefinition", inherit = TypeSystemDefinition)
 ScalarTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "ScalarTypeDefinition",
+  # Changed default behavior of directives to be optional
   " loc?: ?Location;
     description?: ?string;
     name: Name;
-    .serialize?: ?fn;
-    .parse_value?: ?fn;
-    .parse_literal?: ?fn;",
+    directives?: ?Array<Directive>;
+    serialize?: ?fn;
+    parse_value?: ?fn;
+    parse_literal?: ?fn;",
   public = list(
     initialize = function(
       loc = NULL,
       description = NULL,
       name,
-      .serialize = NULL,
-      .parse_value = NULL,
-      .parse_literal = NULL
+      directives = NULL,
+      serialize = NULL,
+      parse_value = NULL,
+      parse_literal = NULL
     ) {
+      if (is.character(name)) {
+        name = Name$new(value = name)
+      }
       self$name = name
-      if (!missing(.serialize)) {
-        self$.serialize = .serialize
+      if (!missing(serialize)) {
+        self$serialize = serialize
       } else {
         warning(
           str_c(
@@ -602,19 +611,22 @@ ScalarTypeDefinition = R6_from_args(
             "': Setting 'serialize' to return 'NULL'"
           )
         )
-        self$.serialize = function(x){ return(NULL) }
+        self$serialize = function(x){ return(NULL) }
       }
 
       if (!missing(description)) {
         self$description = description
       }
+      if (!missing(directives)) {
+        self$directives = directives
+      }
 
-      if ((!missing(.parse_value)) || (!missing(.parse_literal))) {
-        if (missing(.parse_value) || missing(.parse_literal)) {
+      if ((!missing(parse_value)) || (!missing(parse_literal))) {
+        if (missing(parse_value) || missing(parse_literal)) {
           stop0(self$name, " must provide both .parse_value and .parse_literal functions")
         }
-        self$.parse_value = .parse_value
-        self$.parse_literal = .parse_literal
+        self$parse_value = parse_value
+        self$parse_literal = parse_literal
       } else {
         warning(
           str_c(
@@ -622,8 +634,8 @@ ScalarTypeDefinition = R6_from_args(
             "': Setting 'parse_value' and 'parse_literal' to return 'NULL'"
           )
         )
-        self$.parse_value = function(x) { return(NULL) }
-        self$.parse_literal = function(x) { return(NULL) }
+        self$parse_value = function(x) { return(NULL) }
+        self$parse_literal = function(x) { return(NULL) }
       }
 
     }
@@ -637,17 +649,100 @@ ObjectTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     interfaces?: ?Array<NamedType>;
-    fields: Array<FieldDefinition>;"
+    directives?: ?Array<Directive>;
+    fields: Array<FieldDefinition>;",
+  active = list(
+    .is_valid = function() {
+      # Object types have the potential to be invalid if incorrectly defined.
+      # This set of rules must be adhered to by every Object type in a GraphQL schema.
+      #
+      # 1. An Object type must define one or more fields.
+      # 2. The fields of an Object type must have unique names within that Object type;
+      #    no two fields may share the same name.
+      # 3. An object type must be a super‐set of all interfaces it implements:
+      #   1. The object type must include a field of the same name for every field defined in an
+      #      interface.
+      #     1. The object field must be of a type which is equal to or a sub‐type of the interface
+      #        field (covariant).
+      #       1. An object field type is a valid sub‐type if it is equal to (the same type as) the
+      #          interface field type.
+      #       2. An object field type is a valid sub‐type if it is an Object type and the
+      #          interface field type is either an Interface type or a Union type and the object
+      #          field type is a possible type of the interface field type.
+      #       3. An object field type is a valid sub‐type if it is a List type and the interface
+      #          field type is also a List type and the list‐item type of the object field type is
+      #          a valid sub‐type of the list‐item type of the interface field type.
+      #       4. An object field type is a valid sub‐type if it is a Non‐Null variant of a valid
+      #          sub‐type of the interface field type.
+      #     2. The object field must include an argument of the same name for every argument
+      #        defined in the interface field.
+      #       1. The object field argument must accept the same type (invariant) as the interface
+      #          field argument.
+      #     3. The object field may include additional arguments not defined in the interface
+      #        field, but any additional argument must not be required.
+
+      # #1
+      ## checked in object initialization
+      # if (length(self$fields) == 0) {
+      #   stop("Object definition has 0 field values")
+      # }
+
+      self$fields %>%
+        lapply(extract, ".title") ->
+      self_field_names
+
+      # #2
+      if (any(duplicated(self_field_names))) {
+        dup_names <- self_field_names[duplicated(self_field_names)]
+        stop("Object has duplicated names: ", str_c(dup_names, collapse = ", "))
+      }
+
+      # #3
+      if (length(self$interfaces) > 0) {
+
+        for (interface in self$interfaces) {
+
+          for (interface_field in interface$fields) {
+            # #3.1
+            if (! (inteface_field$.title %in% self_field_names)) {
+              stop(
+                "Object (", self$.title, ") has missing interface (", interface$.title, ")",
+                " field name (", inteface_field$.title, ")"
+              )
+            }
+
+            # #3.1.1
+            matching_field <- self$fields[[interface_field$.title == self_field_names]]
+            if (! inherits(matching_field, interface_field$.kind)) {
+              stop(
+                "Object (", self$.title, ") field (", matching_field$.title, ") does not inherit interface (", interface$.title, ")",
+                " field (", inteface_field$.title, ")"
+              )
+            }
+
+            stop("TODO")
+
+
+          }
+        }
+      }
+
+
+
+    }
+  )
 )
 
 FieldDefinition = R6_from_args(
   inherit = TypeDefinition,
+  # Changed default behavior of arguments to be optional
   "FieldDefinition",
   " loc?: ?Location;
     description?: ?string;
     name: Name;
-    arguments: Array<InputValueDefinition>;
-    type: Type;"
+    arguments?: ?Array<InputValueDefinition>;
+    type: Type;
+    directives?: ?Array<Directive>;"
 )
 
 InputValueDefinition = R6_from_args(
@@ -656,16 +751,8 @@ InputValueDefinition = R6_from_args(
   " loc?: ?Location;
     name: Name;
     type: Type;
-    defaultValue?: ?Value;"
-)
-
-InputObjectTypeDefinition = R6_from_args(
-  inherit = TypeDefinition,
-  "InputObjectTypeDefinition",
-  " loc?: ?Location;
-    description?: ?string;
-    name: Name;
-    fields: Array<InputValueDefinition>;"
+    defaultValue?: ?Value;
+    directives?: ?Array<Directive>;"
 )
 
 InterfaceTypeDefinition = R6_from_args(
@@ -674,6 +761,7 @@ InterfaceTypeDefinition = R6_from_args(
   " loc?: ?Location;
     description?: ?string;
     name: Name;
+    directives?: ?Array<Directive>;
     fields: Array<FieldDefinition>;"
 )
 
@@ -683,6 +771,7 @@ UnionTypeDefinition = R6_from_args(
   " loc?: ?Location;
     description?: ?string;
     name: Name;
+    directives?: ?Array<Directive>;
     types: Array<NamedType>;"
 )
 
@@ -692,6 +781,7 @@ EnumTypeDefinition = R6_from_args(
   " loc?: ?Location;
     description?: ?string;
     name: Name;
+    directives?: ?Array<Directive>;
     values: Array<EnumValueDefinition>;"
 )
 
@@ -701,7 +791,17 @@ EnumValueDefinition = R6_from_args(
   " loc?: ?Location;
     description?: ?string;
     name: Name;
-    isDeprecated: boolean;"
+    directives?: ?Array<Directive>;"
+)
+
+InputObjectTypeDefinition = R6_from_args(
+  inherit = TypeDefinition,
+  "InputObjectTypeDefinition",
+  " loc?: ?Location;
+    description?: ?string;
+    name: Name;
+    directives?: ?Array<Directive>;
+    fields: Array<InputValueDefinition>;"
 )
 
 TypeExtensionDefinition = R6_from_args(
