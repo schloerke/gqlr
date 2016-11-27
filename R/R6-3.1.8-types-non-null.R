@@ -18,26 +18,26 @@
 # If the argument of a Non Null is provided with a variable, a query error must be raised if the runtime provided value is not provided or is null in the provided representation (usually JSON). Otherwise, the coerced value is the result of using the input coercion for the wrapped type.
 
 # TODO
-gql_NonNullType = R6_from_args(
-  inherit = Type,
-  "NonNullType",
-  " loc?: ?Location;
-    type: NamedType | ListType;",
-
-
-  active = list(
-    ofType = function() {
-      self$type$kind
-    },
-    type = function(value) {
-      if (missing(value)) {
-        return(self$.args$type$value)
-      }
-      if (!(inherits(value, "NamedType") || inherits(value, "ListType"))) {
-        stop0("expected value with class of NamedType or ListType. Received ", value$kind)
-      }
-      self$.args$type$value <- value
-      value
-    }
-  )
-)
+# gql_NonNullType = R6_from_args(
+#   inherit = Type,
+#   "NonNullType",
+#   " loc?: ?Location;
+#     type: NamedType | ListType;",
+#
+#
+#   active = list(
+#     ofType = function() {
+#       self$type$kind
+#     },
+#     type = function(value) {
+#       if (missing(value)) {
+#         return(self$.args$type$value)
+#       }
+#       if (!(inherits(value, "NamedType") || inherits(value, "ListType"))) {
+#         stop0("expected value with class of NamedType or ListType. Received ", value$kind)
+#       }
+#       self$.args$type$value <- value
+#       value
+#     }
+#   )
+# )

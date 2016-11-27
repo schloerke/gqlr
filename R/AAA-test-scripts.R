@@ -52,7 +52,6 @@ type Foo implements Bar {
   seven(argument: Int = null): Type
 }
 "
-
 ObjectTypeDefinition$new(
   name = Name$new(value = "Foo"),
   interfaces = list(

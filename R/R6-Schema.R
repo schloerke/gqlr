@@ -35,8 +35,10 @@
 
 
 
-Schema <- R6_from_args(
-  "Schema",
+
+
+zSchema <- R6_from_args(
+  "zSchema",
   " query: GraphQLObjectType;
     mutation?: ?GraphQLObjectType;
     directives?: ?Array<GraphQLDirective>;",
@@ -47,11 +49,13 @@ Schema <- R6_from_args(
         self$mutation = mutation
       }
 
-      if (missing(directives)) {
-        self$directives = list(GraphQLIncludeDirective, GraphQLSkipDirective)
-      } else {
-        self$directives = directives
+      all_directives <- list(IncludeDirective, SkipDirective)
+
+      if (!missing(directives)) {
+        all_directives <- append(all_directives, directives)
       }
+      self$directives <- all_directives
+
 
     },
     get_directive = function(name) {
@@ -370,8 +374,48 @@ SchemaObj <- R6Class(
 #
 
 
+DirectiveLocationNames <- (function() {
+  ret <- list()
+  for (name in c(
+    # operations
+    "QUERY",
+    "MUTATION",
+    "SUBSCRIPTION",
+    "FIELD",
+    "FRAGMENT_DEFINITION",
+    "FRAGMENT_SPREAD",
+    "INLINE_FRAGMENT",
+    # Schema Definitions
+    "SCHEMA",
+    "SCALAR",
+    "OBJECT",
+    "FIELD_DEFINITION",
+    "ARGUMENT_DEFINITION",
+    "INTERFACE",
+    "UNION",
+    "ENUM",
+    "ENUM_VALUE",
+    "INPUT_OBJECT",
+    "INPUT_FIELD_DEFINITION"
+  )) {
+    ret[[name]] <- Name$new(value = name)
+  }
+  ret
+})()
 
-introspection_spec <- function(){
+
+TypeKindValues <- list(
+  SCALAR = "SCALAR",
+  OBJECT = "OBJECT",
+  INTERFACE = "INTERFACE",
+  UNION = "UNION",
+  ENUM = "ENUM",
+  INPUT_OBJECT = "INPUT_OBJECT",
+  LIST = "LIST",
+  NON_NULL = "NON_NULL"
+)
+
+
 "
 type __Schema {
   types: [__Type!]!
@@ -379,6 +423,153 @@ type __Schema {
   mutationType: __Type
   directives: [__Directive!]!
 }
+"
+Introspection__Schema <- ObjectTypeDefinition$new(
+  name = Name$new(value = "__Schema"),
+  description = collapse(
+    "A GraphQL Schema defines the capabilities of a GraphQL server. It ",
+    "exposes all available types and directives on the server, as well as ",
+    "the entry points for query, mutation, and subscription operations." ,
+    "  Subscriptions are not implemented in gqlr."
+  ),
+  fields = list(
+    FieldDefinition$new(
+      description = "A list of all types supported by this server.",
+      name = Name$new(value = "types"),
+      type = NonNullType$new(type = ListType$new(type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__Type")))))
+    ),
+    FieldDefinition$new(
+      description = "The type that query operations will be rooted at.",
+      name = Name$new(value = "queryType"),
+      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__Type")))
+    ),
+    FieldDefinition$new(
+      description = "The type that mutation operations will be rooted at.",
+      name = Name$new(value = "mutationType"),
+      type = NamedType$new(name = Name$new(value = "__Type"))
+    ),
+    FieldDefinition$new(
+      description = "A list of all directives supported by this server.",
+      name = Name$new(value = "directives"),
+      type = NonNullType$new(type = ListType$new(type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__Directive")))))
+    )
+  )
+)
+# Introspection__Schema$.str()
+
+
+"
+type __Directive {
+  name: String!
+  description: String
+  locations: [__DirectiveLocation!]!
+  args: [__InputValue!]!
+}
+"
+Introspection__Directive <- ObjectTypeDefinition$new(
+  name = Name$new(value = "__Directive"),
+  description = collapse(
+    "A Directive provides a way to describe alternate runtime execution and ",
+    "type validation behavior in a GraphQL document.",
+    "\n\nIn some cases, you need to provide options to alter GraphQL's ",
+    "execution behavior in ways field arguments will not suffice, such as ",
+    "conditionally including or skipping a field. Directives provide this by ",
+    "describing additional information to the executor."
+  ),
+  fields = list(
+    FieldDefinition$new(
+      name = Name$new(value = "name"),
+      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "String")))
+    ),
+    FieldDefinition$new(
+      name = Name$new(value = "description"),
+      type = NamedType$new(name = Name$new(value = "String"))
+    ),
+    FieldDefinition$new(
+      name = Name$new(value = "locations"),
+      type = NonNullType$new(type = ListType$new(
+        type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__DirectiveLocation")))
+      ))
+    ),
+    FieldDefinition$new(
+      name = Name$new(value = "args"),
+      type = NonNullType$new(type = ListType$new(
+        type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__InputValue")))
+      ))
+    )
+  )
+)
+# Introspection__Directive$.str()
+
+
+Introspection__DirectiveLocation <- (function() {
+  enum_values <- list()
+  for (key in names(DirectiveLocationNames)) {
+    enum_values <- append(enum_values,
+      EnumValueDefinition$new(
+        name = DirectiveLocationNames[[key]],
+        description = str_c("Location adjacent to a ", str_replace(tolower(key), "_", " "))
+      )
+    )
+  }
+
+  EnumTypeDefinition$new(
+    name = Name$new(value = "__DirectiveLocation"),
+    description = collapse(
+      "A Directive can be adjacent to many parts of the GraphQL language, a ",
+      "__DirectiveLocation describes one such possible adjacencies."
+    ),
+    values = enum_values
+  )
+})()
+
+
+
+Introspection__Type <- ObjectTypeDefinition$new(
+  name = Name$new(value = "__Type"),
+  fields = list(
+    FieldDefinition$new(
+      name = Name$new(value = "kind"),
+      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__TypeKind"))),
+      .resolve = function(type) {
+        # if (inherits(type, ))
+      }
+    ),
+    FieldDefinition$new(
+      name = Name$new(value = "name"),
+      type = NamedType$new(name = Name$new(value = "String"))
+    ),
+    FieldDefinition$new(
+      name = Name$new(value = "description"),
+      type = NamedType$new(name = Name$new(value = "String"))
+    ),
+    FieldDefinition$new(
+      name = Name$new(value = "fields"),
+      type = NonNullType(type = NamedType$new(name = Name$new(value = "__Field"))),
+      .resolve = function(type, includeDeprecated) {
+        if (
+          !(
+            inherits(type, "ObjectTypeDefinition") || inherits(type, "InterfaceTypeDefinition")
+          )
+        ) {
+          return(NULL)
+        }
+
+        # get field names %TODO
+        type$fields
+
+      }
+    )
+
+  )
+)
+# Introspection__Type$.str()
+
+
+
+introspection_spec <- function(){
+
+"
 
 type __Type {
   kind: __TypeKind!

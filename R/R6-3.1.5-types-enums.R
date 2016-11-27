@@ -21,70 +21,70 @@
 
 
 
-GraphQLEnumValueDefinition = R6_from_args(
-  "GraphQLEnumValueDefinition",
-  " name: string;
-    description?: ?string;
-    deprecationReason?: ?string;
-    value: any"
-)
-zEnumValue = R6_from_args(
-  inherit = TypeDefinition,
-  "zEnumValue",
-  " loc?: ?Location;
-    value: string;",
-  public = list(
-    "_values" = NULL,
-    get_values = function() {
-      self$values
-    },
-
-    "_nameList" = NULL,
-    "_get_by_name" = function(nameVal) {
-      if (is.null(self$"_nameList")) {
-        nameList = as.list(self$get_values())
-        names(nameList) <- lapply(nameList, "[[", "name") %>% unlist() %>% as.character()
-        self$"_nameList" <- nameList
-      }
-      self[["_nameList"]][[nameVal]]
-    },
-
-    "_valueList" = NULL,
-    "_get_by_value" = function(nameVal) {
-      if (is.null(self$"_valueList")) {
-        valueList = as.list(self$get_values())
-        names(valueList) <- lapply(nameList, "[[", "value") %>% unlist() %>% as.character()
-        self$"_valueList" <- valueList
-      }
-      self[["_valueList"]][[nameVal]]
-    },
-
-    serialize = function(value) {
-      enumObj = self[["_get_by_value"]](value)
-      if (!is.null(enumObj)) {
-        enumObj$name
-      } else {
-        NULL
-      }
-    },
-    parse_value = function(nameVal) {
-      enumObj = self[["_get_by_name"]](nameVal)
-      if (!is.null(enumObj)) {
-        enumObj$value
-      } else {
-        NULL
-      }
-    },
-    parse_literal = function(astObj) {
-      if (astObj$kind == "EnumValue") {
-        enumObj = self[["_get_by_name"]](astObj$value)
-        if (!is.null(enumObj)) {
-          return(enumObj$value)
-        }
-      }
-      return(NULL)
-    }
-
-
-  )
-)
+# GraphQLEnumValueDefinition = R6_from_args(
+#   "GraphQLEnumValueDefinition",
+#   " name: string;
+#     description?: ?string;
+#     deprecationReason?: ?string;
+#     value: any"
+# )
+# zEnumValue = R6_from_args(
+#   inherit = TypeDefinition,
+#   "zEnumValue",
+#   " loc?: ?Location;
+#     value: string;",
+#   public = list(
+#     "_values" = NULL,
+#     get_values = function() {
+#       self$values
+#     },
+#
+#     "_nameList" = NULL,
+#     "_get_by_name" = function(nameVal) {
+#       if (is.null(self$"_nameList")) {
+#         nameList = as.list(self$get_values())
+#         names(nameList) <- lapply(nameList, "[[", "name") %>% unlist() %>% as.character()
+#         self$"_nameList" <- nameList
+#       }
+#       self[["_nameList"]][[nameVal]]
+#     },
+#
+#     "_valueList" = NULL,
+#     "_get_by_value" = function(nameVal) {
+#       if (is.null(self$"_valueList")) {
+#         valueList = as.list(self$get_values())
+#         names(valueList) <- lapply(nameList, "[[", "value") %>% unlist() %>% as.character()
+#         self$"_valueList" <- valueList
+#       }
+#       self[["_valueList"]][[nameVal]]
+#     },
+#
+#     serialize = function(value) {
+#       enumObj = self[["_get_by_value"]](value)
+#       if (!is.null(enumObj)) {
+#         enumObj$name
+#       } else {
+#         NULL
+#       }
+#     },
+#     parse_value = function(nameVal) {
+#       enumObj = self[["_get_by_name"]](nameVal)
+#       if (!is.null(enumObj)) {
+#         enumObj$value
+#       } else {
+#         NULL
+#       }
+#     },
+#     parse_literal = function(astObj) {
+#       if (astObj$kind == "EnumValue") {
+#         enumObj = self[["_get_by_name"]](astObj$value)
+#         if (!is.null(enumObj)) {
+#           return(enumObj$value)
+#         }
+#       }
+#       return(NULL)
+#     }
+#
+#
+#   )
+# )

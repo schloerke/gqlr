@@ -22,19 +22,24 @@ coerce_helper = function(as_fn, is_fn) {
 RegisterClassObj <- R6Class(
   "RegisterdR6Classes",
   public = list(
-    classList = list(),
+    list = list(),
     is_registered = function(key) {
-      !is.null(self$classList[[key]])
+      !is.null(self$list[[key]])
     },
     add = function(key, value) {
-      self$classList[[key]] <- value
+      self$list[[key]] <- value
     },
     get_class_obj = function(key) {
-      obj = self$classList[[key]]
+      obj = self$list[[key]]
       if (is.null(obj)) {
         stop0("Could not find object with class: ", classVal)
       }
       obj
+    }
+  ),
+  active = list(
+    names = function() {
+      names(self$list)
     }
   )
   # private = privateList,
@@ -257,8 +262,10 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
         any = identity,
         boolean = coerce_helper(as.logical, is.logical),
         fn = pryr_unenclose(function(x) {
-          if (!is.function(x)) {
-            stop0("can not set ", argName, " to a non function value.")
+          if (!is.null(x)) {
+            if (!is.function(x)) {
+              stop0("can not set ", argName, " to a non function value.")
+            }
           }
           x
         })

@@ -15,24 +15,24 @@
 #
 # Interfaces are never valid inputs.
 
-
-GraphQLFieldDefinition <- R6_from_args(
-  "GQL_Field_Definition",
-  " name: string;
-    description?: ?string;
-    type: GraphQLOutputType;
-    args: Array<GraphQLArgument>;
-    resolve?: ?GraphQLFieldResolveFn;
-    deprecationReason?: ?string;"
-)
-GraphQLInterfaceType <- R6_from_args(
-  "GQL_Interface_Type",
-  " name: string;
-    description?: ?string;
-    resolve_type: fn;
-    implementations?: ?Array<string>;
-    fields?: ?Dict<GraphQLFieldDefinition>;",
-  public = list(
-
-  )
-)
+#
+# GraphQLFieldDefinition <- R6_from_args(
+#   "GQL_Field_Definition",
+#   " name: string;
+#     description?: ?string;
+#     type: GraphQLOutputType;
+#     args: Array<GraphQLArgument>;
+#     resolve?: ?GraphQLFieldResolveFn;
+#     deprecationReason?: ?string;"
+# )
+# GraphQLInterfaceType <- R6_from_args(
+#   "GQL_Interface_Type",
+#   " name: string;
+#     description?: ?string;
+#     resolve_type: fn;
+#     implementations?: ?Array<string>;
+#     fields?: ?Dict<GraphQLFieldDefinition>;",
+#   public = list(
+#
+#   )
+# )

@@ -15,6 +15,19 @@
 
 
 
+# ASTTypes <- list(
+#   SCALAR = "SCALAR",
+#   OBJECT = "OBJECT",
+#   INTERFACE = "INTERFACE",
+#   UNION = "UNION",
+#   ENUM = "ENUM",
+#   INPUT_OBJECT = "INPUT_OBJECT",
+#   LIST = "LIST",
+#   NON_NULL = "NON_NULL"
+# )
+
+
+
 
 
 GQLR_STR <- R6Class("GraphQLR Structure",
@@ -742,7 +755,8 @@ FieldDefinition = R6_from_args(
     name: Name;
     arguments?: ?Array<InputValueDefinition>;
     type: Type;
-    directives?: ?Array<Directive>;"
+    directives?: ?Array<Directive>;
+    .resolve?: ?fn;"
 )
 
 InputValueDefinition = R6_from_args(
@@ -819,5 +833,6 @@ DirectiveDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     arguments?: ?Array<InputValueDefinition>;
-    locations: Array<Name>;"
+    locations: Array<Name>;
+    .resolve: fn;"
 )
