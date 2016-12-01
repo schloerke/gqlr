@@ -222,7 +222,6 @@ type __Field {
   deprecationReason: String
 }
 "
-
 Introspection__Field <- ObjectTypeDefinition$new(
   name = name_from_txt("__Field"),
   description = collapse(
