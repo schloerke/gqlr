@@ -351,6 +351,22 @@ SchemaObj <- R6Class(
 #     name: string;
 #     description: string;"
 # )
+#
+
+
+
+
+
+
+
+
+
+
+
+# introspection_spec <- function(){
+#
+# "
+#
 # type __Type {
 #   kind: __TypeKind!
 #   name: String
@@ -375,549 +391,326 @@ SchemaObj <- R6Class(
 #   ofType: __Type
 # }
 #
-
-
-DirectiveLocationNames <- (function() {
-  ret <- list()
-  for (name in c(
-    # operations
-    "QUERY",
-    "MUTATION",
-    "SUBSCRIPTION",
-    "FIELD",
-    "FRAGMENT_DEFINITION",
-    "FRAGMENT_SPREAD",
-    "INLINE_FRAGMENT",
-    # Schema Definitions
-    "SCHEMA",
-    "SCALAR",
-    "OBJECT",
-    "FIELD_DEFINITION",
-    "ARGUMENT_DEFINITION",
-    "INTERFACE",
-    "UNION",
-    "ENUM",
-    "ENUM_VALUE",
-    "INPUT_OBJECT",
-    "INPUT_FIELD_DEFINITION"
-  )) {
-    ret[[name]] <- Name$new(value = name)
-  }
-  ret
-})()
-
-
-TypeKindValues <- list(
-  SCALAR = "SCALAR",
-  OBJECT = "OBJECT",
-  INTERFACE = "INTERFACE",
-  UNION = "UNION",
-  ENUM = "ENUM",
-  INPUT_OBJECT = "INPUT_OBJECT",
-  LIST = "LIST",
-  NON_NULL = "NON_NULL"
-)
-
-
-"
-type __Schema {
-  types: [__Type!]!
-  queryType: __Type!
-  mutationType: __Type
-  directives: [__Directive!]!
-}
-"
-Introspection__Schema <- ObjectTypeDefinition$new(
-  name = Name$new(value = "__Schema"),
-  description = collapse(
-    "A GraphQL Schema defines the capabilities of a GraphQL server. It ",
-    "exposes all available types and directives on the server, as well as ",
-    "the entry points for query, mutation, and subscription operations." ,
-    "  Subscriptions are not implemented in gqlr."
-  ),
-  fields = list(
-    FieldDefinition$new(
-      description = "A list of all types supported by this server.",
-      name = Name$new(value = "types"),
-      type = NonNullType$new(type = ListType$new(type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__Type")))))
-    ),
-    FieldDefinition$new(
-      description = "The type that query operations will be rooted at.",
-      name = Name$new(value = "queryType"),
-      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__Type")))
-    ),
-    FieldDefinition$new(
-      description = "The type that mutation operations will be rooted at.",
-      name = Name$new(value = "mutationType"),
-      type = NamedType$new(name = Name$new(value = "__Type"))
-    ),
-    FieldDefinition$new(
-      description = "A list of all directives supported by this server.",
-      name = Name$new(value = "directives"),
-      type = NonNullType$new(type = ListType$new(type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__Directive")))))
-    )
-  )
-)
-# Introspection__Schema$.str()
-
-
-"
-type __Directive {
-  name: String!
-  description: String
-  locations: [__DirectiveLocation!]!
-  args: [__InputValue!]!
-}
-"
-Introspection__Directive <- ObjectTypeDefinition$new(
-  name = Name$new(value = "__Directive"),
-  description = collapse(
-    "A Directive provides a way to describe alternate runtime execution and ",
-    "type validation behavior in a GraphQL document.",
-    "\n\nIn some cases, you need to provide options to alter GraphQL's ",
-    "execution behavior in ways field arguments will not suffice, such as ",
-    "conditionally including or skipping a field. Directives provide this by ",
-    "describing additional information to the executor."
-  ),
-  fields = list(
-    FieldDefinition$new(
-      name = Name$new(value = "name"),
-      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "String")))
-    ),
-    FieldDefinition$new(
-      name = Name$new(value = "description"),
-      type = NamedType$new(name = Name$new(value = "String"))
-    ),
-    FieldDefinition$new(
-      name = Name$new(value = "locations"),
-      type = NonNullType$new(type = ListType$new(
-        type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__DirectiveLocation")))
-      ))
-    ),
-    FieldDefinition$new(
-      name = Name$new(value = "args"),
-      type = NonNullType$new(type = ListType$new(
-        type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__InputValue")))
-      ))
-    )
-  )
-)
-# Introspection__Directive$.str()
-
-
-Introspection__DirectiveLocation <- (function() {
-  enum_values <- list()
-  for (key in names(DirectiveLocationNames)) {
-    enum_values <- append(enum_values,
-      EnumValueDefinition$new(
-        name = DirectiveLocationNames[[key]],
-        description = str_c("Location adjacent to a ", str_replace(tolower(key), "_", " "))
-      )
-    )
-  }
-
-  EnumTypeDefinition$new(
-    name = Name$new(value = "__DirectiveLocation"),
-    description = collapse(
-      "A Directive can be adjacent to many parts of the GraphQL language, a ",
-      "__DirectiveLocation describes one such possible adjacencies."
-    ),
-    values = enum_values
-  )
-})()
-
-
-
-Introspection__Type <- ObjectTypeDefinition$new(
-  name = Name$new(value = "__Type"),
-  fields = list(
-    FieldDefinition$new(
-      name = Name$new(value = "kind"),
-      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "__TypeKind"))),
-      .resolve = function(type) {
-        # if (inherits(type, ))
-      }
-    ),
-    FieldDefinition$new(
-      name = Name$new(value = "name"),
-      type = NamedType$new(name = Name$new(value = "String"))
-    ),
-    FieldDefinition$new(
-      name = Name$new(value = "description"),
-      type = NamedType$new(name = Name$new(value = "String"))
-    ),
-    FieldDefinition$new(
-      name = Name$new(value = "fields"),
-      type = NonNullType(type = NamedType$new(name = Name$new(value = "__Field"))),
-      .resolve = function(type, includeDeprecated) {
-        if (
-          !(
-            inherits(type, "ObjectTypeDefinition") || inherits(type, "InterfaceTypeDefinition")
-          )
-        ) {
-          return(NULL)
-        }
-
-        # get field names %TODO
-        type$fields
-
-      }
-    )
-
-  )
-)
-# Introspection__Type$.str()
-
-
-
-introspection_spec <- function(){
-
-"
-
-type __Type {
-  kind: __TypeKind!
-  name: String
-  description: String
-
-  # OBJECT and INTERFACE only
-  fields(includeDeprecated: Boolean = false): [__Field!]
-
-  # OBJECT only
-  interfaces: [__Type!]
-
-  # INTERFACE and UNION only
-  possibleTypes: [__Type!]
-
-  # ENUM only
-  enumValues(includeDeprecated: Boolean = false): [__EnumValue!]
-
-  # INPUT_OBJECT only
-  inputFields: [__InputValue!]
-
-  # NON_NULL and LIST only
-  ofType: __Type
-}
-
-type __Field {
-  name: String!
-  description: String
-  args: [__InputValue!]!
-  type: __Type!
-  isDeprecated: Boolean!
-  deprecationReason: String
-}
-
-type __InputValue {
-  name: String!
-  description: String
-  type: __Type!
-  defaultValue: String
-}
-
-type __EnumValue {
-  name: String!
-  description: String
-  isDeprecated: Boolean!
-  deprecationReason: String
-}
-
-enum __TypeKind {
-  SCALAR
-  OBJECT
-  INTERFACE
-  UNION
-  ENUM
-  INPUT_OBJECT
-  LIST
-  NON_NULL
-}
-
-type __Directive {
-  name: String!
-  description: String
-  locations: [__DirectiveLocation!]!
-  args: [__InputValue!]!
-}
-
-enum __DirectiveLocation {
-  QUERY
-  MUTATION
-  FIELD
-  FRAGMENT_DEFINITION
-  FRAGMENT_SPREAD
-  INLINE_FRAGMENT
-}"
-}
-
-introspection_imp <- function() {
-  list(
-    "__Schema" = list(
-      .description = collapse(
-        'A GraphQL Schema defines the capabilities of a GraphQL server. It ',
-        'exposes all available types and directives on the server, as well as ',
-        'the entry points for query, mutation, and subscription operations.'
-      ),
-
-      types = with_description(
-        description = 'A list of all types supported by this server.',
-        function(schemaObj, ...) {
-          schemaObj$typeMap
-        }
-      ),
-
-      queryType = with_description(
-        description = 'The type that query operations will be rooted at.',
-        function(schemaObj, ...) {
-          schemaObj$queryType
-        }
-      ),
-
-      mutationType = with_description(
-        description = collapse(
-          'If this server supports mutation, the type that ',
-          'mutation operations will be rooted at.'
-        ),
-        function(schemaObj, ...) {
-         schemaObj$mutationType
-        }
-      ),
-
-      subscriptionType = with_description(
-        description = collapse(
-          'If this server support subscription, the type that ',
-          'subscription operations will be rooted at.'
-        ),
-        function(schemaObj, ...) {
-          schemaObj$subscriptionType
-        }
-      ),
-
-      directives = with_description(
-        description = 'A list of all directives supported by this server.',
-        function(schemaObj) {
-          schemaObj$directives
-        }
-      )
-    ),
-
-
-    "__Type" = list(
-      .description = collapse(
-        'The fundamental unit of any GraphQL Schema is the type. There are ',
-        'many kinds of types in GraphQL as represented by the `__TypeKind` enum.',
-        '\n\nDepending on the kind of a type, certain fields describe ',
-        'information about that type. Scalar types provide no information ',
-        'beyond a name and description, while Enum types provide their values. ',
-        'Object and Interface types provide the fields they describe. Abstract ',
-        'types, Union and Interface, provide the Object types possible ',
-        'at runtime. List and NonNull types compose other types.'
-      ),
-
-      kind = function(obj, ...) {
-        print("fix type values")
-        browser()
-        if (inherits(obj, "scalar")) {
-          return("scalar")
-        }
-        # if (type instanceof GraphQLScalarType) {
-        #   return TypeKind.SCALAR;
-        # } else if (type instanceof GraphQLObjectType) {
-        #   return TypeKind.OBJECT;
-        # } else if (type instanceof GraphQLInterfaceType) {
-        #   return TypeKind.INTERFACE;
-        # } else if (type instanceof GraphQLUnionType) {
-        #   return TypeKind.UNION;
-        # } else if (type instanceof GraphQLEnumType) {
-        #   return TypeKind.ENUM;
-        # } else if (type instanceof GraphQLInputObjectType) {
-        #   return TypeKind.INPUT_OBJECT;
-        # } else if (type instanceof GraphQLList) {
-        #   return TypeKind.LIST;
-        # } else if (type instanceof GraphQLNonNull) {
-        #   return TypeKind.NON_NULL;
-        # }
-        stop0('Unknown kind of type: ', type)
-      },
-
-      fields = function(typeObj, includeDeprecated = FALSE, ...) {
-        print("fix types")
-        browser()
-
-        if (! (inherits(typeObj, "object") || inherits(typeObj, "interface"))) {
-          return(NULL)
-        }
-        fieldMap = typeObj$fields
-        if (!includeDeprecated) {
-          fieldMap <- Filter(function(fieldVal) {
-            !is.null(fieldVal$deprecationReason)
-          }, fieldMap)
-        }
-        fieldMap
-      },
-
-      interfaces = function(typeObj, ...) {
-        if (inherits(typeObj, "object")) {
-          typeObj$interfaces
-        } else {
-          NULL
-        }
-      },
-
-      possibleTypes = function(typeObj, args, context, schema, ...) {
-        if (inherits(typeObj, "interface") || inherits(typeObj, "union")) {
-          schema$possibleTypes
-        } else {
-          NULL
-        }
-      },
-
-      enumValues = function(typeObj, includeDeprecated = FALSE, ...) {
-        if (inherits(typeObj, "enum")) {
-          values = typeObj$values
-          if (!includeDeprecated) {
-            values = Filter(function(enumVal) {
-              ! is.null(enumVal$deprecationReason)
-            }, values)
-          }
-          return(values)
-        }
-        return(NULL)
-      },
-
-      inputFields = function(typeObj, ...) {
-        if (inherits(typeObj, "inputobject")) {
-          return(typeObj$fields)
-        }
-        return(NULL)
-      }
-      # ofType: { type: __Type }
-    ),
-
-
-    "__Field" = list(
-      .description = collapse(
-        'Object and Interface types are described by a list of Fields, each of ',
-        'which has a name, potentially a list of arguments, and a return type.'
-      ),
-
-      args = function(fieldObj, ...) {
-        ret <- fieldObj$args
-        if (is.null(ret)) {
-          ret <- list()
-        }
-        return(ret)
-      },
-
-      isDeprecated = function(fieldObj, ...) {
-        !is.null(fieldObj$deprecationReason)
-      }
-    ),
-
-
-    "__InputValue" = list(
-      .description = collapse(
-        'Arguments provided to Fields or Directives and the input fields of an ',
-        'InputObject are represented as Input Values which describe their type ',
-        'and optionally a default value.'
-      ),
-
-      # ,
-      defaultValue = with_description(
-        description = collapse(
-          'A GraphQL-formatted string representing the default value for this ',
-          'input value.'
-        ),
-        function(inputValueObj, ...) {
-          if (is.null(inputValueObj$defaultValue)) {
-            return(NULL)
-          }
-          # print(astFromValue(inputVal.defaultValue, inputVal))
-          return(inputValueObj$defaultValue)
-        }
-      )
-    ),
-
-
-    "__EnumValue" = list(
-      .description = collapse(
-        'One possible value for a given Enum. Enum values are unique values, not ',
-        'a placeholder for a string or numeric value. However an Enum value is ',
-        'returned in a JSON response as a string.'
-      ),
-
-      isDeprecated = function(fieldObj, ...) {
-        !is.null(fieldObj$deprecationReason)
-      }
-    ),
-
-
-    "__TypeKind" = list(
-      .description = 'An enum describing what kind of type a given `__Type` is.',
-
-      SCALAR = 'Indicates this type is a scalar.',
-      OBJECT = 'Indicates this type is an object. `fields` and `interfaces` are valid fields.',
-      INTERFACE = 'Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.',
-      UNION = 'Indicates this type is a union. `possibleTypes` is a valid field.',
-      ENUM = 'Indicates this type is an enum. `enumValues` is a valid field.',
-      INPUT_OBJECT = 'Indicates this type is an input object. `inputFields` is a valid field.',
-      LIST = 'Indicates this type is a list. `ofType` is a valid field.',
-      NON_NULL = 'Indicates this type is a non-null. `ofType` is a valid field.'
-    ),
-
-
-    "__Directive" = list(
-      .description = collapse(
-        'A Directive provides a way to describe alternate runtime execution and ',
-        'type validation behavior in a GraphQL document.',
-        '\n\nIn some cases, you need to provide options to alter GraphQL’s ',
-        'execution behavior in ways field arguments will not suffice, such as ',
-        'conditionally including or skipping a field. Directives provide this by ',
-        'describing additional information to the executor.'
-      ),
-      args = function(directiveObj, ...) {
-        ret = directiveObj$args
-        if (is.null(ret)) {
-          ret <- list()
-        }
-        return(ret)
-      }
-    ),
-
-
-    "__DirectiveLocation" = list(
-      .description = collapse(
-        'A Directive can be adjacent to many parts of the GraphQL language, a ',
-        '__DirectiveLocation describes one such possible adjacencies.'
-      ),
-
-      QUERY               = 'Location adjacent to a query operation.',
-      MUTATION            = 'Location adjacent to a mutation operation.',
-      SUBSCRIPTION        = 'Location adjacent to a subscription operation.',
-      FIELD               = 'Location adjacent to a field.',
-      FRAGMENT_DEFINITION = 'Location adjacent to a fragment definition.',
-      FRAGMENT_SPREAD     = 'Location adjacent to a fragment spread.',
-      INLINE_FRAGMENT     = 'Location adjacent to an inline fragment.'
-    )
-  )
-}
-
-
-
-
-enum_value_upgrade = function(key, obj = NULL) {
-  if (typeof(obj) %in% c("character", "NULL")) {
-    obj = list(description = obj)
-  }
-  if (typeof(obj) != "list") {
-    stop("'obj' type must be a list or a plain character")
-  }
-  if (is.null(obj$key)) {
-    obj$key = key
-  }
-  if (is.null(obj$key)) {
-    obj$isDeprecated = FALSE
-  }
-}
+# type __Field {
+#   name: String!
+#   description: String
+#   args: [__InputValue!]!
+#   type: __Type!
+#   isDeprecated: Boolean!
+#   deprecationReason: String
+# }
+#
+# type __InputValue {
+#   name: String!
+#   description: String
+#   type: __Type!
+#   defaultValue: String
+# }
+#
+# type __EnumValue {
+#   name: String!
+#   description: String
+#   isDeprecated: Boolean!
+#   deprecationReason: String
+# }
+#
+# enum __TypeKind {
+#   SCALAR
+#   OBJECT
+#   INTERFACE
+#   UNION
+#   ENUM
+#   INPUT_OBJECT
+#   LIST
+#   NON_NULL
+# }
+#
+# type __Directive {
+#   name: String!
+#   description: String
+#   locations: [__DirectiveLocation!]!
+#   args: [__InputValue!]!
+# }
+#
+# enum __DirectiveLocation {
+#   QUERY
+#   MUTATION
+#   FIELD
+#   FRAGMENT_DEFINITION
+#   FRAGMENT_SPREAD
+#   INLINE_FRAGMENT
+# }"
+# }
+#
+# introspection_imp <- function() {
+#   list(
+#     "__Schema" = list(
+#       .description = collapse(
+#         'A GraphQL Schema defines the capabilities of a GraphQL server. It ',
+#         'exposes all available types and directives on the server, as well as ',
+#         'the entry points for query, mutation, and subscription operations.'
+#       ),
+#
+#       types = with_description(
+#         description = 'A list of all types supported by this server.',
+#         function(schemaObj, ...) {
+#           schemaObj$typeMap
+#         }
+#       ),
+#
+#       queryType = with_description(
+#         description = 'The type that query operations will be rooted at.',
+#         function(schemaObj, ...) {
+#           schemaObj$queryType
+#         }
+#       ),
+#
+#       mutationType = with_description(
+#         description = collapse(
+#           'If this server supports mutation, the type that ',
+#           'mutation operations will be rooted at.'
+#         ),
+#         function(schemaObj, ...) {
+#          schemaObj$mutationType
+#         }
+#       ),
+#
+#       subscriptionType = with_description(
+#         description = collapse(
+#           'If this server support subscription, the type that ',
+#           'subscription operations will be rooted at.'
+#         ),
+#         function(schemaObj, ...) {
+#           schemaObj$subscriptionType
+#         }
+#       ),
+#
+#       directives = with_description(
+#         description = 'A list of all directives supported by this server.',
+#         function(schemaObj) {
+#           schemaObj$directives
+#         }
+#       )
+#     ),
+#
+#
+#     "__Type" = list(
+#       .description = collapse(
+#         'The fundamental unit of any GraphQL Schema is the type. There are ',
+#         'many kinds of types in GraphQL as represented by the `__TypeKind` enum.',
+#         '\n\nDepending on the kind of a type, certain fields describe ',
+#         'information about that type. Scalar types provide no information ',
+#         'beyond a name and description, while Enum types provide their values. ',
+#         'Object and Interface types provide the fields they describe. Abstract ',
+#         'types, Union and Interface, provide the Object types possible ',
+#         'at runtime. List and NonNull types compose other types.'
+#       ),
+#
+#       kind = function(obj, ...) {
+#         print("fix type values")
+#         browser()
+#         if (inherits(obj, "scalar")) {
+#           return("scalar")
+#         }
+#         # if (type instanceof GraphQLScalarType) {
+#         #   return TypeKind.SCALAR;
+#         # } else if (type instanceof GraphQLObjectType) {
+#         #   return TypeKind.OBJECT;
+#         # } else if (type instanceof GraphQLInterfaceType) {
+#         #   return TypeKind.INTERFACE;
+#         # } else if (type instanceof GraphQLUnionType) {
+#         #   return TypeKind.UNION;
+#         # } else if (type instanceof GraphQLEnumType) {
+#         #   return TypeKind.ENUM;
+#         # } else if (type instanceof GraphQLInputObjectType) {
+#         #   return TypeKind.INPUT_OBJECT;
+#         # } else if (type instanceof GraphQLList) {
+#         #   return TypeKind.LIST;
+#         # } else if (type instanceof GraphQLNonNull) {
+#         #   return TypeKind.NON_NULL;
+#         # }
+#         stop0('Unknown kind of type: ', type)
+#       },
+#
+#       fields = function(typeObj, includeDeprecated = FALSE, ...) {
+#         print("fix types")
+#         browser()
+#
+#         if (! (inherits(typeObj, "object") || inherits(typeObj, "interface"))) {
+#           return(NULL)
+#         }
+#         fieldMap = typeObj$fields
+#         if (!includeDeprecated) {
+#           fieldMap <- Filter(function(fieldVal) {
+#             !is.null(fieldVal$deprecationReason)
+#           }, fieldMap)
+#         }
+#         fieldMap
+#       },
+#
+#       interfaces = function(typeObj, ...) {
+#         if (inherits(typeObj, "object")) {
+#           typeObj$interfaces
+#         } else {
+#           NULL
+#         }
+#       },
+#
+#       possibleTypes = function(typeObj, args, context, schema, ...) {
+#         if (inherits(typeObj, "interface") || inherits(typeObj, "union")) {
+#           schema$possibleTypes
+#         } else {
+#           NULL
+#         }
+#       },
+#
+#       enumValues = function(typeObj, includeDeprecated = FALSE, ...) {
+#         if (inherits(typeObj, "enum")) {
+#           values = typeObj$values
+#           if (!includeDeprecated) {
+#             values = Filter(function(enumVal) {
+#               ! is.null(enumVal$deprecationReason)
+#             }, values)
+#           }
+#           return(values)
+#         }
+#         return(NULL)
+#       },
+#
+#       inputFields = function(typeObj, ...) {
+#         if (inherits(typeObj, "inputobject")) {
+#           return(typeObj$fields)
+#         }
+#         return(NULL)
+#       }
+#       # ofType: { type: __Type }
+#     ),
+#
+#
+#     "__Field" = list(
+#       .description = collapse(
+#         'Object and Interface types are described by a list of Fields, each of ',
+#         'which has a name, potentially a list of arguments, and a return type.'
+#       ),
+#
+#       args = function(fieldObj, ...) {
+#         ret <- fieldObj$args
+#         if (is.null(ret)) {
+#           ret <- list()
+#         }
+#         return(ret)
+#       },
+#
+#       isDeprecated = function(fieldObj, ...) {
+#         !is.null(fieldObj$deprecationReason)
+#       }
+#     ),
+#
+#
+#     "__InputValue" = list(
+#       .description = collapse(
+#         'Arguments provided to Fields or Directives and the input fields of an ',
+#         'InputObject are represented as Input Values which describe their type ',
+#         'and optionally a default value.'
+#       ),
+#
+#       # ,
+#       defaultValue = with_description(
+#         description = collapse(
+#           'A GraphQL-formatted string representing the default value for this ',
+#           'input value.'
+#         ),
+#         function(inputValueObj, ...) {
+#           if (is.null(inputValueObj$defaultValue)) {
+#             return(NULL)
+#           }
+#           # print(astFromValue(inputVal.defaultValue, inputVal))
+#           return(inputValueObj$defaultValue)
+#         }
+#       )
+#     ),
+#
+#
+#     "__EnumValue" = list(
+#       .description = collapse(
+#         'One possible value for a given Enum. Enum values are unique values, not ',
+#         'a placeholder for a string or numeric value. However an Enum value is ',
+#         'returned in a JSON response as a string.'
+#       ),
+#
+#       isDeprecated = function(fieldObj, ...) {
+#         !is.null(fieldObj$deprecationReason)
+#       }
+#     ),
+#
+#
+#     "__TypeKind" = list(
+#       .description = 'An enum describing what kind of type a given `__Type` is.',
+#
+#       SCALAR = 'Indicates this type is a scalar.',
+#       OBJECT = 'Indicates this type is an object. `fields` and `interfaces` are valid fields.',
+#       INTERFACE = 'Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.',
+#       UNION = 'Indicates this type is a union. `possibleTypes` is a valid field.',
+#       ENUM = 'Indicates this type is an enum. `enumValues` is a valid field.',
+#       INPUT_OBJECT = 'Indicates this type is an input object. `inputFields` is a valid field.',
+#       LIST = 'Indicates this type is a list. `ofType` is a valid field.',
+#       NON_NULL = 'Indicates this type is a non-null. `ofType` is a valid field.'
+#     ),
+#
+#
+#     "__Directive" = list(
+#       .description = collapse(
+#         'A Directive provides a way to describe alternate runtime execution and ',
+#         'type validation behavior in a GraphQL document.',
+#         '\n\nIn some cases, you need to provide options to alter GraphQL’s ',
+#         'execution behavior in ways field arguments will not suffice, such as ',
+#         'conditionally including or skipping a field. Directives provide this by ',
+#         'describing additional information to the executor.'
+#       ),
+#       args = function(directiveObj, ...) {
+#         ret = directiveObj$args
+#         if (is.null(ret)) {
+#           ret <- list()
+#         }
+#         return(ret)
+#       }
+#     ),
+#
+#
+#     "__DirectiveLocation" = list(
+#       .description = collapse(
+#         'A Directive can be adjacent to many parts of the GraphQL language, a ',
+#         '__DirectiveLocation describes one such possible adjacencies.'
+#       ),
+#
+#       QUERY               = 'Location adjacent to a query operation.',
+#       MUTATION            = 'Location adjacent to a mutation operation.',
+#       SUBSCRIPTION        = 'Location adjacent to a subscription operation.',
+#       FIELD               = 'Location adjacent to a field.',
+#       FRAGMENT_DEFINITION = 'Location adjacent to a fragment definition.',
+#       FRAGMENT_SPREAD     = 'Location adjacent to a fragment spread.',
+#       INLINE_FRAGMENT     = 'Location adjacent to an inline fragment.'
+#     )
+#   )
+# }
+
+
+
+
+# enum_value_upgrade = function(key, obj = NULL) {
+#   if (typeof(obj) %in% c("character", "NULL")) {
+#     obj = list(description = obj)
+#   }
+#   if (typeof(obj) != "list") {
+#     stop("'obj' type must be a list or a plain character")
+#   }
+#   if (is.null(obj$key)) {
+#     obj$key = key
+#   }
+#   if (is.null(obj$key)) {
+#     obj$isDeprecated = FALSE
+#   }
+# }
 
 
 
