@@ -444,3 +444,40 @@ gqlr_str <- function(x, ...) {
 #     invisible(x)
 #   }
 # })()
+
+
+
+name_from_txt <- function(txt) {
+  return(Name$new(value = txt))
+}
+field_type_from_txt <- function(txt) {
+  txt <- str_trim(txt)
+  if (str_detect(txt, "!$")) {
+    # remove ! and recurse
+    txt <- str_replace(txt, "!$", "")
+    type_val <- field_type_from_txt(txt)
+    return(NonNullType$new(type = type_val))
+  }
+
+  if (str_detect(txt, "\\]$")) {
+    # remove brackets and recurse
+    txt <- str_replace(txt, "^\\[", "")
+    txt <- str_replace(txt, "\\]$", "")
+    type_val <- field_type_from_txt(txt)
+    return(ListType$new(type = type_val))
+  }
+
+  # must be the name
+  name_val <- name_from_txt(txt)
+  return(NamedType$new(name = name_val))
+}
+
+field_type_obj_from_txt <- function(name_txt, field_txt, description = NULL, ...) {
+  type_val <- field_type_from_txt(field_txt)
+  FieldDefinition$new(
+    description = description,
+    name = name_from_txt(name_txt),
+    type = type_val,
+    ...
+  )
+}
