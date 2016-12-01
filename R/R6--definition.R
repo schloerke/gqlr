@@ -266,7 +266,8 @@ Name <- R6_from_args(
     .str = function(maxLevel = -1, showNull = FALSE, showLoc = FALSE, spaceCount = 0, isFirst = TRUE) {
       if (maxLevel != 0) {
         # cat("<Name - ", self$value, ">")
-        cat("<Name> '", self$value, "'", sep = "")
+        # cat("<Name> '", self$value, "'", sep = "")
+        cat("`", self$value, "`", sep = "")
       }
     }
   ),
