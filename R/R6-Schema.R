@@ -1,3 +1,6 @@
+#' @include R6--definition.R
+
+
 # type Foo implements Bar {
 #   one: Type
 #   two(argument: InputType!): Type
