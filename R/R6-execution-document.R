@@ -95,7 +95,7 @@ evaluate_operation <- function() {
 
 
 #' Parse a Selection Set
-#' @seealso \url{https://github.com/facebook/graphql/blob/master/spec/Section%206%20--%20Execution.md#evaluating-selection-sets}
+#' @seealso https://github.com/facebook/graphql/blob/master/spec/Section%206%20--%20Execution.md#evaluating-selection-sets
 parse_selection_set <- function(selectionSetObj, fragmentList, contextObj) {
 
   # If the selection set is being evaluated on the null object, then the result of evaluating the selection set is null.
