@@ -1,3 +1,4 @@
+# testthat::test_file(file.path("tests", "testthat", "test-document.R"))
 
 
 
@@ -6,8 +7,7 @@ context("Document - Names")
 check_if_valid <- function(query, expected, ...) {
 
   query %>%
-    make_ast() %>%
-    parse_document() ->
+    eval_json() ->
     ans
 
   expect_true(is.list(ans))
@@ -16,8 +16,7 @@ check_if_valid <- function(query, expected, ...) {
 expect_err <- function(query, ...) {
   expect_error({
     query %>%
-      make_ast() %>%
-      parse_document()
+      eval_json()
   }, ...)
 }
 

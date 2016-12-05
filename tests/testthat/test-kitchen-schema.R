@@ -4,7 +4,7 @@ context("kitchen schema")
 
 expect_str <- function(a, txt) {
   testthat::expect_equal(
-    paste(capture.output(a$.str()), collapse = "\n"),
+    paste(capture.output(str(a)), collapse = "\n"),
     txt
   )
 }
