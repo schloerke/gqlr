@@ -3,11 +3,11 @@
 # Object types have the potential to be invalid if incorrectly defined. This set of rules must be
 # adhered to by every Object type in a GraphQL schema.
 #
-#   * An Object type must define one or more fields.
-#   * The fields of an Object type must have unique names within that Object type; no two fields
+#   *√ An Object type must define one or more fields.
+#   *√ The fields of an Object type must have unique names within that Object type; no two fields
 #     may share the same name.
 #   * An object type must be a super‐set of all interfaces it implements:
-#     * The object type must include a field of the same name for every field defined in
+#     *√ The object type must include a field of the same name for every field defined in
 #       an interface.
 #       * The object field must be of a type which is equal to or a sub‐type of the interface
 #         field (covariant).
@@ -21,11 +21,11 @@
 #           sub‐type of the list‐item type of the interface field type.
 #         * An object field type is a valid sub‐type if it is a Non‐Null variant of a valid
 #           sub‐type of the interface field type.
-#       * The object field must include an argument of the same name for every argument defined in
+#       *√ The object field must include an argument of the same name for every argument defined in
 #         the interface field.
-#         * The object field argument must accept the same type (invariant) as the interface field
+#         *√ The object field argument must accept the same type (invariant) as the interface field
 #           argument.
-#       * The object field may include additional arguments not defined in the interface field,
+#       *√ The object field may include additional arguments not defined in the interface field,
 #         but any additional argument must not be required.
 
 
@@ -78,12 +78,41 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
       # TODO check the field type in the interface
 
 
-
       # check the args
       interface_field_args <- interface_field$arguments
       interface_field_arg_names <- get_name_values(interface_field_args)
       matching_obj_field_args <- matching_obj_field$arguments
       matching_obj_field_arg_names <- get_name_values(matching_obj_field_args)
+
+      if (
+        length(interface_field_arg_names) != lengths(matching_obj_field_arg_names)
+      ) {
+        stop(
+          "object definition: ", x$.title,
+          " must have the same arguments",
+          " of interface: ", interface_obj$.title,
+          " for field: ", interface_field_name
+        )
+      }
+
+      # The object field may include additional arguments not defined in the interface field,
+      #         but any additional argument must not be required.
+      not_in_interface <- (interface_field_arg_names %in% matching_obj_field_arg_names)
+      field_args_not_in_interface <- interface_field_args[[not_in_interface]]
+      lapply(
+        interface_field_args[[not_in_interface]],
+        function(field_arg) {
+          defaultVal <- field_arg$defaultValue
+          if (!is.null(defaultVal)) {
+            stop(
+              "object definition: ", x$.title,
+              " must have default values for non-interface argument: ", field_arg$name$value,
+              " when looking at interface: ", interface_obj$.title,
+              " for field: ", interface_field_name
+            )
+          }
+        }
+      )
 
       # all interface args must exist and have the same type
       lapply(interface_field_arg_names, function(interface_field_arg_name) {
@@ -125,5 +154,6 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
 
   })
 
+  return(invisible(TRUE))
 
 }
