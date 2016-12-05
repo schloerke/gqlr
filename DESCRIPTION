@@ -46,7 +46,7 @@ Collate:
     'R6z-from-json.R'
     'S3--aaa-setup.R'
     'S3-3.1.2.3-object-type-validation.R'
-    'S3-graphql_str.R'
+    'S3-graphql_string.R'
     'S3-str.R'
     'gqlr-package.R'
     'graphql_json.R'
