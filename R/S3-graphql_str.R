@@ -1,6 +1,11 @@
 
 
 
+graphql_string.Name = function(x, ...) {
+  str_c("`", x$value, "`")
+}
+
+
 graphql_string.Type = function(x, ...) {
   parse_type <- function(obj) {
     switch(obj$.kind,

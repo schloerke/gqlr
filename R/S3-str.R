@@ -137,6 +137,12 @@ str.AST <- (function() {
 
 
 
+str.Name <- function(object, maxLevel = -1, ...) {
+  if (maxLevel != 0) {
+    cat(graphql_string(object))
+  }
+}
+
 
 
 
