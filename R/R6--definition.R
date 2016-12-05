@@ -533,23 +533,7 @@ Directive = R6_from_args(
 #                  | NonNullType
 Type = R6_from_args(
   inherit = Node,
-  "Type",
-  public = list(
-    .str = function(maxLevel = -1, showNull = FALSE, showLoc = FALSE, spaceCount = 0, isFirst = TRUE) {
-      if (maxLevel != 0) {
-        parse_type <- function(x) {
-          switch(x$.kind,
-            "NamedType" = x$name$value,
-            "ListType" = str_c("[", parse_type(x$type), "]"),
-            "NonNullType" = str_c(parse_type(x$type), "!"),
-            stop("type: ", x$.kind, " not known!")
-          )
-        }
-        # cat("<Name - ", self$value, ">")
-        cat("`", parse_type(self), "`", sep = "")
-      }
-    }
-  )
+  "Type"
 )
 
 
