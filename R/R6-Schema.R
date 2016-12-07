@@ -107,13 +107,13 @@ GQLRSchema <- R6Class(
     types = list()
   ),
   public = list(
-    
-    get_scalar = function(name) private$get_by_name(x, "scalars"),
-    get_enum = function(name) private$get_by_name(x, "enums"),
-    get_object = function(name) private$get_by_name(x, "objects"),
-    get_interface = function(name) private$get_by_name(x, "interfaces"),
-    get_union = function(name) private$get_by_name(x, "unions"),
-    get_input_object = function(name) private$get_by_name(x, "input_objects"),
+
+    get_scalar = function(name) private$get_by_name(name, "scalars"),
+    get_enum = function(name) private$get_by_name(name, "enums"),
+    get_object = function(name) private$get_by_name(name, "objects"),
+    get_interface = function(name) private$get_by_name(name, "interfaces"),
+    get_union = function(name) private$get_by_name(name, "unions"),
+    get_input_object = function(name) private$get_by_name(name, "input_objects"),
 
     get_scalars = function() private$scalars,
     get_enums = function() private$enums,
