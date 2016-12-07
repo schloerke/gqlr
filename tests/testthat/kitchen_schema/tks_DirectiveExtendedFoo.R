@@ -1,7 +1,7 @@
 "
 extend type Foo @onType {}
 "
-tks_ExtendedAnnotatedFoo <- TypeExtensionDefinition$new(
+tks_DirectiveExtendedFoo <- TypeExtensionDefinition$new(
   definition = ObjectTypeDefinition$new(
     name = Name$new(value = "Foo"),
     interfaces = list(
