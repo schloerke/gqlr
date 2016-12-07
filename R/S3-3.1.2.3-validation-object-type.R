@@ -1,3 +1,106 @@
+get_name_values <- function(list_obj) {
+  list_obj
+    lapply("[[", "name") %>%
+    lapply("[[", "value") %>%
+    unlist()
+}
+
+
+# helper to check for more than one field and unique field names
+validate_field_names <- function(x, error_title) {
+  # must have one or more fields
+  object_fields <- x$fields
+  if (length(object_fields) == 0) {
+    stop(error_title, " definiiton: ", x$.title, " must have at least one field")
+  }
+
+  # fields must have unique names
+  field_names <- get_name_values(object_fields)
+
+  if (any(duplicated(field_names))) {
+    stop(error_title, " defintion: ", x$.title, " must have unique field names")
+  }
+}
+
+
+# 3.1.3.1 - Interface type validation
+#
+# Interface types have the potential to be invalid if incorrectly defined.
+#
+#   * An Interface type must define one or more fields.
+#   * The fields of an Interface type must have unique names within that Interface type;
+#     no two fields may share the same name.
+validate.InterfaceTypeDefinition <- function(x, schema_obj, ...) {
+
+  validate_field_names(x, "interface")
+
+  return(invisible(TRUE))
+}
+
+
+
+
+# 3.1.4.1 - Union type validation
+#
+# Union types have the potential to be invalid if incorrectly defined.
+#
+# * The member types of a Union type must all be Object base types; Scalar, Interface and
+#   Union types may not be member types of a Union. Similarly, wrapping types may not be member
+#   types of a Union.
+# * A Union type must define one or more member types.
+
+validate.UnionTypeDefinition <- function(x, schema_obj, ...) {
+
+  types <- x$types
+  if (length(types) == 0) {
+    stop("union definition: ", x$.title, " must have at least one type.")
+  }
+
+  lapply(types, function(type) {
+    type_object <- schema_obj$get_object(type)
+
+    if (is.null(type_object)) {
+      stop(
+        "union definition: ", x$.title,
+        " types can only be objects.",
+        " Scalar, Interface, and Union types may not be member types of a Union."
+      )
+    }
+  })
+
+  invisible(TRUE)
+}
+
+
+
+
+
+# 3.1.6.1 - Input Object type validation
+#
+# * An Input Object type must define one or more fields.
+# * The fields of an Input Object type must have unique names within that Input Object type;
+#   no two fields may share the same name.
+# * The return types of each defined field must be an Input type.
+
+validate.InputObjectTypeDefinition <- function(x, schema_obj, ...) {
+  validate_field_names(x, "input object")
+
+  lapply(x$fields, function(field) {
+    type_obj <- schema_obj$get_type(field$type)
+
+    if (is.null(type_obj)) {
+      stop(
+        "input object: ", x$.title,
+        " must return a InputType",
+        " for field: ", field$.title
+      )
+    }
+  })
+}
+
+
+
+
 # 3.1.2.3 Object type validation
 #
 # Object types have the potential to be invalid if incorrectly defined. This set of rules must be
@@ -29,27 +132,12 @@
 #         but any additional argument must not be required.
 
 
+
 validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
 
-  get_name_values <- function(fields) {
-    fields
-      lapply("[[", "name") %>%
-      lapply("[[", "value") %>%
-      unlist()
-  }
+  validate_field_names(x, "object")
 
-  # must have one or more fields
-  object_fields <- x$fields
-  if (length(object_fields) == 0) {
-    stop("object definiiton: ", x$.title, " must have at least one field")
-  }
-
-  # fields must have unique names
   field_names <- get_name_values(object_fields)
-
-  if (any(duplicated(field_names))) {
-    stop("object defintion: ", x$.title, " must have unique field names")
-  }
 
   interfaces <- x$interfaces
   if (is.null(interfaces)) {
