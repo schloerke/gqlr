@@ -2,6 +2,8 @@
 
 context("kitchen schema")
 
+source("source_helper")
+
 expect_str <- function(a, txt) {
   testthat::expect_equal(
     paste(capture.output(str(a)), collapse = "\n"),
@@ -11,27 +13,9 @@ expect_str <- function(a, txt) {
 
 test_that("schema obj", {
 
-"
-schema {
-  query: QueryType
-  mutation: MutationType
-}
-"
-a <- SchemaDefinition$new(
-  operationTypes = list(
-    OperationTypeDefinition$new(
-      operation = "query",
-      type = NamedType$new(name = Name$new(value = "QueryType"))
-    ),
-    OperationTypeDefinition$new(
-      operation = "mutation",
-      type = NamedType$new(name = Name$new(value = "MutationType"))
-    )
-  ),
-  directives = NULL
-)
+  source_kitchen_schema("Schema")
 
-expect_str(a,
+expect_str(tks_schema,
 "<SchemaDefinition>
 . operationTypes:
 . 1 - <OperationTypeDefinition>
@@ -48,120 +32,9 @@ expect_str(a,
 
 test_that("object", {
 
-"
-type Foo implements Bar {
-  one: Type
-  two(argument: InputType!): Type
-  three(argument: InputType, other: String): Int
-  four(argument: String = \"string\"): String
-  five(argument: [String] = [\"string\", \"string\"]): String
-  six(argument: InputType = {key: \"value\"}): Type
-  seven(argument: Int = null): Type
-}
-"
-a <- ObjectTypeDefinition$new(
-  name = Name$new(value = "Foo"),
-  interfaces = list(
-    NamedType$new(name = Name$new(value = "Bar"))
-  ),
-  fields = list(
-    FieldDefinition$new(
-      # one: Type
-      name = Name$new(value = "one"),
-      type = NamedType$new(name = Name$new(value = "Type")),
-      arguments = NULL
-    ),
-    FieldDefinition$new(
-      # two(argument: InputType!): Type
-      name = Name$new(value = "two"),
-      type = NamedType$new(name = Name$new(value = "Type")),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "argument"),
-          type = NonNullType$new(type = NamedType$new(name = Name$new(value = "InputType")))
-        )
-      )
-    ),
-    FieldDefinition$new(
-      # three(argument: InputType, other: String): Int
-      name = Name$new(value = "three"),
-      type = NamedType$new(name = Name$new(value = "Int")),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "argument"),
-          type = NonNullType$new(type = NamedType$new(name = Name$new(value = "InputType")))
-        ),
-        InputValueDefinition$new(
-          name = Name$new(value = "other"),
-          type = NamedType$new(name = Name$new(value = "String"))
-        )
-      )
-    ),
-    FieldDefinition$new(
-      # four(argument: String = \"string\"): String
-      name = Name$new(value = "four"),
-      type = NamedType$new(name = Name$new(value = "String")),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "argument"),
-          type = NamedType$new(name = Name$new(value = "String")),
-          defaultValue = StringValue$new(value = "string")
-        )
-      )
-    ),
-    FieldDefinition$new(
-      # five(argument: [String] = [\"string\", \"string\"]): String
-      name = Name$new(value = "five"),
-      type = NamedType$new(name = Name$new(value = "String")),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "argument"),
-          type = ListType$new(type = NamedType$new(name = Name$new(value = "String"))),
-          defaultValue = ListValue$new(
-            values = list(
-              StringValue$new(value = "string"),
-              StringValue$new(value = "string")
-            )
-          )
-        )
-      )
-    ),
-    FieldDefinition$new(
-      # six(argument: InputType = {key: \"value\"}): Type
-      name = Name$new(value = "six"),
-      type = NamedType$new(name = Name$new(value = "Type")),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "argument"),
-          type = NamedType$new(name = Name$new(value = "InputType")),
-          defaultValue = ObjectValue$new(
-            fields = list(
-              ObjectField$new(
-                name = Name$new(value = "key"),
-                value = StringValue$new(value = "value")
-              )
-            )
-          )
-        )
-      )
-    ),
-    FieldDefinition$new(
-      # seven(argument: Int = null): Type
-      name = Name$new(value = "seven"),
-      type = NamedType$new(name = Name$new(value = "Type")),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "argument"),
-          type = NamedType$new(name = Name$new(value = "Int")),
-          defaultValue = NULL
-        )
-      )
-    )
-  )
-)
+  source_kitchen_schema("Foo")
 
-
-expect_str(a,
+expect_str(tks_Foo,
 "<ObjectTypeDefinition>
 . name: `Foo`
 . interfaces:
@@ -230,53 +103,15 @@ expect_str(a,
 . . . type: `Int`
 . . type: `Type`")
 
-
 })
 
 
 
-test_that("anootate", {
+test_that("annotate", {
 
-"
-type AnnotatedObject @onObject(arg: \"value\") {
-  annotatedField(arg: Type = \"default\" @onArg): Type @onField
-}
-"
-a <- ObjectTypeDefinition$new(
-  name = Name$new(value = "AnnotatedObject"),
-  directives = list(
-    Directive$new(
-      name = Name$new(value = "onObject"),
-      arguments = list(
-        name = Name$new(value = "arg"),
-        value = StringValue(value = "value")
-      )
-    )
-  ),
-  fields = list(
-    FieldDefinition$new(
-      name = Name$new(value = "annotatedField"),
-      type = NamedType$new(name = Name$new(value = "Type")),
-      directives = list(
-        Directive$new(name = Name$new(value = "onField"))
-      ),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "arg"),
-          type = NamedType$new(name = Name$new(value = "Type")),
-          defaultValue = StringValue$new("default"),
-          directives = list(
-            Directive$new(
-              name = Name$new(value = "onArg")
-            )
-          )
-        )
-      )
-    )
-  )
-)
+  source_kitchen_schema("AnnotatedObject")
 
-expect_str(a,
+expect_str(tks_AnnotatedObject,
 "<ObjectTypeDefinition>
 . name: `AnnotatedObject`
 . directives:
@@ -303,34 +138,9 @@ expect_str(a,
 
 test_that("interface", {
 
-"
-interface Bar {
-  one: Type
-  four(argument: String = \"string\"): String
-}
-"
-a <- InterfaceTypeDefinition$new(
-  name = Name$new(value = "Bar"),
-  fields = list(
-    FieldDefinition$new(
-      name = Name$new(value = "one"),
-      type = NamedType$new(name = Name$new(value = "Type"))
-    ),
-    FieldDefinition$new(
-      name = Name$new(value = "four"),
-      type = NamedType$new(name = Name$new(value = "String")),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "argument"),
-          type = NamedType$new(name = Name$new(value = "String")),
-          defaultValue = StringValue$new(value = "string")
-        )
-      )
-    )
-  )
-)
+  source_kitchen_schema("Bar")
 
-expect_str(a,
+expect_str(tks_Bar,
 "<InterfaceTypeDefinition>
 . name: `Bar`
 . fields:
@@ -345,8 +155,7 @@ expect_str(a,
 . . . type: `String`
 . . . defaultValue: <StringValue>
 . . . . value: 'string'
-. . type: `String`"
-)
+. . type: `String`")
 
 })
 
@@ -354,43 +163,9 @@ expect_str(a,
 
 test_that("annotated interface", {
 
-"
-interface AnnotatedInterface @onInterface {
-  annotatedField(arg: Type @onArg): Type @onField
-}
-"
-a <- InterfaceTypeDefinition$new(
-  name = Name$new(value = "AnnotatedInterface"),
-  directives = list(
-    Directive$new(
-      name = Name$new(value = "onInterface")
-    )
-  ),
-  fields = list(
-    FieldDefinition$new(
-      name = Name$new(value = "annotatedField"),
-      type = NamedType$new(name = Name$new(value = "Type")),
-      directives = list(
-        Directive$new(
-          name = Name$new(value = "onField")
-        )
-      ),
-      arguments = list(
-        InputValueDefinition$new(
-          name = Name$new(value = "arg"),
-          type = NamedType$new(name = Name$new(value = "Type")),
-          directives = list(
-            Directive$new(
-              name = Name$new(value = "onArg")
-            )
-          )
-        )
-      )
-    )
-  )
-)
+  source("AnnotatedInterface")
 
-expect_str(a,
+expect_str(tks_AnnotatedInterface,
 "<InterfaceTypeDefinition>
 . name: `AnnotatedInterface`
 . directives:
@@ -417,20 +192,9 @@ expect_str(a,
 
 test_that("union", {
 
-"
-union Feed = Story | Article | Advert
-"
-a <- UnionTypeDefinition$new(
-  name = Name$new(value = "Feed"),
-  types = list(
-    NamedType$new(name = Name$new(value = "Story")),
-    NamedType$new(name = Name$new(value = "Article")),
-    NamedType$new(name = Name$new(value = "Advert"))
-  )
-)
+  source_kitchen_schema("Feed")
 
-
-expect_str(a,
+expect_str(tks_Feed,
 "<UnionTypeDefinition>
 . name: `Feed`
 . types:
@@ -444,21 +208,9 @@ expect_str(a,
 
 test_that("annotated union", {
 
-"
-union AnnotatedUnion @onUnion = A | B
-"
-a <- UnionTypeDefinition$new(
-  name = Name$new(value = "AnnotatedUnion"),
-  directives = list(
-    Directive$new(name = Name$new(value = "onUnion"))
-  ),
-  types = list(
-    NamedType$new(name = Name$new(value = "A")),
-    NamedType$new(name = Name$new(value = "B"))
-  )
-)
+  source_kitchen_schema("AnnotatedUnion")
 
-expect_str(a,
+expect_str(tks_AnnotatedUnion,
 "<UnionTypeDefinition>
 . name: `AnnotatedUnion`
 . directives:
@@ -473,17 +225,9 @@ expect_str(a,
 
 test_that("custom scalar", {
 
-"
-scalar CustomScalar
-"
-a <- ScalarTypeDefinition$new(
-  name = Name$new(value = "CustomScalar"),
-  parse_value = function(...) NULL,
-  parse_literal = function(...) NULL,
-  serialize = function(...) NULL
-)
+  source_kitchen_schema("CustomScalar")
 
-expect_str(a,
+expect_str(tks_CustomScalar,
 "<ScalarTypeDefinition>
 . name: `CustomScalar`
 . serialize: fn
@@ -495,22 +239,9 @@ expect_str(a,
 
 test_that("annotated scalar", {
 
-"
-scalar AnnotatedScalar @onScalar
-"
-a <- ScalarTypeDefinition$new(
-  name = Name$new(value = "AnnotatedScalar"),
-  directives = list(
-    Directive$new(
-      name = Name$new(value = "onScalar")
-    )
-  ),
-  parse_value = function(...) NULL,
-  parse_literal = function(...) NULL,
-  serialize = function(...) NULL
-)
+  source_kitchen_schema("AnnotatedScalar")
 
-expect_str(a,
+expect_str(tks_AnnotatedScalar,
 "<ScalarTypeDefinition>
 . name: `AnnotatedScalar`
 . directives:
@@ -526,21 +257,9 @@ expect_str(a,
 
 test_that("enum", {
 
-"
-enum Site {
-  DESKTOP
-  MOBILE
-}
-"
-a <- EnumTypeDefinition$new(
-  name = Name$new(value = "Site"),
-  values = list(
-    EnumValueDefinition$new(name = Name$new(value = "DESKTOP")),
-    EnumValueDefinition$new(name = Name$new(value = "MOBILE"))
-  )
-)
+  source_kitchen_schema("Site")
 
-expect_str(a,
+expect_str(tks_Site,
 "<EnumTypeDefinition>
 . name: `Site`
 . values:
@@ -555,29 +274,9 @@ expect_str(a,
 
 test_that("annotated enum", {
 
-"
-enum AnnotatedEnum @onEnum {
-  ANNOTATED_VALUE @onEnumValue
-  OTHER_VALUE
-}
-"
-a <- EnumTypeDefinition$new(
-  name = Name$new(value = "AnnotatedEnum"),
-  directives = list(
-    Directive$new(name = Name$new(value = "onEnum"))
-  ),
-  values = list(
-    EnumValueDefinition$new(
-      name = Name$new(value = "ANNOTATED_VALUE"),
-      directives = list(
-        Directive$new(name = Name$new(value = "onEnumValue"))
-      )
-    ),
-    EnumValueDefinition$new(name = Name$new(value = "OTHER_VALUE"))
-  )
-)
+  source_kitchen_schema("AnnotatedEnum")
 
-expect_str(a,
+expect_str(tks_AnnotatedEnum,
 "<EnumTypeDefinition>
 . name: `AnnotatedEnum`
 . directives:
@@ -597,26 +296,7 @@ expect_str(a,
 
 test_that("input type", {
 
-"
-input InputType {
-  key: String!
-  answer: Int = 42
-}
-"
-a <- InputObjectTypeDefinition$new(
-  name = Name$new(value = "InputType"),
-  fields = list(
-    InputValueDefinition$new(
-      name = Name$new(value = "key"),
-      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "String")))
-    ),
-    InputValueDefinition$new(
-      name = Name$new(value = "answer"),
-      type = NamedType$new(name = Name$new(value = "Int")),
-      defaultValue = IntValue$new(value = 42)
-    )
-  )
-)
+  source_kitchen_schema("InputType")
 
 expect_str(a,
 "<InputObjectTypeDefinition>
@@ -636,28 +316,9 @@ expect_str(a,
 
 test_that("annotated input", {
 
-"
-input AnnotatedInput @onInputObjectType {
-  annotatedField: Type @onField
-}
-"
-a <- InputObjectTypeDefinition$new(
-  name = Name$new(value = "AnnotatedInput"),
-  directives = list(
-    Directive$new(name = Name$new(value = "onInputObjectType"))
-  ),
-  fields = list(
-    InputValueDefinition$new(
-      name = Name$new(value = "annotatedField"),
-      type = NamedType$new(name = Name$new(value = "Type")),
-      directives = list(
-        Directive$new(name = Name$new(value = "onField"))
-      )
-    )
-  )
-)
+  source_kitchen_schema("AnnotatedInputType")
 
-expect_str(a,
+expect_str(tks_AnnotatedInputType,
 "<InputObjectTypeDefinition>
 . name: `AnnotatedInput`
 . directives:
@@ -676,33 +337,9 @@ expect_str(a,
 
 test_that("extended type", {
 
-"
-extend type Foo {
-  seven(argument: [String]): Type
-}
-"
-a <- TypeExtensionDefinition$new(
-  definition = ObjectTypeDefinition$new(
-    name = Name$new(value = "Foo"),
-    interfaces = list(
-      NameType$new(name = Name$new(value = "Foo"))
-    ),
-    fields = list(
-      FieldDefinition$new(
-        name = Name$new(value = "seven"),
-        type = NamedType$new(name = Name$new(value = "Type")),
-        arguments = list(
-          InputValueDefinition$new(
-            name = Name$new(value = "argument"),
-            type = ListType$new(type = NamedType$new(name = Name$new(value = "String")))
-          )
-        )
-      )
-    )
-  )
-)
+  source_kitchen_schema("ExtendedFoo")
 
-expect_str(a,
+expect_str(tks_ExtendedFoo,
 "<TypeExtensionDefinition>
 . definition: <ObjectTypeDefinition>
 . . name: `Foo`
@@ -720,23 +357,9 @@ expect_str(a,
 
 test_that("extend type directive", {
 
-"
-extend type Foo @onType {}
-"
-a <- TypeExtensionDefinition$new(
-  definition = ObjectTypeDefinition$new(
-    name = Name$new(value = "Foo"),
-    interfaces = list(
-      NameType$new(name = Name$new(value = "Foo"))
-    ),
-    directives = list(
-      Directive$new(name = Name$new(value = "onType"))
-    ),
-    fields = NULL
-  )
-)
+  source_kitchen_schema("DirectiveExtendedFoo")
 
-expect_str(a,
+expect_str(tks_ExtendedAnnotatedFoo,
 "<TypeExtensionDefinition>
 . definition: <ObjectTypeDefinition>
 . . name: `Foo`
@@ -749,15 +372,9 @@ expect_str(a,
 
 test_that("no fields type", {
 
-"
-type NoFields {}
-"
-a <- ObjectTypeDefinition$new(
-  name = Name$new(value = "NoFields"),
-  fields = NULL
-)
+  source_kitchen_schema("NoFields")
 
-expect_str(a,
+expect_str(tks_NoFields,
 "<ObjectTypeDefinition>
 . name: `NoFields`")
 
@@ -766,27 +383,9 @@ expect_str(a,
 
 test_that("directive", {
 
-"
-directive @skip(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
-"
-a <- DirectiveDefinition$new(
-  name = Name$new(value = "skip"),
-  arguments = list(
-    InputValueDefinition$new(
-      name = Name$new(value = "if"),
-      type = NonNullType(type = NamedType$new(name = Name$new(value = "Boolean")))
-    )
-  ),
-  locations = list(
-    Name$new(value = "FIELD"),
-    Name$new(value = "FRAGMENT_SPREAD"),
-    Name$new(value = "INLINE_FRAGMENT")
-  ),
-  .resolve = function(...) TRUE
-)
+  source_kitchen_schema("DirectiveSkip")
 
-
-expect_str(a,
+expect_str(tks_DirectiveSkip,
 "<DirectiveDefinition>
 . name: `skip`
 . locations:
@@ -800,29 +399,9 @@ expect_str(a,
 
 test_that("directive", {
 
-"
-directive @include(if: Boolean!)
-  on FIELD
-   | FRAGMENT_SPREAD
-   | INLINE_FRAGMENT
-"
-a <- DirectiveDefinition$new(
-  name = Name$new(value = "include"),
-  arguments = list(
-    InputValueDefinition$new(
-      name = Name$new(value = "if"),
-      type = NonNullType$new(type = NamedType$new(name = Name$new(value = "Boolean")))
-    )
-  ),
-  locations = list(
-    Name$new(value = "FIELD"),
-    Name$new(value = "FRAGMENT_SPREAD"),
-    Name$new(value = "INLINE_FRAGMENT")
-  ),
-  .resolve = function(...) TRUE
-)
+  source_kitchen_schema("DirectiveInclude")
 
-expect_str(a,
+expect_str(tks_DirectiveInclude,
 "<DirectiveDefinition>
 . name: `include`
 . arguments:
