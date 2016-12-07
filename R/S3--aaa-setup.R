@@ -12,3 +12,7 @@ graphql_string <- function(x, ...) {
 validate <- function(x, schema_obj, ...) {
   UseMethod("validate", x)
 }
+
+validate.default <- function(x, schema_obj, ...) {
+  return(invisible(NULL))
+}
