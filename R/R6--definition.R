@@ -545,84 +545,15 @@ ObjectTypeDefinition = R6_from_args(
     interfaces?: ?Array<NamedType>;
     directives?: ?Array<Directive>;
     fields: Array<FieldDefinition>;",
-  active = list(
-    .is_valid = function() {
-      # Object types have the potential to be invalid if incorrectly defined.
-      # This set of rules must be adhered to by every Object type in a GraphQL schema.
-      #
-      # 1. An Object type must define one or more fields.
-      # 2. The fields of an Object type must have unique names within that Object type;
-      #    no two fields may share the same name.
-      # 3. An object type must be a super‐set of all interfaces it implements:
-      #   1. The object type must include a field of the same name for every field defined in an
-      #      interface.
-      #     1. The object field must be of a type which is equal to or a sub‐type of the interface
-      #        field (covariant).
-      #       1. An object field type is a valid sub‐type if it is equal to (the same type as) the
-      #          interface field type.
-      #       2. An object field type is a valid sub‐type if it is an Object type and the
-      #          interface field type is either an Interface type or a Union type and the object
-      #          field type is a possible type of the interface field type.
-      #       3. An object field type is a valid sub‐type if it is a List type and the interface
-      #          field type is also a List type and the list‐item type of the object field type is
-      #          a valid sub‐type of the list‐item type of the interface field type.
-      #       4. An object field type is a valid sub‐type if it is a Non‐Null variant of a valid
-      #          sub‐type of the interface field type.
-      #     2. The object field must include an argument of the same name for every argument
-      #        defined in the interface field.
-      #       1. The object field argument must accept the same type (invariant) as the interface
-      #          field argument.
-      #     3. The object field may include additional arguments not defined in the interface
-      #        field, but any additional argument must not be required.
-
-      # #1
-      ## checked in object initialization
-      # if (length(self$fields) == 0) {
-      #   stop("Object definition has 0 field values")
-      # }
-
-      self$fields %>%
-        lapply(extract, ".title") ->
-      self_field_names
-
-      # #2
-      if (any(duplicated(self_field_names))) {
-        dup_names <- self_field_names[duplicated(self_field_names)]
-        stop("Object has duplicated names: ", str_c(dup_names, collapse = ", "))
-      }
-
-      # #3
-      if (length(self$interfaces) > 0) {
-
-        for (interface in self$interfaces) {
-
-          for (interface_field in interface$fields) {
-            # #3.1
-            if (! (inteface_field$.title %in% self_field_names)) {
-              stop(
-                "Object (", self$.title, ") has missing interface (", interface$.title, ")",
-                " field name (", inteface_field$.title, ")"
-              )
-            }
-
-            # #3.1.1
-            matching_field <- self$fields[[interface_field$.title == self_field_names]]
-            if (! inherits(matching_field, interface_field$.kind)) {
-              stop(
-                "Object (", self$.title, ") field (", matching_field$.title, ") does not inherit interface (", interface$.title, ")",
-                " field (", inteface_field$.title, ")"
-              )
-            }
-
-            stop("TODO")
-
-
-          }
+  public = list(
+    .contains_field = function(field_obj) {
+      find_name <- field_obj$name$value
+      for (field in self$fields) {
+        if (field$name$value == find_name) {
+          return(TRUE)
         }
       }
-
-
-
+      return(FALSE)
     }
   )
 )
