@@ -40,119 +40,150 @@
 
 
 
-zSchema <- R6_from_args(
-  "zSchema",
-  " query: GraphQLObjectType;
-    mutation?: ?GraphQLObjectType;
-    directives?: ?Array<GraphQLDirective>;",
-  public = list(
-    initialize = function(query, mutation = NULL, directives = NULL) {
-      self$query = query
-      if (!missing(mutation)) {
-        self$mutation = mutation
-      }
+# zSchema <- R6_from_args(
+#   "zSchema",
+#   " query: GraphQLObjectType;
+#     mutation?: ?GraphQLObjectType;
+#     directives?: ?Array<GraphQLDirective>;",
+#   public = list(
+#     initialize = function(query, mutation = NULL, directives = NULL) {
+#       self$query = query
+#       if (!missing(mutation)) {
+#         self$mutation = mutation
+#       }
+#
+#       all_directives <- list(IncludeDirective, SkipDirective)
+#
+#       if (!missing(directives)) {
+#         all_directives <- append(all_directives, directives)
+#       }
+#       self$directives <- all_directives
+#
+#
+#     },
+#     get_directive = function(name) {
+#       dirs <- self$directives
+#       dirNames <- lapply(dirs, "[[", "name") %>% unlist()
+#       matchesName = which(dirNames == name)
+#       if (length(matchesName) == 0) {
+#         stop0("there is no directive with name: ", name)
+#       }
+#       dirs[min(matchesName)]
+#     }
+#   ),
+#   private = list(
+#     validate = function() {
+#
+#     }
+#   ),
+#   active = list()
+# )
 
-      all_directives <- list(IncludeDirective, SkipDirective)
-
-      if (!missing(directives)) {
-        all_directives <- append(all_directives, directives)
-      }
-      self$directives <- all_directives
 
 
-    },
-    get_directive = function(name) {
-      dirs <- self$directives
-      dirNames <- lapply(dirs, "[[", "name") %>% unlist()
-      matchesName = which(dirNames == name)
-      if (length(matchesName) == 0) {
-        stop0("there is no directive with name: ", name)
-      }
-      dirs[min(matchesName)]
-    }
-  ),
+GQLRSchema <- R6Class(
+  "GQLRSchema",
   private = list(
-    validate = function() {
+    is_done = FALSE,
 
-    }
-  ),
-  active = list()
-)
+    scalars = list(),
+    enums = list(),
+    objects = list(),
+    interfaces = list(),
+    unions = list(),
+    input_objects = list(),
 
-
-
-SchemaObj <- R6Class(
-  "SchemaAllInOne",
-  private = list(
-  ),
-  public = list(
-    isDone = FALSE, objects = list(), interfaces = list(), inputs = list(),
-    typeMap = list(),
-
-    initialize = function(documentObj = r6_from_list(eval_json(text), fnList), text = NULL, fnList = list()) {
-
-      if (missing(text) & missing(documentObj)) {
-        stop("Either 'documentObj' or 'text' must be supplied")
+    get_by_name = function(name_obj, obj_list_txt) {
+      if (is.character(name_obj)) {
+        private[[obj_list_txt]][[name_obj]]
+      } else if (inherits(name_obj, "Name")) {
+        private[[obj_list_txt]][[name_obj$value]]
+      } else if (inherits(name_obj, "NamedType")) {
+        private[[obj_list_txt]][[name_obj$name$value]]
       }
-      # if (!missing(text)) {
-      #   documentObj <- eval_json(text, fnList)
-      # } else if (missing(documentObj)) {
-      #   stop("Either 'documentObj' or 'text' must be supplied")
-      # }
-
-
-
-      check_if_gqlr_object(documentObj, "Document")
-
-      defs <- documentObj$definitions
-      for (i in seq_along(defs)) {
-        self$add(defs[[i]], fnList)
-      }
-      self$validate()
-      invisible(self)
+      stop("must supply a string, Name, or NamedType")
     },
 
+    types = list()
+  ),
+  public = list(
+    
+    get_scalar = function(name) private$get_by_name(x, "scalars"),
+    get_enum = function(name) private$get_by_name(x, "enums"),
+    get_object = function(name) private$get_by_name(x, "objects"),
+    get_interface = function(name) private$get_by_name(x, "interfaces"),
+    get_union = function(name) private$get_by_name(x, "unions"),
+    get_input_object = function(name) private$get_by_name(x, "input_objects"),
+
+    get_scalars = function() private$scalars,
+    get_enums = function() private$enums,
+    get_objects = function() private$objects,
+    get_interfaces = function() private$interfaces,
+    get_unions = function() private$unions,
+    get_input_objects = function() private$input_objects,
+
+
+    # initialize = function(
+    #   document_obj = r6_from_list(eval_json(text), fnList),
+    #   text = NULL,
+    #   fnList = list()
+    # ) {
+    #
+    #   if (missing(text) & missing(document_obj)) {
+    #     stop("Either 'document_obj' or 'text' must be supplied")
+    #   }
+    #
+    #   if(!inherits(document_obj, "Document")) {
+    #     stop("'document_obj' must be supplied")
+    #   }
+    #
+    #   defs <- documentObj$definitions
+    #   for (i in seq_along(defs)) {
+    #     self$add(defs[[i]], fnList)
+    #   }
+    #   self$validate()
+    #   invisible(self)
+    # },
     add = function(obj, fnList) {
-      if (!inherit(obj, "AST")) {
+      if (!inherits(obj, "AST")) {
         stop0(
           "Object must be of class AST to add to a Schema. Received: ",
           paste(class(obj), collapse = ", ")
         )
       }
 
-      self$isDone <- FALSE
+      private$is_done <- FALSE
 
-      groups = list(
-        "ObjectTypeDefinition" = "objects",
-        "InterfaceTypeDefinition" = "interfaces",
-        "UnionTypeDefinition" = "objects",
-        "ScalarTypeDefinition" = "objects",
-        "EnumTypeDefinition" = "objects",
-        "InputObjectTypeDefinition" = "inputs"
-      )
-
-      objKind <- obj$kind
-      objName <- obj$name$value
-      if (is.null(objName) ) {
+      obj_kind <- obj$.kind
+      obj_name <- obj$name$value
+      if (is.null(obj_name) ) {
         stop("To add an object to a Schema, it must have a name.")
       }
 
-      objGroup = groups[[objKind]]
+      if (obj_kind != "TypeExtensionDefinition") {
 
-      if (objKind != "TypeExtensionDefinition") {
-        if (is.null(objGroup)) {
+        groups = list(
+          "ObjectTypeDefinition" = "objects",
+          "InterfaceTypeDefinition" = "interfaces",
+          "UnionTypeDefinition" = "objects",
+          "ScalarTypeDefinition" = "scalars",
+          "EnumTypeDefinition" = "enums",
+          "InputObjectTypeDefinition" = "inputs"
+        )
+        obj_group <- groups[[obj_kind]]
+
+        if (is.null(obj_group)) {
           print(obj)
-          stop0("Unknown object type requested to be added to schema. Type: ", objKind)
+          stop0("Unknown object type requested to be added to schema. Type: ", obj_kind)
         }
 
-        if ( objName %in% self$schema_names) {
-          print(self$schema_names)
-          cat('\n')
-          print(obj)
-          stop0(objKind, " already defined. ", objKind, ": ", objName)
+        if (!is.null(private[[obj_group]][[obj_name]])) {
+          print(private[[obj_group]][[obj_name]])
+          stop0(obj_name, " already defined in ", obj_kind)
         }
 
-        self[[objGroup]][[objName]] <- obj
+        private[[obj_group]][[obj_name]] <- obj
+
         return(invisible(self))
       }
 
@@ -167,6 +198,9 @@ SchemaObj <- R6Class(
       #   name: Name;
       #   interfaces?: ?Array<NamedType>;
       #   fields: Array<FieldDefinition>;"
+
+      # TODO
+      stop("implement later!")
 
       extObj <- obj$definition
       extObjName <- extObj$name
@@ -198,136 +232,125 @@ SchemaObj <- R6Class(
       self[[extObjType]][[extObjName]] <- originalObject
 
       return(invisible(self))
-    },
-
-
-    validate = function() {
-      # This must be done at the very end.
-      # TypeExtensionDefinitions screw everything up as something could be valid before,
-      # but not after.
-
-      # get the names for each group
-      allNames <- self$schema_names
-
-      # make sure none of the names are duplicated
-      if (any(duplicated(allNames))) {
-        duplicatedNames <- allNames[duplicated(allNames)]
-        print(duplicatedNames)
-        stop0("duplicated names are above.  Schema names may only be supplied once")
-      }
-
-      interfaceNames <- names(self$interfaces)
-      objectNames <- names(self$objects)
-      check_is_valid_type_obj <- function(typeObj) {
-        if (typeObj$'_kind' != "Type" ) {
-          stop0("object fieldType is not 'Type'. Received: ", typeObj[['_kind']])
-        }
-
-        type <- typeObj$type
-        if (type %in% c("Type", "Int", "String")) {
-          # good
-        } else {
-          stop0("Invalid field type received: |", type, "|. Known field types: |", paste(objectNames, collapse = ", "), "|")
-        }
-      }
-
-      # for every schema object
-      schemaObj$objects <- lapply(schemaObj$objects, function(objectObj) {
-
-        # Conversely, GraphQL type system authors must not define any types, fields, arguments, or any other type system artifact with two leading underscores.
-        # TODO
-
-        # for UnionTypeDefinition
-        lapply(objectObj$types, check_is_valid_type_obj)
-
-        # for ObjectTypeDefinition
-        lapply(objectObj$fieldTypes, check_is_valid_type_obj)
-
-        # for ObjectTypeDefinition arguments
-        lapply(objectObj$fieldArguments, function(fieldArgObj) {
-          # fieldArgObj = three(argument: InputType, other: String = "string"): Int
-
-          lapply(fieldArgObj, function(argObj) {
-            # argObj = {argument: InputType, other: String = "string"}
-
-            lapply(argObj, function(argValObj) {
-              argValObj <- as.list(argValObj)
-              # argObj = {String = "string"}
-              argType <- argValObj$type
-
-              defaultValueKind <- argValObj$defaultValueKind
-
-              # TODO. find proper types
-            })
-
-          })
-        })
-
-        # lapply(objectObj$fieldArguments, function(argObj) {
-        #
-        # })
-
-
-
-        # // Assert each interface field is implemented.
-        lapply(objectObj$interfaces, function(objectInterfaceObj) {
-          interfaceType <- objectInterfaceObj$type
-
-          # // Assert interface field exists on object.
-          if (!(interfaceType %in% interfaceNames)) {
-            print(objectObj)
-            stop0("Schema object '", objectObj$name, "' is trying to implement a missing interface '", interfaceType, "'")
-          }
-          interfaceObj <- schemaObj$interfaces[[interfaceType]]
-
-          # // Assert interface field type is satisfied by object field type,
-          # by being a valid subtype. (covariant)
-          lapply(names(interfaceObj$fieldTypes), function(interfaceFieldName) {
-            interFieldObj <- interfaceObj$fieldTypes[[interfaceFieldName]]
-
-          })
-
-
-          # for each field of the interface, make sure it's added or stomped
-          for (name in names(interfaceObj$fieldTypes)) {
-            # if the field doesn't exist, add it
-            if (is.null(objectObj$fieldTypes[[name]])) {
-              objectObj$fieldTypes[[name]] <<- interfaceObj$fieldTypes[[name]]
-              objectObj$fieldArguments[[name]] <<- interfaceObj$fieldArguments[[name]]
-            }
-          }
-        })
-
-        objectObj
-      })
-
-      schemaObj$interfaces <- NULL
-
-      schemaObj$isDone <- TRUE
-      schemaObj
-
-    },
-
-    introspection = function() {
-      # type __Schema {
-      #   types: [__Type!]!
-      #   queryType: __Type!
-      #   mutationType: __Type
-      #   directives: [__Directive!]!
-      # }
-      # __schema : __Schema!
-      # __type(name: String!) : __Type
     }
+
+
+    # validate = function() {
+    #   # This must be done at the very end.
+    #   # TypeExtensionDefinitions screw everything up as something could be valid before,
+    #   # but not after.
+    #
+    #   # get the names for each group
+    #   allNames <- self$schema_names
+    #
+    #   # make sure none of the names are duplicated
+    #   if (any(duplicated(allNames))) {
+    #     duplicatedNames <- allNames[duplicated(allNames)]
+    #     print(duplicatedNames)
+    #     stop0("duplicated names are above.  Schema names may only be supplied once")
+    #   }
+    #
+    #   interfaceNames <- names(self$interfaces)
+    #   objectNames <- names(self$objects)
+    #   check_is_valid_type_obj <- function(typeObj) {
+    #     if (typeObj$'_kind' != "Type" ) {
+    #       stop0("object fieldType is not 'Type'. Received: ", typeObj[['_kind']])
+    #     }
+    #
+    #     type <- typeObj$type
+    #     if (type %in% c("Type", "Int", "String")) {
+    #       # good
+    #     } else {
+    #       stop0("Invalid field type received: |", type, "|. Known field types: |", paste(objectNames, collapse = ", "), "|")
+    #     }
+    #   }
+    #
+    #   # for every schema object
+    #   schemaObj$objects <- lapply(schemaObj$objects, function(objectObj) {
+    #
+    #     # Conversely, GraphQL type system authors must not define any types, fields, arguments, or any other type system artifact with two leading underscores.
+    #     # TODO
+    #
+    #     # for UnionTypeDefinition
+    #     lapply(objectObj$types, check_is_valid_type_obj)
+    #
+    #     # for ObjectTypeDefinition
+    #     lapply(objectObj$fieldTypes, check_is_valid_type_obj)
+    #
+    #     # for ObjectTypeDefinition arguments
+    #     lapply(objectObj$fieldArguments, function(fieldArgObj) {
+    #       # fieldArgObj = three(argument: InputType, other: String = "string"): Int
+    #
+    #       lapply(fieldArgObj, function(argObj) {
+    #         # argObj = {argument: InputType, other: String = "string"}
+    #
+    #         lapply(argObj, function(argValObj) {
+    #           argValObj <- as.list(argValObj)
+    #           # argObj = {String = "string"}
+    #           argType <- argValObj$type
+    #
+    #           defaultValueKind <- argValObj$defaultValueKind
+    #
+    #           # TODO. find proper types
+    #         })
+    #
+    #       })
+    #     })
+    #
+    #     # lapply(objectObj$fieldArguments, function(argObj) {
+    #     #
+    #     # })
+    #
+    #
+    #
+    #     # // Assert each interface field is implemented.
+    #     lapply(objectObj$interfaces, function(objectInterfaceObj) {
+    #       interfaceType <- objectInterfaceObj$type
+    #
+    #       # // Assert interface field exists on object.
+    #       if (!(interfaceType %in% interfaceNames)) {
+    #         print(objectObj)
+    #         stop0("Schema object '", objectObj$name, "' is trying to implement a missing interface '", interfaceType, "'")
+    #       }
+    #       interfaceObj <- schemaObj$interfaces[[interfaceType]]
+    #
+    #       # // Assert interface field type is satisfied by object field type,
+    #       # by being a valid subtype. (covariant)
+    #       lapply(names(interfaceObj$fieldTypes), function(interfaceFieldName) {
+    #         interFieldObj <- interfaceObj$fieldTypes[[interfaceFieldName]]
+    #
+    #       })
+    #
+    #
+    #       # for each field of the interface, make sure it's added or stomped
+    #       for (name in names(interfaceObj$fieldTypes)) {
+    #         # if the field doesn't exist, add it
+    #         if (is.null(objectObj$fieldTypes[[name]])) {
+    #           objectObj$fieldTypes[[name]] <<- interfaceObj$fieldTypes[[name]]
+    #           objectObj$fieldArguments[[name]] <<- interfaceObj$fieldArguments[[name]]
+    #         }
+    #       }
+    #     })
+    #
+    #     objectObj
+    #   })
+    #
+    #   schemaObj$interfaces <- NULL
+    #
+    #   schemaObj$isDone <- TRUE
+    #   schemaObj
+    #
+    # }
 
   ),
   active = list(
-    schema_names = function() {
-      unlist(c(
-        names(self$objects),
-        names(self$interfaces),
-        names(self$inputs)
-      ))
-    }
+    # schema_names = function() {
+    #   unlist(c(
+    #     names(self$objects),
+    #     names(self$interfaces),
+    #     names(self$inputs)
+    #   ))
+    # }
   )
 )
 
