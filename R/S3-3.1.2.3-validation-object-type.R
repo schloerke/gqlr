@@ -1,8 +1,7 @@
 get_name_values <- function(list_obj) {
-  list_obj
-    lapply("[[", "name") %>%
-    lapply("[[", "value") %>%
-    unlist()
+  name_objs <- lapply(list_obj, "[[", "name")
+  name_vals <- lapply(name_objs, "[[", "value")
+  unlist(name_vals)
 }
 
 
