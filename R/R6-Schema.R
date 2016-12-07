@@ -165,7 +165,7 @@ GQLRSchema <- R6Class(
         groups = list(
           "ObjectTypeDefinition" = "objects",
           "InterfaceTypeDefinition" = "interfaces",
-          "UnionTypeDefinition" = "objects",
+          "UnionTypeDefinition" = "unions",
           "ScalarTypeDefinition" = "scalars",
           "EnumTypeDefinition" = "enums",
           "InputObjectTypeDefinition" = "inputs"
