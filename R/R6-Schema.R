@@ -100,8 +100,9 @@ GQLRSchema <- R6Class(
         private[[obj_list_txt]][[name_obj$value]]
       } else if (inherits(name_obj, "NamedType")) {
         private[[obj_list_txt]][[name_obj$name$value]]
+      } else {
+        stop("must supply a string, Name, or NamedType")
       }
-      stop("must supply a string, Name, or NamedType")
     },
 
     types = list()
