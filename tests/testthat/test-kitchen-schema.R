@@ -2,7 +2,9 @@
 
 context("kitchen schema")
 
-source("source_helper")
+
+
+source("source_helper.R")
 
 expect_str <- function(a, txt) {
   testthat::expect_equal(
@@ -13,9 +15,8 @@ expect_str <- function(a, txt) {
 
 test_that("schema obj", {
 
-  source_kitchen_schema("Schema")
-
-expect_str(tks_schema,
+source_kitchen_schema("Schema") %>%
+expect_str(
 "<SchemaDefinition>
 . operationTypes:
 . 1 - <OperationTypeDefinition>
@@ -32,9 +33,8 @@ expect_str(tks_schema,
 
 test_that("object", {
 
-  source_kitchen_schema("Foo")
-
-expect_str(tks_Foo,
+source_kitchen_schema("Foo") %>%
+expect_str(
 "<ObjectTypeDefinition>
 . name: `Foo`
 . interfaces:
@@ -109,9 +109,8 @@ expect_str(tks_Foo,
 
 test_that("annotate", {
 
-  source_kitchen_schema("AnnotatedObject")
-
-expect_str(tks_AnnotatedObject,
+source_kitchen_schema("AnnotatedObject") %>%
+expect_str(
 "<ObjectTypeDefinition>
 . name: `AnnotatedObject`
 . directives:
@@ -138,9 +137,8 @@ expect_str(tks_AnnotatedObject,
 
 test_that("interface", {
 
-  source_kitchen_schema("Bar")
-
-expect_str(tks_Bar,
+source_kitchen_schema("Bar") %>%
+expect_str(
 "<InterfaceTypeDefinition>
 . name: `Bar`
 . fields:
@@ -163,9 +161,8 @@ expect_str(tks_Bar,
 
 test_that("annotated interface", {
 
-  source("AnnotatedInterface")
-
-expect_str(tks_AnnotatedInterface,
+source_kitchen_schema("AnnotatedInterface") %>%
+expect_str(
 "<InterfaceTypeDefinition>
 . name: `AnnotatedInterface`
 . directives:
@@ -192,9 +189,8 @@ expect_str(tks_AnnotatedInterface,
 
 test_that("union", {
 
-  source_kitchen_schema("Feed")
-
-expect_str(tks_Feed,
+source_kitchen_schema("Feed") %>%
+expect_str(
 "<UnionTypeDefinition>
 . name: `Feed`
 . types:
@@ -208,9 +204,8 @@ expect_str(tks_Feed,
 
 test_that("annotated union", {
 
-  source_kitchen_schema("AnnotatedUnion")
-
-expect_str(tks_AnnotatedUnion,
+source_kitchen_schema("AnnotatedUnion") %>%
+expect_str(
 "<UnionTypeDefinition>
 . name: `AnnotatedUnion`
 . directives:
@@ -225,9 +220,8 @@ expect_str(tks_AnnotatedUnion,
 
 test_that("custom scalar", {
 
-  source_kitchen_schema("CustomScalar")
-
-expect_str(tks_CustomScalar,
+source_kitchen_schema("CustomScalar") %>%
+expect_str(
 "<ScalarTypeDefinition>
 . name: `CustomScalar`
 . serialize: fn
@@ -239,9 +233,8 @@ expect_str(tks_CustomScalar,
 
 test_that("annotated scalar", {
 
-  source_kitchen_schema("AnnotatedScalar")
-
-expect_str(tks_AnnotatedScalar,
+source_kitchen_schema("AnnotatedScalar") %>%
+expect_str(
 "<ScalarTypeDefinition>
 . name: `AnnotatedScalar`
 . directives:
@@ -257,9 +250,8 @@ expect_str(tks_AnnotatedScalar,
 
 test_that("enum", {
 
-  source_kitchen_schema("Site")
-
-expect_str(tks_Site,
+source_kitchen_schema("Site") %>%
+expect_str(
 "<EnumTypeDefinition>
 . name: `Site`
 . values:
@@ -274,9 +266,8 @@ expect_str(tks_Site,
 
 test_that("annotated enum", {
 
-  source_kitchen_schema("AnnotatedEnum")
-
-expect_str(tks_AnnotatedEnum,
+source_kitchen_schema("AnnotatedEnum") %>%
+expect_str(
 "<EnumTypeDefinition>
 . name: `AnnotatedEnum`
 . directives:
@@ -296,9 +287,8 @@ expect_str(tks_AnnotatedEnum,
 
 test_that("input type", {
 
-  source_kitchen_schema("InputType")
-
-expect_str(a,
+source_kitchen_schema("InputType") %>%
+expect_str(
 "<InputObjectTypeDefinition>
 . name: `InputType`
 . fields:
@@ -316,9 +306,8 @@ expect_str(a,
 
 test_that("annotated input", {
 
-  source_kitchen_schema("AnnotatedInputType")
-
-expect_str(tks_AnnotatedInputType,
+source_kitchen_schema("AnnotatedInputType") %>%
+expect_str(
 "<InputObjectTypeDefinition>
 . name: `AnnotatedInput`
 . directives:
@@ -337,9 +326,8 @@ expect_str(tks_AnnotatedInputType,
 
 test_that("extended type", {
 
-  source_kitchen_schema("ExtendedFoo")
-
-expect_str(tks_ExtendedFoo,
+source_kitchen_schema("ExtendedFoo") %>%
+expect_str(
 "<TypeExtensionDefinition>
 . definition: <ObjectTypeDefinition>
 . . name: `Foo`
@@ -357,9 +345,8 @@ expect_str(tks_ExtendedFoo,
 
 test_that("extend type directive", {
 
-  source_kitchen_schema("DirectiveExtendedFoo")
-
-expect_str(tks_ExtendedAnnotatedFoo,
+source_kitchen_schema("DirectiveExtendedFoo") %>%
+expect_str(
 "<TypeExtensionDefinition>
 . definition: <ObjectTypeDefinition>
 . . name: `Foo`
@@ -372,9 +359,8 @@ expect_str(tks_ExtendedAnnotatedFoo,
 
 test_that("no fields type", {
 
-  source_kitchen_schema("NoFields")
-
-expect_str(tks_NoFields,
+source_kitchen_schema("NoFields") %>%
+expect_str(
 "<ObjectTypeDefinition>
 . name: `NoFields`")
 
@@ -383,9 +369,8 @@ expect_str(tks_NoFields,
 
 test_that("directive", {
 
-  source_kitchen_schema("DirectiveSkip")
-
-expect_str(tks_DirectiveSkip,
+source_kitchen_schema("DirectiveSkip") %>%
+expect_str(
 "<DirectiveDefinition>
 . name: `skip`
 . locations:
@@ -399,9 +384,8 @@ expect_str(tks_DirectiveSkip,
 
 test_that("directive", {
 
-  source_kitchen_schema("DirectiveInclude")
-
-expect_str(tks_DirectiveInclude,
+source_kitchen_schema("DirectiveInclude") %>%
+expect_str(
 "<DirectiveDefinition>
 . name: `include`
 . arguments:
