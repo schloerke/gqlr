@@ -29,4 +29,8 @@ test_that("valid", {
   expect_validate("CatOrDog", "union")
 
 
+  lapply(names(dog_cat_schema$get_interfaces()), expect_validate, "interface")
+  lapply(names(dog_cat_schema$get_unions()), expect_validate, "union")
+  lapply(names(dog_cat_schema$get_objects()), expect_validate, "object")
+
 })
