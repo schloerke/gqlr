@@ -43,6 +43,7 @@ Dog <- ObjectTypeDefinition$new(
     field_type_obj_from_txt("owner", "Human")
   )
 )
+
 dog_cat_schema$add(Dog)
 
 
@@ -189,6 +190,7 @@ dog_cat_schema$add(HumanOrAlien)
 "
 type QueryRoot {
   dog: Dog
+  cat: Cat
 }
 "
 QueryRoot <- ObjectTypeDefinition$new(
