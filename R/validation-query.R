@@ -8,35 +8,45 @@
 
 validate_query <- function(document_obj, schema_obj, ...) {
 
-  validate_operation_names(document_obj, schema_obj)
+  validate_operation_names(document_obj, schema_obj, ...)
 
+  validate_field_selections(document_obj, schema_obj, ...)
 
+  invisible(TRUE)
 }
 
 
 
-# 5.1.1.1 - Operation Name Uniqueness
-# 5.1.2.1 - Lone Anonymous Operation
-validate_operation_names <- function(document_obj, schema_obj, ...) {
+# √5.1.1.1 - Operation Name Uniqueness
+# √5.1.2.1 - Lone Anonymous Operation
+validate_operation_names <- function(document_obj, ...) {
   # 5.1.1.1 - Operation Name Uniqueness
     # All operation names must be unique.
       # A single missing name is unique
   missing_count <- 0
+  query_mutation_count <- 0
   seen_names <- list()
 
-  for (definition in x$definitions) {
+  for (definition in document_obj$definitions) {
     if (is.null(definition$.args$name)) {
       # doens't have name object, such as TypeSystemDefinition
       next
     }
+
+    if (!is.null(definition$operation)) {
+      if (definition$operation %in% c("query", "mutation")) {
+        query_mutation_count <- query_mutation_count + 1
+      }
+    }
+
     name_val <- definition$name$value
     if (is.null(name_val)) {
       missing_count <- missing_count + 1
     } else {
-      if (seen_names[[name_val]]) {
+      if (isTRUE(seen_names[[name_val]])) {
         stop(
-          "document definition: ", definition$.title,
-          " has duplicate name: ", name_val
+          "document definition",
+          " has duplicate return name: ", name_val
         )
       }
       seen_names[[name_val]] <- TRUE
@@ -47,9 +57,9 @@ validate_operation_names <- function(document_obj, schema_obj, ...) {
 
   # 5.1.2.1 - Lone Anonymous Operation
     # if there is a missing name and a provided name, throw error
-  if (missing_count > 0 & length(seen_names) > 0) {
+  if (missing_count > 0 & query_mutation_count > 1) {
     stop(
-      "document definition: ", defintion$.title,
+      "document definition: ", document_obj$.title,
       " has an anonymous and defined definition.",
       " This is not allowed."
     )
@@ -69,23 +79,77 @@ validate_operation_names <- function(document_obj, schema_obj, ...) {
 # TODO
 # 5.2.1 - Field Selections on Objects, Interfaces, and Unions Types
 validate_field_selections <- function(document_obj, schema_obj, ...) {
-  for (operation in document_obj$defintions) {
-    if (operation$operation != "query") {
-      next
+
+  for (operation in document_obj$definitions) {
+
+    if (!is.null(operation$operation)) {
+      # is operation
+      if (operation$operation == "query") {
+        validate_fields_in_selection_set(operation$selectionSet, schema_obj$get_object("QueryRoot"), schema_obj, ...)
+      } else if (operation$operation == "mutation") {
+        stop("TODO. not implemented")
+      }
+    } else {
+      # is fragment
+      validate_fields_in_selection_set(
+        operation$selectionSet,
+        schema_obj$get_object(operation$typeCondition),
+        schema_obj,
+        ...
+      )
+      validate_fragment(operation, schema_obj, ...)
     }
 
-    validate_selection_set(operation$selectionSet, schema_obj$get_object("QueryRoot"), schema_obj, ...)
   }
 }
 
 
-validate_selection_set <- function(selection_set_obj, object, schema_obj, ...) {
-  for (selection in selection_set_obj) {
-    if (is.null(selection$selectionSet)) {
-      # only name appears
-      object$contains_field(selection$name)
+validate_fields_in_selection_set <- function(selection_set_obj, object, schema_obj, ...) {
+  selection_obj_list <- selection_set_obj$selections
+  selection_names <- get_name_values(selection_obj_list)
+
+  object_field_list <- object$fields
+
+  obj_field_names <- get_name_values(object_field_list)
+
+  # recursively look into subfields
+  for (selection_obj in selection_obj_list) {
+
+    if (inherits(selection_obj, "FragmentSpread")) {
+
+      # calling a fragment
+      # validate_fields_in_selection_set()
+
+    } else {
+      # not a fragment
+      # make sure all request names exist in return obj
+      if (! (selection_obj$name$value %in% obj_field_names)) {
+        stop(
+          "not all requested names are found.",
+          " missing field: ", selection_obj$name$value,
+          " for object: ", object$.title
+        )
+      }
+    }
+
+
+    if (!is.null(selection_obj$arguments)) {
+      validate_arguments(selection_obj$arguments, schema_obj, ...)
+    }
+
+    field_name <- selection_obj$name$value
+
+    if (!is.null(selection_obj$selectionSet)) {
+      matching_obj_field <- object_field_list[[which(field_name == obj_field_names)]]
+      validate_fields_in_selection_set(
+        selection_obj$selectionSet,
+        schema_obj$get_object(matching_obj_field$type$name),
+        schema_obj,
+        ...
+      )
     }
   }
+
 }
 
 
@@ -103,40 +167,68 @@ validate_selection_set <- function(selection_set_obj, object, schema_obj, ...) {
 # 5.3.2 - Argument Uniqueness
 # 5.3.3.1 - Compatible Values
 # 5.3.3.2 - Required Non-Null Arguments
-validate_argument <- function(argument_obj, schema_obj, object, ...) {
+validate_arguments <- function(argument_obj_list, schema_obj, ...) {
 
-  object_val <- schema_obj$get_object
+  for (argument_obj in argument_obj_list) {
+
+    arg_value <- argument_obj$value
+
+    if (inherits(arg_value, "ObjectValue")) {
+      validate_input_object_field_uniqueness(arg_value, schema_obj, ...)
+    }
+
+  }
+
+  invisible(TRUE)
 }
 
 
 # TODO
-# 5.4.1.1 - Fragment Name Uniqueness
+# 5.4.1.1 - Fragment Name Uniqueness - covered in 5.1.1.1
 # 5.4.1.2 - Fragment Spread Type Existence
 # 5.4.1.3 - Fragments On Composite Types
 # 5.4.1.4 - Fragments Must Be Used
 # 5.4.2.1 - Fragment spread target defined
-# 5.4.2.2 - Fragment spreads must not form cycles
+# √5.4.2.2 - Fragment spreads must not form cycles
 # 5.4.2.3 - Fragment spread is possible
 # 5.4.2.3.1 - Object Spreads In Object Scope
 # 5.4.2.3.2 - Abstract Spreads in Object Scope
 # 5.4.2.3.3 - Object Spreads In Abstract Scope
 # 5.4.2.3.4 - Abstract Spreads in Abstract Scope
+validate_fragment <- function(fragment, schema_obj, fragments_seen = c(), ...) {
+  fragment_name <- fragment$name$value
+
+  # 5.4.2.2
+  if (fragment_name %in% fragments_seen) {
+    stop("fragment: ", fragment_name, " is circularly defined")
+  }
+  fragments_seen <- append(fragments_seen, fragment_name)
+
+
+  browser()
+
+
+
+}
 
 
 
 
-# TODO
 # 5.5.1 - Input Object Field Uniqueness
+validate_input_object_field_uniqueness <- function(object_value, schema_obj, ...) {
+  print("found!")
+  validate_field_names(object_value, "object value")
+}
 
 
 # TODO
-# 5.6.1 - Directives Are Defined
-# 5.6.2 - Directives Are In Valid Locations
-# 5.6.3 - Directives Are Unique Per Location
+# 5.6.1 - Directives Are Defined - Must be done in execution stage
+# 5.6.2 - Directives Are In Valid Locations - Must be done in execution stage
+# 5.6.3 - Directives Are Unique Per Location - Must be done in execution stage
 
 
 
-# TODO
+# TODO - Must be done in execution stage
 # 5.7.1 - Variable Uniqueness
 # 5.7.2 - Variable Default Values Are Correctly Typed
 # 5.7.3 - Variables Are Input Types
