@@ -136,6 +136,7 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
 
   validate_field_names(x, "object")
 
+  object_fields <- x$fields
   field_names <- get_name_values(object_fields)
 
   interfaces <- x$interfaces
@@ -158,8 +159,7 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
         stop("object definition: ", x$.title, " must implement all fields of interface: ", interface_obj$.title, ". Missing field: ", interface_field_name)
       }
 
-      matching_obj_field <- objet_fields[[field_names == interface_field_name]]
-
+      matching_obj_field <- object_fields[[which(field_names == interface_field_name)]]
       # check the type
 
       # TODO check the field type in the interface
@@ -172,7 +172,7 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
       matching_obj_field_arg_names <- get_name_values(matching_obj_field_args)
 
       if (
-        length(interface_field_arg_names) != lengths(matching_obj_field_arg_names)
+        length(interface_field_arg_names) != length(matching_obj_field_arg_names)
       ) {
         stop(
           "object definition: ", x$.title,
