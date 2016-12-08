@@ -26,6 +26,14 @@ stop0 <- function(...) {
   stop(paste0(...))
 }
 
+ifnull <- function(a, b) {
+  if (is.null(a)) {
+    b
+  } else {
+    a
+  }
+}
+
 
 
 
