@@ -335,6 +335,12 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
         )
 
       }
+
+      if (!is.null(private$init_validate)) {
+        private$init_validate()
+      }
+
+      return(invisible(self))
     })
   )
 
@@ -448,12 +454,25 @@ gqlr_str <- function(x, ...) {
 
 
 namedtype_from_txt <- function(txt) {
-  return(NamedType$new(name = name_from_txt(txt)))
+  if (!is.character(txt)) {
+    return(txt)
+  }
+
+  NamedType$new(name = name_from_txt(txt))
 }
 name_from_txt <- function(txt) {
-  return(Name$new(value = txt))
+  if (!is.character(txt)) {
+    txt
+  }
+
+  Name$new(value = txt)
 }
+
 type_from_txt <- function(txt) {
+  if (!is.character(txt)) {
+    return(txt)
+  }
+
   txt <- str_trim(txt)
   if (str_detect(txt, "!$")) {
     # remove ! and recurse
@@ -485,9 +504,18 @@ field_type_obj_from_txt <- function(name_txt, field_txt, description = NULL, ...
 }
 
 input_value_from_txt <- function(name_txt, type_txt, ...) {
+
   InputValueDefinition$new(
     name = name_from_txt(name_txt),
-    type_txt = type_from_txt(type_txt),
+    type = type_from_txt(type_txt),
     ...
+  )
+}
+
+
+object_field_from_txt <- function(name_txt, type_txt) {
+  ObjectField$new(
+    name = name_from_txt(name_txt),
+    value = type_from_txt(type_txt)
   )
 }
