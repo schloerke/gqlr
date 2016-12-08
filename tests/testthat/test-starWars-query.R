@@ -19,6 +19,8 @@
 # // 80+ char lines are useful in describe/it, so ignore in this file.
 # /* eslint-disable max-len */
 
+
+if (FALSE) {
 check_if_equal <- function(query, expected, ...) {
   result = graphql(StarWarsSchema, query, ...)
   expect_equal(result, expected)
@@ -281,3 +283,5 @@ test_that('Allows us to verify that Luke is a human', {
   )
   check_if_equal(query, expected)
 });
+
+}

@@ -19,6 +19,8 @@
 # // 80+ char lines are useful in describe/it, so ignore in this file.
 # /* eslint-disable max-len */
 
+if (FALSE) {
+
 context('Star Wars Introspection Tests - Basic Introspection')
 
 check_if_equal <- function(query, expected, ...) {
@@ -316,3 +318,6 @@ test_that('Allows querying the schema for documentation', {
 
   check_if_equal(query, expected)
 })
+
+
+}

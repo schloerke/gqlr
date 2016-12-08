@@ -19,6 +19,8 @@
 # import { validate } from '../validation/validate';
 
 
+if (FALSE) {
+
 
 # /**
 #  * Helper function to test a query and the expected response.
@@ -125,3 +127,5 @@ expect_equal('Allows object fields in inline fragments', {
   "
   expect_equal(hasValidationErrors(query), FALSE);
 });
+
+}
