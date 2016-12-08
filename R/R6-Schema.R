@@ -84,6 +84,49 @@
 GQLRSchema <- R6Class(
   "GQLRSchema",
   private = list(
+
+    # check_and_add_to_directives = function(obj) {
+    #
+    #   # Schema Definitions
+    #   # "SCHEMA",
+    #   if (inherits(obj, "SchemaDefinition")) {
+    #     if (!is.null(obj$directives)) {
+    #       stop("not implemented")
+    #     }
+    #
+    #   # "SCALAR",
+    #   } else if (
+    #     inherits(obj, "ScalarTypeDefinition") ||
+    #     FALSE
+    #   ) {
+    #     if (!is.null(obj$directives)) {
+    #       if (length(obj$directives) > 0) {
+    #         private$has_directive_list[[obj$name$value]] <- obj
+    #         return(invisible(self))
+    #       }
+    #     }
+    #
+    #
+    #   # "OBJECT",
+    #   # "FIELD_DEFINITION",
+    #   } else if (
+    #     inherits(obj, "ObjectTypeDefinition")
+    #   ) {
+    #
+    #   }
+    #   # inherits(obj, "ObjectTypeDefinition") ||
+    #   #
+    #   # "ARGUMENT_DEFINITION",
+    #   # "INTERFACE",
+    #   # "UNION",
+    #   # "ENUM",
+    #   # "ENUM_VALUE",
+    #   # "INPUT_OBJECT",
+    #   # "INPUT_FIELD_DEFINITION"
+    #
+    # },
+
+
     is_done = FALSE,
 
     scalars = list(),
@@ -92,6 +135,8 @@ GQLRSchema <- R6Class(
     interfaces = list(),
     unions = list(),
     input_objects = list(),
+
+    # has_directive_list = list(),
 
     get_by_name = function(name_obj, obj_list_txt) {
       if (is.character(name_obj)) {
@@ -122,6 +167,8 @@ GQLRSchema <- R6Class(
     get_interfaces = function() private$interfaces,
     get_unions = function() private$unions,
     get_input_objects = function() private$input_objects,
+
+    # get_directive_objs = function() private$has_directive_list,
 
 
     # initialize = function(
@@ -162,6 +209,8 @@ GQLRSchema <- R6Class(
       }
 
       if (obj_kind != "TypeExtensionDefinition") {
+
+        # private$check_and_add_to_directives(obj)
 
         groups = list(
           "ObjectTypeDefinition" = "objects",
@@ -233,7 +282,13 @@ GQLRSchema <- R6Class(
       self[[extObjType]][[extObjName]] <- originalObject
 
       return(invisible(self))
-    }
+    }#,
+
+    # validate = function() {
+    #   for (list_name in c()) {
+    #
+    #   }
+    # }
 
 
     # validate = function() {
@@ -356,26 +411,6 @@ GQLRSchema <- R6Class(
 )
 
 
-
-
-#
-# Introspection__Schema <- R6_from_args(
-#   inherit = AST,
-#   "__Schema",
-#   " types: Array<__Type>;
-#     queryType: __Type;
-#     mutationType: ?__Type;
-#     directives: ?Array<__Directive>;"
-# }
-#
-# Introspection__Type <- R6_from_args(
-#   inherit = AST,
-#   "__Type",
-#   " kind: __TypeKind;
-#     name: string;
-#     description: string;"
-# )
-#
 
 
 
