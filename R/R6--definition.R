@@ -167,7 +167,12 @@ Document <- R6_from_args(
   inherit = Node,
   "Document",
   " loc?: ?Location;
-    definitions: Array<Definition>;"
+    definitions: Array<Definition>;",
+  private = list(
+    # init_validate = function() {
+    #   validate_operation_names(self)
+    # }
+  )
 )
 
 
@@ -376,7 +381,12 @@ ObjectValue = R6_from_args(
   inherit = Value,
   "ObjectValue",
   " loc?: ?Location;
-    fields: Array<ObjectField>;"
+    fields: Array<ObjectField>;",
+  private = list(
+    # init_validate = function() {
+    #   validate_input_object_field_uniqueness(self)
+    # }
+  )
 )
 ObjectField = R6_from_args(
   inherit = Node,
