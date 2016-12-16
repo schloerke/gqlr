@@ -191,15 +191,58 @@ dog_cat_schema$add(HumanOrAlien)
 
 
 "
+type Arguments {
+  multipleReqs(x: Int!, y: Int!): Int!
+  booleanArgField(booleanArg: Boolean): Boolean
+  floatArgField(floatArg: Float): Float
+  intArgField(intArg: Int): Int
+  nonNullBooleanArgField(nonNullBooleanArg: Boolean!): Boolean!
+  booleanListArgField(booleanListArg: [Boolean]!): [Boolean]
+}
+"
+Arguments <- ObjectTypeDefinition$new(
+  name = name_from_txt("Arguments"),
+  fields = list(
+    field_type_obj_from_txt("multipleReqs", "Int!", arguments = list(
+      input_value_from_txt("x", "Int!"),
+      input_value_from_txt("y", "Int!")
+    )),
+    field_type_obj_from_txt("booleanArgField", "Boolean", arguments = list(
+      input_value_from_txt("booleanArg", "Boolean")
+    )),
+    field_type_obj_from_txt("floatArgField", "Float", arguments = list(
+      input_value_from_txt("floatArg", "Float")
+    )),
+    field_type_obj_from_txt("intArgField", "Int", arguments = list(
+      input_value_from_txt("intArg", "Int")
+    )),
+    field_type_obj_from_txt("nonNullBooleanArgField", "Boolean!", arguments = list(
+      input_value_from_txt("nonNullBooleanArg", "Boolean!")
+    )),
+    field_type_obj_from_txt("booleanListArgField", "[Boolean]", arguments = list(
+      input_value_from_txt("booleanListArg", "[Boolean]!")
+    ))
+  )
+)
+dog_cat_schema$add(Arguments)
+# extend type QueryRoot {
+#   arguments: Arguments
+# }
+
+
+"
 type QueryRoot {
   dog: Dog
   cat: Cat
+  arguments: Arguments
 }
 "
 QueryRoot <- ObjectTypeDefinition$new(
   name = name_from_txt("QueryRoot"),
   fields = list(
-    field_type_obj_from_txt("dog", "Dog")
+    field_type_obj_from_txt("dog", "Dog"),
+    field_type_obj_from_txt("cat", "Cat"),
+    field_type_obj_from_txt("arguments", "Arguments")
   )
 )
 dog_cat_schema$add(QueryRoot)
