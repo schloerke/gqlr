@@ -148,15 +148,18 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
       stop("unknown field type")
     }
 
+    field_name <- selection_obj$name$value
+    matching_obj_field <- object_field_list[[which(field_name == obj_field_names)]]
 
-    if (!is.null(selection_obj$arguments)) {
-      validate_arguments(selection_obj$arguments, schema_obj, ...)
+    if (
+      !is.null(selection_obj$arguments) ||
+      !is.null(matching_obj_field$arguments)
+    ) {
+      validate_arguments(selection_obj$arguments, matching_obj_field, schema_obj, ...)
     }
 
-    field_name <- selection_obj$name$value
 
     if (!is.null(selection_obj$selectionSet)) {
-      matching_obj_field <- object_field_list[[which(field_name == obj_field_names)]]
       validate_fields_in_selection_set(
         selection_obj$selectionSet,
         schema_obj$get_object(matching_obj_field$type$name),
