@@ -52,5 +52,6 @@ Collate:
     'graphql_json.R'
     'start-tmp.R'
     'upgrade_query_remove_fragments.R'
+    'validation-arguments.R'
     'validation-query.R'
     'wrappers.R'
