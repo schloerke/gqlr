@@ -14,7 +14,7 @@ validate_query <- function(document_obj, schema_obj, ...) {
 
   validate_field_selections(document_obj, schema_obj, ...)
 
-  invisible(TRUE)
+  document_obj
 }
 
 
