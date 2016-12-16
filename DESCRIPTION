@@ -51,5 +51,6 @@ Collate:
     'gqlr-package.R'
     'graphql_json.R'
     'start-tmp.R'
+    'upgrade_query_remove_fragments.R'
     'validation-query.R'
     'wrappers.R'
