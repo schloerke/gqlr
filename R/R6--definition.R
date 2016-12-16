@@ -278,6 +278,7 @@ FragmentDefinition = R6_from_args(
 #                   | FloatValue
 #                   | StringValue
 #                   | BooleanValue
+#                   | NulLValue
 #                   | EnumValue
 #                   | ListValue
 #                   | ObjectValue
@@ -364,6 +365,11 @@ BooleanValue = R6_from_args(
     serialize = coerce_helper(as.logical, is.logical),
     parse_value = coerce_helper(as.logical, is.logical)
   )
+)
+NullValue = R6_from_args(
+  inherit = Value,
+  "NulLValue",
+  " loc?: ?Location;"
 )
 EnumValue = R6_from_args(
   inherit = Value,
