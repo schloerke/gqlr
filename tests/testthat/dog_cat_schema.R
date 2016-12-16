@@ -94,9 +94,11 @@ Alien <- ObjectTypeDefinition$new(
 dog_cat_schema$add(Alien)
 
 
+# added pets field for implementation
 "
 type Human implements Sentient {
   name: String!
+  pet: Pet
 }
 "
 Human <- ObjectTypeDefinition$new(
@@ -105,7 +107,8 @@ Human <- ObjectTypeDefinition$new(
     namedtype_from_txt("Sentient")
   ),
   fields = list(
-    field_type_obj_from_txt("name", "String!")
+    field_type_obj_from_txt("name", "String!"),
+    field_type_obj_from_txt("pet", "Pet")
   )
 )
 dog_cat_schema$add(Human)
