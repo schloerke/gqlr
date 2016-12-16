@@ -1,3 +1,6 @@
+# TODO reduce fields to unique names
+# should be done at execution stage
+
 
 
 
