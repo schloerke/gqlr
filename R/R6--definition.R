@@ -556,14 +556,17 @@ ObjectTypeDefinition = R6_from_args(
     directives?: ?Array<Directive>;
     fields: Array<FieldDefinition>;",
   public = list(
-    .contains_field = function(field_obj) {
+    .get_field = function(field_obj) {
       find_name <- field_obj$name$value
       for (field in self$fields) {
         if (field$name$value == find_name) {
-          return(TRUE)
+          return(field)
         }
       }
-      return(FALSE)
+      return(NULL)
+    },
+    .contains_field = function(field_obj) {
+      !is.null(self$.get_field(field_obj))
     }
   )
 )
