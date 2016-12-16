@@ -90,14 +90,7 @@ validate_field_selections <- function(document_obj, schema_obj, ...) {
         stop("TODO. not implemented")
       }
     } else {
-      # is fragment
-      validate_fields_in_selection_set(
-        operation$selectionSet,
-        schema_obj$get_object(operation$typeCondition),
-        schema_obj,
-        ...
-      )
-      validate_fragment(operation, schema_obj, ...)
+      stop("this shouldn't happen. there should be no more fragments")
     }
 
   }
@@ -183,34 +176,7 @@ validate_arguments <- function(argument_obj_list, schema_obj, ...) {
 }
 
 
-# TODO
-# 5.4.1.1 - Fragment Name Uniqueness - covered in 5.1.1.1
-# 5.4.1.2 - Fragment Spread Type Existence
-# 5.4.1.3 - Fragments On Composite Types
-# 5.4.1.4 - Fragments Must Be Used
-# 5.4.2.1 - Fragment spread target defined
-# √5.4.2.2 - Fragment spreads must not form cycles
-# 5.4.2.3 - Fragment spread is possible
-# 5.4.2.3.1 - Object Spreads In Object Scope
-# 5.4.2.3.2 - Abstract Spreads in Object Scope
-# 5.4.2.3.3 - Object Spreads In Abstract Scope
-# 5.4.2.3.4 - Abstract Spreads in Abstract Scope
-validate_fragment <- function(fragment, schema_obj, fragments_seen = c(), ...) {
-  fragment_name <- fragment$name$value
-
-  # 5.4.2.2
-  if (fragment_name %in% fragments_seen) {
-    stop("fragment: ", fragment_name, " is circularly defined")
-  }
-  fragments_seen <- append(fragments_seen, fragment_name)
-
-
-  browser()
-
-
-
-}
-
+# 5.4 - Fragments. In upgrade_query_remove_fragments.R
 
 
 
