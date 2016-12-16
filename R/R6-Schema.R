@@ -137,22 +137,28 @@ GQLRSchema <- R6Class(
     input_objects = list(),
 
     # has_directive_list = list(),
-
     get_by_name = function(name_obj, obj_list_txt) {
-      if (is.character(name_obj)) {
-        private[[obj_list_txt]][[name_obj]]
-      } else if (inherits(name_obj, "Name")) {
-        private[[obj_list_txt]][[name_obj$value]]
-      } else if (inherits(name_obj, "NamedType")) {
-        private[[obj_list_txt]][[name_obj$name$value]]
-      } else {
-        stop("must supply a string, Name, or NamedType")
-      }
+      name_val <- self$name_helper(name_obj)
+      private[[obj_list_txt]][[name_val]]
     },
+
+    objects_that_implement_interface_list = list(),
 
     types = list()
   ),
   public = list(
+
+    name_helper = function(name_obj) {
+      if (is.character(name_obj)) {
+        name_obj
+      } else if (inherits(name_obj, "Name")) {
+        name_obj$value
+      } else if (inherits(name_obj, "NamedType")) {
+        name_obj$name$value
+      } else {
+        stop("must supply a string, Name, or NamedType")
+      }
+    },
 
     get_scalar = function(name) private$get_by_name(name, "scalars"),
     get_enum = function(name) private$get_by_name(name, "enums"),
@@ -167,6 +173,58 @@ GQLRSchema <- R6Class(
     get_interfaces = function() private$interfaces,
     get_unions = function() private$unions,
     get_input_objects = function() private$input_objects,
+
+
+    # returns a char vector or NULL of names of objs that implement a particular interface
+    objects_that_implement_interface = function(name) {
+      name_val <- self$name_helper(name)
+      names(private$objects_that_implement_interface_list[[name_val]])
+    },
+
+    get_possible_types = function(name_obj) {
+      name_val <- self$name_helper(name_obj)
+      if (!is.null(self$get_object(name_val))) {
+        return(name_val)
+      }
+      if (!is.null(self$get_interface(name_val))) {
+        return(self$objects_that_implement_interface(name_val))
+      }
+      union_obj <- self$get_union(name_val)
+      if (!is.null(union_obj)) {
+        union_names <- unlist(lapply(union_obj$types, self$name_helper))
+        return(union_names)
+      }
+      stop("type: ", name_val, " is not an object, interface, or union")
+
+    },
+
+    interface_is_super_of = function(interface_obj, name_obj) {
+
+    },
+    interface_can_implement_type = function(interface_obj, name_obj) {
+      self_interfaces <- ifnull(self$interfaces, list())
+      for (interface in self_interfaces) {
+        if (self$interface_is_super_of(name_obj)) {
+          return(TRUE)
+        }
+      }
+      return(FALSE)
+    },
+
+
+    get_object_interface_or_union = function(name_obj) {
+      name_val <- self$name_helper(name_obj)
+      ifnull(
+        self$get_object(name_val),
+        ifnull(
+          self$get_interface(name_val),
+          self$get_union(name_val)
+        )
+      )
+
+      # recursively go until the named type is found
+      # self$get_object_interface_or_union(type_obj$type)
+    },
 
     # get_directive_objs = function() private$has_directive_list,
 
@@ -233,6 +291,26 @@ GQLRSchema <- R6Class(
         }
 
         private[[obj_group]][[obj_name]] <- obj
+
+        if (obj_kind == "ObjectTypeDefinition") {
+          if (!is.null(obj$interfaces)) {
+            obj_name_val <- self$name_helper(obj$name)
+            for (interface_obj in obj$interfaces) {
+              interface_obj_name <- self$name_helper(interface_obj$name)
+              if (
+                is.null(
+                  private$objects_that_implement_interface_list[[interface_obj_name]]
+                )
+              ) {
+                private$objects_that_implement_interface_list[[interface_obj_name]] <- list()
+              }
+
+              private$objects_that_implement_interface_list[[
+                interface_obj_name
+              ]][[obj_name_val]] <- obj_name_val
+            }
+          }
+        }
 
         return(invisible(self))
       }
