@@ -186,8 +186,8 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
 # 5.4 - Fragments. In upgrade_query_remove_fragments.R
 
 
-
 # 5.5.1 - Input Object Field Uniqueness
+# TODO TESTS
 validate_input_object_field_uniqueness <- function(object_value, schema_obj, ...) {
   print("found!")
   validate_field_names(object_value, "object value")
@@ -198,6 +198,7 @@ validate_input_object_field_uniqueness <- function(object_value, schema_obj, ...
 # 5.6.1 - Directives Are Defined - Must be done in execution stage
 # 5.6.2 - Directives Are In Valid Locations - Must be done in execution stage
 # 5.6.3 - Directives Are Unique Per Location - Must be done in execution stage
+# must also call validate_arguments on all directive args
 
 
 
