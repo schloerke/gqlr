@@ -1,36 +1,10 @@
 # testthat::test_file(file.path("tests", "testthat", "test-validation-query.R"))
 
 
-
 context("validation-query")
 
 
-source("dog_cat_schema.R")
-
-
-expect_r6 <- function(query, ...) {
-
-  query %>%
-    eval_json() %>%
-    r6_from_list() %>%
-    validate_query(dog_cat_schema) %>%
-    expect_true(...)
-
-}
-
-
-
-expect_err <- function(query, ...) {
-  expect_error(
-    {
-      query %>%
-        eval_json() %>%
-        r6_from_list() %>%
-        validate_query(dog_cat_schema)
-    },
-    ...
-  )
-}
+source("validate_helper.R")
 
 
 test_that('5.1.1.1 - Operation Name Uniqueness', {
@@ -49,7 +23,7 @@ test_that('5.1.1.1 - Operation Name Uniqueness', {
     }
   }
   " %>%
-  expect_r6(query)
+  expect_r6()
 
   "
   query getName {
@@ -114,7 +88,7 @@ test_that('5.1.2.1 - Lone Anonymous Operation', {
     }
   }
   " %>%
-  expect_r6(query)
+  expect_r6()
 
   "
   {
@@ -156,6 +130,11 @@ test_that('5.1.2.1 - Lone Anonymous Operation', {
 test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
 
   "
+  {
+    dog {
+      ...interfaceFieldSelection
+    }
+  }
   fragment interfaceFieldSelection on Pet {
     name
   }
@@ -163,86 +142,31 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
   expect_r6()
 
   "
+  {
+    dog {
+      ... on Dog {
+        name
+      }
+      ...interfaceFieldSelection
+    }
+  }
+  fragment interfaceFieldSelection on Pet {
+    name
+  }
+  " %>%
+  expect_r6()
+
+
+  "
+  {
+    dog {
+      ...fieldNotDefined
+    }
+  }
   fragment fieldNotDefined on Dog {
     meowVolume
   }
   " %>%
   expect_err("not all requested names are found")
-
-})
-
-
-
-
-test_that("5.4.1.1 - Fragment Name Uniqueness", {
-
-  "
-  {
-    dog {
-      ...fragmentOne
-      ...fragmentTwo
-    }
-  }
-  fragment fragmentOne on Dog {
-    name
-  }
-  fragment fragmentTwo on Dog {
-    owner {
-      name
-    }
-  }
-  " %>%
-  expect_r6()
-
-  "
-  {
-    dog {
-      ...fragmentOne
-    }
-  }
-  fragment fragmentOne on Dog {
-    name
-  }
-  fragment fragmentOne on Dog {
-    owner {
-      name
-    }
-  }
-  " %>%
-  expect_err("has duplicate return name")
-
-
-  })
-
-
-test_that("5.4.1.2 - Fragment Spread Type Existence", {
-
-
-  "
-  fragment correctType on Dog {
-    name
-  }
-
-  fragment inlineFragment on Dog {
-    ... on Dog {
-      name
-    }
-  }
-
-  fragment inlineFragment2 on Dog {
-    ... @include(if: true) {
-      name
-    }
-  }
-  " %>%
-  expect_r6()
-
-
-  "
-  fragment notOnExistingType on NotInSchema {
-    name
-  }
-  " %>%
-  expect_err()
 
 })
