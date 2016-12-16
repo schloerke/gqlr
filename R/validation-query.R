@@ -10,6 +10,8 @@ validate_query <- function(document_obj, schema_obj, ...) {
 
   validate_operation_names(document_obj, schema_obj, ...)
 
+  document_obj <- upgrade_query_remove_fragments(document_obj, schema_obj)
+
   validate_field_selections(document_obj, schema_obj, ...)
 
   invisible(TRUE)
@@ -97,6 +99,7 @@ validate_field_selections <- function(document_obj, schema_obj, ...) {
 }
 
 
+# selection_set_obj should only be comprised of fields and inline fragments
 validate_fields_in_selection_set <- function(selection_set_obj, object, schema_obj, ...) {
   selection_obj_list <- selection_set_obj$selections
   selection_names <- get_name_values(selection_obj_list)
@@ -109,12 +112,25 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
   for (selection_obj in selection_obj_list) {
 
     if (inherits(selection_obj, "FragmentSpread")) {
+      stop("this should not occur")
 
-      # calling a fragment
-      # validate_fields_in_selection_set()
+    } else if (inherits(selection_obj, "InlineFragment")) {
 
-    } else {
-      # not a fragment
+      type_condition <- ifnull(selection_obj$typeCondition, object$name)
+
+      matching_obj <- schema_obj$get_object_interface_or_union(type_condition)
+
+      # get the object that it's looking at, then validate those fields
+      validate_fields_in_selection_set(
+        selection_obj$selectionSet,
+        matching_obj,
+        schema_obj,
+        ...
+      )
+      # since validation is done within a "new" context, call next to avoid complications
+      next
+
+    } else if (inherits(selection_obj, "Field")) {
       # make sure all request names exist in return obj
       if (! (selection_obj$name$value %in% obj_field_names)) {
         stop(
@@ -123,6 +139,10 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
           " for object: ", object$.title
         )
       }
+
+    } else {
+      str(selection_obj)
+      stop("unknown field type")
     }
 
 
