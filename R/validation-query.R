@@ -178,25 +178,6 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
 
 
 
-# TODO
-# 5.3.1 - Argument Names
-# 5.3.2 - Argument Uniqueness
-# 5.3.3.1 - Compatible Values
-# 5.3.3.2 - Required Non-Null Arguments
-validate_arguments <- function(argument_obj_list, schema_obj, ...) {
-
-  for (argument_obj in argument_obj_list) {
-
-    arg_value <- argument_obj$value
-
-    if (inherits(arg_value, "ObjectValue")) {
-      validate_input_object_field_uniqueness(arg_value, schema_obj, ...)
-    }
-
-  }
-
-  invisible(TRUE)
-}
 
 
 # 5.4 - Fragments. In upgrade_query_remove_fragments.R
