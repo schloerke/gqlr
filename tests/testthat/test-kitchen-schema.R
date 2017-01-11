@@ -410,8 +410,7 @@ expect_str(
 
 test_that("kitchen schema", {
 
-test_json("kitchen-schema") %>%
-  r6_from_list() %>%
+test_obj("kitchen-schema") %>%
 expect_str(
 "<Document>
 . definitions:
