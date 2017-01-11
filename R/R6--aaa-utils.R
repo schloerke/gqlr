@@ -32,7 +32,7 @@ RegisterClassObj <- R6Class(
     get_class_obj = function(key) {
       obj = self$list[[key]]
       if (is.null(obj)) {
-        stop0("Could not find object with class: ", classVal)
+        stop0("Could not find object with class: ", key)
       }
       obj
     }
