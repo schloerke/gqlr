@@ -368,7 +368,7 @@ BooleanValue = R6_from_args(
 )
 NullValue = R6_from_args(
   inherit = Value,
-  "NulLValue",
+  "NullValue",
   " loc?: ?Location;"
 )
 EnumValue = R6_from_args(
