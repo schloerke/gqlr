@@ -665,5 +665,5 @@ DirectiveDefinition = R6_from_args(
     name: Name;
     arguments?: ?Array<InputValueDefinition>;
     locations: Array<Name>;
-    .resolve: fn;"
+    .resolve?: ?fn;"
 )
