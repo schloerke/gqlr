@@ -4,6 +4,10 @@ enum AnnotatedEnum @onEnum {
   OTHER_VALUE
 }
 "
+#  %>%
+#   graphql2obj() %>%
+#   extract2("definitions") %>% extract2(1) ->
+# tks_AnnotatedEnum
 tks_AnnotatedEnum <- EnumTypeDefinition$new(
   name = Name$new(value = "AnnotatedEnum"),
   directives = list(
