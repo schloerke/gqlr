@@ -155,18 +155,17 @@ test_that("5.3.3.2 - Require Non-Null Arguments", {
   " %>%
   expect_err("null or missing argument not allowed")
 
-  # TODO remove when libgraphqlparser is updated in graphql R library
-  # "
-  # {
-  #   arguments {
-  #     ...missingRequiredArg
-  #   }
-  # }
-  # fragment missingRequiredArg on Arguments {
-  #   notNullBooleanArgField(nonNullBooleanArg: null)
-  # }
-  # " %>%
-  # expect_err("null or missing argument not allowed")
+  "
+  {
+    arguments {
+      ...missingRequiredArg
+    }
+  }
+  fragment missingRequiredArg on Arguments {
+    notNullBooleanArgField(nonNullBooleanArg: null)
+  }
+  " %>%
+  expect_err("not all requested names are found")
 
 
 
