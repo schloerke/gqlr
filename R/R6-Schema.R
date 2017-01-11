@@ -230,7 +230,7 @@ GQLRSchema <- R6Class(
 
 
     # initialize = function(
-    #   document_obj = r6_from_list(eval_json(text), fnList),
+    #   document_obj = r6_from_list(graphql2list(text), fnList),
     #   text = NULL,
     #   fnList = list()
     # ) {

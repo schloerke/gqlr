@@ -31,7 +31,7 @@ test_string <- function(pos = 0) {
 #' @export
 test_json <- function(...) {
   test_string(...) %>%
-    eval_json()
+    graphql2list()
 }
 
 from_json <- function(...) {

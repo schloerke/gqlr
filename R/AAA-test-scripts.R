@@ -1,20 +1,20 @@
 
 if (FALSE) {
 
-  load_all(); test_json("simple-query") %>% r6_from_list() %>% str()
+  # load_all(); source("tests/testthat/dog_cat_schema.R"); query %>% graphql2obj() %>% validate_query(dog_cat_schema) %>% str()
 
-  load_all(); test_json("kitchen-query") %>% r6_from_list() %>% str()
+  load_all(); test_string("simple-query") %>% graphql2obj() %>% str()
 
-  load_all(); test_json("kitchen-query") %>% r6_from_list() %>% str(maxLevel = 2)
+  load_all(); test_string("kitchen-query") %>% graphql2obj() %>% str()
 
-  # load_all(); test_json("simple-schema") %>% r6_from_list() %>% str()
-  # load_all(); test_json("kitchen-schema") %>% r6_from_list() %>% str()
+  load_all(); test_string("kitchen-query") %>% graphql2obj() %>% str(maxLevel = 2)
+
+  # load_all(); test_string("simple-schema") %>% graphql2obj() %>% str()
+  # load_all(); test_string("kitchen-schema") %>% graphql2obj() %>% str()
 
   # load_all(); test_json("film-schema") %>% r6_from_list() %>% str()
   load_all(); test_json("film-query") %>% r6_from_list() %>% str()
 
-  # load_all(); introspection_spec() %>% eval_json() %>% r6_from_list() %>% str()
-  # load_all(); introspection_imp()
 
 
   # a <- SchemaDefinition$new(
@@ -68,7 +68,7 @@ if (FALSE) {
 #   )
 # )
 #
-# load_all(); filmSchemaTxt %>% eval_json() %>% r6_from_list() %>% str()
+# load_all(); filmSchemaTxt %>% graphql2obj() %>% str()
 #
 # schemaObj <- SchemaObj$new(text = filmSchemaTxt, fnList = filmFnList)
 #

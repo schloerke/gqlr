@@ -24,10 +24,15 @@ clean_json.default <- function(obj, ...) {
   obj
 }
 
-eval_json <- function(str = test_string()) {
+graphql2list <- function(txt = test_string()) {
   # ct <- javascript_context()
   # ct$call("stringify", str) %>%
-  graphql::graphql2json(str) %>%
+  graphql::graphql2json(txt) %>%
     rjson::fromJSON() %>%
     clean_json()
+}
+
+graphql2obj <- function(txt = test_string()) {
+  graphql2list(txt) %>%
+    r6_from_list()
 }
