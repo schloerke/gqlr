@@ -21,3 +21,6 @@ JS/build.js
 # c files
 src/*.so
 src/*.o
+
+
+_ignore
