@@ -32,7 +32,7 @@ graphql2list <- function(txt = test_string()) {
     clean_json()
 }
 
-graphql2obj <- function(txt = test_string()) {
+graphql2obj <- function(txt = test_string(), ...) {
   graphql2list(txt) %>%
-    r6_from_list()
+    r6_from_list(...)
 }
