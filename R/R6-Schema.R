@@ -80,6 +80,17 @@
 # )
 
 
+desc_fn <- function(desc, fn) {
+  if (missing(desc) || missing(fn)) {
+    stop("both 'desc' and 'fn' must be supplied")
+  }
+  attr(fn, "description") <- desc
+  fn
+}
+
+
+
+
 
 GQLRSchema <- R6Class(
   "GQLRSchema",
