@@ -1,4 +1,4 @@
-
+#' @include R6z-from-json.R
 
 clean_json <- function(obj, ...) {
   UseMethod("clean_json")
@@ -12,9 +12,8 @@ clean_json.list <- function(obj, ...) {
     obj$loc$kind <- "Location"
     # class(obj$loc) <- "Location"
   }
-
   kind <- obj$kind
-  ret <- lapply(obj, clean_json)
+  ret <- lapply(obj, function(x) clean_json(x))
   if (! is.null(kind)) {
     class(ret) <- kind
   }
