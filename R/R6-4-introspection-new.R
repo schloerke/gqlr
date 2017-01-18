@@ -1,5 +1,6 @@
 #' @include R6-3.2-directives.R
 #' @include graphql_json.R
+#' @include R6-Schema.R
 
 # setup_instrospection <- function() {
 
