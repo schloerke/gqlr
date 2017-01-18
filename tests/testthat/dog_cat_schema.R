@@ -58,6 +58,9 @@ type Arguments {
 type QueryRoot {
   dog: Dog
   cat: Cat
+  human: Human
+  pet: Pet
+  catOrDog: CatOrDog
   arguments: Arguments
 }
 " %>%
