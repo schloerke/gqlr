@@ -167,7 +167,13 @@ GQLRSchema <- R6Class(
       } else if (inherits(name_obj, "NamedType")) {
         name_obj$name$value
       } else {
-        stop("must supply a string, Name, or NamedType")
+        if (inherits(name_obj, "NonNullType")) {
+          self$name_helper(name_obj$type)
+        } else if (inherits(name_obj, "ListType")) {
+          self$name_helper(name_obj$type)
+        } else {
+          stop("must supply a string, Name, or NamedType")
+        }
       }
     },
 
