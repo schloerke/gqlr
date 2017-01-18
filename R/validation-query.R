@@ -145,11 +145,20 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
     } else if (inherits(selection_obj, "Field")) {
       # make sure all request names exist in return obj
       if (! (selection_obj$name$value %in% obj_field_names)) {
-        stop(
-          "not all requested names are found.",
-          " missing field: ", selection_obj$name$value,
-          " for object: ", object$.title
-        )
+        if (inherits(object, "UnionTypeDefinition")) {
+          # 5.2.1 - can't query fields directly on a union object
+          bad_field_names <- selection_names[! (selection_names %in% c("__typename"))]
+          stop(
+            "fields may not be queried directly on a union object, except for '__typename'.  ",
+            "Not allowed to ask for fields: ", str_c(bad_field_names, collapse = ", ")
+          )
+        } else {
+          stop(
+            "not all requested names are found.",
+            " missing field: '", selection_obj$name$value, "'",
+            " for object: '", object$.title, "'"
+          )
+        }
       }
 
     } else {

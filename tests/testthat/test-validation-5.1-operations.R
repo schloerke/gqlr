@@ -1,7 +1,7 @@
 # testthat::test_file(file.path("tests", "testthat", "test-validation-query.R"))
 
 
-context("validation-query")
+context("validation-5.1-operations")
 
 
 source("validate_helper.R")
@@ -123,50 +123,3 @@ test_that('5.1.2.1 - Lone Anonymous Operation', {
   expect_err("syntax error")
 
 });
-
-
-
-
-test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
-
-  "
-  {
-    dog {
-      ...interfaceFieldSelection
-    }
-  }
-  fragment interfaceFieldSelection on Pet {
-    name
-  }
-  " %>%
-  expect_r6()
-
-  "
-  {
-    dog {
-      ... on Dog {
-        name
-      }
-      ...interfaceFieldSelection
-    }
-  }
-  fragment interfaceFieldSelection on Pet {
-    name
-  }
-  " %>%
-  expect_r6()
-
-
-  "
-  {
-    dog {
-      ...fieldNotDefined
-    }
-  }
-  fragment fieldNotDefined on Dog {
-    meowVolume
-  }
-  " %>%
-  expect_err("not all requested names are found")
-
-})
