@@ -7,7 +7,7 @@
 # 5.2 Fields     - TODO
   # 5.2.1 - Field selections on objects - DONE
   # 5.2.2 - Field Selection Merging     - TODO
-  # 5.2.3 - Leaf Field Selections       - TODO
+  # 5.2.3 - Leaf Field Selections       - DONE
 # 5.3 Arguments  - DONE
 # 5.4 Fragments  - DONE
 # 5.5 Values     - TODO
@@ -178,12 +178,32 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
 
 
     if (!is.null(selection_obj$selectionSet)) {
+      matching_obj <- schema_obj$get_object(matching_obj_field$type$name)
+      if (is.null(matching_obj)) {
+        # 5.2.3 - if is leaf, can not dig deeper
+        stop(
+          "unknown object definition for field: '", selection_obj$name$value, "'.",
+          " Not allowed to query deeper into leaf field selections."
+        )
+      }
       validate_fields_in_selection_set(
         selection_obj$selectionSet,
         schema_obj$get_object(matching_obj_field$type$name),
         schema_obj,
         ...
       )
+    } else {
+      # no sub selection set, make sure this is ok
+      # browser()
+      if (inherits(selection_obj, "Field")) {
+        matching_obj <- schema_obj$get_object_interface_or_union(matching_obj_field$type)
+        if (!is.null(matching_obj)) {
+          stop(
+            "non leaf selection does not have any children.",
+            " Missing children fields for field: '", selection_obj$name$value, "'."
+          )
+        }
+      }
     }
   }
 
@@ -192,6 +212,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
 
 # TODO
 # 5.2.2 - Field Selection Merging
+
 
 # TODO
 # 5.2.3 - Leaf Field Selections

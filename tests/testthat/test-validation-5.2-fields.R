@@ -1,3 +1,4 @@
+
 context("validation-5.2-fields")
 
 
@@ -95,3 +96,57 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
 })
 
 
+
+
+test_that("5.2.3 - Leaf Field Selections", {
+
+
+  "
+  {
+    dog {
+      ...scalarSelection
+    }
+  }
+  fragment scalarSelection on Dog {
+    barkVolume
+  }
+  " %>%
+  expect_r6()
+
+  "
+  {
+    dog {
+      ...scalarSelectionsNotAllowedOnBoolean
+    }
+  }
+  fragment scalarSelectionsNotAllowedOnBoolean on Dog {
+    barkVolume {
+      sinceWhen
+    }
+  }
+  " %>%
+  expect_err("Not allowed to query deeper into leaf")
+
+
+  "
+  query directQueryOnObjectWithoutSubFields {
+    human
+  }
+  " %>%
+  expect_err("non leaf selection does not have any children")
+
+  "
+  query directQueryOnInterfaceWithoutSubFields {
+    pet
+  }
+  " %>%
+  expect_err("non leaf selection does not have any children")
+
+  "
+  query directQueryOnUnionWithoutSubFields {
+    catOrDog
+  }
+  " %>%
+  expect_err("non leaf selection does not have any children")
+
+})
