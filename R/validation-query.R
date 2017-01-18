@@ -2,7 +2,17 @@
 # should be done at execution stage
 
 
-
+## Major Sections
+# 5.1 Operations - DONE
+# 5.2 Fields     - TODO
+  # 5.2.1 - Field selections on objects - DONE
+  # 5.2.2 - Field Selection Merging     - TODO
+  # 5.2.3 - Leaf Field Selections       - TODO
+# 5.3 Arguments  - DONE
+# 5.4 Fragments  - DONE
+# 5.5 Values     - TODO
+# 5.6 Directives - TODO
+# 5.7 Variables  - TODO
 
 
 
@@ -81,7 +91,6 @@ validate_operation_names <- function(document_obj, ...) {
 
 
 
-# TODO
 # 5.2.1 - Field Selections on Objects, Interfaces, and Unions Types
 validate_field_selections <- function(document_obj, schema_obj, ...) {
 
