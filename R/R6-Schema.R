@@ -293,7 +293,7 @@ GQLRSchema <- R6Class(
           "UnionTypeDefinition" = "unions",
           "ScalarTypeDefinition" = "scalars",
           "EnumTypeDefinition" = "enums",
-          "InputObjectTypeDefinition" = "inputs"
+          "InputObjectTypeDefinition" = "input_objects"
         )
         obj_group <- groups[[obj_kind]]
 
