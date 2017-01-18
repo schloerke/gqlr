@@ -10,7 +10,7 @@
   # 5.2.3 - Leaf Field Selections       - DONE
 # 5.3 Arguments  - DONE
 # 5.4 Fragments  - DONE
-# 5.5 Values     - TODO
+# 5.5 Values     - DONE
 # 5.6 Directives - TODO
 # 5.7 Variables  - TODO
 
@@ -226,10 +226,8 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
 
 
 # 5.5.1 - Input Object Field Uniqueness
-# TODO TESTS
 validate_input_object_field_uniqueness <- function(object_value, schema_obj, ...) {
-  print("found!")
-  validate_field_names(object_value, "object value")
+  validate_field_names(object_value, "input object value")
 }
 
 
