@@ -8,7 +8,7 @@ DirectiveLocationNames <- (function() {
     # operations
     "QUERY",
     "MUTATION",
-    "SUBSCRIPTION",
+    # "SUBSCRIPTION",
     "FIELD",
     "FRAGMENT_DEFINITION",
     "FRAGMENT_SPREAD",

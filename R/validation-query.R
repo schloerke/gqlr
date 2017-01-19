@@ -11,7 +11,10 @@
 # 5.3 Arguments  - DONE
 # 5.4 Fragments  - DONE
 # 5.5 Values     - DONE
-# 5.6 Directives - DONE
+# 5.6 Directives - TODO
+  # 5.6.1 - Directives Are Defined              - DONE
+  # 5.6.2 - Directives Are In Valid Locations   - TODO
+  # 5.6.3 - Directives Are Unique Per Location  - DONE
 # 5.7 Variables  - TODO
 
 
@@ -98,6 +101,9 @@ validate_field_selections <- function(document_obj, schema_obj, ...) {
 
     if (!is.null(operation$operation)) {
       # is operation
+
+      validate_directives(operation$directives, schema_obj, operation)
+
       if (operation$operation == "query") {
         validate_fields_in_selection_set(operation$selectionSet, schema_obj$get_object("QueryRoot"), schema_obj, ...)
       } else if (operation$operation == "mutation") {
@@ -236,7 +242,93 @@ validate_input_object_field_uniqueness <- function(object_value, schema_obj, ...
 # 5.6.2 - Directives Are In Valid Locations - Must be done in execution stage
 # 5.6.3 - Directives Are Unique Per Location - Must be done in execution stage
 # must also call validate_arguments on all directive args
+validate_directives <- function(directive_objs, ...) {
+  if (is.null(directive_objs)) {
+    return(directive_objs)
+  }
+  if (length(directive_objs) == 0) {
+    return(directive_objs)
+  }
 
+  directives <- lapply(directive_objs, validate_directive, ...)
+
+  if (length(directives) > 0) {
+    directive_names <- lapply(directives, `[[`, "name") %>% lapply(`[[`, "value") %>% unlist()
+    if (length(unique(directive_names)) != length(directives)) {
+      stop(
+        "All directives must be unique when used in on the same object.",
+        "  Currently found the following directives: '", str_c(directive_names, collapse = "', '"), "'"
+      )
+    }
+  }
+
+  directives
+}
+validate_directive <- function(directive_obj, schema_obj, parent_obj, ...) {
+  if (is.null(directive_obj)) {
+    return(directive_obj)
+  }
+
+  directive_definition <- schema_obj$get_directive(directive_obj$name)
+
+  # 5.6.1 - must be difined
+  if (is.null(directive_definition)) {
+    stop("all directives must be defined. Missing defintion for directive: '", directive_obj$name$value, "'")
+  }
+
+  # [Name]
+  directive_definition$locations %>%
+    lapply(`[[`, "value") %>%
+    unlist() ->
+  directive_possible_locations
+
+  # 5.6.2
+  parent_cur_location <- directive_current_location(parent_obj)
+
+  if (!(parent_cur_location %in% directive_possible_locations)) {
+    stop(
+      "directive: '", directive_obj$name$value,
+      "' is being used in a '", parent_cur_location, "' situation.",
+      " Can only be used in: '", str_c(directive_possible_locations, collapse = "', '"), "'"
+    )
+  }
+
+  directive_obj
+}
+
+
+directive_current_location <- function(parent_obj) {
+
+  parent_kind <- parent_obj$.kind
+
+  switch(parent_kind,
+    # query
+    "OperationDefinition" =
+      switch(parent_obj$operation,
+        query = "QUERY",
+        mutation = "MUTATION"
+      ),
+
+    "Field" = "FIELD",
+    "FragmentDefinition" = "FRAGMENT_DEFINITION",
+    "FragmentSpread" = "FRAGMENT_SPREAD",
+    "InlineFragment" = "INLINE_FRAGMENT",
+
+    # Schema Definitions
+    "SchemaDefinition" = "SCHEMA",
+    "ScalarTypeDefinition" = "SCALAR",
+    "ObjectTypeDefinition" = "OBJECT",
+    "FieldDefinition" = "FIELD_DEFINITION",
+    "Argument" = "ARGUMENT_DEFINITION",
+    "InterfaceTypeDefinition" = "INTERFACE",
+    "UnionTypeDefinition" = "UNION",
+    "EnumTypeDefinition" = "ENUM",
+    "EnumValueDefinition" = "ENUM_VALUE",
+    "InputObjectTypeDefinition" = "INPUT_OBJECT",
+    "InputValueDefinition" = "INPUT_FIELD_DEFINITION"
+  )
+
+}
 
 
 # TODO - Must be done in execution stage

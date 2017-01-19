@@ -83,6 +83,9 @@ upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
         }
         new_selections <- append(new_selections, field)
 
+        validate_directives(field$directives, schema_obj, field)
+
+
       } else if (inherits(field, "FragmentSpread") || inherits(field, "InlineFragment")) {
 
         field_seen_fragments <- seen_fragments
@@ -93,6 +96,8 @@ upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
 
           fragment_spread_name <- graphql_string(field$name)
           fragment_obj <- fragment_list[[fragment_spread_name]]
+
+          validate_directives(field$directives, schema_obj, field)
 
           # 5.4.2.1 - Fragment spread target defined
           if (is.null(fragment_obj)) {
@@ -109,6 +114,8 @@ upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
           }
           field_seen_fragments <- c(field_seen_fragments, fragment_spread_name)
 
+          validate_directives(fragment_obj$directives, schema_obj, fragment_obj)
+
           # since the fragment was received, make it "inline fragment"
           fragment_obj <- InlineFragment$new(
             loc = fragment_obj$loc,
@@ -120,6 +127,9 @@ upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
         } else {
           # inline_fragment
           fragment_obj <- field
+
+          validate_directives(fragment_obj$directives, schema_obj, fragment_obj)
+
         }
 
         # at this point the fragment_obj is either a inlinefragment or fragment definition

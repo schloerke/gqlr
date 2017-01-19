@@ -6,36 +6,64 @@ source("validate_helper.R")
 
 test_that("5.6.1 - Directives Are Defined", {
 
-  test_schema <- GQLRSchema$new()
-
   "
-  # schema {
-  #   query: QueryRoot
-  # }
-  input SingleArgInput {
-    arg: Boolean
-  }
-  type QueryRoot {
-    field(arg: SingleArgInput): Int
+  {
+    dog {
+      name @skip(if: false)
+      name2:name @include(if: false)
+      barkVolume
+    }
   }
   " %>%
-    graphql2obj() %>%
-    magrittr::extract2("definitions") %>%
-    lapply(test_schema$add)
+  expect_r6()
 
 
   "
   {
-    field(arg: { arg: true })
+    dog {
+      name @directiveNotMade(if: false)
+      barkVolume
+    }
   }
   " %>%
-  expect_r6(schema_obj = test_schema)
+  expect_err("Missing defintion for directive")
+
+})
+
+
+test_that("5.6.2 - Directives Are In Valid Locations", {
 
   "
   {
-    field(arg: { arg: true, arg: false })
+    dog {
+      name
+      barkVolume @skip(if: true)
+    }
   }
   " %>%
-  expect_err("must have unique field names", schema_obj = test_schema)
+  expect_r6()
+
+  "
+  query @skip(if: true) {
+    dog {
+      name
+    }
+  }
+  " %>%
+  expect_err("directive: 'skip' is being used in a 'QUERY' situation.")
+
+})
+
+test_that("5.6.3 - Directives Are Unique Per Location", {
+
+  "
+  query {
+    dog {
+      name
+      barkVolume @skip(if: $foo) @skip(if: $bar)
+    }
+  }
+  " %>%
+  expect_err("found the following directives: 'skip', 'skip'")
 
 })
