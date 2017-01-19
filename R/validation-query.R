@@ -8,10 +8,11 @@
   # 5.2.1 - Field selections on objects - DONE
   # 5.2.2 - Field Selection Merging     - TODO
   # 5.2.3 - Leaf Field Selections       - DONE
-# 5.3 Arguments  - DONE
+# 5.3 Arguments  -
+  # 5.3.3.1 - Variables TODO
 # 5.4 Fragments  - DONE
 # 5.5 Values     - DONE
-# 5.6 Directives - TODO
+# 5.6 Directives -
   # 5.6.1 - Directives Are Defined              - DONE
   # 5.6.2 - Directives Are In Valid Locations   - TODO
   # 5.6.3 - Directives Are Unique Per Location  - DONE
@@ -175,13 +176,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
     field_name <- selection_obj$name$value
     matching_obj_field <- object_field_list[[which(field_name == obj_field_names)]]
 
-    if (
-      !is.null(selection_obj$arguments) ||
-      !is.null(matching_obj_field$arguments)
-    ) {
-      validate_arguments(selection_obj$arguments, matching_obj_field, schema_obj, ...)
-    }
-
+    validate_arguments(selection_obj$arguments, matching_obj_field, schema_obj, ...)
 
     if (!is.null(selection_obj$selectionSet)) {
       matching_obj <- schema_obj$get_object(matching_obj_field$type$name)
@@ -237,11 +232,10 @@ validate_input_object_field_uniqueness <- function(object_value, schema_obj, ...
 }
 
 
-# TODO
-# 5.6.1 - Directives Are Defined - Must be done in execution stage
-# 5.6.2 - Directives Are In Valid Locations - Must be done in execution stage
-# 5.6.3 - Directives Are Unique Per Location - Must be done in execution stage
-# must also call validate_arguments on all directive args
+# √5.6.1 - Directives Are Defined - Must be done in execution stage
+# √5.6.2 - Directives Are In Valid Locations - Must be done in execution stage
+# √5.6.3 - Directives Are Unique Per Location - Must be done in execution stage
+# √must also call validate_arguments on all directive args
 validate_directives <- function(directive_objs, ...) {
   if (is.null(directive_objs)) {
     return(directive_objs)
@@ -254,6 +248,7 @@ validate_directives <- function(directive_objs, ...) {
 
   if (length(directives) > 0) {
     directive_names <- lapply(directives, `[[`, "name") %>% lapply(`[[`, "value") %>% unlist()
+    # 5.6.3
     if (length(unique(directive_names)) != length(directives)) {
       stop(
         "All directives must be unique when used in on the same object.",
@@ -275,6 +270,8 @@ validate_directive <- function(directive_obj, schema_obj, parent_obj, ...) {
   if (is.null(directive_definition)) {
     stop("all directives must be defined. Missing defintion for directive: '", directive_obj$name$value, "'")
   }
+
+  validate_arguments(directive_obj$arguments, directive_definition, schema_obj)
 
   # [Name]
   directive_definition$locations %>%

@@ -6,6 +6,14 @@
 # 5.3.3.2 - Required Non-Null Arguments
 validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...) {
 
+  if (
+    is.null(argument_obj_list) &&
+    is.null(field_def_obj$arguments)
+  ) {
+    return(invisible(TRUE))
+  }
+
+
   if (is.null(field_def_obj$arguments)) {
     stop(
       "there are no arguments for field: ", graphql_string(field_def_obj$name)
