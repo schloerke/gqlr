@@ -8,6 +8,9 @@
 graphql_string <- function(x, ...) {
   UseMethod("graphql_string", x)
 }
+graphql_string.default <- function(x, ...) {
+  as.character(x)
+}
 
 validate <- function(x, schema_obj, ...) {
   UseMethod("validate", x)
