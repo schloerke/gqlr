@@ -1,5 +1,5 @@
 
-r6_from_list <- function(obj, fn_list = NULL, level = 0, keys = c(), objPos = NULL, verbose = FALSE) {
+r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, keys = c(), objPos = NULL, verbose = FALSE) {
   vcat <- function(...) {
     if (verbose) {
       cat(..., sep = "")
@@ -42,48 +42,85 @@ r6_from_list <- function(obj, fn_list = NULL, level = 0, keys = c(), objPos = NU
           # browser()
           # lapply(objVal, r6_from_list, keys = keys, level = level)
           retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
+
+            fn_values_i <- list()
+            fn_list_i <- list()
+
             if (!is.null(fn_list)) {
+              # print(obj_name)
+              # print(fn_list)
+              # print(objClass)
+              # browser()
+
               if (objClass == "Document" && activeKey == "definitions") {
-                fn_list_and_desc <- document_defintion_fn_and_desc(objVal[[i]], fn_list)
-                if (!is.null(fn_list_and_desc$description)) {
-                  objVal[[i]][["description"]] <- fn_list_and_desc$description
-                }
+                # for each definition, get the description and pass on the fields as functions list
+                obj_name <- objVal[[i]]$name$value
+                info_i <- fn_list[[obj_name]]
+                info_i <- get_resolve_and_description(info_i)
 
-                fn_list <- fn_list_and_desc$fn_list
-
-              } else {
-                if (objClass == "ObjectTypeDefinition" && activeKey == "fields") {
-                  fn_list_and_desc <- get_resolve_and_description(objVal[[i]], fn_list)
-                  objVal[[i]][[".resolve"]] <- fn_list_and_desc$resolve_fn
+                if (objVal[[i]]$kind == "ObjectTypeDefinition") {
+                  fn_list_i <- lapply(info_i$fields, get_resolve_and_description)
+                  fn_values_i <- info_i
+                  fn_values_i$fields <- NULL
 
                 } else {
-
-                  # print(list(class = objClass, activeKey = activeKey))
-                  fn_list_and_desc <- get_resolve_and_description(objVal[[i]], fn_list)
-
+                  fn_list_i <- lapply(info_i$fields, get_resolve_and_description)
+                  fn_values_i <- info_i
+                  fn_values_i$fields <- NULL
                 }
 
-                fn_list <- fn_list_and_desc$fn_list
+              } else {
 
-                # has a description field...
-                if (!is.null(r6Obj$public_fields$.args$description)) {
-                  description <- fn_list_and_desc$description
-                  if (!is.null(description)) {
-                    objVal[[i]][["description"]] <- description
-                  }
+                if (
+                  (objClass == "ObjectTypeDefinition" && activeKey == "fields") ||
+                  (objClass == "EnumTypeDefinition" && activeKey == "values")
+                ) {
+                  # get the description or fields of an object or enum value
+                  # pass them into the recursive definition so that they are added to the objects
+                  obj_name <- objVal[[i]]$name$value
+                  fn_values_i <- fn_list[[obj_name]]
+                  fn_values_i <- get_resolve_and_description(fn_values_i)
+                  fn_list_i <- list()
+
+                } else {
+                  # print(list(class = objClass, activeKey = activeKey))
+                  # fn_list <- get_resolve_and_description(fn_list)
                 }
               }
+
             }
 
-            r6_from_list(objVal[[i]], fn_list = fn_list, keys = keys, level = level, objPos = i, verbose = verbose)
+            r6_from_list(objVal[[i]], fn_list = fn_list_i, fn_values = fn_values_i, keys = keys, level = level, objPos = i, verbose = verbose)
           })
         } else {
           # going into another object, such as "Name" or "Location"
+          # print(list(objClass, activeKey, 1))
+          # if (objClass == "DirectiveDefinition") browser()
+
           retList[[activeKey]] <- r6_from_list(objVal, fn_list = fn_list, keys = keys, level = level, verbose = verbose)
         }
       }
     } else {
       retList[[activeKey]] <- objVal
+    }
+  }
+
+  # finally add description or resolve methods or any other methods
+  # the information here should not exist in the first place, so stomping should not occur
+  name_map <- list(
+    "resolve" = ".resolve"
+  )
+  if (is.list(fn_values)) {
+    if (length(fn_values) > 0) {
+      for (name in names(fn_values)) {
+        to_name <- ifnull(name_map[[name]], name)
+        if (to_name %in% fieldNames) {
+          val <- fn_values[[name]]
+          if (!is.null(val)) {
+            retList[[to_name]] <- val
+          }
+        }
+      }
     }
   }
 
@@ -99,26 +136,22 @@ default_resolve_key_value <- function(obj, args, schema_obj, ...) {
 
 
 
-document_defintion_fn_and_desc <- function(obj_val_i, fn_list) {
-  obj_name <- obj_val_i$name$value
-  fn_list <- fn_list[[obj_name]]
-  description <- fn_list$.description
+get_resolve_and_description <- function(fn_list) {
+  if (is.null(fn_list)) {
+    return(NULL)
+  }
 
-  list(fn_list = fn_list, description = description)
-}
+  if (is.list(fn_list)) {
+    return(fn_list)
+  }
 
-
-get_resolve_and_description <- function(obj_val_i, fn_list) {
-  obj_name <- obj_val_i$name$value
-
-  resolve_fn <- fn_list[[obj_name]]
-  if (is.character(resolve_fn)) {
-    description <- resolve_fn
+  if (is.character(fn_list)) {
+    description <- fn_list
     resolve_fn <- NULL
 
-  } else {
-    description <- attr(resolve_fn, "description")
-
+  } else if (is.function(fn_list)) {
+    description <- NULL
+    resolve_fn <- fn_list
   }
 
   resolve_fn <- ifnull(resolve_fn, default_resolve_key_value)

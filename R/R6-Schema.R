@@ -80,12 +80,14 @@
 # )
 
 
-desc_fn <- function(desc, fn) {
+desc_fn <- function(desc, fn, fn_name = "resolve") {
   if (missing(desc) || missing(fn)) {
     stop("both 'desc' and 'fn' must be supplied")
   }
-  attr(fn, "description") <- desc
-  fn
+  ret <- list()
+  ret$description <- desc
+  ret[[fn_name]] <- fn
+  ret
 }
 
 
