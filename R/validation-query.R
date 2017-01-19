@@ -11,7 +11,7 @@
 # 5.3 Arguments  - DONE
 # 5.4 Fragments  - DONE
 # 5.5 Values     - DONE
-# 5.6 Directives - TODO
+# 5.6 Directives - DONE
 # 5.7 Variables  - TODO
 
 

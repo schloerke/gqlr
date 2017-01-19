@@ -1,0 +1,41 @@
+
+context("validation-5.6-directives")
+
+
+source("validate_helper.R")
+
+test_that("5.6.1 - Directives Are Defined", {
+
+  test_schema <- GQLRSchema$new()
+
+  "
+  # schema {
+  #   query: QueryRoot
+  # }
+  input SingleArgInput {
+    arg: Boolean
+  }
+  type QueryRoot {
+    field(arg: SingleArgInput): Int
+  }
+  " %>%
+    graphql2obj() %>%
+    magrittr::extract2("definitions") %>%
+    lapply(test_schema$add)
+
+
+  "
+  {
+    field(arg: { arg: true })
+  }
+  " %>%
+  expect_r6(schema_obj = test_schema)
+
+  "
+  {
+    field(arg: { arg: true, arg: false })
+  }
+  " %>%
+  expect_err("must have unique field names", schema_obj = test_schema)
+
+})
