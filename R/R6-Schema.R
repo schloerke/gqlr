@@ -1,4 +1,5 @@
 #' @include R6--definition.R
+#' @include R6-3.2-directives.R
 
 
 # type Foo implements Bar {
@@ -92,8 +93,6 @@ desc_fn <- function(desc, fn, fn_name = "resolve") {
 
 
 
-
-
 GQLRSchema <- R6Class(
   "GQLRSchema",
   private = list(
@@ -148,6 +147,7 @@ GQLRSchema <- R6Class(
     interfaces = list(),
     unions = list(),
     input_objects = list(),
+    directives = list(),
 
     # has_directive_list = list(),
     get_by_name = function(name_obj, obj_list_txt) {
@@ -160,6 +160,14 @@ GQLRSchema <- R6Class(
     types = list()
   ),
   public = list(
+
+    initialize = pryr_unenclose(function(...) {
+
+      self$add(SkipDirective)
+      self$add(IncludeDirective)
+
+      return(invisible(self))
+    }),
 
     name_helper = function(name_obj) {
       if (is.character(name_obj)) {
@@ -185,6 +193,7 @@ GQLRSchema <- R6Class(
     get_interface = function(name) private$get_by_name(name, "interfaces"),
     get_union = function(name) private$get_by_name(name, "unions"),
     get_input_object = function(name) private$get_by_name(name, "input_objects"),
+    get_directive = function(name) private$get_by_name(name, "directives"),
 
     get_scalars = function() private$scalars,
     get_enums = function() private$enums,
@@ -192,6 +201,7 @@ GQLRSchema <- R6Class(
     get_interfaces = function() private$interfaces,
     get_unions = function() private$unions,
     get_input_objects = function() private$input_objects,
+    get_directives = function() private$directives,
 
 
     # returns a char vector or NULL of names of objs that implement a particular interface
@@ -295,7 +305,8 @@ GQLRSchema <- R6Class(
           "UnionTypeDefinition" = "unions",
           "ScalarTypeDefinition" = "scalars",
           "EnumTypeDefinition" = "enums",
-          "InputObjectTypeDefinition" = "input_objects"
+          "InputObjectTypeDefinition" = "input_objects",
+          "DirectiveDefinition" = "directives"
         )
         obj_group <- groups[[obj_kind]]
 
