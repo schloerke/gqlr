@@ -55,6 +55,8 @@ type Arguments {
   booleanListArgField(booleanListArg: [Boolean]!): [Boolean]
 }
 
+input ComplexInput { name: String, owner: String }
+
 type QueryRoot {
   dog: Dog
   cat: Cat
@@ -62,6 +64,8 @@ type QueryRoot {
   pet: Pet
   catOrDog: CatOrDog
   arguments: Arguments
+  findDog(complex: ComplexInput): Dog
+  booleanList(booleanListArg: [Boolean!]): Boolean
 }
 " %>%
   graphql2obj() %>%

@@ -4,8 +4,8 @@ context("kitchen schema")
 
 expect_str <- function(a, txt) {
   testthat::expect_equal(
-    paste(capture.output(str(a)), collapse = "\n"),
-    txt
+    capture.output(str(a)),
+    strsplit(txt, "\n")[[1]]
   )
 }
 
@@ -168,17 +168,17 @@ expect_str(
 . . 2 - `B`
 . 8 - <ScalarTypeDefinition>
 . . name: `CustomScalar`
-. . serialize: fn
-. . parse_value: fn
-. . parse_literal: fn
+. . .serialize: fn
+. . .parse_value: fn
+. . .parse_literal: fn
 . 9 - <ScalarTypeDefinition>
 . . name: `AnnotatedScalar`
 . . directives:
 . . 1 - <Directive>
 . . . name: `onScalar`
-. . serialize: fn
-. . parse_value: fn
-. . parse_literal: fn
+. . .serialize: fn
+. . .parse_value: fn
+. . .parse_literal: fn
 . 10 - <EnumTypeDefinition>
 . . name: `Site`
 . . values:
