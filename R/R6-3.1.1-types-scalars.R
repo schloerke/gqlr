@@ -111,9 +111,9 @@ Int <- ScalarTypeDefinition$new(
     "Response formats that support a 32‐bit integer or a number type should use that ",
     "type to represent this scalar."
   ),
-  serialize = as.character,
-  parse_value = coerce_int,
-  parse_literal = parse_literal("Int", coerce_int)
+  .serialize = as.character,
+  .parse_value = coerce_int,
+  .parse_literal = parse_literal("Int", coerce_int)
 )
 
 
@@ -133,15 +133,15 @@ Float = ScalarTypeDefinition$new(
     'values as specified by ',
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).'
   ),
-  serialize = function(value) {
+  .serialize = function(value) {
     ret <- as.character(value)
     if (!str_detect(ret, "\\.")) {
       ret <- str_c(ret, ".0")
     }
     ret
   },
-  parse_value = coerce_float,
-  parse_literal = function(astObj) {
+  .parse_value = coerce_float,
+  .parse_literal = function(astObj) {
     kind = astObj$kind
     if (kind == "Int" || kind == "Float") {
       coerce_float(astObj$value)
@@ -159,9 +159,9 @@ String = ScalarTypeDefinition$new(
     'character sequences. The String type is most often used by GraphQL to ',
     'represent free-form human-readable text.'
   ),
-  serialize = as.character,
-  parse_value = as.character,
-  parse_literal = parse_literal("String", as.character)
+  .serialize = as.character,
+  .parse_value = as.character,
+  .parse_literal = parse_literal("String", as.character)
 )
 
 
@@ -176,9 +176,9 @@ coerce_boolean = function (value) {
 Boolean = ScalarTypeDefinition$new(
   name = "Boolean",
   description = 'The `Boolean` scalar type represents `TRUE` or `FALSE`.',
-  serialize = as.character,
-  parse_value = coerce_boolean,
-  parse_literal = parse_literal("Boolean", coerce_boolean)
+  .serialize = as.character,
+  .parse_value = coerce_boolean,
+  .parse_literal = parse_literal("Boolean", coerce_boolean)
 )
 
 
@@ -192,9 +192,9 @@ ID = ScalarTypeDefinition$new(
     'When expected as an input type, any string (such as `"4"`) or integer ',
     '(such as `4`) input value will be accepted as an ID.'
   ),
-  serialize = as.character,
-  parse_value = as.character,
-  parse_literal = function(astObj) {
+  .serialize = as.character,
+  .parse_value = as.character,
+  .parse_literal = function(astObj) {
     if (
       astObj$.kind == "String" ||
       astObj$.kind == "Int"

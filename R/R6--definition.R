@@ -288,10 +288,10 @@ Value <- R6_from_args("Value",
     serialize = function(x) {
       x
     },
-    parse_value = function(x) {
+    .parse_value = function(x) {
       x
     },
-    parse_literal = function(...) {
+    .parse_literal = function(...) {
       self$.parse_value(...)
     }
   )
@@ -324,9 +324,12 @@ IntValue = (function(){
     " loc?: ?Location;
       value: string;",
     public = list(
-      parse_literal = coerce_int,
-      serialize = coerce_int,
-      parse_value = coerce_int
+      .parse_literal = coerce_int,
+      .serialize = coerce_int,
+      .parse_value = coerce_int
+    ),
+    active = list(
+      # value = scalar_active_value
     )
   )
 })()
@@ -337,9 +340,12 @@ FloatValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
-    parse_literal = coerce_helper(as.numeric, is.numeric),
-    serialize = coerce_helper(as.numeric, is.numeric),
-    parse_value = coerce_helper(as.numeric, is.numeric)
+    .parse_literal = coerce_helper(as.numeric, is.numeric),
+    .serialize = coerce_helper(as.numeric, is.numeric),
+    .parse_value = coerce_helper(as.numeric, is.numeric)
+  ),
+  active = list(
+    # value = scalar_active_value
   )
 )
 
@@ -349,9 +355,12 @@ StringValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
-    parse_literal = coerce_helper(as.character, is.character),
-    serialize = coerce_helper(as.character, is.character),
-    parse_value = coerce_helper(as.character, is.character)
+    .parse_literal = coerce_helper(as.character, is.character),
+    .serialize = coerce_helper(as.character, is.character),
+    .parse_value = coerce_helper(as.character, is.character)
+  ),
+  active = list(
+    # value = scalar_active_value
   )
 )
 
@@ -361,9 +370,12 @@ BooleanValue = R6_from_args(
   " loc?: ?Location;
     value: boolean;",
   public = list(
-    parse_literal = coerce_helper(as.logical, is.logical),
-    serialize = coerce_helper(as.logical, is.logical),
-    parse_value = coerce_helper(as.logical, is.logical)
+    .parse_literal = coerce_helper(as.logical, is.logical),
+    .serialize = coerce_helper(as.logical, is.logical),
+    .parse_value = coerce_helper(as.logical, is.logical)
+  ),
+  active = list(
+    # value = scalar_active_value
   )
 )
 NullValue = R6_from_args(
@@ -495,33 +507,33 @@ ScalarTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    serialize?: ?fn;
-    parse_value?: ?fn;
-    parse_literal?: ?fn;",
+    .serialize?: ?fn;
+    .parse_value?: ?fn;
+    .parse_literal?: ?fn;",
   public = list(
     initialize = function(
       loc = NULL,
       description = NULL,
       name,
       directives = NULL,
-      serialize = NULL,
-      parse_value = NULL,
-      parse_literal = NULL
+      .serialize = NULL,
+      .parse_value = NULL,
+      .parse_literal = NULL
     ) {
       if (is.character(name)) {
         name = Name$new(value = name)
       }
       self$name = name
-      if (!missing(serialize)) {
-        self$serialize = serialize
+      if (!missing(.serialize)) {
+        self$.serialize = .serialize
       } else {
         warning(
           str_c(
             "Scalar: '", self$name$value,
-            "': Setting 'serialize' to return 'NULL'"
+            "': Setting '.serialize' to return 'NULL'"
           )
         )
-        self$serialize = function(x){ return(NULL) }
+        self$.serialize = function(x){ return(NULL) }
       }
 
       if (!missing(description)) {
@@ -531,21 +543,21 @@ ScalarTypeDefinition = R6_from_args(
         self$directives = directives
       }
 
-      if ((!missing(parse_value)) || (!missing(parse_literal))) {
-        if (missing(parse_value) || missing(parse_literal)) {
+      if ((!missing(.parse_value)) || (!missing(.parse_literal))) {
+        if (missing(.parse_value) || missing(.parse_literal)) {
           stop0(self$name, " must provide both .parse_value and .parse_literal functions")
         }
-        self$parse_value = parse_value
-        self$parse_literal = parse_literal
+        self$.parse_value = .parse_value
+        self$.parse_literal = .parse_literal
       } else {
         warning(
           str_c(
             "Scalar: '", self$name$value,
-            "': Setting 'parse_value' and 'parse_literal' to return 'NULL'"
+            "': Setting '.parse_value' and '.parse_literal' to return 'NULL'"
           )
         )
-        self$parse_value = function(x) { return(NULL) }
-        self$parse_literal = function(x) { return(NULL) }
+        self$.parse_value = function(x) { return(NULL) }
+        self$.parse_literal = function(x) { return(NULL) }
       }
 
     }
