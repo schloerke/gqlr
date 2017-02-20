@@ -332,13 +332,146 @@ directive_current_location <- function(parent_obj) {
 
 
 # TODO - Must be done in execution stage
+# √5.7.1 - Variable Uniqueness
+# 5.7.2 - Variable Default Values Are Correctly Typed - TODO type coersion
+# √5.7.3 - Variables Are Input Types
+# √5.7.4 - All Variable Uses Defined
+# √5.7.5 - All Variables Used
+# 5.7.6 - All Variable Usages are Allowed - TODO need type coersion
+validate_variables <- function(operation_variables, schema_obj, ...) {
+  var_validator <- VariableValdationHelper$new(operation_variables, schema_obj)
+
+  var_validator
+}
+
+
+VariableValdationHelper <- R6Class("VariableValdationHelper",
+  public = list(
+    names = character(0),
+    has_been_seen = list(),
+    type = list(),
+    variables = list(),
+    schema_obj = NULL,
+
+    check_variable = function(var) {
+      if (is.null(var)) {
+        return(invisible(TRUE))
+      }
+
+      var_name <- graphql_string(var$name)
+
+      matching_var <- self$variables[[var_name]]
+
+      # 5.7.4 - All Variable Uses Defined
+      if (is.null(matching_var)) {
+        stop("Matching variable definition can not be found for variable: ", var_name)
+      }
+
+      self$has_been_seen[[var_name]] <- TRUE
+
+      invisible(TRUE)
+    },
+
+
+    finally = function() {
+
+      # 5.7.5 - All Variables Used
+      has_been_seen <- unlist(self$has_been_seen)
+      if (!all(has_been_seen)) {
+        stop(
+          "Not all variable definitions have been seen.",
+          " Unused variables: ", names(has_been_seen)[!has_been_seen]
+        )
+      }
+
+      invisible(TRUE)
+    },
+
+
+    initialize = function(vars, schema_obj) {
+      if (is.null(vars)) {
+        return(invisible(self))
+      }
+
+      if (!is.list(vars)) stop("vars must be a list")
+
+      self$variables <- list()
+
+      vars %>%
+        lapply(function(var) {
+          name <- graphql_string(var$variable$name)
+
+          self$variables[[name]] <- var
+          self$has_been_seen[[name]] <- FALSE
+
+          self$type[[name]] <- var$type
+
+          # 5.7.2
+          default_value_obj <- var$defaultValue
+          if (!is.null(default_value_obj)) {
+            if (inherits(var$type, "NonNullType")) {
+              stop(
+                "Non-Null Variables are not allowed to have default values. ",
+                " Found a default value for variable: ", name
+              )
+            }
+
+            default_val <- var$defaultValue$value
+            if (!is.null(default_val)) {
+              # browser()
+              type_obj <- schema_obj$get_type(schema_obj$name_helper(var$type))
+
+              # TODO - if type can be coerced, do so, othewise throw error
+              # if (schema_obj$is_coersable_type(from = var$type, to = var$defaultValue$.kind)) {
+              #   stop(
+              #     "Can not parse default value of type: ", default_value_obj$.kind,
+              #     " for variable: ", name
+              #   )
+              # }
+            }
+          }
+
+
+          # 5.7.3 - Variables Are Input Types
+          matching_core_type_object <- ifnull(
+            schema_obj$get_scalar(var$type), ifnull(
+            schema_obj$get_enum(var$type),
+            schema_obj$get_input_object(var$type)
+          ))
+
+          if (is.null(matching_core_type_object)) {
+            stop(
+              "Can not find matching Scalar, Enum, or Input Object with type: ",
+              schema_obj$name_helper(var$type),
+              " for variable: ", name
+            )
+          }
+
+
+          name
+        }) %>%
+        unlist() ->
+      names
+
+      self$names <- names
+
+      # 5.7.1 - Variable Uniqueness
+      if (length(names) != length(unique(names))) {
+        name_count <- table(names)
+        name_count <- name_count[name_count > 1]
+        duplicate_names <- names(name_count)
+        stop(
+          "All defined variables must be unique.",
+          " Found duplicates of name: ", str_c(duplicate_names, collapse = ", ")
+        )
+      }
+
+      self$names <- names
 
 
 
+    }
+  )
 
 
-
-
-
-
-
+)
