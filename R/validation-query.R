@@ -103,13 +103,18 @@ validate_field_selections <- function(document_obj, schema_obj, ...) {
     if (!is.null(operation$operation)) {
       # is operation
 
-      validate_directives(operation$directives, schema_obj, operation)
+      var_validator <- validate_variables(operation$variableDefinitions, schema_obj)
+
+      validate_directives(operation$directives, schema_obj = schema_obj, parent_obj = operation, ..., variable_validator = var_validator)
 
       if (operation$operation == "query") {
-        validate_fields_in_selection_set(operation$selectionSet, schema_obj$get_object("QueryRoot"), schema_obj, ...)
+        validate_fields_in_selection_set(operation$selectionSet, schema_obj$get_object("QueryRoot"), schema_obj, ..., variable_validator = var_validator)
       } else if (operation$operation == "mutation") {
         stop("TODO. not implemented")
       }
+
+      var_validator$finally()
+
     } else {
       stop("this shouldn't happen. there should be no more fragments")
     }
@@ -119,7 +124,7 @@ validate_field_selections <- function(document_obj, schema_obj, ...) {
 
 
 # selection_set_obj should only be comprised of fields and inline fragments
-validate_fields_in_selection_set <- function(selection_set_obj, object, schema_obj, ...) {
+validate_fields_in_selection_set <- function(selection_set_obj, object, schema_obj, ..., variable_validator) {
   selection_obj_list <- selection_set_obj$selections
   selection_names <- get_name_values(selection_obj_list)
 
@@ -144,7 +149,8 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
         selection_obj$selectionSet,
         matching_obj,
         schema_obj,
-        ...
+        ...,
+        variable_validator = variable_validator
       )
       # since validation is done within a "new" context, call next to avoid complications
       next
@@ -176,7 +182,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
     field_name <- selection_obj$name$value
     matching_obj_field <- object_field_list[[which(field_name == obj_field_names)]]
 
-    validate_arguments(selection_obj$arguments, matching_obj_field, schema_obj, ...)
+    validate_arguments(selection_obj$arguments, matching_obj_field, schema_obj, ..., variable_validator = variable_validator)
 
     if (!is.null(selection_obj$selectionSet)) {
       matching_obj <- schema_obj$get_object(matching_obj_field$type$name)
@@ -191,7 +197,8 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
         selection_obj$selectionSet,
         schema_obj$get_object(matching_obj_field$type$name),
         schema_obj,
-        ...
+        ...,
+        variable_validator = variable_validator
       )
     } else {
       # no sub selection set, make sure this is ok
@@ -215,9 +222,6 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
 # 5.2.2 - Field Selection Merging
 
 
-# TODO
-# 5.2.3 - Leaf Field Selections
-
 
 
 
@@ -236,7 +240,7 @@ validate_input_object_field_uniqueness <- function(object_value, schema_obj, ...
 # √5.6.2 - Directives Are In Valid Locations - Must be done in execution stage
 # √5.6.3 - Directives Are Unique Per Location - Must be done in execution stage
 # √must also call validate_arguments on all directive args
-validate_directives <- function(directive_objs, ...) {
+validate_directives <- function(directive_objs, schema_obj, parent_obj, ...) {
   if (is.null(directive_objs)) {
     return(directive_objs)
   }
@@ -244,7 +248,7 @@ validate_directives <- function(directive_objs, ...) {
     return(directive_objs)
   }
 
-  directives <- lapply(directive_objs, validate_directive, ...)
+  directives <- lapply(directive_objs, validate_directive, schema_obj = schema_obj, parent_obj = parent_obj, ...)
 
   if (length(directives) > 0) {
     directive_names <- lapply(directives, `[[`, "name") %>% lapply(`[[`, "value") %>% unlist()
@@ -271,7 +275,7 @@ validate_directive <- function(directive_obj, schema_obj, parent_obj, ...) {
     stop("all directives must be defined. Missing defintion for directive: '", directive_obj$name$value, "'")
   }
 
-  validate_arguments(directive_obj$arguments, directive_definition, schema_obj)
+  validate_arguments(directive_obj$arguments, directive_definition, schema_obj, ...)
 
   # [Name]
   directive_definition$locations %>%
@@ -329,9 +333,13 @@ directive_current_location <- function(parent_obj) {
 
 
 # TODO - Must be done in execution stage
-# 5.7.1 - Variable Uniqueness
-# 5.7.2 - Variable Default Values Are Correctly Typed
-# 5.7.3 - Variables Are Input Types
-# 5.7.4 - All Variable Uses Defined
-# 5.7.5 - All Variables Used
-# 5.7.6 - All Variable Usages are Allowed
+
+
+
+
+
+
+
+
+
+

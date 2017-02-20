@@ -3,8 +3,8 @@
 # √5.3.1 - Argument Names
 # √5.3.2 - Argument Uniqueness
 # TODO 5.3.3.1 - Compatible Values
-# 5.3.3.2 - Required Non-Null Arguments
-validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...) {
+# √5.3.3.2 - Required Non-Null Arguments
+validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ..., variable_validator) {
 
   if (
     is.null(argument_obj_list) &&
@@ -61,6 +61,9 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
     #   Let type be the type expected by argumentDefinition.
     #   The type of literalArgument must be coercible to type.
     if (inherits(arg_value, "Variable")) {
+      if (!is.null(variable_validator)) {
+        variable_validator$check_variable(arg_value)
+      }
       next
     }
     # TODO check type

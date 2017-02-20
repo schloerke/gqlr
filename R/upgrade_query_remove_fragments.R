@@ -88,7 +88,7 @@ upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
         }
         new_selections <- append(new_selections, field)
 
-        validate_directives(field$directives, schema_obj, field)
+        validate_directives(field$directives, schema_obj, field, variable_validator = NULL)
 
 
       } else if (inherits(field, "FragmentSpread") || inherits(field, "InlineFragment")) {
