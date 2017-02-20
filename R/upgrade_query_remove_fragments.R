@@ -14,18 +14,22 @@
 
 
 # TODO
-# √5.4.1.1 - Fragment Name Uniqueness
+  # implement mutation
 
-# √5.4.1.2 - Fragment Spread Type Existence
-# √5.4.1.3 - Fragments On Composite Types
-# √5.4.1.4 - Fragments Must Be Used
-# √5.4.2.1 - Fragment spread target defined
-# √5.4.2.2 - Fragment spreads must not form cycles
-# √5.4.2.3 - Fragment spread is possible
-# √5.4.2.3.1 - Object Spreads In Object Scope - covered in 5.4.2.3
-# √5.4.2.3.2 - Abstract Spreads in Object Scope - covered in 5.4.2.3
-# √5.4.2.3.3 - Object Spreads In Abstract Scope - covered in 5.4.2.3
-# √5.4.2.3.4 - Abstract Spreads in Abstract Scope - covered in 5.4.2.3
+# DONE
+# 5.4.1
+  # √5.4.1.1 - Fragment Name Uniqueness
+  # √5.4.1.2 - Fragment Spread Type Existence
+  # √5.4.1.3 - Fragments On Composite Types
+  # √5.4.1.4 - Fragments Must Be Used
+# 5.4.2
+  # √5.4.2.1 - Fragment spread target defined
+  # √5.4.2.2 - Fragment spreads must not form cycles
+  # √5.4.2.3 - Fragment spread is possible
+    # √5.4.2.3.1 - Object Spreads In Object Scope - covered in 5.4.2.3
+    # √5.4.2.3.2 - Abstract Spreads in Object Scope - covered in 5.4.2.3
+    # √5.4.2.3.3 - Object Spreads In Abstract Scope - covered in 5.4.2.3
+    # √5.4.2.3.4 - Abstract Spreads in Abstract Scope - covered in 5.4.2.3
 upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
 
   fragment_list <- list()
@@ -42,6 +46,7 @@ upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
           query_list[[graphql_string(operation$name)]] <- operation
         }
       } else {
+        # TODO
         stop("TODO implement mutation")
       }
     } else {
