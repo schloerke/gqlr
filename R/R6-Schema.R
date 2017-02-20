@@ -201,6 +201,18 @@ GQLRSchema <- R6Class(
     get_union = function(name) private$get_by_name(name, "unions"),
     get_input_object = function(name) private$get_by_name(name, "input_objects"),
     get_directive = function(name) private$get_by_name(name, "directives"),
+    get_type = function(name) {
+      ifnull(
+        self$get_scalar(name),        ifnull(
+        self$get_enum(name),          ifnull(
+        self$get_object(name),        ifnull(
+        self$get_interface(name),     ifnull(
+        self$get_union(name),         ifnull(
+        self$get_input_object(name),
+        self$get_directive(name)
+      ))))))
+    },
+
 
     get_scalars = function() private$scalars,
     get_enums = function() private$enums,
