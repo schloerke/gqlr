@@ -4,19 +4,18 @@
 
 ## Major Sections
 # 5.1 Operations - DONE
-# 5.2 Fields     - TODO
+# 5.2 Fields     -
   # 5.2.1 - Field selections on objects - DONE
   # 5.2.2 - Field Selection Merging     - TODO
   # 5.2.3 - Leaf Field Selections       - DONE
 # 5.3 Arguments  -
-  # 5.3.3.1 - Variables TODO
-# 5.4 Fragments  - DONE
+  # 5.3.3.1 - Compatible Values - TODO
+# 5.4 Fragments  - DONE (TODO Mutatation)
 # 5.5 Values     - DONE
-# 5.6 Directives -
-  # 5.6.1 - Directives Are Defined              - DONE
-  # 5.6.2 - Directives Are In Valid Locations   - TODO
-  # 5.6.3 - Directives Are Unique Per Location  - DONE
-# 5.7 Variables  - TODO
+# 5.6 Directives - DONE
+# 5.7 Variables  -
+  # 5.7.2 - Variable Default Values Are Correctly Typed - TODO type coersion
+  # 5.7.6 - All Variable Usages are Allowed - TODO need type coersion
 
 
 
