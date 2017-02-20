@@ -1,5 +1,6 @@
 #' @include R6--definition.R
 #' @include R6-3.2-directives.R
+#' @include R6-3.1.1-types-scalars.R
 
 
 # type Foo implements Bar {
@@ -162,6 +163,12 @@ GQLRSchema <- R6Class(
   public = list(
 
     initialize = pryr_unenclose(function(...) {
+
+      self$add(Int)
+      self$add(Float)
+      self$add(String)
+      self$add(Boolean)
+      self$add(ID)
 
       self$add(SkipDirective)
       self$add(IncludeDirective)
