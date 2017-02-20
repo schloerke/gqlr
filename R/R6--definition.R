@@ -303,6 +303,16 @@ Variable <- R6_from_args(
   " loc?: ?Location;
     name: Name; "
 )
+
+scalar_active_value <- function(value) {
+  if (missing(value)) {
+    return(self$.args[["value"]]$value)
+  }
+
+  self$.args[["value"]]$value <- self$.parse_value(value)
+  return(invisible(value))
+}
+
 IntValue = (function(){
   coerce_int = function (value) {
     MAX_INT =  2147483647
