@@ -57,10 +57,10 @@ test_that("5.3.1 - Argument Names", {
     }
   }
   fragment multipleArgs on Arguments {
-    multipleReqs(x: 1, y: 2)
+    first: multipleReqs(x: 1, y: 2)
   }
   fragment multipleArgsReverseOrder on Arguments {
-    multipleReqs(y: 1, x: 2)
+    second: multipleReqs(y: 1, x: 2)
   }
   " %>%
   expect_r6()
@@ -132,13 +132,13 @@ test_that("5.3.3.2 - Require Non-Null Arguments", {
     }
   }
   fragment goodBooleanArg on Arguments {
-    booleanArgField(booleanArg: true)
+    first: booleanArgField(booleanArg: true)
   }
   fragment goodNonNullArg on Arguments {
     nonNullBooleanArgField(nonNullBooleanArg: true)
   }
   fragment goodBooleanArgDefault on Arguments {
-    booleanArgField
+    second: booleanArgField
   }
   " %>%
   expect_r6()
