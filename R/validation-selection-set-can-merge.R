@@ -1,35 +1,11 @@
 
 
 
-
-
-# get_selection_set_field_list <- function(selection_set) {
-#
-# }
-
-
-get_alias_or_name_values <- function(list_obj) {
-  lapply(list_obj, function(item) {
-    if (!is.null(item$alias)) {
-      item$alias$value
-    } else {
-      item$name$value
-    }
-  }) %>%
-    unlist()
-}
-
-
-
 # 5.2.2 - Field Selection Merging
 # assuming only inline fragments exist at this point
 validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_obj, ..., same_response_shape_only = FALSE) {
 
   selection_set <- selection_set_obj$selections
-
-  # cat("\n\nmatching obj: \n")
-  # str(matching_obj)
-  # cat("\n")
 
   field_information_list <- list()
   add_all_fields <- function(selection_set_, matching_obj_) {
@@ -59,53 +35,24 @@ validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_ob
   }
   add_all_fields(selection_set, matching_obj)
 
-  # if(identical(graphql_string(selection_set[[1]]$typeCondition), "`Pet`")) {
-  #   str(field_information_list)
-  #   browser()
-  # }
-
-
-
-  # matching_fields <- matching_obj$fields
-  # matching_field_names <- get_name_values(matching_fields)
-  #
-  # field_names <- get_alias_or_name_values(selection_set)
-  # unique_field_names <- unique(field_names)
   to_names <- lapply(field_information_list, "[[", "to_name") %>% unlist()
-  if (any(duplicated(to_names))) {
-  # if (length(field_names) > 1) {
-    # str(selection_set)
-    # print(field_names)
-    # browser()
-  } else {
+  if (!any(duplicated(to_names))) {
     return(TRUE)
   }
 
   dup_field_names <- unique(to_names[duplicated(to_names)])
 
-  # browser()
   for (dup_field_name in dup_field_names) {
     field_list_sub <- field_information_list[to_names == dup_field_name]
-
-    # dup_field_positions <- which(field_names == dup_field_name)
-    # duplicated_fields <- selection_set[dup_field_positions]
 
     for (i in seq_along(field_list_sub)) {
       field_i_info <- field_list_sub[[i]]
 
-      # matching_field_i <- matching_fields[[which(matching_field_names == field_i$name$value)]]
-      # matching_field_i_name <- graphql_string(matching_field_i$name)
-      # str(matching_field_i)
-      # browser()
-      # field_i_parent_obj <- schema_obj$get_type(matching_field_i$type)
       for (j in seq_along(field_list_sub)) {
         if (i < j) {
           field_j_info <- field_list_sub[[j]]
 
-          # matching_field_j <- matching_fields[[which(matching_field_names == field_j$name$value)]]
-          # matching_field_j_name <- graphql_string(matching_field_j$name)
-          # str(matching_field_i)
-          # browser()
+          # SameResponseShape(fieldA, fieldB) must be true.
           validate_fields_have_same_response_shape(field_i_info, field_j_info, schema_obj)
 
           if (same_response_shape_only) {
@@ -289,23 +236,4 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
   validate_fields_can_merge(selection_set, schema_obj, matching_obj, same_response_shape_only = TRUE)
 
   TRUE
-}
-
-selection_set_fields_have_same_response_shape <- function(field_a, field_b, schema_obj) {
-  # type_a <- schema_obj(field_a
-}
-
-selection_set_field_names_and_shape <- function(selection_set) {
-  ret <- list()
-
-  for (selection_field in selection_set$selections) {
-    if (inherits(selection_field, "Field")) {
-      to_name <- ifnull(selection_field$alias, selection_field$name)
-
-
-    } else if (inherits(selection_field, "InlineFragment")) {
-
-
-    }
-  }
 }
