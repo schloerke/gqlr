@@ -83,7 +83,7 @@ upgrade_query_remove_fragments <- function(document_obj, schema_obj) {
 
           # need to recurse in field objects
           matching_field <- matching_obj$.get_field(field)
-          matching_field_obj <- schema_obj$get_object(matching_field$type)
+          matching_field_obj <- schema_obj$get_object_interface_or_union(matching_field$type)
           field <- upgrade_fragments_in_field(field, matching_field_obj, seen_fragments)
         }
         new_selections <- append(new_selections, field)
