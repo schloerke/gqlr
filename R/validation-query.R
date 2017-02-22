@@ -8,12 +8,9 @@
 
 ## Major Sections
 # 5.1 Operations - DONE
-# 5.2 Fields     -
-  # 5.2.1 - Field selections on objects - DONE
-  # 5.2.2 - Field Selection Merging     - TODO
-  # 5.2.3 - Leaf Field Selections       - DONE
+# 5.2 Fields     - DONE
 # 5.3 Arguments  -
-  # 5.3.3.1 - Compatible Values - TODO
+  # 5.3.3.1 - Compatible Values - TODO type coersion
 # 5.4 Fragments  - DONE (TODO Mutatation)
 # 5.5 Values     - DONE
 # 5.6 Directives - DONE
@@ -226,10 +223,6 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
 }
 
 
-# TODO
-# 5.2.2 - Field Selection Merging
-
-
 
 
 
@@ -340,7 +333,6 @@ directive_current_location <- function(parent_obj) {
 }
 
 
-# TODO - Must be done in execution stage
 # √5.7.1 - Variable Uniqueness
 # 5.7.2 - Variable Default Values Are Correctly Typed - TODO type coersion
 # √5.7.3 - Variables Are Input Types

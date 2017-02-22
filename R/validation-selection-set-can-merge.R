@@ -1,7 +1,7 @@
 
 
 
-# 5.2.2 - Field Selection Merging
+# 5.2.2 - Field Selection Merging - DONE
 # assuming only inline fragments exist at this point
 validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_obj, ..., same_response_shape_only = FALSE) {
 

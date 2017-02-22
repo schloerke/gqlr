@@ -1,9 +1,9 @@
 
 #
-# √5.3.1 - Argument Names
-# √5.3.2 - Argument Uniqueness
-# TODO 5.3.3.1 - Compatible Values
-# √5.3.3.2 - Required Non-Null Arguments
+# 5.3.1 - Argument Names                - DONE
+# 5.3.2 - Argument Uniqueness           - DONE
+# 5.3.3.1 - Compatible Values           - TODO
+# 5.3.3.2 - Required Non-Null Arguments - DONE
 validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ..., variable_validator) {
 
   if (
