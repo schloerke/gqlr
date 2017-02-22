@@ -574,6 +574,17 @@ ScalarTypeDefinition = R6_from_args(
   )
 )
 
+
+interface_or_object_get_field = function(field_obj) {
+  find_name <- field_obj$name$value
+  for (field in self$fields) {
+    if (field$name$value == find_name) {
+      return(field)
+    }
+  }
+  return(NULL)
+}
+
 ObjectTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "ObjectTypeDefinition",
@@ -584,15 +595,7 @@ ObjectTypeDefinition = R6_from_args(
     directives?: ?Array<Directive>;
     fields: Array<FieldDefinition>;",
   public = list(
-    .get_field = function(field_obj) {
-      find_name <- field_obj$name$value
-      for (field in self$fields) {
-        if (field$name$value == find_name) {
-          return(field)
-        }
-      }
-      return(NULL)
-    },
+    .get_field = interface_or_object_get_field,
     .contains_field = function(field_obj) {
       !is.null(self$.get_field(field_obj))
     }
@@ -629,7 +632,10 @@ InterfaceTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    fields: Array<FieldDefinition>;"
+    fields: Array<FieldDefinition>;",
+  public = list(
+    .get_field = interface_or_object_get_field
+  )
 )
 
 UnionTypeDefinition = R6_from_args(
