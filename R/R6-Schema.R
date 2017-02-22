@@ -260,6 +260,13 @@ GQLRSchema <- R6Class(
     },
 
 
+    get_scalar_or_enum = function(name_obj) {
+      name_val <- self$name_helper(name_obj)
+      ifnull(
+        self$get_scalar(name_val),
+        self$get_enum(name_val)
+      )
+    },
     get_object_interface_or_union = function(name_obj) {
       name_val <- self$name_helper(name_obj)
       ifnull(
