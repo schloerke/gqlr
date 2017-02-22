@@ -1,3 +1,7 @@
+#' @include validation-selection-set-can-merge.R
+#' @include validation-arguments.R
+#' @include upgrade_query_remove_fragments.R
+
 # TODO reduce fields to unique names
 # should be done at execution stage
 
@@ -184,7 +188,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
     validate_arguments(selection_obj$arguments, matching_obj_field, schema_obj, ..., variable_validator = variable_validator)
 
     if (!is.null(selection_obj$selectionSet)) {
-      matching_obj <- schema_obj$get_object(matching_obj_field$type$name)
+      matching_obj <- schema_obj$get_object_interface_or_union(matching_obj_field$type$name)
       if (is.null(matching_obj)) {
         # 5.2.3 - if is leaf, can not dig deeper
         stop(
@@ -194,7 +198,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
       }
       validate_fields_in_selection_set(
         selection_obj$selectionSet,
-        schema_obj$get_object(matching_obj_field$type$name),
+        matching_obj,
         schema_obj,
         ...,
         variable_validator = variable_validator
@@ -213,6 +217,11 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
       }
     }
   }
+
+  # must be done after union check in forloop above
+  validate_fields_can_merge(selection_set_obj, schema_obj, object)
+
+
 
 }
 
