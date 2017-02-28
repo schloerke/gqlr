@@ -66,7 +66,7 @@ test_that("5.7.2 - Default Values Are Correctly Typed", {
     }
   }
   " %>%
-  expect_err("asdf")
+  expect_err("found StringValue")
 
 
   "
