@@ -278,7 +278,7 @@ FragmentDefinition = R6_from_args(
 #                   | FloatValue
 #                   | StringValue
 #                   | BooleanValue
-#                   | NulLValue
+#                   | NullValue
 #                   | EnumValue
 #                   | ListValue
 #                   | ObjectValue
