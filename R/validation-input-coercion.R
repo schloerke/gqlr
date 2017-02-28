@@ -90,7 +90,14 @@ validate_value_can_be_coerced = function(from_input, to_type, schema_obj) {
   #   type instanceof GraphQLScalarType || type instanceof GraphQLEnumType,
   #   'Must be input type'
   # );
-  if (!inherits(to_obj, "ScalarTypeDefinition")) {
+  if (
+    !(
+      inherits(to_obj, "ScalarTypeDefinition") ||
+      inherits(to_obj, "EnumTypeDefinition")
+    )
+  ) {
+    str(to_obj)
+    browser()
     stop("Must be input type")
   }
 
