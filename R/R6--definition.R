@@ -285,15 +285,15 @@ FragmentDefinition = R6_from_args(
 Value <- R6_from_args("Value",
   inherit = Node,
   public = list(
-    serialize = function(x) {
-      x
-    },
-    .parse_value = function(x) {
-      x
-    },
-    .parse_literal = function(...) {
-      self$.parse_value(...)
-    }
+    # serialize = function(x) {
+    #   x
+    # },
+    # .parse_value = function(x) {
+    #   x
+    # },
+    # .parse_literal = function(...) {
+    #   self$.parse_value(...)
+    # }
   )
 )
 
@@ -314,19 +314,19 @@ scalar_active_value <- function(value) {
 }
 
 IntValue = (function(){
-  coerce_int = function (value) {
-    MAX_INT =  2147483647
-    MIN_INT = -2147483648
-    num <- as.integer(value)
-    if (is.integer(num)) {
-      if (length(num) == 1) {
-        if (num <= MAX_INT && num >= MIN_INT) {
-          return(num)
-        }
-      }
-    }
-    return(NULL)
-  }
+  # coerce_int = function (value) {
+  #   MAX_INT =  2147483647
+  #   MIN_INT = -2147483648
+  #   num <- as.integer(value)
+  #   if (is.integer(num)) {
+  #     if (length(num) == 1) {
+  #       if (num <= MAX_INT && num >= MIN_INT) {
+  #         return(num)
+  #       }
+  #     }
+  #   }
+  #   return(NULL)
+  # }
 
   R6_from_args(
     inherit = Value,
@@ -334,9 +334,11 @@ IntValue = (function(){
     " loc?: ?Location;
       value: string;",
     public = list(
-      .parse_literal = coerce_int,
-      .serialize = coerce_int,
-      .parse_value = coerce_int
+      # .parse_literal = coerce_int,
+      # .serialize = coerce_int,
+      # .parse_value = coerce_int,
+      # .MAX_INT =  2147483647,
+      # .MIN_INT = -2147483648
     ),
     active = list(
       # value = scalar_active_value
@@ -350,9 +352,9 @@ FloatValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
-    .parse_literal = coerce_helper(as.numeric, is.numeric),
-    .serialize = coerce_helper(as.numeric, is.numeric),
-    .parse_value = coerce_helper(as.numeric, is.numeric)
+    # .parse_literal = coerce_helper(as.numeric, is.numeric),
+    # .serialize = coerce_helper(as.numeric, is.numeric),
+    # .parse_value = coerce_helper(as.numeric, is.numeric)
   ),
   active = list(
     # value = scalar_active_value
@@ -365,9 +367,9 @@ StringValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
-    .parse_literal = coerce_helper(as.character, is.character),
-    .serialize = coerce_helper(as.character, is.character),
-    .parse_value = coerce_helper(as.character, is.character)
+    # .parse_literal = coerce_helper(as.character, is.character),
+    # .serialize = coerce_helper(as.character, is.character),
+    # .parse_value = coerce_helper(as.character, is.character)
   ),
   active = list(
     # value = scalar_active_value
@@ -380,9 +382,9 @@ BooleanValue = R6_from_args(
   " loc?: ?Location;
     value: boolean;",
   public = list(
-    .parse_literal = coerce_helper(as.logical, is.logical),
-    .serialize = coerce_helper(as.logical, is.logical),
-    .parse_value = coerce_helper(as.logical, is.logical)
+    # .parse_literal = coerce_helper(as.logical, is.logical),
+    # .serialize = coerce_helper(as.logical, is.logical),
+    # .parse_value = coerce_helper(as.logical, is.logical)
   ),
   active = list(
     # value = scalar_active_value
