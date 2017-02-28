@@ -66,8 +66,9 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
       }
       next
     }
+
     # TODO check type
-    # is_coercible_type(arg_value, matching_arg_obj$type)
+    validate_value_can_be_coerced(arg_value, matching_arg_obj$type, schema_obj)
 
 
     if (inherits(arg_value, "ObjectValue")) {
