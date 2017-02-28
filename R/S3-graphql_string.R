@@ -18,3 +18,7 @@ graphql_string.Type = function(x, ...) {
   # cat("<Name - ", self$value, ">")
   str_c("`", parse_type(x), "`")
 }
+
+graphql_string.ScalarTypeDefinition <- function(x, ...) {
+  str_c("`", x$.kind, "`")
+}
