@@ -41,10 +41,10 @@
 
 
 
-parse_literal = function(kind, parse_value) {
-  fn <- function(astObj) {
-    if (astObj$kind == kind) {
-      parse_value(astObj$value)
+parse_literal = function(kind_val, parse_value) {
+  fn <- function(obj) {
+    if (obj$.kind == kind_val) {
+      parse_value(obj$value)
     } else {
       NULL
     }
@@ -113,7 +113,15 @@ Int <- ScalarTypeDefinition$new(
   ),
   .serialize = as.character,
   .parse_value = coerce_int,
-  .parse_literal = parse_literal("Int", coerce_int)
+  .parse_literal = parse_literal("IntValue", coerce_int)
+  # .parse_literal = pryr_unenclose(function(obj) {
+  #   if (obj$.kind == "IntValue") {
+  #     coerce_int(obj$value)
+  #   } else {
+  #     NULL
+  #   }
+  # })
+
 )
 
 
@@ -141,14 +149,14 @@ Float = ScalarTypeDefinition$new(
     ret
   },
   .parse_value = coerce_float,
-  .parse_literal = function(astObj) {
-    kind = astObj$kind
-    if (kind == "Int" || kind == "Float") {
-      coerce_float(astObj$value)
+  .parse_literal = pryr_unenclose(function(obj) {
+    kind = obj$.kind
+    if (kind == "IntValue" || kind == "FloatValue") {
+      coerce_float(obj$value)
     } else {
       NULL
     }
-  }
+  })
 )
 
 
@@ -161,7 +169,7 @@ String = ScalarTypeDefinition$new(
   ),
   .serialize = as.character,
   .parse_value = as.character,
-  .parse_literal = parse_literal("String", as.character)
+  .parse_literal = parse_literal("StringValue", as.character)
 )
 
 
@@ -178,7 +186,7 @@ Boolean = ScalarTypeDefinition$new(
   description = 'The `Boolean` scalar type represents `TRUE` or `FALSE`.',
   .serialize = as.character,
   .parse_value = coerce_boolean,
-  .parse_literal = parse_literal("Boolean", coerce_boolean)
+  .parse_literal = parse_literal("BooleanValue", coerce_boolean)
 )
 
 
