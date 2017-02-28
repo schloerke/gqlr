@@ -669,7 +669,23 @@ EnumTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    values: Array<EnumValueDefinition>;"
+    values: Array<EnumValueDefinition>;",
+  public = list(
+    .parse_literal = function(value_obj) {
+
+      if (!inherits(value_obj, "EnumValue")) {
+        return(NULL)
+      }
+
+      for (value in self$values) {
+        if (identical(value$name$value, value_obj$value)) {
+          return(value_obj$value)
+        }
+      }
+
+      return(NULL)
+    }
+  )
 )
 
 EnumValueDefinition = R6_from_args(
