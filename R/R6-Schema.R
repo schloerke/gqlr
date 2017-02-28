@@ -168,7 +168,7 @@ GQLRSchema <- R6Class(
       self$add(Float)
       self$add(String)
       self$add(Boolean)
-      self$add(ID)
+      # self$add(ID)
 
       self$add(SkipDirective)
       self$add(IncludeDirective)

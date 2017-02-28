@@ -190,26 +190,27 @@ Boolean = ScalarTypeDefinition$new(
 )
 
 
-# no literal AST definition, but defining as such
-ID = ScalarTypeDefinition$new(
-  name = "ID",
-  description = str_c(
-    'The `ID` scalar type represents a unique identifier, often used to ',
-    'refetch an object or as key for a cache. The ID type appears in a JSON ',
-    'response as a String; however, it is not intended to be human-readable. ',
-    'When expected as an input type, any string (such as `"4"`) or integer ',
-    '(such as `4`) input value will be accepted as an ID.'
-  ),
-  .serialize = as.character,
-  .parse_value = as.character,
-  .parse_literal = function(astObj) {
-    if (
-      astObj$.kind == "String" ||
-      astObj$.kind == "Int"
-    ) {
-      return(as.character(astObj$value))
-    } else {
-      return(NULL)
-    }
-  }
-)
+## Not including in R setup
+# # no literal AST definition, but defining as such
+# ID = ScalarTypeDefinition$new(
+#   name = "ID",
+#   description = str_c(
+#     'The `ID` scalar type represents a unique identifier, often used to ',
+#     'refetch an object or as key for a cache. The ID type appears in a JSON ',
+#     'response as a String; however, it is not intended to be human-readable. ',
+#     'When expected as an input type, any string (such as `"4"`) or integer ',
+#     '(such as `4`) input value will be accepted as an ID.'
+#   ),
+#   .serialize = as.character,
+#   .parse_value = as.character,
+#   .parse_literal = function(astObj) {
+#     if (
+#       astObj$.kind == "String" ||
+#       astObj$.kind == "Int"
+#     ) {
+#       return(as.character(astObj$value))
+#     } else {
+#       return(NULL)
+#     }
+#   }
+# )
