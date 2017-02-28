@@ -149,6 +149,7 @@ GQLRSchema <- R6Class(
     unions = list(),
     input_objects = list(),
     directives = list(),
+    values = list(),
 
     # has_directive_list = list(),
     get_by_name = function(name_obj, obj_list_txt) {
@@ -201,6 +202,7 @@ GQLRSchema <- R6Class(
     get_union = function(name) private$get_by_name(name, "unions"),
     get_input_object = function(name) private$get_by_name(name, "input_objects"),
     get_directive = function(name) private$get_by_name(name, "directives"),
+    get_value = function(name) private$get_by_name(name, "values"),
     get_type = function(name) {
       ifnull(
         self$get_scalar(name),        ifnull(
@@ -208,9 +210,10 @@ GQLRSchema <- R6Class(
         self$get_object(name),        ifnull(
         self$get_interface(name),     ifnull(
         self$get_union(name),         ifnull(
-        self$get_input_object(name),
-        self$get_directive(name)
-      ))))))
+        self$get_input_object(name),  ifnull(
+        self$get_directive(name),
+        self$get_value(name)
+      )))))))
     },
 
 
@@ -221,6 +224,7 @@ GQLRSchema <- R6Class(
     get_unions = function() private$unions,
     get_input_objects = function() private$input_objects,
     get_directives = function() private$directives,
+    get_values = function() private$values,
 
 
     # returns a char vector or NULL of names of objs that implement a particular interface
