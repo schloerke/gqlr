@@ -1,7 +1,7 @@
-# testthat::test_file(file.path("tests", "testthat", "test-input-coersion.R"))
+# testthat::test_file(file.path("tests", "testthat", "test-input-coercion.R"))
 
 
-context("input-coersion")
+context("input-coercion")
 
 source("validate_helper.R")
 
@@ -16,7 +16,7 @@ source("validate_helper.R")
 # }
 #
 
-test_that("input-coersion - Int", {
+test_that("input-coercion - Int", {
   "{ arguments { intArgField(intArg: 5) } }" %>% expect_r6()
   "{ arguments { intArgField(intArg: null) } }" %>% expect_r6()
 
@@ -26,7 +26,7 @@ test_that("input-coersion - Int", {
 })
 
 
-test_that("input-coersion - Float", {
+test_that("input-coercion - Float", {
   "{ arguments { floatArgField(floatArg: 5) } }" %>% expect_r6()
   "{ arguments { floatArgField(floatArg: 5.0) } }" %>% expect_r6()
   "{ arguments { floatArgField(floatArg: null) } }" %>% expect_r6()
@@ -36,7 +36,7 @@ test_that("input-coersion - Float", {
 })
 
 
-test_that("input-coersion - String", {
+test_that("input-coercion - String", {
   "{ arguments { stringArgField(stringArg: \"5\") } }" %>% expect_r6()
   "{ arguments { stringArgField(stringArg: null) } }" %>% expect_r6()
 
@@ -45,7 +45,7 @@ test_that("input-coersion - String", {
   "{ arguments { stringArgField(stringArg: true) } }" %>% expect_err("Expected type ")
 })
 
-test_that("input-coersion - Boolean", {
+test_that("input-coercion - Boolean", {
   "{ arguments { booleanArgField(booleanArg: true) } }" %>% expect_r6()
   "{ arguments { booleanArgField(booleanArg: null) } }" %>% expect_r6()
 

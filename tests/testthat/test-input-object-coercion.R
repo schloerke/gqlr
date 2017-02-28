@@ -1,7 +1,7 @@
-# testthat::test_file(file.path("tests", "testthat", "test-input-object-coersion.R"))
+# testthat::test_file(file.path("tests", "testthat", "test-input-object-coercion.R"))
 
 
-context("input-object-coersion")
+context("input-object-coercion")
 
 source("validate_helper.R")
 
