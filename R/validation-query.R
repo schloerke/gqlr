@@ -10,14 +10,12 @@
 ## Major Sections
 # 5.1 Operations - DONE
 # 5.2 Fields     - DONE
-# 5.3 Arguments  -
-  # 5.3.3.1 - Compatible Values - TODO type coersion
+# 5.3 Arguments  - DONE
 # 5.4 Fragments  - DONE (TODO Mutatation)
 # 5.5 Values     - DONE
 # 5.6 Directives - DONE
 # 5.7 Variables  -
-  # 5.7.2 - Variable Default Values Are Correctly Typed - TODO type coersion
-  # 5.7.6 - All Variable Usages are Allowed - TODO need type coersion
+  # 5.7.6 - All Variable Usages are Allowed - TODO need type coercion
 
 
 
@@ -335,11 +333,11 @@ directive_current_location <- function(parent_obj) {
 
 
 # √5.7.1 - Variable Uniqueness
-# 5.7.2 - Variable Default Values Are Correctly Typed - TODO type coersion
+# √5.7.2 - Variable Default Values Are Correctly Typed
 # √5.7.3 - Variables Are Input Types
 # √5.7.4 - All Variable Uses Defined
 # √5.7.5 - All Variables Used
-# 5.7.6 - All Variable Usages are Allowed - TODO need type coersion
+# 5.7.6 - All Variable Usages are Allowed - TODO need type coercion
 validate_variables <- function(operation_variables, schema_obj, ...) {
   var_validator <- VariableValdationHelper$new(operation_variables, schema_obj)
 
@@ -426,7 +424,6 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
             default_val <- var$defaultValue$value
             if (!is.null(default_val)) {
-              # browser()
               type_obj <- schema_obj$get_type(schema_obj$name_helper(var$type))
 
               self$default_value_can_be_coerced(
