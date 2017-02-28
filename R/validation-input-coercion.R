@@ -50,19 +50,6 @@ validate_value_can_be_coerced = function(from_input, to_type, schema_obj) {
       validate_value_can_be_coerced(from_input, list_type, schema_obj)
     )
   }
-  # // Lists accept a non-list value as a list of one.
-  # if (type instanceof GraphQLList) {
-  #   const itemType = type.ofType;
-  #   if (valueNode.kind === LIST) {
-  #     return (valueNode: ListValueNode).values.reduce((acc, item, index) => {
-  #       const errors = isValidLiteralValue(itemType, item);
-  #       return acc.concat(errors.map(error =>
-  #         `In element #${index}: ${error}`
-  #       ));
-  #     }, []);
-  #   }
-  #   return isValidLiteralValue(itemType, valueNode);
-  # }
 
   to_obj <- schema_obj$get_type(to_type)
   # to_obj %>% str()
