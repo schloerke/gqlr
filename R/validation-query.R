@@ -438,10 +438,17 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
 
           # 5.7.3 - Variables Are Input Types
+          core_var_type <- var$type
+          while(
+            inherits(core_var_type, "ListType") ||
+            inherits(core_var_type, "NonNullType")
+          ) {
+            core_var_type <- core_var_type$type
+          }
           matching_core_type_object <- ifnull(
-            schema_obj$get_scalar(var$type), ifnull(
-            schema_obj$get_enum(var$type),
-            schema_obj$get_input_object(var$type)
+            schema_obj$get_scalar(core_var_type), ifnull(
+            schema_obj$get_enum(core_var_type),
+            schema_obj$get_input_object(core_var_type)
           ))
 
           if (is.null(matching_core_type_object)) {
