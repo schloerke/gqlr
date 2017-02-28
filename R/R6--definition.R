@@ -673,6 +673,14 @@ EnumTypeDefinition = R6_from_args(
   public = list(
     .parse_literal = function(value_obj) {
 
+      # if (inherits(value_obj, "IntValue")) {
+      #   int_val <- value_obj$value
+      #   if (int_val > 0 & int_val <= length(self$values)) {
+      #     return(self$values[[int_val]]$name$value)
+      #   }
+      #   return(NULL)
+      # }
+
       if (!inherits(value_obj, "EnumValue")) {
         return(NULL)
       }
