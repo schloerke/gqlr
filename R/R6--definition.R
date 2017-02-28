@@ -407,6 +407,15 @@ ListValue = R6_from_args(
   " loc?: ?Location;
     values: Array<Value>;"
 )
+
+object_get_by_field_name = function(name_obj) {
+  for (field in self$fields) {
+    if (identical(field$name$value, name_obj$value)) {
+      return(field)
+    }
+  }
+  return(NULL)
+}
 ObjectValue = R6_from_args(
   inherit = Value,
   "ObjectValue",
@@ -416,6 +425,9 @@ ObjectValue = R6_from_args(
     # init_validate = function() {
     #   validate_input_object_field_uniqueness(self)
     # }
+  ),
+  public = list(
+    .get_field_by_name = object_get_by_field_name
   )
 )
 ObjectField = R6_from_args(
@@ -676,7 +688,10 @@ InputObjectTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    fields: Array<InputValueDefinition>;"
+    fields: Array<InputValueDefinition>;",
+  public = list(
+    .get_field_by_name = object_get_by_field_name
+  )
 )
 
 TypeExtensionDefinition = R6_from_args(
