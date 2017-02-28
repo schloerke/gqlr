@@ -285,6 +285,10 @@ GQLRSchema <- R6Class(
       # self$get_object_interface_or_union(type_obj$type)
     },
 
+    # is_input_type_coercible = function(from_type, to_type) {
+    #   # if ()
+    # },
+
     # get_directive_objs = function() private$has_directive_list,
 
 
