@@ -1,6 +1,7 @@
 #' @include validation-selection-set-can-merge.R
 #' @include validation-arguments.R
 #' @include upgrade_query_remove_fragments.R
+#' @include validation-input-coercion.R
 
 # TODO reduce fields to unique names
 # should be done at execution stage
@@ -389,6 +390,37 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
     },
 
 
+    variable_can_be_coerced = function(from_type, to_type) {
+      browser()
+      from_type <- self$schema_obj$get_type(from_type)
+      to_type <- self$schema_obj$get_type(to_type)
+
+      from_type_name <- from_type$.kind
+      to_type_name <- to_type$.kind
+      browser()
+
+      if (self$schema_obj$get_object_interface_or_union(from_type)) {
+        stop(
+          "Objects, Interfaces, or Unions may not be input types. \n",
+          "Received type: ", from_type_name
+        )
+      }
+
+      switch(from_type_name,
+        "FloatValue" = any(identical(to_type, "FloatValue"), identical(to_type, "IntValue")),
+        # "IDValue" = any(identical(to_type, "ID"), identical(to_type, "StringValue"), identical(to_type, "IntValue")),
+        identical(from_type_name, to_type_name)
+
+      )
+
+      str(from_type)
+      cat("\n\n")
+      str(to_type)
+      browser()
+
+    },
+
+
     initialize = function(vars, schema_obj) {
       if (is.null(vars)) {
         return(invisible(self))
@@ -397,6 +429,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
       if (!is.list(vars)) stop("vars must be a list")
 
       self$variables <- list()
+      self$schema_obj = schema_obj
 
       vars %>%
         lapply(function(var) {
@@ -423,12 +456,12 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
               type_obj <- schema_obj$get_type(schema_obj$name_helper(var$type))
 
               # TODO - if type can be coerced, do so, othewise throw error
-              # if (schema_obj$is_coersable_type(from = var$type, to = var$defaultValue$.kind)) {
-              #   stop(
-              #     "Can not parse default value of type: ", default_value_obj$.kind,
-              #     " for variable: ", name
-              #   )
-              # }
+              if (!self$variable_can_be_coerced(from_type = var$type, to_type = var$defaultValue$.kind)) {
+                stop(
+                  "Can not parse default value of type: ", default_value_obj$.kind,
+                  " for variable: ", name
+                )
+              }
             }
           }
 
