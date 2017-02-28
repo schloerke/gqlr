@@ -1,3 +1,4 @@
+# testthat::test_file(file.path("tests", "testthat", "test-validation-5.5-values.R"))
 
 context("validation-5.5-values")
 
@@ -7,7 +8,6 @@ source("validate_helper.R")
 test_that("5.5.1 - Input Object Field Uniqueness", {
 
   test_schema <- GQLRSchema$new()
-
   "
   # schema {
   #   query: QueryRoot

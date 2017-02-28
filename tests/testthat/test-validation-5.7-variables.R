@@ -59,15 +59,14 @@ test_that("5.7.2 - Default Values Are Correctly Typed", {
   expect_err("Non-Null Variables are not allowed to have default values")
 
 
-  # TODO - unlock with type is coercible
-  # "
-  # query houseTrainedQuery($atOtherHomes: Boolean = \"true\") {
-  #   dog {
-  #     isHousetrained(atOtherHomes: $atOtherHomes)
-  #   }
-  # }
-  # " %>%
-  # expect_err("asdf")
+  "
+  query houseTrainedQuery($atOtherHomes: Boolean = \"true\") {
+    dog {
+      isHousetrained(atOtherHomes: $atOtherHomes)
+    }
+  }
+  " %>%
+  expect_err("asdf")
 
 
   "

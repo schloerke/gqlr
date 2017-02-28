@@ -35,17 +35,17 @@ test_that("5.3.1 - Argument Names", {
   " %>%
   expect_err("could not find matching arg value")
 
-  # "
-  # {
-  #   dog {
-  #     ...invalidArgName
-  #   }
-  # }
-  # fragment invalidArgName on Dog {
-  #   isHousetrained(atOtherHomes: true) @include(unless: false)
-  # }
-  # " %>%
-  # expect_err()
+  "
+  {
+    dog {
+      ...invalidArgName
+    }
+  }
+  fragment invalidArgName on Dog {
+    isHousetrained(atOtherHomes: true) @include(unless: false)
+  }
+  " %>%
+  expect_err("could not find matching arg")
 
 
   # order doesn't matter
@@ -103,17 +103,6 @@ test_that("5.3.3.1 - Compatible Values", {
   " %>%
   expect_r6()
 
-  # "
-  # {
-  #   arguments {
-  #     ...stringIntoInt
-  #   }
-  # }
-  # fragment stringIntoInt on Arguments {
-  #   intArgField(intArg: \"3\")
-  # }
-  # " %>%
-  # expect_err()
 
 
 
