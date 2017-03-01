@@ -177,21 +177,27 @@ GQLRSchema <- R6Class(
       return(invisible(self))
     }),
 
+    get_inner_type = function(type_obj) {
+      while(
+        inherits(type_obj, "NonNullType") ||
+        inherits(type_obj, "ListType")
+      ) {
+        type_obj <- type_obj$type
+      }
+      type_obj
+    },
+
     name_helper = function(name_obj) {
       if (is.character(name_obj)) {
         name_obj
       } else if (inherits(name_obj, "Name")) {
         name_obj$value
-      } else if (inherits(name_obj, "NamedType")) {
+      } else if (inherits(name_obj, "Type")) {
+        # non null, list, named
+        name_obj <- self$get_inner_type(name_obj)
         name_obj$name$value
       } else {
-        if (inherits(name_obj, "NonNullType")) {
-          self$name_helper(name_obj$type)
-        } else if (inherits(name_obj, "ListType")) {
-          self$name_helper(name_obj$type)
-        } else {
-          stop("must supply a string, Name, or NamedType")
-        }
+        stop("must supply a string, Name, or NamedType")
       }
     },
 
