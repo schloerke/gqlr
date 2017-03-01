@@ -62,7 +62,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
     #   The type of literalArgument must be coercible to type.
     if (inherits(arg_value, "Variable")) {
       if (!is.null(variable_validator)) {
-        variable_validator$check_variable(arg_value)
+        variable_validator$check_variable(arg_value, matching_arg_obj$type)
       }
       next
     }

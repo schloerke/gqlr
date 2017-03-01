@@ -201,7 +201,6 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, schema_o
       )
     } else {
       # no sub selection set, make sure this is ok
-      # browser()
       if (inherits(selection_obj, "Field")) {
         matching_obj <- schema_obj$get_object_interface_or_union(matching_obj_field$type)
         if (!is.null(matching_obj)) {
@@ -353,21 +352,86 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
     variables = list(),
     schema_obj = NULL,
 
-    check_variable = function(var) {
+    check_variable = function(var, argument_type) {
       if (is.null(var)) {
         return(invisible(TRUE))
       }
 
       var_name <- graphql_string(var$name)
 
-      matching_var <- self$variables[[var_name]]
+      var_obj <- self$variables[[var_name]]
 
       # 5.7.4 - All Variable Uses Defined
-      if (is.null(matching_var)) {
+      if (is.null(var_obj)) {
         stop("Matching variable definition can not be found for variable: ", var_name)
       }
 
       self$has_been_seen[[var_name]] <- TRUE
+
+      # 5.7.6
+      # AreTypesCompatible
+      variable_type <- var_obj$type
+      # If hasDefault is true, treat the variableType as non‐null.
+      if (!is.null(var_obj$defaultValue)) {
+        if (!inherits(variable_type, "NonNullType")) {
+          variable_type <- NonNullType$new(type = variable_type)
+        }
+      }
+
+      # If argumentType and variableType have different list dimensions, return false
+      # If any list level of variableType is not non‐null, and the corresponding level in argument is non‐null, the types are not compatible.
+      cur_var_type <- variable_type
+      cur_arg_type <- argument_type
+      check_non_null <- function() {
+        if (inherits(cur_arg_type, "NonNullType")) {
+          stop("Variable can not provide a nullible argument to a non-nullible definition")
+        }
+      }
+
+      while(
+        inherits(cur_var_type, "NonNullType") ||
+        inherits(cur_var_type, "ListType") ||
+        inherits(cur_arg_type, "NonNullType") ||
+        inherits(cur_arg_type, "ListType")
+      ) {
+        if (
+          inherits(cur_var_type, "NonNullType") ||
+          inherits(cur_arg_type, "NonNullType")
+        ) {
+          if (!inherits(cur_var_type, "NonNullType")) {
+            stop("Variable can not provide a nullible argument to a non-nullible definition")
+          } else {
+            cur_var_type <- cur_var_type$type
+          }
+          if (inherits(cur_arg_type, "NonNullType")) {
+            cur_arg_type <- cur_arg_type$type
+          }
+
+        } else {
+          if (
+            !inherits(cur_var_type, "ListType") ||
+            !inherits(cur_arg_type, "ListType")
+          ) {
+            # if either is not a list
+            stop("Variable list dimensions do not match argument's list dimensions")
+          } else {
+            # must both be lists at this point
+            cur_var_type <- cur_var_type$type
+            cur_arg_type <- cur_arg_type$type
+          }
+        }
+      }
+
+      # If inner type of argumentType and variableType are different, return false
+      if (!identical(
+        graphql_string(cur_var_type),
+        graphql_string(cur_arg_type)
+      )) {
+        stop(
+          "Argument and variable inner types do not match. Found: ",
+          graphql_string(cur_arg_type), " and ", graphql_string(cur_var_type)
+        )
+      }
 
       invisible(TRUE)
     },
@@ -435,13 +499,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
 
           # 5.7.3 - Variables Are Input Types
-          core_var_type <- var$type
-          while(
-            inherits(core_var_type, "ListType") ||
-            inherits(core_var_type, "NonNullType")
-          ) {
-            core_var_type <- core_var_type$type
-          }
+          core_var_type <- schema_obj$get_inner_type(var$type)
           matching_core_type_object <- ifnull(
             schema_obj$get_scalar(core_var_type), ifnull(
             schema_obj$get_enum(core_var_type),
