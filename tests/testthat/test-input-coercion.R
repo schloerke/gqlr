@@ -12,7 +12,7 @@ source("validate_helper.R")
 #   intArgField(intArg: Int): Int
 #   stringArgField(stringArg: String): String
 #   nonNullBooleanArgField(nonNullBooleanArg: Boolean!): Boolean!
-#   booleanListArgField(booleanListArg: [Boolean]!): [Boolean]
+#   booleanListArgField(booleanListArg: [Boolean]): [Boolean]
 # }
 #
 

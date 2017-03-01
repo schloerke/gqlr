@@ -146,7 +146,7 @@ test_that("5.2.2 - Field Selection Merging", {
     doesKnowCommand(dogCommand: SIT)
     doesKnowCommand(dogCommand: SIT)
   }
-  query B($dogCommand: DogCommand) {
+  query B($dogCommand: DogCommand!) {
     dog {
       ...mergeIdenticalFieldsWithIdenticalValues
     }
@@ -172,7 +172,7 @@ test_that("5.2.2 - Field Selection Merging", {
   expect_err("Two matching return fields must have identical arguments")
 
   "
-  query A($dogCommand: DogCommand) {
+  query A($dogCommand: DogCommand = SIT) {
     dog {
       ...conflictingArgsValueAndVar
     }
@@ -185,7 +185,7 @@ test_that("5.2.2 - Field Selection Merging", {
   expect_err("Two matching return fields must have identical arguments")
 
   "
-  query A($varOne: DogCommand, $varTwo: DogCommand) {
+  query A($varOne: DogCommand = SIT, $varTwo: DogCommand = SIT) {
     dog {
       ...conflictingArgsWithVars
     }

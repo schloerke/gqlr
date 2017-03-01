@@ -53,7 +53,9 @@ type Arguments {
   intArgField(intArg: Int): Int
   stringArgField(stringArg: String): String
   nonNullBooleanArgField(nonNullBooleanArg: Boolean!): Boolean!
-  booleanListArgField(booleanListArg: [Boolean]!): [Boolean]
+  booleanListArgField(booleanListArg: [Boolean]): [Boolean]
+  booleanNonNullListArgField(booleanNonNullListArg: [Boolean]!): [Boolean]!
+  nonNullBooleanListArgField(nonNullBooleanListArg: [Boolean!]): [Boolean!]
 }
 
 input ComplexInput { name: String, owner: String }
