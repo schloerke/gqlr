@@ -6,18 +6,26 @@ get_name_values <- function(list_obj) {
 
 
 # helper to check for more than one field and unique field names
-validate_field_names <- function(x, error_title) {
+validate_field_names <- function(x, error_title, error_code, ..., vh) {
   # must have one or more fields
   object_fields <- x$fields
   if (length(object_fields) == 0) {
-    stop(error_title, " definiiton: ", x$.title, " must have at least one field")
+    vh$error_list$add(
+      error_code,
+      error_title, " definiiton: ", x$.title, " must have at least one field"
+    )
+    return(FALSE)
   }
 
   # fields must have unique names
   field_names <- get_name_values(object_fields)
 
   if (any(duplicated(field_names))) {
-    stop(error_title, " defintion: ", x$.title, " must have unique field names")
+    vh$error_list$add(
+      error_code,
+      error_title, " defintion: ", x$.title, " must have unique field names"
+    )
+    return(FALSE)
   }
 }
 
@@ -29,9 +37,9 @@ validate_field_names <- function(x, error_title) {
 #   * An Interface type must define one or more fields.
 #   * The fields of an Interface type must have unique names within that Interface type;
 #     no two fields may share the same name.
-validate.InterfaceTypeDefinition <- function(x, schema_obj, ...) {
+validate.InterfaceTypeDefinition <- function(x, ..., vh) {
 
-  validate_field_names(x, "interface")
+  validate_field_names(x, "interface", "3.1.3.1", vh = vh)
 
   return(invisible(TRUE))
 }
@@ -48,22 +56,28 @@ validate.InterfaceTypeDefinition <- function(x, schema_obj, ...) {
 #   types of a Union.
 # * A Union type must define one or more member types.
 
-validate.UnionTypeDefinition <- function(x, schema_obj, ...) {
+validate.UnionTypeDefinition <- function(x, ..., vh) {
 
   types <- x$types
   if (length(types) == 0) {
-    stop("union definition: ", x$.title, " must have at least one type.")
+    vh$error_list$add(
+      "3.1.4.1",
+      "union definition: ", x$.title, " must have at least one type."
+    )
+    return(FALSE)
   }
 
   lapply(types, function(type) {
-    type_object <- schema_obj$get_object(type)
+    type_object <- vh$schema_obj$get_object(type)
 
     if (is.null(type_object)) {
-      stop(
+      vh$error_list$add(
+        "3.1.4.1",
         "union definition: ", x$.title,
         " types can only be objects.",
         " Scalar, Interface, and Union types may not be member types of a Union."
       )
+      return(FALSE)
     }
   })
 
@@ -81,18 +95,20 @@ validate.UnionTypeDefinition <- function(x, schema_obj, ...) {
 #   no two fields may share the same name.
 # * The return types of each defined field must be an Input type.
 
-validate.InputObjectTypeDefinition <- function(x, schema_obj, ...) {
-  validate_field_names(x, "input object")
+validate.InputObjectTypeDefinition <- function(x, ..., vh) {
+  validate_field_names(x, "input object", "3.1.6.1", vh = vh)
 
   lapply(x$fields, function(field) {
-    type_obj <- schema_obj$get_type(field$type)
+    type_obj <- vh$schema_obj$get_type(field$type)
 
     if (is.null(type_obj)) {
-      stop(
+      vh$error_list$add(
+        "3.1.6.1",
         "input object: ", x$.title,
         " must return a InputType",
         " for field: ", field$.title
       )
+      return(FALSE)
     }
   })
 }
@@ -132,9 +148,9 @@ validate.InputObjectTypeDefinition <- function(x, schema_obj, ...) {
 
 
 
-validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
+validate.ObjectTypeDefinition <- function(x, ..., vh) {
 
-  validate_field_names(x, "object")
+  validate_field_names(x, "object", "3.1.2.3", vh = vh)
 
   object_fields <- x$fields
   field_names <- get_name_values(object_fields)
@@ -146,7 +162,7 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
 
   # check for interfaces
   lapply(interfaces, function(interface_named_type) {
-    interface_obj <- schema_obj$get_interface(interface_named_type)
+    interface_obj <- vh$schema_obj$get_interface(interface_named_type)
 
     interface_fields <- interface_obj$fields
 
@@ -156,7 +172,11 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
 
       # object must implement every interface field name
       if (! (interface_field_name %in% field_names)) {
-        stop("object definition: ", x$.title, " must implement all fields of interface: ", interface_obj$.title, ". Missing field: ", interface_field_name)
+        vh$error_list$add(
+          "3.1.2.3",
+          "object definition: ", x$.title, " must implement all fields of interface: ", interface_obj$.title, ". Missing field: ", interface_field_name
+        )
+        return(FALSE)
       }
 
       matching_obj_field <- object_fields[[which(field_names == interface_field_name)]]
@@ -175,12 +195,14 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
       if (
         length(interface_field_arg_names) != length(matching_obj_field_arg_names)
       ) {
-        stop(
+        vh$error_list$add(
+          "3.1.2.3",
           "object definition: ", x$.title,
           " must have the same arguments",
           " of interface: ", interface_obj$.title,
           " for field: ", interface_field_name
         )
+        return(FALSE)
       }
 
       # The object field may include additional arguments not defined in the interface field,
@@ -192,12 +214,14 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
         function(field_arg) {
           defaultVal <- field_arg$defaultValue
           if (!is.null(defaultVal)) {
-            stop(
+            vh$error_list$add(
+              "3.1.2.3",
               "object definition: ", x$.title,
               " must have default values for non-interface argument: ", field_arg$name$value,
               " when looking at interface: ", interface_obj$.title,
               " for field: ", interface_field_name
             )
+            return(FALSE)
           }
         }
       )
@@ -206,12 +230,14 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
       lapply(interface_field_arg_names, function(interface_field_arg_name) {
 
         if (! (interface_field_arg_name %in% matching_obj_field_arg_names)) {
-          stop(
+          vh$error_list$add(
+            "3.1.2.3",
             "object definition: ", x$.title,
             " must implement argument: ", interface_field_arg_name,
             " of interface: ", interface_obj$.title,
             " for field: ", interface_field_name
           )
+          return(FALSE)
         }
 
         interface_field_arg <- interface_field_args[[
@@ -226,13 +252,15 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
         interface_field_arg_type <- graphql_string(interface_field_arg$type)
 
         if (matching_obj_field_arg_type != interface_field_arg_type) {
-          stop(
+          vh$error_list$add(
+            "3.1.2.3",
             "object definition: ", x$.title,
             " of interface: ", interface_obj$.title,
             " for field: ", interface_field_name,
             " must input the same type: ", matching_obj_field_arg_type,
             " for argument: ", interface_field_arg_name
           )
+          return(FALSE)
         }
 
       })

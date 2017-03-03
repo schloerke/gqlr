@@ -110,6 +110,14 @@ test_that('5.1.2.1 - Lone Anonymous Operation', {
 
   # Causes parser error
   # missing fragment name
+  expect_graphql_error <- function(query, ...) {
+    expect_error(
+      {
+        graphql2obj(query)
+      },
+      ...
+    )
+  }
   "
   query HeroNameQuery1 {
     ...HeroNameFrag
@@ -120,6 +128,6 @@ test_that('5.1.2.1 - Lone Anonymous Operation', {
     }
   }
   " %>%
-  expect_err("syntax error")
+  expect_graphql_error("syntax error")
 
 });

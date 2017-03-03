@@ -3,7 +3,12 @@
 
 # 5.2.2 - Field Selection Merging - DONE
 # assuming only inline fragments exist at this point
-validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_obj, ..., same_response_shape_only = FALSE) {
+validate_fields_can_merge <- function(
+  selection_set_obj, matching_obj,
+  ...,
+  vh,
+  same_response_shape_only = FALSE
+) {
 
   selection_set <- selection_set_obj$selections
 
@@ -27,7 +32,7 @@ validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_ob
           # inline fragment with no type. get parent type
           item_matching_obj <- matching_obj_
         } else {
-          item_matching_obj <- schema_obj$get_object_interface_or_union(field$typeCondition)
+          item_matching_obj <- vh$schema_obj$get_object_interface_or_union(field$typeCondition)
         }
         add_all_fields(field$selectionSet$selections, item_matching_obj)
       }
@@ -53,7 +58,7 @@ validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_ob
           field_j_info <- field_list_sub[[j]]
 
           # SameResponseShape(fieldA, fieldB) must be true.
-          validate_fields_have_same_response_shape(field_i_info, field_j_info, schema_obj)
+          validate_fields_have_same_response_shape(field_i_info, field_j_info, vh = vh)
 
           if (same_response_shape_only) {
             next
@@ -65,15 +70,17 @@ validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_ob
               field_i_info$parent_type,
               field_j_info$parent_type
             ) ||
-            is.null(schema_obj$get_object(field_i_info$parent_type)) ||
-            is.null(schema_obj$get_object(field_j_info$parent_type))
+            is.null(vh$schema_obj$get_object(field_i_info$parent_type)) ||
+            is.null(vh$schema_obj$get_object(field_j_info$parent_type))
           ) {
             # fieldA and fieldB must have identical field names.
             if (field_i_info$name != field_j_info$name) {
-              stop(
+              vh$error_list$add(
+                "5.2.2",
                 "Two matching return fields must have the same original field name\n",
                 "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info)
               )
+              next
             }
 
             # fieldA and fieldB must have identical sets of arguments.
@@ -85,10 +92,12 @@ validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_ob
                 capture.output(str(field_i_info$field$arguments)),
                 capture.output(str(field_j_info$field$arguments))
               )) {
-                stop(
+                vh$error_list$add(
+                  "5.2.2",
                   "Two matching return fields must have identical arguments\n",
                   "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info)
                 )
+                next
               }
             }
 
@@ -108,8 +117,8 @@ validate_fields_can_merge <- function(selection_set_obj, schema_obj, matching_ob
                   )
                 )
               )
-              return_type_obj <- schema_obj$get_type(field_i_info$return_type_obj)
-              validate_fields_can_merge(merged_set, schema_obj, return_type_obj,...)
+              return_type_obj <- vh$schema_obj$get_type(field_i_info$return_type_obj)
+              validate_fields_can_merge(merged_set, return_type_obj, vh = vh)
             }
           }
 
@@ -131,7 +140,7 @@ field_string <- function(field_info) {
   }
 }
 
-validate_fields_have_same_response_shape <- function(field_i_info, field_j_info, schema_obj) {
+validate_fields_have_same_response_shape <- function(field_i_info, field_j_info, ..., vh) {
   # Let typeA be the return type of fieldA.
   type_i <- field_i_info$return_type
   # Let typeB be the return type of fieldB.
@@ -147,11 +156,13 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
         (!inherits(type_i, "NonNullType")) ||
         (!inherits(type_j, "NonNullType"))
       ) {
-        stop(
-          "Two matching return fields must both be NonNullType if one value is NonNullType.",
+        vh$error_list$add(
+          "5.2.2",
+          "Two matching return fields must both be NonNullType if one value is NonNullType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
           "Currently returning: ", graphql_string(type_i), " and ", graphql_string(type_j)
         )
+        return(FALSE)
       }
       # Let typeA be the nullable type of typeA
       type_i <- type_i$type
@@ -166,11 +177,13 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
         (!inherits(type_i, "ListType")) ||
         (!inherits(type_j, "ListType"))
       ) {
-        stop(
-          "Two matching return fields must both be ListType if one value is ListType",
+        vh$error_list$add(
+          "5.2.2",
+          "Two matching return fields must both be ListType if one value is ListType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
           "Currently returning: ", graphql_string(type_i), " and ", graphql_string(type_j)
         )
+        return(FALSE)
       }
       # Let typeA be the item type of typeA
       type_i <- type_i$type
@@ -186,33 +199,37 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
 
   # If typeA or typeB is Scalar or Enum.
   if (
-    (!is.null(schema_obj$get_scalar_or_enum(type_i))) ||
-    (!is.null(schema_obj$get_scalar_or_enum(type_j)))
+    (!is.null(vh$schema_obj$get_scalar_or_enum(type_i))) ||
+    (!is.null(vh$schema_obj$get_scalar_or_enum(type_j)))
   ) {
     # typeA and typeB must be the same type.
     if (!identical(type_i_str, type_j_str)) {
-      stop(
+      vh$error_list$add(
+        "5.2.2",
         "Two matching return names must return the same types. \n",
         "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
         "Currently returning: ", type_i_str, " and ", type_j_str
       )
+      return(FALSE)
     }
     return(TRUE)
 
   }
 
   # Assert: typeA and typeB are both composite types.
-  composite_i <- schema_obj$get_object_interface_or_union(type_i)
-  composite_j <- schema_obj$get_object_interface_or_union(type_j)
+  composite_i <- vh$schema_obj$get_object_interface_or_union(type_i)
+  composite_j <- vh$schema_obj$get_object_interface_or_union(type_j)
   if (
     is.null(obj_int_union_i) ||
     is.null(obj_int_union_j)
   ) {
-    stop(
+    vh$error_list$add(
+      "5.2.2",
       "Two matching return names must return an Object, Interface, or Union ",
       "if they do not return a Scalar or Enum.  \n",
       "Currently returning: ", type_i_str, " and ", type_j_str
     )
+    return(FALSE)
   }
 
   # Let mergedSet be the result of adding the selection set of fieldA and the selection set of fieldB.
@@ -231,9 +248,16 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
       )
     )
   )
-  return_type_obj <- schema_obj$get_type(field_i_info$return_type_obj)
-  validate_fields_can_merge(merged_set, schema_obj, return_type_obj,...)
-  validate_fields_can_merge(selection_set, schema_obj, matching_obj, same_response_shape_only = TRUE)
+  return_type_obj <- vh$schema_obj$get_type(field_i_info$return_type_obj)
+  validate_fields_can_merge(
+    merged_set, return_type_obj,
+    vh = vh
+  )
+  validate_fields_can_merge(
+    selection_set, matching_obj,
+    vh = vh,
+    same_response_shape_only = TRUE
+  )
 
   TRUE
 }

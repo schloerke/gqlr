@@ -8,12 +8,17 @@ test_that("valid", {
 
   source("dog_cat_schema.R")
 
-  expect_validate <- function(name, obj_type, ...) {
+  expect_validate <- function(name, obj_type) {
+    vh <- ValidatorHelpers$new(dog_cat_schema)
     # obj <- dog_cat_schema$get_interface("Pet")
     obj <- dog_cat_schema[[paste("get_", obj_type, sep = "")]](name)
-    expect_true({
-      validate(obj, dog_cat_schema, ...)
+
+    expect_silent({
+      validate(obj, vh = vh)
     })
+
+    expect_true(vh$error_list$has_no_errors())
+
   }
 
 

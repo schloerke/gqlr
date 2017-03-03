@@ -4,7 +4,7 @@
 # 5.3.2 - Argument Uniqueness           - DONE
 # 5.3.3.1 - Compatible Values           - DONE
 # 5.3.3.2 - Required Non-Null Arguments - DONE
-validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ..., variable_validator) {
+validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_variables = FALSE) {
 
   if (
     is.null(argument_obj_list) &&
@@ -15,9 +15,11 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
 
 
   if (is.null(field_def_obj$arguments)) {
-    stop(
-      "there are no arguments for field: ", graphql_string(field_def_obj$name)
+    vh$error_list$add(
+      "5.3.1",
+      "Arguments supplied, but there are no arguments for field: ", graphql_string(field_def_obj$name)
     )
+    return(FALSE)
   }
 
   field_arg_map <- field_def_obj$arguments
@@ -36,7 +38,11 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
 
     # 5.3.2 - Argument Uniqueness
     if (!is.null(values_seen[[arg_name_str]])) {
-      stop("duplicate arguments with same name: ", arg_name_str)
+      vh$error_list$add(
+        "5.3.2",
+        "duplicate arguments with same name: ", arg_name_str
+      )
+      return(FALSE)
     }
 
     arg_value <- argument_obj$value
@@ -46,10 +52,12 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
 
     # 5.3.1 - Argument Names
     if (is.null(matching_arg_obj)) {
-      stop(
+      vh$error_list$add(
+        "5.3.1",
         "could not find matching arg value with label: ", graphql_string(arg_name),
         " for field: ", graphql_string(field_def_obj$name)
       )
+      return(FALSE)
     }
 
 
@@ -61,18 +69,18 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
     #   Let type be the type expected by argumentDefinition.
     #   The type of literalArgument must be coercible to type.
     if (inherits(arg_value, "Variable")) {
-      if (!is.null(variable_validator)) {
-        variable_validator$check_variable(arg_value, matching_arg_obj$type)
+      if (!isTRUE(skip_variables)) {
+        vh$variable_validator$check_variable(arg_value, matching_arg_obj$type)
       }
       next
     }
 
     # check type can be coerced
-    validate_value_can_be_coerced(arg_value, matching_arg_obj$type, schema_obj)
+    validate_value_can_be_coerced(arg_value, matching_arg_obj$type, vh = vh, rule_code = "5.3.3.1")
 
 
     if (inherits(arg_value, "ObjectValue")) {
-      validate_input_object_field_uniqueness(arg_value, schema_obj, ...)
+      validate_input_object_field_uniqueness(arg_value, vh = vh)
     }
 
   }
@@ -97,10 +105,12 @@ validate_arguments <- function(argument_obj_list, field_def_obj, schema_obj, ...
         is.null(arg_value) ||
         inherits(arg_value, "NullValue")
       ) {
-        stop(
+        vh$error_list$add(
+          "5.3.3.2",
           "null or missing argument not allowed for argument: ", graphql_string(field_arg$name),
           " for field: ", graphql_string(field_def_obj$name)
         )
+        next
       }
     }
   }
