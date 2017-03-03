@@ -165,6 +165,7 @@ validate.ObjectTypeDefinition <- function(x, schema_obj, ...) {
       # TODO check the field type in the interface
 
 
+
       # check the args
       interface_field_args <- interface_field$arguments
       interface_field_arg_names <- get_name_values(interface_field_args)

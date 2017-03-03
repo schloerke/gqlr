@@ -14,8 +14,7 @@
 # 5.4 Fragments  - DONE (TODO Mutatation)
 # 5.5 Values     - DONE
 # 5.6 Directives - DONE
-# 5.7 Variables  -
-  # 5.7.6 - All Variable Usages are Allowed - TODO need type coercion
+# 5.7 Variables  - DONE
 
 
 
