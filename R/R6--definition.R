@@ -198,6 +198,16 @@ Document <- R6_from_args(
     .format = function(...) {
       format_list(self$definitions, .collapse = "\n\n")
     },
+    .get_operations = function() {
+      ret <- list()
+      for (defintion in self$definitions) {
+        if (inherits(definition, "OperationDefinition")) {
+          ret <- append(ret, definition)
+        }
+      }
+
+      ret
+    }
   )
 )
 
