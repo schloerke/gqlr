@@ -105,13 +105,13 @@ Location <- R6_from_args(
     end: number;
     source?: ?Source;",
   public = list(
-    .str = function(maxLevel = -1, ...) {
-      if (maxLevel == 0) {
-        return()
-      }
-
-      cat("<", self$.kind, "> (", self$start, ", ", self$end, ")", sep = "")
-    }
+    # .str = function(maxLevel = -1, ...) {
+    #   if (maxLevel == 0) {
+    #     return()
+    #   }
+    #
+    #   cat("<", self$.kind, "> (", self$start, ", ", self$end, ")", sep = "")
+    # }
   )
 )
 
