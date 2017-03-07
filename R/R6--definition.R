@@ -690,6 +690,17 @@ NamedType = R6_from_args(
     name: Name;
     description?: ?string;",
   public = list(
+    .matches = function(name_obj) {
+      if (!inherits(name_obj, "NamedType")) {
+        str(name_obj)
+        stop("supply a NamedType obj")
+      }
+
+      return(identical(
+        self$name$value,
+        name_obj$name$value
+      ))
+    },
     .format = function(...) {
       self$name$.format()
     }
