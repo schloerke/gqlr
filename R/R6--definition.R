@@ -28,11 +28,27 @@
 # )
 
 
+format_list = function(list_vals, .before = "", .after = "", .collapse = "", ...) {
+  if (is.null(list_vals)) stop("received null list")
+  if (length(list_vals) == 0) return(NULL)
 
+  list_vals %>%
+    lapply(function(x) {
+      x$.format(...)
+    }) %>%
+    unlist() ->
+  txt_arr
+
+  collapse(.before, txt_arr, .after, collapse = .collapse)
+}
 
 
 AST <- R6Class("AST",
   public = list(
+    .format = function(...) {
+      str(self)
+      stop("Not implemented")
+    }
   ),
   active = list(
     .title = function() {
@@ -147,6 +163,11 @@ Name <- R6_from_args(
   "Name",
   " loc?: ?Location;
     value: string;",
+  public = list(
+    .format = function(...) {
+      self$value
+    }
+  ),
   active = list(
     value = function(value) {
       if (missing(value)) {
@@ -172,6 +193,11 @@ Document <- R6_from_args(
     # init_validate = function() {
     #   validate_operation_names(self)
     # }
+  ),
+  public = list(
+    .format = function(...) {
+      format_list(self$definitions, .collapse = "\n\n")
+    },
   )
 )
 
@@ -189,7 +215,37 @@ OperationDefinition <- R6_from_args(
     name?: ?Name;
     variableDefinitions?: ?Array<VariableDefinition>;
     directives?: ?Array<Directive>;
-    selectionSet: SelectionSet;"
+    selectionSet: SelectionSet;",
+  public = list(
+    .format = function(...) {
+
+      if (!(
+        is.null(self$name) & is.null(self$variableDefinitions) & is.null(self$directives)
+      )) {
+        name_txt <- variable_txt <- directive_txt <- NULL
+
+        if (!is.null(self$name)) {
+          name_txt <- str_c(" ", self$name$.format())
+        }
+        if (!is.null(self$variableDefinitions)) {
+          variable_txt <- collapse(
+            "(", format_list(self$variableDefinitions, .collapse = ", "), ")"
+          )
+        }
+        if (!is.null(self$directives)) {
+          directive_txt <- format_list(self$directives, .before = " ")
+        }
+
+        pre_text <- collapse(self$operation, name_txt, variable_txt, directive_txt, " ")
+      } else {
+        pre_text <- NULL
+      }
+
+      collapse(
+        pre_text, self$selectionSet$.format(sapce_count = 2)
+      )
+    }
+  )
 )
 
 
@@ -199,14 +255,41 @@ VariableDefinition <- R6_from_args(
   " loc?: ?Location;
     variable: Variable;
     type: Type;
-    defaultValue?: ?Value;"
+    defaultValue?: ?Value;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$variable$.format(), ": ", self$type$.format(),
+        if (!is.null(self$defaultValue)) str_c(" = ", self$defaultValue$.format())
+      )
+    },
+    .get_name = function() {
+      self$variable$name$value
+    }
+  )
 )
 
 SelectionSet <- R6_from_args(
   inherit = Node,
   "SelectionSet",
   " loc?: ?Location;
-    selections: Array<Selection>;"
+    selections: Array<Selection>;",
+  public = list(
+    .format = function(..., space_count = 2) {
+      before_spaces <- collapse(rep(" ", max(c(space_count - 2, 0))))
+
+      collapse(
+        "{\n",
+        format_list(
+          .before = collapse(rep(" ", space_count)),
+          self$selections,
+          .collapse = "\n",
+          space_count = space_count + 2
+        ), "\n",
+        before_spaces, "}"
+      )
+    }
+  )
 )
 
 
@@ -226,7 +309,22 @@ Field = R6_from_args(
     name: Name;
     arguments?: ?Array<Argument>;
     directives?: ?Array<Directive>;
-    selectionSet?: ?SelectionSet;"
+    selectionSet?: ?SelectionSet;",
+  public = list(
+    .format = function(..., space_count = 0) {
+      collapse(
+        if (!is.null(self$alias))
+          collapse(self$alias$.format(), ": "),
+        self$name$.format(),
+        if (!is.null(self$arguments))
+          collapse("(", format_list(self$arguments, .collapse = ", "), ")"),
+        if (!is.null(self$directives))
+          collapse(" ", format_list(self$directives)),
+        if (!is.null(self$selectionSet))
+          str_c(" ", self$selectionSet$.format(space_count = space_count))
+      )
+    }
+  )
 )
 
 
@@ -235,7 +333,16 @@ Argument = R6_from_args(
   "Argument",
   " loc?: ?Location;
     name: Name;
-    value: Value;"
+    value: Value;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$name$.format(),
+        ": ",
+        self$value$.format()
+      )
+    }
+  )
 )
 
 
@@ -244,7 +351,17 @@ FragmentSpread = R6_from_args(
   "FragmentSpread",
   " loc?: ?Location;
     name: Name;
-    directives?: ?Array<Directive>;"
+    directives?: ?Array<Directive>;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "...",
+        self$name$.format(),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " ")
+      )
+    }
+  )
 )
 
 
@@ -254,7 +371,20 @@ InlineFragment = R6_from_args(
   " loc?: ?Location;
     typeCondition?: ?NamedType;
     directives?: ?Array<Directive>;
-    selectionSet: SelectionSet;"
+    selectionSet: SelectionSet;",
+  public = list(
+    .format = function(..., space_count = 0) {
+      collapse(
+        "...",
+        if (!is.null(self$typeCondition))
+          collapse(" on ", self$typeCondition$.format()),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " "),
+        " ",
+        self$selectionSet$.format(space_count = space_count)
+      )
+    }
+  )
 )
 
 
@@ -266,7 +396,20 @@ FragmentDefinition = R6_from_args(
     name: Name;
     typeCondition: NamedType;
     directives?: ?Array<Directive>;
-    selectionSet: SelectionSet;"
+    selectionSet: SelectionSet;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "fragment ",
+        self$name$.format(),
+        if (!is.null(self$typeCondition))
+          collapse(" on ", self$typeCondition$.format()),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " "),
+        " ", self$selectionSet$.format(space_count = 2)
+      )
+    }
+  )
 )
 
 
@@ -301,7 +444,12 @@ Variable <- R6_from_args(
   inherit = Value,
   "Variable",
   " loc?: ?Location;
-    name: Name; "
+    name: Name; ",
+  public = list(
+    .format = function(...) {
+      collapse("$", self$name$.format())
+    }
+  )
 )
 
 scalar_active_value <- function(value) {
@@ -334,6 +482,9 @@ IntValue = (function(){
     " loc?: ?Location;
       value: string;",
     public = list(
+      .format = function(...) {
+        as.character(self$value)
+      }
       # .parse_literal = coerce_int,
       # .serialize = coerce_int,
       # .parse_value = coerce_int,
@@ -352,6 +503,9 @@ FloatValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
+    .format = function(...) {
+      as.character(self$value)
+    }
     # .parse_literal = coerce_helper(as.numeric, is.numeric),
     # .serialize = coerce_helper(as.numeric, is.numeric),
     # .parse_value = coerce_helper(as.numeric, is.numeric)
@@ -367,6 +521,9 @@ StringValue = R6_from_args(
   " loc?: ?Location;
     value: string;",
   public = list(
+    .format = function(...) {
+      collapse("\"", as.character(self$value), "\"")
+    }
     # .parse_literal = coerce_helper(as.character, is.character),
     # .serialize = coerce_helper(as.character, is.character),
     # .parse_value = coerce_helper(as.character, is.character)
@@ -382,6 +539,13 @@ BooleanValue = R6_from_args(
   " loc?: ?Location;
     value: boolean;",
   public = list(
+    .format = function(...) {
+      if (isTRUE(self$value)) {
+        "true"
+      } else {
+        "false"
+      }
+    }
     # .parse_literal = coerce_helper(as.logical, is.logical),
     # .serialize = coerce_helper(as.logical, is.logical),
     # .parse_value = coerce_helper(as.logical, is.logical)
@@ -393,19 +557,38 @@ BooleanValue = R6_from_args(
 NullValue = R6_from_args(
   inherit = Value,
   "NullValue",
-  " loc?: ?Location;"
+  " loc?: ?Location;",
+  public = list(
+    .format = function(...) {
+      "null"
+    }
+  )
 )
 EnumValue = R6_from_args(
   inherit = Value,
   "EnumValue",
   " loc?: ?Location;
-    value: string;"
+    value: string;",
+  public = list(
+    .format = function(...) {
+      as.character(self$value)
+    }
+  )
 )
 ListValue = R6_from_args(
   inherit = Value,
   "ListValue",
   " loc?: ?Location;
-    values: Array<Value>;"
+    values: Array<Value>;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "[",
+        format_list(self$values, .collapse = ", "),
+        "]"
+      )
+    }
+  )
 )
 
 object_get_by_field_name = function(name_obj) {
@@ -427,7 +610,14 @@ ObjectValue = R6_from_args(
     # }
   ),
   public = list(
-    .get_field_by_name = object_get_by_field_name
+    .get_field_by_name = object_get_by_field_name,
+    .format = function(...) {
+      collapse(
+        "{",
+        format_list(self$fields, collapse = ", "),
+        "}"
+      )
+    }
   )
 )
 ObjectField = R6_from_args(
@@ -436,7 +626,16 @@ ObjectField = R6_from_args(
   " loc?: ?Location;
     name: Name;
     value: Value;
-  "
+  ",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$name$.format(),
+        ": ",
+        self$value$.format()
+      )
+    }
+  )
 )
 
 
@@ -449,7 +648,16 @@ Directive = R6_from_args(
   " loc?: ?Location;
     description?: ?string;
     name: Name;
-    arguments?: ?Array<Argument>;"
+    arguments?: ?Array<Argument>;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "@", self$name$.format(),
+        if (!is.null(self$arguments))
+          collapse("(", format_list(self$arguments, .collapse = ", "), ")")
+      )
+    }
+  )
 )
 
 
@@ -470,7 +678,12 @@ NamedType = R6_from_args(
   "NamedType",
   " loc?: ?Location;
     name: Name;
-    description?: ?string;"
+    description?: ?string;",
+  public = list(
+    .format = function(...) {
+      self$name$.format()
+    }
+  )
 )
 
 ListType = R6_from_args(
@@ -478,7 +691,16 @@ ListType = R6_from_args(
   "ListType",
   " loc?: ?Location;
     type: Type;
-    description?: ?string;"
+    description?: ?string;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "[",
+        self$type$.format(),
+        "]"
+      )
+    }
+  )
 )
 
 NonNullType = R6_from_args(
@@ -486,7 +708,15 @@ NonNullType = R6_from_args(
   "NonNullType",
   " loc?: ?Location;
     type: NamedType | ListType;
-    description?: ?string;"
+    description?: ?string;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$type$.format(),
+        "!"
+      )
+    }
+  )
 )
 
 
@@ -504,15 +734,37 @@ SchemaDefinition = R6_from_args(
   # Changed default behavior of directives to be optional
   " loc?: ?Location;
     directives?: ?Array<Directive>;
-    operationTypes: Array<OperationTypeDefinition>;"
+    operationTypes: Array<OperationTypeDefinition>;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "schema",
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " "),
+        " {\n",
+          format_list(self$operationTypes, .before = "  ", .after = "\n"),
+        "}"
+      )
+    }
+  )
 )
+
 
 OperationTypeDefinition = R6_from_args(
   inherit = Node,
   "OperationTypeDefinition",
   " loc?: ?Location;
     operation: 'query' | 'mutation' | 'subscription';
-    type: NamedType;"
+    type: NamedType;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$operation,
+        ": ",
+        self$type$.format()
+      )
+    }
+  )
 )
 
 # export type TypeDefinition = ScalarTypeDefinition
@@ -535,6 +787,14 @@ ScalarTypeDefinition = R6_from_args(
     .parse_value?: ?fn;
     .parse_literal?: ?fn;",
   public = list(
+    .format = function(...) {
+      collapse(
+        "scalar ",
+        self$name$.format(),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " ")
+      )
+    },
     initialize = function(
       loc = NULL,
       description = NULL,
@@ -609,6 +869,22 @@ ObjectTypeDefinition = R6_from_args(
     directives?: ?Array<Directive>;
     fields: Array<FieldDefinition>;",
   public = list(
+    .format = function(...) {
+      collapse(
+        "type ",
+        self$name$.format(),
+        if (!is.null(self$interfaces))
+          collapse(
+            " implements ",
+            format_list(self$interfaces)
+          ),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " "),
+        " {\n",
+        format_list(self$fields, .before = "  ", .after = "\n"),
+        "}"
+      )
+    },
     .get_field = interface_or_object_get_field,
     .contains_field = function(field_obj) {
       !is.null(self$.get_field(field_obj))
@@ -626,7 +902,20 @@ FieldDefinition = R6_from_args(
     arguments?: ?Array<InputValueDefinition>;
     type: Type;
     directives?: ?Array<Directive>;
-    .resolve?: ?fn;"
+    .resolve?: ?fn;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$name$.format(),
+        if (!is.null(self$arguments))
+          collapse("(", format_list(self$arguments, .collapse = ", "), ")"),
+        ": ",
+        self$type$.format(),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " ")
+      )
+    }
+  )
 )
 
 InputValueDefinition = R6_from_args(
@@ -636,7 +925,20 @@ InputValueDefinition = R6_from_args(
     name: Name;
     type: Type;
     defaultValue?: ?Value;
-    directives?: ?Array<Directive>;"
+    directives?: ?Array<Directive>;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$name$.format(),
+        ": ",
+        self$type$.format(),
+        if (!is.null(self$defaultValue))
+          collapse(" = ", self$defaultValue$.format()),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " ")
+      )
+    }
+  )
 )
 
 InterfaceTypeDefinition = R6_from_args(
@@ -648,6 +950,17 @@ InterfaceTypeDefinition = R6_from_args(
     directives?: ?Array<Directive>;
     fields: Array<FieldDefinition>;",
   public = list(
+    .format = function(...) {
+      collapse(
+        "interface ",
+        self$name$.format(),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " "),
+        " {\n",
+          format_list(self$fields, .before = "  ", .after = "\n"),
+        "}"
+      )
+    },
     .get_field = interface_or_object_get_field
   )
 )
@@ -659,7 +972,19 @@ UnionTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    types: Array<NamedType>;"
+    types: Array<NamedType>;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "union ",
+        self$name$.format(),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " "),
+        " = ",
+        format_list(self$types, .collapse = " | ")
+      )
+    },
+  )
 )
 
 EnumTypeDefinition = R6_from_args(
@@ -671,6 +996,17 @@ EnumTypeDefinition = R6_from_args(
     directives?: ?Array<Directive>;
     values: Array<EnumValueDefinition>;",
   public = list(
+    .format = function(...) {
+      collapse(
+          "enum ",
+          self$name$.format(),
+          if (!is.null(self$directives))
+            format_list(self$directives, .before = " "),
+          " {\n",
+            format_list(self$values, .before = "  ", .after = "\n"),
+          "}"
+      )
+    },
     .parse_literal = function(value_obj) {
 
       # if (inherits(value_obj, "IntValue")) {
@@ -702,7 +1038,16 @@ EnumValueDefinition = R6_from_args(
   " loc?: ?Location;
     description?: ?string;
     name: Name;
-    directives?: ?Array<Directive>;"
+    directives?: ?Array<Directive>;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        self$name$.format(),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " ")
+      )
+    }
+  )
 )
 
 InputObjectTypeDefinition = R6_from_args(
@@ -714,6 +1059,17 @@ InputObjectTypeDefinition = R6_from_args(
     directives?: ?Array<Directive>;
     fields: Array<InputValueDefinition>;",
   public = list(
+    .format = function(...) {
+      collapse(
+        "input ",
+        self$name$.format(),
+        if (!is.null(self$directives))
+          format_list(self$directives, .before = " "),
+        " {\n",
+          format_list(self$fields, .before = "  ", .after = "\n"),
+        "}"
+      )
+    },
     .get_field_by_name = object_get_by_field_name
   )
 )
@@ -722,7 +1078,15 @@ TypeExtensionDefinition = R6_from_args(
   inherit = Definition,
   "TypeExtensionDefinition",
   " loc?: ?Location;
-    definition: ObjectTypeDefinition;"
+    definition: ObjectTypeDefinition;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "extend ",
+        self$definition$.format()
+      )
+    }
+  )
 )
 
 
@@ -734,5 +1098,20 @@ DirectiveDefinition = R6_from_args(
     name: Name;
     arguments?: ?Array<InputValueDefinition>;
     locations: Array<Name>;
-    .resolve?: ?fn;"
+    .resolve?: ?fn;",
+  public = list(
+    .format = function(...) {
+      collapse(
+        "directive @", self$name$.format(),
+        if (!is.null(self$arguments))
+          collapse(
+            "(",
+            format_list(self$arguments, .collapse = ", "),
+            ")"
+          ),
+        "\n  on ",
+        format_list(self$locations, .collapse = "\n   | ")
+      )
+    }
+  )
 )
