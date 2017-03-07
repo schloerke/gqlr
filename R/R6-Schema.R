@@ -276,7 +276,18 @@ GQLRSchema <- R6Class(
 
     },
 
-    interface_is_super_of = function(interface_obj, name_obj) {
+    # interface_is_super_of = function(interface_obj, name_obj) {
+    #
+    # },
+    # interface_can_implement_type = function(interface_obj, name_obj) {
+    #   self_interfaces <- ifnull(self$interfaces, list())
+    #   for (interface in self_interfaces) {
+    #     if (self$interface_is_super_of(name_obj)) {
+    #       return(TRUE)
+    #     }
+    #   }
+    #   return(FALSE)
+    # },
 
     },
     interface_can_implement_type = function(interface_obj, name_obj) {
