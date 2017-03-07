@@ -10,8 +10,8 @@ str_c <- function (..., sep = "", collapse = NULL) {
   paste(..., sep = sep, collapse = collapse)
 }
 
-collapse <- function(..., collapse = "") {
-  str_c(..., collapse = collapse)
+collapse <- function(..., sep = "", collapse = "") {
+  paste(..., sep = sep, collapse = collapse)
 }
 
 str_replace <- function(x, val, replacement) {
