@@ -43,7 +43,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
         if (is.null(operation$name)) {
           query_list[[""]] <- operation
         } else {
-          query_list[[graphql_string(operation$name)]] <- operation
+          query_list[[format(operation$name)]] <- operation
         }
       } else {
         # TODO
@@ -52,7 +52,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
     } else {
 
       fragment <- operation
-      fragment_name <- graphql_string(fragment$name)
+      fragment_name <- format(fragment$name)
 
       # 5.4.1.1
       if (!is.null(fragment_list[[fragment_name]])) {
@@ -103,7 +103,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
         if (inherits(field, "FragmentSpread")) {
           # is fragement spread
 
-          fragment_spread_name <- graphql_string(field$name)
+          fragment_spread_name <- format(field$name)
           fragment_obj <- fragment_list[[fragment_spread_name]]
 
           validate_directives(field$directives, field, vh = vh)
@@ -166,7 +166,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
           vh$error_list$add(
             "5.4.1.3",
             "fragment must supply at object, interface, or union.",
-            " Can not find match for typeCondition: ", graphql_string(matching_type_condition)
+            " Can not find match for typeCondition: ", format(matching_type_condition)
           )
           return(NULL)
         }

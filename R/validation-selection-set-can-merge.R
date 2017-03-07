@@ -160,7 +160,7 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
           "5.2.2",
           "Two matching return fields must both be NonNullType if one value is NonNullType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
-          "Currently returning: ", graphql_string(type_i), " and ", graphql_string(type_j)
+          "Currently returning: ", format(type_i), " and ", format(type_j)
         )
         return(FALSE)
       }
@@ -181,7 +181,7 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
           "5.2.2",
           "Two matching return fields must both be ListType if one value is ListType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
-          "Currently returning: ", graphql_string(type_i), " and ", graphql_string(type_j)
+          "Currently returning: ", format(type_i), " and ", format(type_j)
         )
         return(FALSE)
       }
@@ -194,8 +194,8 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
     }
   }
 
-  type_i_str <- graphql_string(type_i)
-  type_j_str <- graphql_string(type_j)
+  type_i_str <- format(type_i)
+  type_j_str <- format(type_j)
 
   # If typeA or typeB is Scalar or Enum.
   if (

@@ -16,7 +16,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
     if (is.null(from_input)) {
       vh$error_list$add(
         rule_code,
-        "Expected ", graphql_string(to_type), " found missing value."
+        "Expected ", format(to_type), " found missing value."
       )
       return(FALSE)
     }
@@ -24,7 +24,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
     if (inherits(from_input, "NullValue")) {
       vh$error_list$add(
         rule_code,
-        "Expected ", graphql_string(to_type), " found null value."
+        "Expected ", format(to_type), " found null value."
       )
     }
     return(
@@ -126,7 +126,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
   if (is.null(result)) {
     vh$error_list$add(
       rule_code,
-      "Expected type ", graphql_string(to_type), ", found ", from_input$.kind
+      "Expected type ", format(to_type), ", found ", from_input$.kind
     )
   }
 

@@ -17,7 +17,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
   if (is.null(field_def_obj$arguments)) {
     vh$error_list$add(
       "5.3.1",
-      "Arguments supplied, but there are no arguments for field: ", graphql_string(field_def_obj$name)
+      "Arguments supplied, but there are no arguments for field: ", format(field_def_obj$name)
     )
     return(FALSE)
   }
@@ -25,7 +25,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
   field_arg_map <- field_def_obj$arguments
   field_arg_map %>%
     lapply("[[", "name") %>%
-    lapply(graphql_string) %>%
+    lapply(format) %>%
     unlist() ->
   names(field_arg_map)
 
@@ -34,7 +34,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
   for (argument_obj in argument_obj_list) {
 
     arg_name <- argument_obj$name
-    arg_name_str <- graphql_string(arg_name)
+    arg_name_str <- format(arg_name)
 
     # 5.3.2 - Argument Uniqueness
     if (!is.null(values_seen[[arg_name_str]])) {
@@ -48,14 +48,14 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
     arg_value <- argument_obj$value
     values_seen[[arg_name_str]] <- arg_value
 
-    matching_arg_obj <- field_arg_map[[graphql_string(arg_name)]]
+    matching_arg_obj <- field_arg_map[[format(arg_name)]]
 
     # 5.3.1 - Argument Names
     if (is.null(matching_arg_obj)) {
       vh$error_list$add(
         "5.3.1",
-        "could not find matching arg value with label: ", graphql_string(arg_name),
-        " for field: ", graphql_string(field_def_obj$name)
+        "could not find matching arg value with label: ", format(arg_name),
+        " for field: ", format(field_def_obj$name)
       )
       return(FALSE)
     }
@@ -100,15 +100,15 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
   #     value must not be the null literal.
   for (field_arg in field_arg_map) {
     if (inherits(field_arg$type, "NonNullType")) {
-      arg_value <- values_seen[[graphql_string(field_arg$name)]]
+      arg_value <- values_seen[[format(field_arg$name)]]
       if (
         is.null(arg_value) ||
         inherits(arg_value, "NullValue")
       ) {
         vh$error_list$add(
           "5.3.3.2",
-          "null or missing argument not allowed for argument: ", graphql_string(field_arg$name),
-          " for field: ", graphql_string(field_def_obj$name)
+          "null or missing argument not allowed for argument: ", format(field_arg$name),
+          " for field: ", format(field_def_obj$name)
         )
         next
       }

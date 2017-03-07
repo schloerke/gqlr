@@ -370,7 +370,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
         return(invisible(TRUE))
       }
 
-      var_name <- graphql_string(var$name)
+      var_name <- format(var$name)
 
       var_obj <- self$variables[[var_name]]
 
@@ -443,13 +443,13 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
       # If inner type of argumentType and variableType are different, return false
       if (!identical(
-        graphql_string(cur_var_type),
-        graphql_string(cur_arg_type)
+        format(cur_var_type),
+        format(cur_arg_type)
       )) {
         self$vh$error_list$add(
           "5.7.6",
           "Argument and variable inner types do not match. Found: ",
-          graphql_string(cur_arg_type), " and ", graphql_string(cur_var_type)
+          format(cur_arg_type), " and ", format(cur_var_type)
         )
         return(invisible(FALSE))
       }
@@ -496,7 +496,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
       vars %>%
         lapply(function(var) {
-          name <- graphql_string(var$variable$name)
+          name <- format(var$variable$name)
 
           self$variables[[name]] <- var
           self$has_been_seen[[name]] <- FALSE
