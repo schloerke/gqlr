@@ -152,6 +152,10 @@ GQLRSchema <- R6Class(
     values = list(),
 
     # has_directive_list = list(),
+    exists_by_name = function(name_obj, obj_list_txt) {
+      name_val <- self$name_helper
+      name_val %in% names(private[[obj_list_txt]])
+    },
     get_by_name = function(name_obj, obj_list_txt) {
       name_val <- self$name_helper(name_obj)
       private[[obj_list_txt]][[name_val]]
@@ -201,15 +205,34 @@ GQLRSchema <- R6Class(
       }
     },
 
-    get_scalar = function(name) private$get_by_name(name, "scalars"),
-    get_enum = function(name) private$get_by_name(name, "enums"),
-    get_object = function(name) private$get_by_name(name, "objects"),
-    get_interface = function(name) private$get_by_name(name, "interfaces"),
-    get_union = function(name) private$get_by_name(name, "unions"),
+    is_scalar       = function(name) private$exists_by_name(name, "scalars"),
+    is_enum         = function(name) private$exists_by_name(name, "enums"),
+    is_object       = function(name) private$exists_by_name(name, "objects"),
+    is_interface    = function(name) private$exists_by_name(name, "interfaces"),
+    is_union        = function(name) private$exists_by_name(name, "unions"),
+    is_input_object = function(name) private$exists_by_name(name, "input_objects"),
+    is_directive    = function(name) private$exists_by_name(name, "directives"),
+    is_value        = function(name) private$exists_by_name(name, "values"),
+
+    get_scalar       = function(name) private$get_by_name(name, "scalars"),
+    get_enum         = function(name) private$get_by_name(name, "enums"),
+    get_object       = function(name) private$get_by_name(name, "objects"),
+    get_interface    = function(name) private$get_by_name(name, "interfaces"),
+    get_union        = function(name) private$get_by_name(name, "unions"),
     get_input_object = function(name) private$get_by_name(name, "input_objects"),
-    get_directive = function(name) private$get_by_name(name, "directives"),
-    get_value = function(name) private$get_by_name(name, "values"),
-    get_type = function(name) {
+    get_directive    = function(name) private$get_by_name(name, "directives"),
+    get_value        = function(name) private$get_by_name(name, "values"),
+
+    get_scalars       = function() private$scalars,
+    get_enums         = function() private$enums,
+    get_objects       = function() private$objects,
+    get_interfaces    = function() private$interfaces,
+    get_unions        = function() private$unions,
+    get_input_objects = function() private$input_objects,
+    get_directives    = function() private$directives,
+    get_values        = function() private$values,
+
+    get_type         = function(name) {
       ifnull(
         self$get_scalar(name),        ifnull(
         self$get_enum(name),          ifnull(
@@ -221,16 +244,6 @@ GQLRSchema <- R6Class(
         self$get_value(name)
       )))))))
     },
-
-
-    get_scalars = function() private$scalars,
-    get_enums = function() private$enums,
-    get_objects = function() private$objects,
-    get_interfaces = function() private$interfaces,
-    get_unions = function() private$unions,
-    get_input_objects = function() private$input_objects,
-    get_directives = function() private$directives,
-    get_values = function() private$values,
 
 
     # returns a char vector or NULL of names of objs that implement a particular interface
