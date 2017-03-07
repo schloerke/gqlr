@@ -1,5 +1,4 @@
 
-dog_cat_schema <- GQLRSchema$new()
 
 "
 enum DogCommand { SIT, DOWN, HEEL }
@@ -71,6 +70,8 @@ type QueryRoot {
   booleanList(booleanListArg: [Boolean!]): Boolean
 }
 " %>%
-  graphql2obj() %>%
-  magrittr::extract2("definitions") %>%
-  lapply(dog_cat_schema$add)
+  graphql2obj() ->
+dog_cat_obj
+
+dog_cat_schema <- GQLRSchema$new()
+dog_cat_obj$definitions %>% lapply(dog_cat_schema$add)
