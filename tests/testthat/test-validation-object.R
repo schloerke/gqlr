@@ -9,7 +9,7 @@ test_that("valid", {
   source("dog_cat_schema.R")
 
   expect_validate <- function(name, obj_type) {
-    vh <- ValidatorHelpers$new(dog_cat_schema)
+    vh <- ObjectHelpers$new(dog_cat_schema)
     # obj <- dog_cat_schema$get_interface("Pet")
     obj <- dog_cat_schema[[paste("get_", obj_type, sep = "")]](name)
 

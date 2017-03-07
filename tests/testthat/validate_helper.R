@@ -3,7 +3,7 @@ source("dog_cat_schema.R")
 
 expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 
-  vh <- ValidatorHelpers$new(schema_obj, ErrorList$new())
+  vh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 
   ans <- query %>%
     graphql2obj() %>%
@@ -16,7 +16,7 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 
 expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
 
-  vh <- ValidatorHelpers$new(schema_obj, ErrorList$new())
+  vh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 
   ans <- query %>%
     graphql2obj() %>%

@@ -20,7 +20,7 @@
 
 
 
-# vh <- ValidatorHelpers$new(schema_obj, error_list)
+# vh <- ObjectHelpers$new(schema_obj, error_list)
 validate_query <- function(document_obj, ..., vh) {
 
   validate_operation_names(document_obj, vh = vh)
@@ -682,18 +682,26 @@ ErrorList <- R6Class("ErrorList",
 
 
 
-ValidatorHelpers <- R6Class(
-  "ValidatorHelpers",
+ObjectHelpers <- R6Class(
+  "ObjectHelpers",
   public = list(
-    variable_validator = NULL,
     schema_obj = NULL,
     error_list = NULL,
 
+    variable_validator = NULL,
     unset_variable_validator = function() {
       self$variable_validator <- NULL
     },
     set_variable_validator = function(variable_validator) {
       self$variable_validator <- variable_validator
+    },
+
+    variable_values = NULL,
+    unset_variable_values = function() {
+      self$variable_values <- NULL
+    },
+    set_variable_values = function(variable_values) {
+      self$variable_values <- variable_values
     },
 
     initialize = function(schema_obj, error_list = ErrorList$new()) {
