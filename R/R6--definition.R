@@ -906,6 +906,18 @@ ObjectTypeDefinition = R6_from_args(
         "}"
       )
     },
+    .does_implement = function(named_type) {
+      interfaces <- self$interfaces
+      if (is.null(interfaces)) {
+        return(FALSE)
+      }
+      for (interface_name in interfaces) {
+        if (interface_name$.matches(named_type)) {
+          return(TRUE)
+        }
+      }
+      return(FALSE)
+    },
     .get_field = interface_or_object_get_field,
     .contains_field = function(field_obj) {
       !is.null(self$.get_field(field_obj))
