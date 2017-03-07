@@ -181,7 +181,14 @@ GQLRSchema <- R6Class(
       return(invisible(self))
     }),
 
+    # returns a NamedType
     get_inner_type = function(type_obj) {
+      if (is.character(type_obj)) {
+        return(
+          NamedType$new(name = Name$new(value = type_obj))
+        )
+      }
+
       while(
         inherits(type_obj, "NonNullType") ||
         inherits(type_obj, "ListType")
