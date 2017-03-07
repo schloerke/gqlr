@@ -1017,6 +1017,15 @@ UnionTypeDefinition = R6_from_args(
         format_list(self$types, .collapse = " | ")
       )
     },
+    .does_implement = function(named_type) {
+      types <- self$types
+      for (union_named_type in self$types) {
+        if (union_named_type$.matches(named_type)) {
+          return(TRUE)
+        }
+      }
+      return(FALSE)
+    }
   )
 )
 
