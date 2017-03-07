@@ -248,16 +248,16 @@ validate.ObjectTypeDefinition <- function(x, ..., vh) {
         ]]
 
         # produce string representation of the type object.  Similar to '[__Type!]!'
-        matching_obj_field_arg_type <- graphql_string(matching_obj_field_arg$type)
-        interface_field_arg_type <- graphql_string(interface_field_arg$type)
+        matching_obj_field_arg_type_txt <- format(matching_obj_field_arg$type)
+        interface_field_arg_type_txt <- format(interface_field_arg$type)
 
-        if (matching_obj_field_arg_type != interface_field_arg_type) {
+        if (matching_obj_field_arg_type_txt != interface_field_arg_type_txt) {
           vh$error_list$add(
             "3.1.2.3",
             "object definition: ", x$.title,
             " of interface: ", interface_obj$.title,
             " for field: ", interface_field_name,
-            " must input the same type: ", matching_obj_field_arg_type,
+            " must input the same type: ", matching_obj_field_arg_type_txt,
             " for argument: ", interface_field_arg_name
           )
           return(FALSE)
