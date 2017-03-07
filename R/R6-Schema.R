@@ -289,16 +289,19 @@ GQLRSchema <- R6Class(
     #   return(FALSE)
     # },
 
-    },
-    interface_can_implement_type = function(interface_obj, name_obj) {
-      self_interfaces <- ifnull(self$interfaces, list())
-      for (interface in self_interfaces) {
-        if (self$interface_is_super_of(name_obj)) {
-          return(TRUE)
-        }
-      }
-      return(FALSE)
-    },
+    # .does_object_implement_interface_type = function(object, interface_type, ..., oh) {
+    #
+    #   object_interfaces <- object$interfaces
+    #   if (is.null(object_interfaces)) return(FALSE)
+    #
+    #   for (object_interface in object_interfaces) {
+    #     if (object_interface$.matches(interface_type)) {
+    #       return(TRUE)
+    #     }
+    #   }
+    #   return(FALSE)
+    # },
+
 
 
     get_scalar_or_enum = function(name_obj) {
