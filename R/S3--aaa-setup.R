@@ -11,7 +11,7 @@
 raw_format <- function(x, ..., prompt = NULL, header = NULL) {
   format(x, ..., prompt = prompt, header = header)
 }
-format.AST <- function(x, ..., prompt = "  ", header = "<graphql definition>") {
+format.AST <- function(x, ..., prompt = "| ", header = "<graphql definition>") {
   collapse(
     if (!is.null(header)) collapse(header, "\n", prompt),
     gsub("\n", collapse("\n", prompt), x$.format(), fixed = TRUE)
