@@ -1,0 +1,384 @@
+<Document>
+. definitions:
+. 1 - <SchemaDefinition>
+. . operationTypes:
+. . 1 - <OperationTypeDefinition>
+. . . operation: 'query'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'QueryType'
+. . 2 - <OperationTypeDefinition>
+. . . operation: 'mutation'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'MutationType'
+. 2 - <ObjectTypeDefinition>
+. . name: <Name>
+. . . value: 'Foo'
+. . interfaces:
+. . 1 - <NamedType>
+. . . name: <Name>
+. . . . value: 'Bar'
+. . fields:
+. . 1 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'one'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. . 2 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'two'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'argument'
+. . . . type: <NonNullType>
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'InputType'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. . 3 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'three'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'argument'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'InputType'
+. . . 2 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'other'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'String'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Int'
+. . 4 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'four'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'argument'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'String'
+. . . . defaultValue: <StringValue>
+. . . . . value: 'string'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'String'
+. . 5 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'five'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'argument'
+. . . . type: <ListType>
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
+. . . . defaultValue: <ListValue>
+. . . . . values:
+. . . . . 1 - <StringValue>
+. . . . . . value: 'string'
+. . . . . 2 - <StringValue>
+. . . . . . value: 'string'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'String'
+. . 6 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'six'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'argument'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'InputType'
+. . . . defaultValue: <ObjectValue>
+. . . . . fields:
+. . . . . 1 - <ObjectField>
+. . . . . . name: <Name>
+. . . . . . . value: 'key'
+. . . . . . value: <StringValue>
+. . . . . . . value: 'value'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. . 7 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'seven'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'argument'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'Int'
+. . . . defaultValue: <NullValue>
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. 3 - <ObjectTypeDefinition>
+. . name: <Name>
+. . . value: 'AnnotatedObject'
+. . directives:
+. . 1 - <Directive>
+. . . name: <Name>
+. . . . value: 'onObject'
+. . . arguments:
+. . . 1 - <Argument>
+. . . . name: <Name>
+. . . . . value: 'arg'
+. . . . value: <StringValue>
+. . . . . value: 'value'
+. . fields:
+. . 1 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'annotatedField'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'arg'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'Type'
+. . . . defaultValue: <StringValue>
+. . . . . value: 'default'
+. . . . directives:
+. . . . 1 - <Directive>
+. . . . . name: <Name>
+. . . . . . value: 'onArg'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. . . directives:
+. . . 1 - <Directive>
+. . . . name: <Name>
+. . . . . value: 'onField'
+. 4 - <InterfaceTypeDefinition>
+. . name: <Name>
+. . . value: 'Bar'
+. . fields:
+. . 1 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'one'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. . 2 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'four'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'argument'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'String'
+. . . . defaultValue: <StringValue>
+. . . . . value: 'string'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'String'
+. 5 - <InterfaceTypeDefinition>
+. . name: <Name>
+. . . value: 'AnnotatedInterface'
+. . directives:
+. . 1 - <Directive>
+. . . name: <Name>
+. . . . value: 'onInterface'
+. . fields:
+. . 1 - <FieldDefinition>
+. . . name: <Name>
+. . . . value: 'annotatedField'
+. . . arguments:
+. . . 1 - <InputValueDefinition>
+. . . . name: <Name>
+. . . . . value: 'arg'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'Type'
+. . . . directives:
+. . . . 1 - <Directive>
+. . . . . name: <Name>
+. . . . . . value: 'onArg'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. . . directives:
+. . . 1 - <Directive>
+. . . . name: <Name>
+. . . . . value: 'onField'
+. 6 - <UnionTypeDefinition>
+. . name: <Name>
+. . . value: 'Feed'
+. . types:
+. . 1 - <NamedType>
+. . . name: <Name>
+. . . . value: 'Story'
+. . 2 - <NamedType>
+. . . name: <Name>
+. . . . value: 'Article'
+. . 3 - <NamedType>
+. . . name: <Name>
+. . . . value: 'Advert'
+. 7 - <UnionTypeDefinition>
+. . name: <Name>
+. . . value: 'AnnotatedUnion'
+. . directives:
+. . 1 - <Directive>
+. . . name: <Name>
+. . . . value: 'onUnion'
+. . types:
+. . 1 - <NamedType>
+. . . name: <Name>
+. . . . value: 'A'
+. . 2 - <NamedType>
+. . . name: <Name>
+. . . . value: 'B'
+. 8 - <ScalarTypeDefinition>
+. . name: <Name>
+. . . value: 'CustomScalar'
+. . .serialize: fn
+. . .parse_value: fn
+. . .parse_literal: fn
+. 9 - <ScalarTypeDefinition>
+. . name: <Name>
+. . . value: 'AnnotatedScalar'
+. . directives:
+. . 1 - <Directive>
+. . . name: <Name>
+. . . . value: 'onScalar'
+. . .serialize: fn
+. . .parse_value: fn
+. . .parse_literal: fn
+. 10 - <EnumTypeDefinition>
+. . name: <Name>
+. . . value: 'Site'
+. . values:
+. . 1 - <EnumValueDefinition>
+. . . name: <Name>
+. . . . value: 'DESKTOP'
+. . 2 - <EnumValueDefinition>
+. . . name: <Name>
+. . . . value: 'MOBILE'
+. 11 - <EnumTypeDefinition>
+. . name: <Name>
+. . . value: 'AnnotatedEnum'
+. . directives:
+. . 1 - <Directive>
+. . . name: <Name>
+. . . . value: 'onEnum'
+. . values:
+. . 1 - <EnumValueDefinition>
+. . . name: <Name>
+. . . . value: 'ANNOTATED_VALUE'
+. . . directives:
+. . . 1 - <Directive>
+. . . . name: <Name>
+. . . . . value: 'onEnumValue'
+. . 2 - <EnumValueDefinition>
+. . . name: <Name>
+. . . . value: 'OTHER_VALUE'
+. 12 - <InputObjectTypeDefinition>
+. . name: <Name>
+. . . value: 'InputType'
+. . fields:
+. . 1 - <InputValueDefinition>
+. . . name: <Name>
+. . . . value: 'key'
+. . . type: <NonNullType>
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'String'
+. . 2 - <InputValueDefinition>
+. . . name: <Name>
+. . . . value: 'answer'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Int'
+. . . defaultValue: <IntValue>
+. . . . value: '42'
+. 13 - <InputObjectTypeDefinition>
+. . name: <Name>
+. . . value: 'AnnotatedInput'
+. . directives:
+. . 1 - <Directive>
+. . . name: <Name>
+. . . . value: 'onInputObjectType'
+. . fields:
+. . 1 - <InputValueDefinition>
+. . . name: <Name>
+. . . . value: 'annotatedField'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Type'
+. . . directives:
+. . . 1 - <Directive>
+. . . . name: <Name>
+. . . . . value: 'onField'
+. 14 - <TypeExtensionDefinition>
+. . definition: <ObjectTypeDefinition>
+. . . name: <Name>
+. . . . value: 'Foo'
+. . . fields:
+. . . 1 - <FieldDefinition>
+. . . . name: <Name>
+. . . . . value: 'seven'
+. . . . arguments:
+. . . . 1 - <InputValueDefinition>
+. . . . . name: <Name>
+. . . . . . value: 'argument'
+. . . . . type: <ListType>
+. . . . . . type: <NamedType>
+. . . . . . . name: <Name>
+. . . . . . . . value: 'String'
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'Type'
+. 15 - <DirectiveDefinition>
+. . name: <Name>
+. . . value: 'skip'
+. . arguments:
+. . 1 - <InputValueDefinition>
+. . . name: <Name>
+. . . . value: 'if'
+. . . type: <NonNullType>
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'Boolean'
+. . locations:
+. . 1 - <Name>
+. . . value: 'FIELD'
+. . 2 - <Name>
+. . . value: 'FRAGMENT_SPREAD'
+. . 3 - <Name>
+. . . value: 'INLINE_FRAGMENT'
+. 16 - <DirectiveDefinition>
+. . name: <Name>
+. . . value: 'include'
+. . arguments:
+. . 1 - <InputValueDefinition>
+. . . name: <Name>
+. . . . value: 'if'
+. . . type: <NonNullType>
+. . . . type: <NamedType>
+. . . . . name: <Name>
+. . . . . . value: 'Boolean'
+. . locations:
+. . 1 - <Name>
+. . . value: 'FIELD'
+. . 2 - <Name>
+. . . value: 'FRAGMENT_SPREAD'
+. . 3 - <Name>
+. . . value: 'INLINE_FRAGMENT'

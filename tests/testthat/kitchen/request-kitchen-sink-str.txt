@@ -1,0 +1,257 @@
+<Document>
+. definitions:
+. 1 - <OperationDefinition>
+. . operation: 'query'
+. . name: <Name>
+. . . value: 'queryName'
+. . variableDefinitions:
+. . 1 - <VariableDefinition>
+. . . variable: <Variable>
+. . . . name: <Name>
+. . . . . value: 'foo'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'ComplexType'
+. . 2 - <VariableDefinition>
+. . . variable: <Variable>
+. . . . name: <Name>
+. . . . . value: 'site'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'Site'
+. . . defaultValue: <EnumValue>
+. . . . value: 'MOBILE'
+. . selectionSet: <SelectionSet>
+. . . selections:
+. . . 1 - <Field>
+. . . . alias: <Name>
+. . . . . value: 'whoever123is'
+. . . . name: <Name>
+. . . . . value: 'node'
+. . . . arguments:
+. . . . 1 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'id'
+. . . . . value: <ListValue>
+. . . . . . values:
+. . . . . . 1 - <IntValue>
+. . . . . . . value: '123'
+. . . . . . 2 - <IntValue>
+. . . . . . . value: '456'
+. . . . selectionSet: <SelectionSet>
+. . . . . selections:
+. . . . . 1 - <Field>
+. . . . . . name: <Name>
+. . . . . . . value: 'id'
+. . . . . 2 - <InlineFragment>
+. . . . . . typeCondition: <NamedType>
+. . . . . . . name: <Name>
+. . . . . . . . value: 'User'
+. . . . . . directives:
+. . . . . . 1 - <Directive>
+. . . . . . . name: <Name>
+. . . . . . . . value: 'defer'
+. . . . . . selectionSet: <SelectionSet>
+. . . . . . . selections:
+. . . . . . . 1 - <Field>
+. . . . . . . . name: <Name>
+. . . . . . . . . value: 'field2'
+. . . . . . . . selectionSet: <SelectionSet>
+. . . . . . . . . selections:
+. . . . . . . . . 1 - <Field>
+. . . . . . . . . . name: <Name>
+. . . . . . . . . . . value: 'id'
+. . . . . . . . . 2 - <Field>
+. . . . . . . . . . alias: <Name>
+. . . . . . . . . . . value: 'alias'
+. . . . . . . . . . name: <Name>
+. . . . . . . . . . . value: 'field1'
+. . . . . . . . . . arguments:
+. . . . . . . . . . 1 - <Argument>
+. . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . value: 'first'
+. . . . . . . . . . . value: <IntValue>
+. . . . . . . . . . . . value: '10'
+. . . . . . . . . . 2 - <Argument>
+. . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . value: 'after'
+. . . . . . . . . . . value: <Variable>
+. . . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . . value: 'foo'
+. . . . . . . . . . directives:
+. . . . . . . . . . 1 - <Directive>
+. . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . value: 'include'
+. . . . . . . . . . . arguments:
+. . . . . . . . . . . 1 - <Argument>
+. . . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . . value: 'if'
+. . . . . . . . . . . . value: <Variable>
+. . . . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . . . value: 'foo'
+. . . . . . . . . . selectionSet: <SelectionSet>
+. . . . . . . . . . . selections:
+. . . . . . . . . . . 1 - <Field>
+. . . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . . value: 'id'
+. . . . . . . . . . . 2 - <FragmentSpread>
+. . . . . . . . . . . . name: <Name>
+. . . . . . . . . . . . . value: 'frag'
+. . . . . 3 - <InlineFragment>
+. . . . . . directives:
+. . . . . . 1 - <Directive>
+. . . . . . . name: <Name>
+. . . . . . . . value: 'skip'
+. . . . . . . arguments:
+. . . . . . . 1 - <Argument>
+. . . . . . . . name: <Name>
+. . . . . . . . . value: 'unless'
+. . . . . . . . value: <Variable>
+. . . . . . . . . name: <Name>
+. . . . . . . . . . value: 'foo'
+. . . . . . selectionSet: <SelectionSet>
+. . . . . . . selections:
+. . . . . . . 1 - <Field>
+. . . . . . . . name: <Name>
+. . . . . . . . . value: 'id'
+. . . . . 4 - <InlineFragment>
+. . . . . . selectionSet: <SelectionSet>
+. . . . . . . selections:
+. . . . . . . 1 - <Field>
+. . . . . . . . name: <Name>
+. . . . . . . . . value: 'id'
+. 2 - <OperationDefinition>
+. . operation: 'mutation'
+. . name: <Name>
+. . . value: 'likeStory'
+. . selectionSet: <SelectionSet>
+. . . selections:
+. . . 1 - <Field>
+. . . . name: <Name>
+. . . . . value: 'like'
+. . . . arguments:
+. . . . 1 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'story'
+. . . . . value: <IntValue>
+. . . . . . value: '123'
+. . . . directives:
+. . . . 1 - <Directive>
+. . . . . name: <Name>
+. . . . . . value: 'defer'
+. . . . selectionSet: <SelectionSet>
+. . . . . selections:
+. . . . . 1 - <Field>
+. . . . . . name: <Name>
+. . . . . . . value: 'story'
+. . . . . . selectionSet: <SelectionSet>
+. . . . . . . selections:
+. . . . . . . 1 - <Field>
+. . . . . . . . name: <Name>
+. . . . . . . . . value: 'id'
+. 3 - <OperationDefinition>
+. . operation: 'subscription'
+. . name: <Name>
+. . . value: 'StoryLikeSubscription'
+. . variableDefinitions:
+. . 1 - <VariableDefinition>
+. . . variable: <Variable>
+. . . . name: <Name>
+. . . . . value: 'input'
+. . . type: <NamedType>
+. . . . name: <Name>
+. . . . . value: 'StoryLikeSubscribeInput'
+. . selectionSet: <SelectionSet>
+. . . selections:
+. . . 1 - <Field>
+. . . . name: <Name>
+. . . . . value: 'storyLikeSubscribe'
+. . . . arguments:
+. . . . 1 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'input'
+. . . . . value: <Variable>
+. . . . . . name: <Name>
+. . . . . . . value: 'input'
+. . . . selectionSet: <SelectionSet>
+. . . . . selections:
+. . . . . 1 - <Field>
+. . . . . . name: <Name>
+. . . . . . . value: 'story'
+. . . . . . selectionSet: <SelectionSet>
+. . . . . . . selections:
+. . . . . . . 1 - <Field>
+. . . . . . . . name: <Name>
+. . . . . . . . . value: 'likers'
+. . . . . . . . selectionSet: <SelectionSet>
+. . . . . . . . . selections:
+. . . . . . . . . 1 - <Field>
+. . . . . . . . . . name: <Name>
+. . . . . . . . . . . value: 'count'
+. . . . . . . 2 - <Field>
+. . . . . . . . name: <Name>
+. . . . . . . . . value: 'likeSentence'
+. . . . . . . . selectionSet: <SelectionSet>
+. . . . . . . . . selections:
+. . . . . . . . . 1 - <Field>
+. . . . . . . . . . name: <Name>
+. . . . . . . . . . . value: 'text'
+. 4 - <FragmentDefinition>
+. . name: <Name>
+. . . value: 'frag'
+. . typeCondition: <NamedType>
+. . . name: <Name>
+. . . . value: 'Friend'
+. . selectionSet: <SelectionSet>
+. . . selections:
+. . . 1 - <Field>
+. . . . name: <Name>
+. . . . . value: 'foo'
+. . . . arguments:
+. . . . 1 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'size'
+. . . . . value: <Variable>
+. . . . . . name: <Name>
+. . . . . . . value: 'size'
+. . . . 2 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'bar'
+. . . . . value: <Variable>
+. . . . . . name: <Name>
+. . . . . . . value: 'b'
+. . . . 3 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'obj'
+. . . . . value: <ObjectValue>
+. . . . . . fields:
+. . . . . . 1 - <ObjectField>
+. . . . . . . name: <Name>
+. . . . . . . . value: 'key'
+. . . . . . . value: <StringValue>
+. . . . . . . . value: 'value'
+. 5 - <OperationDefinition>
+. . operation: 'query'
+. . selectionSet: <SelectionSet>
+. . . selections:
+. . . 1 - <Field>
+. . . . name: <Name>
+. . . . . value: 'unnamed'
+. . . . arguments:
+. . . . 1 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'truthy'
+. . . . . value: <BooleanValue>
+. . . . . . value: TRUE
+. . . . 2 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'falsey'
+. . . . . value: <BooleanValue>
+. . . . . . value: FALSE
+. . . . 3 - <Argument>
+. . . . . name: <Name>
+. . . . . . value: 'nullish'
+. . . . . value: <NullValue>
+. . . 2 - <Field>
+. . . . name: <Name>
+. . . . . value: 'query'
