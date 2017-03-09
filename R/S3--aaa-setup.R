@@ -21,6 +21,14 @@ print.AST <- function(x, ..., prompt = "  | ", header = "<graphql definition>") 
   cat(format(x, ..., prompt = prompt, header = header), "\n", sep = "")
 }
 
+methods <- function(x, ...) {
+  UseMethod("methods", x)
+}
+methods.AST <- function(x, ...) {
+  r6_format <- getFromNamespace("format.R6", "R6")
+  cat(r6_format(x, ...), "\n", sep = "")
+}
+
 validate <- function(x, schema_obj, ...) {
   UseMethod("validate", x)
 }
