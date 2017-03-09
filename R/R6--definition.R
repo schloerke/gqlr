@@ -53,7 +53,7 @@ AST <- R6Class("AST",
   active = list(
     .title = function() {
       if (!is.null(self$name)) {
-        return(self$name$value)
+        return(self$name$.format())
       }
       self$.kind
     },
@@ -679,7 +679,21 @@ Directive = R6_from_args(
 #                  | NonNullType
 Type = R6_from_args(
   inherit = Node,
-  "Type"
+  "Type",
+  public = list(
+    .matches = function(name_obj) {
+      if (!inherits(name_obj, "Type")) {
+        str(name_obj)
+        stop("supply a Type obj")
+        return(FALSE)
+      }
+
+      return(identical(
+        self$.format(),
+        name_obj$.format()
+      ))
+    }
+  )
 )
 
 
@@ -690,22 +704,6 @@ NamedType = R6_from_args(
     name: Name;
     description?: ?string;",
   public = list(
-    .matches = function(name_obj) {
-      if (!inherits(name_obj, "Type")) {
-        str(name_obj)
-        stop("supply a Type obj")
-        return(FALSE)
-      }
-
-      if (!inherits(name_obj, "NamedType")) {
-        return(FALSE)
-      }
-
-      return(identical(
-        self$.format(),
-        name_obj$.format()
-      ))
-    },
     .format = function(...) {
       self$name$.format()
     }
@@ -902,7 +900,7 @@ ObjectTypeDefinition = R6_from_args(
         if (!is.null(self$interfaces))
           collapse(
             " implements ",
-            format_list(self$interfaces)
+            format_list(self$interfaces, .collapse = ", ")
           ),
         if (!is.null(self$directives))
           format_list(self$directives, .before = " "),
