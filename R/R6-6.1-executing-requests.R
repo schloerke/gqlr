@@ -41,17 +41,18 @@ execute_request <- function(
 
   coerced_variable_values <- coerce_variable_values(schema_obj, operation, variable_values)
   if (oh$error_list$has_any_errors()) return(NULL)
+  oh$set_coerced_variables(coerced_variable_values)
 
   operation_type <- operation$operation
   if (identical(operation_type, "query")) {
     return(
-      execute_query(operation, coerced_variable_values, initial_value, oh = oh)
+      execute_query(operation, initial_value, oh = oh)
     )
 
   } else if (identical(operation_type, "mutation")) {
     stop("TODO - mutation not implemented")
     return(
-      execute_mutation(operation, coerced_variable_values, initial_value, oh = oh)
+      execute_mutation(operation, initial_value, oh = oh)
     )
 
   }

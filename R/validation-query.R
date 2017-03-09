@@ -697,10 +697,10 @@ ObjectHelpers <- R6Class(
     },
 
     variable_values = NULL,
-    unset_variable_values = function() {
+    unset_coerced_variables = function() {
       self$variable_values <- NULL
     },
-    set_variable_values = function(variable_values) {
+    set_coerced_variables = function(variable_values) {
       self$variable_values <- variable_values
     },
 
