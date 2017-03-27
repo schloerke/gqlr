@@ -9,13 +9,13 @@ test_that("5.5.1 - Input Object Field Uniqueness", {
 
   test_schema <- GQLRSchema$new()
   "
-  # schema {
-  #   query: QueryRoot
-  # }
+  schema {
+    query: SearchRoot
+  }
   input SingleArgInput {
     arg: Boolean
   }
-  type QueryRoot {
+  type SearchRoot {
     field(arg: SingleArgInput): Int
   }
   " %>%

@@ -769,6 +769,19 @@ SchemaDefinition = R6_from_args(
           format_list(self$operationTypes, .before = "  ", .after = "\n"),
         "}"
       )
+    },
+    .get_definition_type = function(def_name) {
+      if(!(def_name %in% c("query", "mutation"))) {
+        stop("'def_name' must be either 'query' or 'mutation'")
+      }
+
+      for (operation_type in self$operationTypes) {
+        if (identical(operation_type$operation, def_name)) {
+          return(operation_type$type)
+        }
+      }
+
+      return(NULL)
     }
   )
 )

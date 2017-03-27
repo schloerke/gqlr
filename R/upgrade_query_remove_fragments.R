@@ -209,7 +209,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
 
   #TODO make lapply
   upgraded_operations <- list()
-  query_root <- vh$schema_obj$get_object("QueryRoot")
+
+  query_root <- vh$schema_obj$get_query_object()
   for (query_obj in query_list) {
     query_obj <- upgrade_fragments_in_field(query_obj, query_root, NULL)
     upgraded_operations <- append(upgraded_operations, query_obj)

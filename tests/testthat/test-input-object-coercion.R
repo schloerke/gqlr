@@ -19,9 +19,12 @@ test_that("small input objects", {
     c: [Int!]
     d: [Int!]!
   }
-  type QueryRoot {
+  type SearchRoot {
     field(arg: ExampleInputObject): Int
     list_field(arg: ExampleListInputObject): Int
+  }
+  schema {
+    query: SearchRoot
   }
   " %>%
     graphql2obj() %>%

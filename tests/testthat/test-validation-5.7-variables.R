@@ -23,7 +23,7 @@ test_that("5.7.1 - Variable Uniqueness", {
   query B($atOtherHomes: Boolean) {
     ...HouseTrainedFragment
   }
-  fragment HouseTrainedFragment on QueryRoot {
+  fragment HouseTrainedFragment on SearchRoot {
     dog {
       isHousetrained(atOtherHomes: $atOtherHomes)
     }

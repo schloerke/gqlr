@@ -59,7 +59,7 @@ type Arguments {
 
 input ComplexInput { name: String, owner: String }
 
-type QueryRoot {
+type SearchRoot {
   dog: Dog
   cat: Cat
   human: Human
@@ -68,6 +68,10 @@ type QueryRoot {
   arguments: Arguments
   findDog(complex: ComplexInput): Dog
   booleanList(booleanListArg: [Boolean!]): Boolean
+}
+
+schema {
+  query: SearchRoot
 }
 " %>%
   graphql2obj() ->

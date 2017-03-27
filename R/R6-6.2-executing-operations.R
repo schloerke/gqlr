@@ -4,14 +4,15 @@
 #
 # If the operation is a query, the result of the operation is the result of executing the query’s top level selection set with the query root object type.
 
-execute_query_mutation_helper <- function(root_type) {
+execute_query_mutation_helper <- function(root_def_name) {
   pryr_unenclose(function(operation_obj, initial_value, ..., oh) {
 
-    root_type_object <- oh$schema_obj$get_object(root_type)
+    root_type <- oh$schema_obj$get_schema_definition(root_def_name)
+    root_type_object <- oh$schema_obj$get_type(root_type)
     if (is.null(root_type_object)) {
       oh$error_list$add(
         "6.2",
-        "Can not find '", root_type, "' object definition in schema"
+        "Can not find definition '", root_type, "' in schema definition"
       )
     }
 
@@ -39,7 +40,7 @@ execute_query_mutation_helper <- function(root_type) {
 
 #   oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 # oh$set_variable_values(variable_values)
-execute_query <- execute_query_mutation_helper("QueryRoot")
+execute_query <- execute_query_mutation_helper("query")
 
 
 
@@ -54,4 +55,4 @@ execute_query <- execute_query_mutation_helper("QueryRoot")
 #   4. Let data be the result of running ExecuteSelectionSet(selectionSet, mutationType, initialValue, variableValues) serially.
 #   5. Let errors be any field errors produced while executing the selection set.
 #   6. Return an unordered map containing data and errors.
-execute_mutation <- execute_query_mutation_helper("MutationRoot")
+execute_mutation <- execute_query_mutation_helper("mutation")

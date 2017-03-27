@@ -113,7 +113,7 @@ validate_field_selections <- function(document_obj, ..., vh) {
 
       if (operation$operation == "query") {
         validate_fields_in_selection_set(
-          operation$selectionSet, vh$schema_obj$get_object("QueryRoot"),
+          operation$selectionSet, vh$schema_obj$get_query_object(),
           vh = vh
         )
       } else if (operation$operation == "mutation") {
@@ -198,7 +198,8 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., vh)
     )
 
     if (!is.null(selection_obj$selectionSet)) {
-      matching_obj <- vh$schema_obj$get_object_interface_or_union(matching_obj_field$type$name)
+      matching_type <- vh$schema_obj$get_inner_type(matching_obj_field$type)
+      matching_obj <- vh$schema_obj$get_object_interface_or_union(matching_type$name)
       if (is.null(matching_obj)) {
         # 5.2.3 - if is leaf, can not dig deeper
         vh$error_list$add(
@@ -684,9 +685,11 @@ ErrorList <- R6Class("ErrorList",
 
 ObjectHelpers <- R6Class(
   "ObjectHelpers",
+  private = list(
+    schema_obj_val = NULL,
+    error_list_val = NULL
+  ),
   public = list(
-    schema_obj = NULL,
-    error_list = NULL,
 
     variable_validator = NULL,
     unset_variable_validator = function() {
@@ -717,6 +720,42 @@ ObjectHelpers <- R6Class(
       invisible(self)
     }
   ),
+  active = list(
+    error_list = function(value) {
+      if (missing(value)) {
+        return(private$error_list_val)
+      }
+
+      if (!inherits(value, "ErrorList")) {
+        stop("must supply a object of class 'ErrorList'")
+      }
+
+      private$error_list_val <- value
+
+      invisible(self)
+    },
+
+    schema_obj = function(value) {
+      if (missing(value)) {
+        return(private$schema_obj_val)
+      }
+
+      if (inherits(value, "character")) {
+        value <- GQLRSchema$new(value)
+      }
+      if (inherits(value, "Document")) {
+        value <- GQLRSchema$new(value)
+      }
+
+      if (!inherits(value, "GQLRSchema")) {
+        stop("must supply a object of class 'Schema'")
+      }
+
+      private$schema_obj_val <- value
+
+      invisible(self)
+    }
+  )
 
 
 )

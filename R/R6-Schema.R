@@ -142,6 +142,8 @@ GQLRSchema <- R6Class(
 
     is_done = FALSE,
 
+    schema_definition = NULL,
+
     scalars = list(),
     enums = list(),
     objects = list(),
@@ -236,6 +238,18 @@ GQLRSchema <- R6Class(
         self$is_interface(name) ||
         self$is_union(name)
       )
+    },
+
+    get_schema_definition = function(def_name) {
+      schema_def <- private$schema_definition
+      if (is.null(schema_def)) {
+        stop("schema definition not found")
+      }
+      schema_def$.get_definition_type(def_name)
+    },
+    get_query_object = function() {
+      query_type <- self$get_schema_definition("query")
+      self$get_object_interface_or_union(query_type)
     },
 
     get_scalar       = function(name) private$get_by_name(name, "scalars"),
@@ -376,6 +390,14 @@ GQLRSchema <- R6Class(
           "Object must be of class AST to add to a Schema. Received: ",
           paste(class(obj), collapse = ", ")
         )
+      }
+
+      if (inherits(obj, "SchemaDefinition")) {
+        if (!is.null(private$schema_definition)) {
+          stop("Existing schema definition already found. Can not add a second definition")
+        }
+        private$schema_definition <- obj
+        return(invisible(self))
       }
 
       private$is_done <- FALSE
