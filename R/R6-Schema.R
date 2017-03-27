@@ -221,6 +221,14 @@ GQLRSchema <- R6Class(
     is_directive    = function(name) private$exists_by_name(name, "directives"),
     is_value        = function(name) private$exists_by_name(name, "values"),
 
+    is_object_interface_or_union = function(name) {
+      return(
+        self$is_object(name) ||
+        self$is_interface(name) ||
+        self$is_union(name)
+      )
+    },
+
     get_scalar       = function(name) private$get_by_name(name, "scalars"),
     get_enum         = function(name) private$get_by_name(name, "enums"),
     get_object       = function(name) private$get_by_name(name, "objects"),

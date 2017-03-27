@@ -45,6 +45,8 @@ Collate:
     'R6-4-introspection.R'
     'R6-6.1-executing-requests.R'
     'R6-6.2-executing-operations.R'
+    'R6-6.3-executing-selection-sets.R'
+    'R6-6.4-executing-fields.R'
     'S3--aaa-setup.R'
     'S3-3.1.2.3-validation-object-type.R'
     'S3-str.R'

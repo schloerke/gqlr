@@ -824,9 +824,9 @@ ScalarTypeDefinition = R6_from_args(
       description = NULL,
       name,
       directives = NULL,
-      .serialize = NULL,
-      .parse_value = NULL,
-      .parse_literal = NULL
+      .serialize = NULL,    # takes in a raw value, such as: "5", 5, 5.0
+      .parse_value = NULL,  # takes in a raw value, such as: "5", 5, 5.0
+      .parse_literal = NULL # takes in AST value object: <BooleanValue>
     ) {
       if (is.character(name)) {
         name = Name$new(value = name)
@@ -950,6 +950,20 @@ FieldDefinition = R6_from_args(
         if (!is.null(self$directives))
           format_list(self$directives, .before = " ")
       )
+    },
+    .get_matching_argument = function(argument) {
+      self_args <- self$arguments
+      if (is.null(self_args)) return(NULL)
+      if (length(self_args) == 0) return(NULL)
+
+      argument_name <- argument$.get_name()
+
+      for (self_arg in self_args) {
+
+      }
+
+      stop("asdfasdf")
+
     }
   )
 )
@@ -1039,7 +1053,10 @@ EnumTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    values: Array<EnumValueDefinition>;",
+    values: Array<EnumValueDefinition>;
+    .serialize?: ?fn;
+    .parse_value?: ?fn;
+    .parse_literal?: ?fn;",
   public = list(
     .format = function(...) {
       collapse(
@@ -1052,7 +1069,40 @@ EnumTypeDefinition = R6_from_args(
           "}"
       )
     },
-    .parse_literal = function(value_obj) {
+    initialize = function(
+      loc = NULL,
+      description = NULL,
+      name,
+      directives = NULL,
+      values,
+      .serialize,
+      .parse_value,
+      .parse_literal
+    ) {
+      if (missing(.serialize)) .serialize <- self$.default_serialize
+      if (missing(.parse_value)) .parse_value <- self$.default_parse_value
+      if (missing(.parse_literal)) .parse_literal <- self$.default_parse_literal
+
+      if (!missing(loc)) self$loc <- loc
+      if (!missing(description)) self$description <- description
+      self$name <- name
+      if (!missing(directives)) self$directives <- directives
+      self$values <- values
+      self$.serialize <- .serialize
+      self$.parse_value <- .parse_value
+      self$.parse_literal <- .parse_literal
+
+      invisible(self)
+    },
+    .default_serialize = function(x) {
+      if (is_nullish(x)) return(NULL)
+      as.character(toupper(x))
+    },
+    .default_parse_value = function(x) {
+      if (is_nullish(x)) return(NULL)
+      as.character(toupper(x))
+    },
+    .default_parse_literal = function(value_obj) {
 
       # if (inherits(value_obj, "IntValue")) {
       #   int_val <- value_obj$value

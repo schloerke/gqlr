@@ -111,7 +111,7 @@ Int <- ScalarTypeDefinition$new(
     "Response formats that support a 32‐bit integer or a number type should use that ",
     "type to represent this scalar."
   ),
-  .serialize = as.character,
+  .serialize = coerce_int,
   .parse_value = coerce_int,
   .parse_literal = parse_literal("IntValue", coerce_int)
   # .parse_literal = pryr_unenclose(function(obj) {
@@ -141,13 +141,7 @@ Float = ScalarTypeDefinition$new(
     'values as specified by ',
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).'
   ),
-  .serialize = function(value) {
-    ret <- as.character(value)
-    if (!str_detect(ret, "\\.")) {
-      ret <- str_c(ret, ".0")
-    }
-    ret
-  },
+  .serialize = coerce_float,
   .parse_value = coerce_float,
   .parse_literal = pryr_unenclose(function(obj) {
     kind = obj$.kind
@@ -184,7 +178,7 @@ coerce_boolean = function (value) {
 Boolean = ScalarTypeDefinition$new(
   name = "Boolean",
   description = 'The `Boolean` scalar type represents `TRUE` or `FALSE`.',
-  .serialize = as.character,
+  .serialize = coerce_boolean,
   .parse_value = coerce_boolean,
   .parse_literal = parse_literal("BooleanValue", coerce_boolean)
 )

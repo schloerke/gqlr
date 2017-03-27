@@ -44,13 +44,13 @@ directive @include(if: Boolean!)
 " %>%
   graphql2obj(fn_list = list(
     skip = list(
-      description = "awesome!",
-      resolve = function(if_val) {
+      # description = "awesome!",
+      .resolve = function(if_val) {
         !isTRUE(if_val)
       }
     ),
     include = list(
-      resolve = function(if_val) {
+      .resolve = function(if_val) {
         isTRUE(if_val)
       }
     )
