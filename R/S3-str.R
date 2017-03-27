@@ -66,13 +66,13 @@ str.AST <- (function() {
             cat_ret_spaces(spaceCount + 2, fieldName, ":")
             for (itemPos in seq_along(fieldVal)) {
               fieldItem <- fieldVal[[itemPos]]
-              cat_ret_spaces(spaceCount + 2, itemPos, " - ")
+              cat_ret_spaces(spaceCount + 4, itemPos, " - ")
 
               check_if_registered(fieldItem)
               str(
                 fieldItem,
                 maxLevel = maxLevel - 1,
-                spaceCount = spaceCount + 2,
+                spaceCount = spaceCount + 4,
                 showNull = showNull,
                 showLoc = showLoc,
                 isFirst = FALSE
@@ -102,7 +102,7 @@ str.AST <- (function() {
           } else if (is.logical(fieldVal)) {
             cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
           } else if (is.function(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": ", "fn")
+            cat_ret_spaces(spaceCount + 2, fieldName, ": ", "function")
           } else {
             print("type unknown (not char or number or bool). Fix this")
             browser()
