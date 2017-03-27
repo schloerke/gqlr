@@ -707,11 +707,11 @@ ObjectHelpers <- R6Class(
       self$variable_values <- variable_values
     },
 
-    get_argument_value = function(arg_value) {
-      if (inherits(arg_value, "Variable")) {
-
-      }
-    },
+    # get_argument_value = function(arg_value) {
+    #   if (inherits(arg_value, "Variable")) {
+    #
+    #   }
+    # },
 
     initialize = function(schema_obj, error_list = ErrorList$new()) {
       self$schema_obj <- schema_obj
