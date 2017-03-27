@@ -25,6 +25,7 @@ Suggests:
 Remotes: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 5.0.1
+Encoding: UTF-8
 Collate:
     'AAA-utils.R'
     'R6--aaa-utils.R'
