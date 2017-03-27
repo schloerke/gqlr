@@ -196,7 +196,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     if (is.null(completed_result)) {
       oh$error_list$add(
         "6.4.3",
-        "non null type returned a null value".
+        "non null type returned a null value"
       )
       return(NULL)
     }
