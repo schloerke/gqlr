@@ -36,7 +36,7 @@ execute_request <- function(
   oh
 ) {
 
-  operation <- get_operation(document_obj, operation_name)
+  operation <- get_operation(document_obj, operation_name, oh = oh)
   if (oh$error_list$has_any_errors()) return(NULL)
 
   coerced_variable_values <- coerce_variable_values(schema_obj, operation, variable_values)
