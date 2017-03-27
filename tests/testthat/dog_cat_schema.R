@@ -71,7 +71,6 @@ type QueryRoot {
 }
 " %>%
   graphql2obj() ->
-dog_cat_obj
+dog_cat_doc
 
-dog_cat_schema <- GQLRSchema$new()
-dog_cat_obj$definitions %>% lapply(dog_cat_schema$add)
+dog_cat_schema <- GQLRSchema$new(dog_cat_doc)

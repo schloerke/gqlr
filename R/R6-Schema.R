@@ -167,7 +167,7 @@ GQLRSchema <- R6Class(
   ),
   public = list(
 
-    initialize = pryr_unenclose(function(...) {
+    initialize = function(document_obj, ...) {
 
       self$add(Int)
       self$add(Float)
@@ -178,8 +178,17 @@ GQLRSchema <- R6Class(
       self$add(SkipDirective)
       self$add(IncludeDirective)
 
+
+      if (!missing(document_obj)) {
+        if (inherits(document_obj, "character")) {
+          document_obj <- graphql2obj(document_obj)
+        }
+
+        lapply(document_obj$definitions, self$add)
+      }
+
       return(invisible(self))
-    }),
+    },
 
     # returns a NamedType
     get_inner_type = function(type_obj) {
