@@ -78,7 +78,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
 
     # for each field...
     for (from_field in from_input$fields) {
-      to_field <- to_obj$.get_field_by_name(from_field$name)
+      to_field <- to_obj$.get_field(from_field)
 
       # ensure matching field exists
       if (is.null(to_field)) {
@@ -91,7 +91,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
 
     # for "to field", make sure it is valid
     for (to_field in to_obj$fields) {
-      from_field <- from_input$.get_field_by_name(to_field$name)
+      from_field <- from_input$.get_field(to_field)
       # ensure field is valid
       validate_value_can_be_coerced(from_field$value, to_field$type, vh = vh, rule_code = rule_code)
     }

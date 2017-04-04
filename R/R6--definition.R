@@ -200,7 +200,7 @@ Document <- R6_from_args(
     },
     .get_operations = function() {
       ret <- list()
-      for (defintion in self$definitions) {
+      for (definition in self$definitions) {
         if (inherits(definition, "OperationDefinition")) {
           ret <- append(ret, definition)
         }
@@ -333,6 +333,20 @@ Field = R6_from_args(
         if (!is.null(self$selectionSet))
           str_c(" ", self$selectionSet$.format(space_count = space_count))
       )
+    },
+    .get_matching_argument = function(argument) {
+      self_args <- self$arguments
+      if (is.null(self_args)) return(NULL)
+      if (length(self_args) == 0) return(NULL)
+
+      argument_name <- argument$.get_name()
+
+      for (self_arg in self_args) {
+        if (identical(self_arg$name$value, argument_name)) {
+          return(self_arg)
+        }
+      }
+      return(NULL)
     }
   )
 )
@@ -601,7 +615,18 @@ ListValue = R6_from_args(
   )
 )
 
-object_get_by_field_name = function(name_obj) {
+
+
+get_by_field = function(field_obj) {
+  field_name <- field_obj$name$value
+  for (field in self$fields) {
+    if (identical(field$name$value, field_name)) {
+      return(field)
+    }
+  }
+  return(NULL)
+}
+get_by_field_name = function(name_obj) {
   for (field in self$fields) {
     if (identical(field$name$value, name_obj$value)) {
       return(field)
@@ -620,7 +645,7 @@ ObjectValue = R6_from_args(
     # }
   ),
   public = list(
-    .get_field_by_name = object_get_by_field_name,
+    .get_field = get_by_field,
     .format = function(...) {
       collapse(
         "{",
@@ -886,16 +911,6 @@ ScalarTypeDefinition = R6_from_args(
 )
 
 
-interface_or_object_get_field = function(field_obj) {
-  find_name <- field_obj$name$value
-  for (field in self$fields) {
-    if (field$name$value == find_name) {
-      return(field)
-    }
-  }
-  return(NULL)
-}
-
 ObjectTypeDefinition = R6_from_args(
   inherit = TypeDefinition,
   "ObjectTypeDefinition",
@@ -922,7 +937,7 @@ ObjectTypeDefinition = R6_from_args(
         "}"
       )
     },
-    .does_implement = function(named_type) {
+    .resolve_type = function(named_type) {
       interfaces <- self$interfaces
       if (is.null(interfaces)) {
         return(FALSE)
@@ -934,10 +949,30 @@ ObjectTypeDefinition = R6_from_args(
       }
       return(FALSE)
     },
-    .get_field = interface_or_object_get_field,
+    .get_field = get_by_field,
     .contains_field = function(field_obj) {
       !is.null(self$.get_field(field_obj))
     }
+    # initialize = function(
+    #   loc = NULL,
+    #   description = NULL,
+    #   name,
+    #   interfaces = NULL,
+    #   directives = NULL,
+    #   fields,
+    #   .resolve = NULL
+    # ) {
+    #   if (!missing(loc)) self$loc <- loc
+    #   if (!missing(description)) self$description <- description
+    #   self$name <- name
+    #   if (!missing(interfaces)) self$interfaces <- interfaces
+    #   if (!missing(directives)) self$directives <- directives
+    #   self$fields <- fields
+    #
+    #   if (missing(.resolve)) {
+    #     self$.resolve <- function()
+    #   }
+    # }
   )
 )
 
@@ -964,19 +999,26 @@ FieldDefinition = R6_from_args(
           format_list(self$directives, .before = " ")
       )
     },
-    .get_matching_argument = function(argument) {
-      self_args <- self$arguments
-      if (is.null(self_args)) return(NULL)
-      if (length(self_args) == 0) return(NULL)
-
-      argument_name <- argument$.get_name()
-
-      for (self_arg in self_args) {
-
+    initialize = function(
+      loc = NULL,
+      description = NULL,
+      name,
+      arguments = NULL,
+      type,
+      directives = NULL,
+      .resolve = function(object, args, schema, ...) {
+        return(object)
       }
+    ) {
+      self$loc <- loc
+      self$description <- description
+      self$name <- name
+      self$arguments <- arguments
+      self$type <- type
+      self$directives <- directives
+      self$.resolve <- .resolve
 
-      stop("asdfasdf")
-
+      invisible(self)
     }
   )
 )
@@ -1000,6 +1042,9 @@ InputValueDefinition = R6_from_args(
         if (!is.null(self$directives))
           format_list(self$directives, .before = " ")
       )
+    },
+    .get_name = function() {
+      self$name$value
     }
   )
 )
@@ -1024,7 +1069,7 @@ InterfaceTypeDefinition = R6_from_args(
         "}"
       )
     },
-    .get_field = interface_or_object_get_field
+    .get_field = get_by_field
   )
 )
 
@@ -1047,7 +1092,7 @@ UnionTypeDefinition = R6_from_args(
         format_list(self$types, .collapse = " | ")
       )
     },
-    .does_implement = function(named_type) {
+    .resolve_type = function(named_type) {
       types <- self$types
       for (union_named_type in self$types) {
         if (union_named_type$.matches(named_type)) {
@@ -1178,7 +1223,7 @@ InputObjectTypeDefinition = R6_from_args(
         "}"
       )
     },
-    .get_field_by_name = object_get_by_field_name
+    .get_field = get_by_field
   )
 )
 
