@@ -18,15 +18,15 @@
 #
 # All GraphQL scalars are representable as strings, though depending on the response format being used, there may be a more appropriate primitive for the given scalar type, and server should use those types when appropriate.
 #
-# GraphQL provides a number of built‐in scalars, but type systems can add additional scalars with semantic meaning. For example, a GraphQL system could define a scalar called Time which, while serialized as a string, promises to conform to ISO‐8601. When querying a field of type Time, you can then rely on the ability to parse the result with an ISO‐8601 parser and use a client‐specific primitive for time. Another example of a potentially useful custom scalar is Url, which serializes as a string, but is guaranteed by the server to be a valid URL.
+# GraphQL provides a number of built-in scalars, but type systems can add additional scalars with semantic meaning. For example, a GraphQL system could define a scalar called Time which, while serialized as a string, promises to conform to ISO-8601. When querying a field of type Time, you can then rely on the ability to parse the result with an ISO-8601 parser and use a client-specific primitive for time. Another example of a potentially useful custom scalar is Url, which serializes as a string, but is guaranteed by the server to be a valid URL.
 #
-# A server may omit any of the built‐in scalars from its schema, for example if a schema does not refer to a floating‐point number, then it will not include the Float type. However, if a schema includes a type with the name of one of the types described here, it must adhere to the behavior described. As an example, a server must not include a type called Int and use it to represent 128‐bit numbers, or internationalization information.
+# A server may omit any of the built-in scalars from its schema, for example if a schema does not refer to a floating-point number, then it will not include the Float type. However, if a schema includes a type with the name of one of the types described here, it must adhere to the behavior described. As an example, a server must not include a type called Int and use it to represent 128-bit numbers, or internationalization information.
 #
 # Result Coercion
 #
 # A GraphQL server, when preparing a field of a given scalar type, must uphold the contract the scalar type describes, either by coercing the value or producing an error.
 #
-# For example, a GraphQL server could be preparing a field with the scalar type Int and encounter a floating‐point number. Since the server must not break the contract by yielding a non‐integer, the server should truncate the fractional value and only yield the integer value. If the server encountered a boolean true value, it should return 1. If the server encountered a string, it may attempt to parse the string for a base‐10 integer value. If the server encounters some value that cannot be reasonably coerced to an Int, then it must raise a field error.
+# For example, a GraphQL server could be preparing a field with the scalar type Int and encounter a floating-point number. Since the server must not break the contract by yielding a non-integer, the server should truncate the fractional value and only yield the integer value. If the server encountered a boolean true value, it should return 1. If the server encountered a string, it may attempt to parse the string for a base-10 integer value. If the server encounters some value that cannot be reasonably coerced to an Int, then it must raise a field error.
 #
 # Since this coercion behavior is not observable to clients of the GraphQL server, the precise rules of coercion are left to the implementation. The only requirement is that the server must yield values which adhere to the expected Scalar type.
 #
@@ -34,9 +34,9 @@
 #
 # If a GraphQL server expects a scalar type as input to an argument, coercion is observable and the rules must be well defined. If an input value does not match a coercion rule, a query error must be raised.
 #
-# GraphQL has different constant literals to represent integer and floating‐point input values, and coercion rules may apply differently depending on which type of input value is encountered. GraphQL may be parameterized by query variables, the values of which are often serialized when sent over a transport like HTTP. Since some common serializations (ex. JSON) do not discriminate between integer and floating‐point values, they are interpreted as an integer input value if they have an empty fractional part (ex. 1.0) and otherwise as floating‐point input value.
+# GraphQL has different constant literals to represent integer and floating-point input values, and coercion rules may apply differently depending on which type of input value is encountered. GraphQL may be parameterized by query variables, the values of which are often serialized when sent over a transport like HTTP. Since some common serializations (ex. JSON) do not discriminate between integer and floating-point values, they are interpreted as an integer input value if they have an empty fractional part (ex. 1.0) and otherwise as floating-point input value.
 #
-# For all types below, with the exception of Non‐Null, if the explicit value null is provided, then the result of input coercion is null.
+# For all types below, with the exception of Non-Null, if the explicit value null is provided, then the result of input coercion is null.
 
 
 
@@ -107,8 +107,8 @@ coerce_int = function (value) {
 Int <- ScalarTypeDefinition$new(
   name = "Int",
   description = paste0(
-    "The Int scalar type represents a signed 32‐bit numeric non‐fractional value. ",
-    "Response formats that support a 32‐bit integer or a number type should use that ",
+    "The Int scalar type represents a signed 32-bit numeric non-fractional value. ",
+    "Response formats that support a 32-bit integer or a number type should use that ",
     "type to represent this scalar."
   ),
   .serialize = coerce_int,
