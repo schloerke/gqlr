@@ -1,4 +1,4 @@
 library(testthat)
-library(graphqlr)
+library(gqlr)
 
-test_check("graphqlr")
+test_check("gqlr")
