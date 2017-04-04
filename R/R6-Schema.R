@@ -155,7 +155,7 @@ GQLRSchema <- R6Class(
 
     # has_directive_list = list(),
     exists_by_name = function(name_obj, obj_list_txt) {
-      name_val <- self$name_helper
+      name_val <- self$name_helper(name_obj)
       name_val %in% names(private[[obj_list_txt]])
     },
     get_by_name = function(name_obj, obj_list_txt) {
