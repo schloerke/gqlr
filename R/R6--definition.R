@@ -1,5 +1,9 @@
 #' @include R6--aaa-utils.R
 
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c("self"))
+}
+
 
 # 4.1.4
 # http://facebook.github.io/graphql/#sec-Type-Name-Introspection
@@ -617,7 +621,7 @@ ListValue = R6_from_args(
 
 
 
-get_by_field = function(field_obj) {
+get_by_field <- function(field_obj) {
   field_name <- field_obj$name$value
   for (field in self$fields) {
     if (identical(field$name$value, field_name)) {

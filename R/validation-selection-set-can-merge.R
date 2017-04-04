@@ -220,8 +220,8 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
   composite_i <- vh$schema_obj$get_object_interface_or_union(type_i)
   composite_j <- vh$schema_obj$get_object_interface_or_union(type_j)
   if (
-    is.null(obj_int_union_i) ||
-    is.null(obj_int_union_j)
+    is.null(composite_i) ||
+    is.null(composite_j)
   ) {
     vh$error_list$add(
       "5.2.2",
@@ -249,15 +249,16 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
     )
   )
   return_type_obj <- vh$schema_obj$get_type(field_i_info$return_type_obj)
+  # TODO double check logic here.
   validate_fields_can_merge(
     merged_set, return_type_obj,
     vh = vh
   )
-  validate_fields_can_merge(
-    selection_set, matching_obj,
-    vh = vh,
-    same_response_shape_only = TRUE
-  )
+  # validate_fields_can_merge(
+  #   selection_set, matching_obj,
+  #   vh = vh,
+  #   same_response_shape_only = TRUE
+  # )
 
   TRUE
 }

@@ -9,7 +9,7 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
     graphql2obj() %>%
     validate_query(vh = vh)
 
-  expect_true(vh$error_list$has_no_errors())
+  expect_equal(vh$error_list$.format(), "<ErrorList> No errors")
 
   expect_true(R6::is.R6(ans), ...)
 }
@@ -26,7 +26,7 @@ expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
 
   expect_error(
     {
-      stop(format(vh$error_list))
+      stop(vh$error_list$.format())
     },
     ...
   )

@@ -21,6 +21,7 @@
 
 
 # vh <- ObjectHelpers$new(schema_obj, error_list)
+#' @export
 validate_query <- function(document_obj, ..., vh) {
 
   validate_operation_names(document_obj, vh = vh)
@@ -578,7 +579,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
 
 
-
+#' @export
 ErrorList <- R6Class("ErrorList",
   private = list(
     # http://facebook.github.io/graphql/
@@ -691,7 +692,7 @@ str.ErrorList <- function(x, ...) {
 
 
 
-
+#' @export
 ObjectHelpers <- R6Class(
   "ObjectHelpers",
   private = list(

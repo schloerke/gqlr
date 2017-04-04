@@ -135,7 +135,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
           fragment_obj <- InlineFragment$new(
             loc = fragment_obj$loc,
             typeCondition = fragment_obj$typeCondition,
-            directivesfragment_obj$directives,
+            directives = fragment_obj$directives,
             selectionSet = fragment_obj$selectionSet
           )
 

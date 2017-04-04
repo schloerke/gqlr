@@ -131,7 +131,7 @@ r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, key
 
 
 default_resolve_key_value <- function(obj, args, schema_obj, ...) {
-  return(obj[[key]])
+  return(obj)
 }
 
 

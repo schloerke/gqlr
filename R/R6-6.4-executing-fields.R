@@ -329,6 +329,10 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     } else {
       # b. Otherwise if fieldType is an Interface or Union type.
         # i. Let objectType be ResolveAbstractType(fieldType, result).
+      field_obj <- ifnull(
+        oh$schema_obj$get_interface(field_type),
+        oh$schema_obj$get_union(field_type)
+      )
       object_type <- resolve_abstract_type(field_type, result, field_obj, oh = oh)
     }
 

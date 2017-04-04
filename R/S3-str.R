@@ -1,4 +1,5 @@
 
+#' @export
 str.AST <- (function() {
 
   cat_ret_spaces = function(spaces, ...) {

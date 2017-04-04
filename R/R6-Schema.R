@@ -93,7 +93,7 @@ desc_fn <- function(desc, fn, fn_name = "resolve") {
 }
 
 
-
+#' @export
 GQLRSchema <- R6Class(
   "GQLRSchema",
   private = list(
