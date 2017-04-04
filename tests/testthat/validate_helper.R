@@ -26,7 +26,7 @@ expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
 
   expect_error(
     {
-      stop(vh$error_list$present())
+      stop(format(vh$error_list))
     },
     ...
   )

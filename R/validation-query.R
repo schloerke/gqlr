@@ -629,6 +629,7 @@ ErrorList <- R6Class("ErrorList",
     )
   ),
   public = list(
+    n = 0,
     errors = list(),
     verbose = TRUE,
 
@@ -638,10 +639,10 @@ ErrorList <- R6Class("ErrorList",
     },
 
     has_no_errors = function() {
-      length(self$errors) == 0
+      self$n == 0
     },
     has_any_errors = function() {
-      length(self$errors) > 0
+      self$n > 0
     },
 
     add = function(rule_code, ...) {
@@ -660,26 +661,34 @@ ErrorList <- R6Class("ErrorList",
       if (isTRUE(self$verbose))
         message("Error: ", err)
 
+      self$n <- self$n + 1
       self$errors[[length(self$errors) + 1]] <- err
       invisible(self)
     },
 
-    get_errors = function() {
-      self$errors
-    },
-
-    present = function() {
+    .format = function(...) {
       if (self$has_any_errors()) {
         str_c(
+          "<ErrorList>\n",
           "Errors: \n",
-          str_c(self$errors, collapse = ", \n")
+          str_c(self$errors, collapse = ",\n")
         )
       } else {
-        character(0)
+        "<ErrorList> No errors"
       }
+    },
+    print = function(...) {
+      cat(self$.format(...))
     }
   )
 )
+format.ErrorList <- function(x, ...) {
+  x$.format(...)
+}
+str.ErrorList <- function(x, ...) {
+  print(x)
+}
+
 
 
 
@@ -705,6 +714,14 @@ ObjectHelpers <- R6Class(
     },
     set_coerced_variables = function(variable_values) {
       self$variable_values <- variable_values
+    },
+    has_variable_value = function(variable_obj) {
+      variable_name <- format(variable_obj$name)
+      variable_name %in% names(self$variable_values)
+    },
+    get_variable_value = function(variable_obj) {
+      variable_name <- format(variable_obj$name)
+      self$variable_values[[variable_name]]
     },
 
     # get_argument_value = function(arg_value) {
