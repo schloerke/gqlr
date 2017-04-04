@@ -26,7 +26,7 @@ Remotes: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Encoding: UTF-8
-Collate:
+Collate: 
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'R6--definition.R'
@@ -42,7 +42,6 @@ Collate:
     'graphql_json.R'
     'R6-3.2-directives.R'
     'R6-Schema.R'
-    'R6-4-introspection-new.R'
     'R6-4-introspection.R'
     'R6-6.1-executing-requests.R'
     'R6-6.2-executing-operations.R'
