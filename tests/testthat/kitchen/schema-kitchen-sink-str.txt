@@ -26,6 +26,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Type'
+. . . . . .resolve: function
 . . . . 2 - <FieldDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'two'
@@ -40,6 +41,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Type'
+. . . . . .resolve: function
 . . . . 3 - <FieldDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'three'
@@ -59,6 +61,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Int'
+. . . . . .resolve: function
 . . . . 4 - <FieldDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'four'
@@ -74,6 +77,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'String'
+. . . . . .resolve: function
 . . . . 5 - <FieldDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'five'
@@ -94,6 +98,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'String'
+. . . . . .resolve: function
 . . . . 6 - <FieldDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'six'
@@ -114,6 +119,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Type'
+. . . . . .resolve: function
 . . . . 7 - <FieldDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'seven'
@@ -128,6 +134,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Type'
+. . . . . .resolve: function
 . . 3 - <ObjectTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedObject'
@@ -165,6 +172,7 @@
 . . . . . . 1 - <Directive>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'onField'
+. . . . . .resolve: function
 . . 4 - <InterfaceTypeDefinition>
 . . . name: <Name>
 . . . . value: 'Bar'
@@ -175,6 +183,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Type'
+. . . . . .resolve: function
 . . . . 2 - <FieldDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'four'
@@ -190,6 +199,7 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'String'
+. . . . . .resolve: function
 . . 5 - <InterfaceTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedInterface'
@@ -219,6 +229,7 @@
 . . . . . . 1 - <Directive>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'onField'
+. . . . . .resolve: function
 . . 6 - <UnionTypeDefinition>
 . . . name: <Name>
 . . . . value: 'Feed'
@@ -352,6 +363,7 @@
 . . . . . . type: <NamedType>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'Type'
+. . . . . . .resolve: function
 . . 15 - <DirectiveDefinition>
 . . . name: <Name>
 . . . . value: 'skip'
