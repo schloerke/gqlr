@@ -4,3 +4,5 @@ man-roxygen
 \.git
 \.DS_Store
 ^node_modules
+^_ignore
+^TODO.txt$
