@@ -122,7 +122,7 @@ gqlr_retrieve_star <- function(type, fn, obj, args) {
   print(list(type = type, fn = fn, obj = obj, args = args))
   cat("processing")
   for (i in 1:4) {
-    System.sleep(".25")
+    base::Sys.sleep(".25")
     cat(".")
   }
   cat("\n")

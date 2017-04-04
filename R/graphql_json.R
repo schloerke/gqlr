@@ -23,6 +23,7 @@ clean_json.default <- function(obj, ...) {
   obj
 }
 
+#' @import graphql rjson
 graphql2list <- function(txt = test_string()) {
   # ct <- javascript_context()
   # ct$call("stringify", str) %>%

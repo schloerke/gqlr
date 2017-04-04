@@ -39,10 +39,5 @@ test_obj <- function(...) {
     graphql2obj()
 }
 
-from_json <- function(...) {
-  rjson::fromJSON(...)
-}
-
-to_json <- function(...) {
-  rjson::toJSON(...)
-}
+from_json <- rjson::fromJSON
+to_json <- rjson::toJSON
