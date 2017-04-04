@@ -3,13 +3,14 @@ Title: GraphQL Server in R
 Version: 0.0.0.9000
 Authors@R: c(
     person("Barret", "Schloerke", email = "schloerke@gmail.com", role = c("aut", "cre")),
-    person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("ths"))
+    person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("ths")),
+    person("Facebook", role = "cph")
   )
 Description: Implementation of GraphQL, a query language created by Facebook for
     describing data requirements on complex application data models.
 Depends:
     R (>= 3.2.2)
-License: MIT
+License: MIT + file LICENSE
 LazyData: true
 Imports:
     stringr,
