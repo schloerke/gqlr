@@ -1,3 +1,33 @@
+
+
+
+
+# 6.1 - Execute request     - DONE
+#   get_operation           - DONE
+#   coerce_variable_values  - DONE
+
+# 6.2 - Execute Query       - DONE
+#   Execute Mutation (TODO later)
+
+# 6.3 - Executing Selection Sets - DONE
+#   collect_fields - Test
+#   does_fragment_type_apply - Test
+
+# 6.4 - Executing Fields
+#   execute_field - Test
+#   coerce_argument_values - TODO
+#   resolve_field_value - Implement defaults
+#   complete_value - Test
+#   resolve_abstract_type - Implement defaults
+#   merge_selection_sets - test
+
+
+
+
+
+
+
+
 #
 # GraphQL generates a response from a request via execution.
 #
@@ -39,7 +69,7 @@ execute_request <- function(
   operation <- get_operation(document_obj, operation_name, oh = oh)
   if (oh$error_list$has_any_errors()) return(NULL)
 
-  coerced_variable_values <- coerce_variable_values(schema_obj, operation, variable_values)
+  coerced_variable_values <- coerce_variable_values(operation, variable_values, oh = oh)
   if (oh$error_list$has_any_errors()) return(NULL)
   oh$set_coerced_variables(coerced_variable_values)
 
@@ -120,14 +150,13 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
 #   4. Return coercedValues.
 
 # variable_values is a named list according to the variable name
-# TODO- similar to CoerceArgumentValues
 coerce_variable_values <- function(operation, variable_values, ..., oh) {
 
   coerced_values <- list()
 
   variable_definitions <- operation$variableDefinitions
 
-  for (variable_definition in variableDefinitions) {
+  for (variable_definition in variable_definitions) {
     variable_name <- variable_definition$.get_name()
     variable_type <- variable_definition$type
     default_value <- variable_definition$defaultValue
@@ -139,16 +168,34 @@ coerce_variable_values <- function(operation, variable_values, ..., oh) {
       }
 
       if (inherits(variable_type, "NonNullType")) {
-        stop("6.1.2", "Non nullible type variable did not have value or default value")
+        oh$error_list$add(
+          "6.1.2",
+          "Non nullible type variable did not have value or default value"
+        )
+        next
       }
     } else {
 
       if (inherits(value, "NullValue")) {
         coerced_value <- NULL
       } else {
-        coerced_value <- coerce_value(value, variable_type)
+        variable_obj <- oh$schema_obj$get_type(variable_type)
+        parse_fn <- variable_obj$.parse_value
+        if (is.null(parse_fn)) {
+          oh$error_list$add(
+            "6.1.2",
+            "Could not find parse functino for object of type: ", variable_type$.kind
+          )
+          next
+        }
+
+        coerced_value <- parse_fn(value)
         if (is.null(coerced_value)) {
-          stop("6.1.2", "Value cannot be coerced according to the input coercion rules")
+          oh$error_list$add(
+            "6.1.2",
+            "Value cannot be coerced according to the input coercion rules"
+          )
+          next
         }
       }
 

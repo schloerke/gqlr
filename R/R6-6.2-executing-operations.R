@@ -41,6 +41,7 @@ execute_query_mutation_helper <- function(root_def_name) {
 #   oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 # oh$set_variable_values(variable_values)
 execute_query <- execute_query_mutation_helper("query")
+# DONE
 
 
 
@@ -56,3 +57,4 @@ execute_query <- execute_query_mutation_helper("query")
 #   5. Let errors be any field errors produced while executing the selection set.
 #   6. Return an unordered map containing data and errors.
 execute_mutation <- execute_query_mutation_helper("mutation")
+# DONE

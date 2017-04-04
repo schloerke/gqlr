@@ -8,17 +8,23 @@
 #   3. Let resolvedValue be ResolveFieldValue(objectType, objectValue, fieldName, argumentValues).
 #   4. Return the result of CompleteValue(fieldType, fields, resolvedValue, variableValues).
 execute_field <- function(object_type, object_value, field_type, fields, ..., oh) {
+
   # 1. Let field be the first entry in fields.
   field <- fields[[1]]
 
   # 2. Let argumentValues be the result of CoerceArgumentValues(objectType, field, variableValues)
-  argument_values <- coerce_argument_values(object_type, field, ..., oh)
+  argument_values <- coerce_argument_values(object_type, field, ..., oh = oh)
 
   # 3. Let resolvedValue be ResolveFieldValue(objectType, objectValue, fieldName, argumentValues).
-  resolved_value <- resolve_field_value(object_type, object_value, field_name, argument_values, oh = oh)
+  resolved_value <- resolve_field_value(object_type, object_value, field_obj = field, argument_values, oh = oh)
+
+  # str(resolved_value)
 
   # 4. Return the result of CompleteValue(fieldType, fields, resolvedValue, variableValues).
-  resolved_value
+  completed_value <- complete_value(field_type, fields, resolved_value, oh = oh)
+  # cat('\n\n')
+  # str(completed_value)
+  completed_value
 }
 
 
@@ -66,6 +72,10 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
   # 2. Let argumentValues be the argument values provided in field.
   argument_values <- field$arguments
 
+  # if there are no arguments, return a list
+  if (is.null(argument_values)) return(coerced_values)
+  if (length(argument_values) == 0) return(coerced_values)
+
   # 3. Let fieldName be the name of field.
   field_name <- field$name
 
@@ -87,55 +97,93 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     default_value <- argument_definition$defaultValue
 
     # d. Let value be the value provided in argumentValues for the name argumentName.
-    stop("fix")
-    field$.get_matching_argument(argument)
-    value <- argument_values[[argument_name]]
-
-    # TODO
-    stop("fix")
-
-    # e. If value is a Variable:
-      # i. Let variableName be the name of Variable value.
-      # ii. Let variableValue be the value provided in variableValues for the name variableName.
-      # iii. If variableValue exists (including null):
-      # 1. Add an entry to coercedValues named argName with the value variableValue.
-      # iv. Otherwise, if defaultValue exists (including null):
-      # 1. Add an entry to coercedValues named argName with the value defaultValue.
-      # v. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
-      # vi. Otherwise, continue to the next argument definition.
-
+    matching_arg <- field$.get_matching_argument(argument_definition)
 
     # f. Otherwise, if value does not exist (was not provided in argumentValues:
-    # i. If defaultValue exists (including null):
-    # 1. Add an entry to coercedValues named argName with the value defaultValue.
-    # ii. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
-    # iii. Otherwise, continue to the next argument definition.
+    if (is.null(matching_arg)) {
+      # i. If defaultValue exists (including null):
+      if (!is.null(default_value)) {
+        # 1. Add an entry to coercedValues named argName with the value defaultValue.
+        coerced_values[[argument_name]] <- default_value
+        next
+      }
+      # ii. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
+      if (inherits(argument_type, "NonNullType")) {
+        oh$error_list$add(
+          "6.4.1",
+          "non nullable type argument did not argument definition"
+        )
+        next
+      }
+
+      # iii. Otherwise, continue to the next argument definition.
+      next
+    }
+
+    value <- matching_arg$value
+    # e. If value is a Variable:
+    if (inherits(value, "Variable")) {
+      # i. Let variableName be the name of Variable value.
+      variable_name <- format(value$name)
+
+      # ii. Let variableValue be the value provided in variableValues for the name variableName.
+      # iii. If variableValue exists (including null):
+      if (oh$has_variable_value(value)) {
+        # 1. Add an entry to coercedValues named argName with the value variableValue.
+        variable_value <- oh$get_variable_value(value)
+        coerced_values[[variable_name]] <- variable_value
+        next
+      }
+
+      # iv. Otherwise, if defaultValue exists (including null):
+      if (!is.null(default_value)) {
+        # 1. Add an entry to coercedValues named argName with the value defaultValue.
+        coerced_values[[variable_name]] <- argument_definition$defaultValue$value
+        next
+      }
+
+      # v. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
+      if (inherits(argument_type, "NonNullType")) {
+        oh$error_list$add(
+          "6.4.1",
+          "non nullable type argument did not find variable definition"
+        )
+        next
+      }
+      # vi. Otherwise, continue to the next argument definition.
+      next
+
+    }
+
+
     # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType, throw a field error.
+    type_obj <- oh$schema_obj$get_type(argument_type)
+    parse_fn <- type_obj$.parse_value
+    if (is.null(parse_fn)) {
+      oh$error_list$add(
+        "6.4.1",
+        "Could not find parse function for object of type: ", format(argument_type)
+      )
+      next
+    }
+
     # h. Let coercedValue be the result of coercing value according to the input coercion rules of argType.
+    coerced_value <- parse_fn(value)
+    if (!is.null(value) && is.null(coerced_value)) {
+      oh$error_list$add(
+        "6.4.1",
+        "Value cannot be coerced according to the input coercion rules"
+      )
+      next
+    }
+
     # i. Add an entry to coercedValues named argName with the value coercedValue.
-    # if (is.null(value)) {
-    #   if (!is.null(default_value)) {
-    #     coerced_values[[argument_name]] <- default_value
-    #   }
-    #
-    #   if (inherits(argument_type, "NonNullType")) {
-    #     stop("6.1.2", "Non nullible type variable did not have value or default value")
-    #   }
-    # } else {
-    #
-    #   if (inherits(value, "NullValue")) {
-    #     coerced_value <- NULL
-    #   } else {
-    #     coerced_value <- coerce_value(value, argument_type)
-    #     if (is.null(coerced_value)) {
-    #       stop("6.1.2", "Value cannot be coerced according to the input coercion rules")
-    #     }
-    #   }
-    #
-    #   coerced_values[[argument_name]] <- coerced_value
-    # }
+    coerced_values[[argument_name]] <- coerced_value
+
   }
 
+  # str(coerced_values)
+  # browser()
   coerced_values
 }
 
@@ -151,11 +199,34 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 #   1. Let resolver be the internal function provided by objectType for determining the resolved value of a field named fieldName.
 #   2. Return the result of calling resolver, providing objectValue and argumentValues.
 # Note: It is common for resolver to be asynchronous due to relying on reading an underlying database or networked service to produce a value. This necessitates the rest of a GraphQL executor to handle an asynchronous execution flow.
-resolve_field_value <- function(object_type, object_value, field_name, argument_values, ..., oh) {
+resolve_field_value <- function(object_type, object_value, field_obj, argument_values, ..., oh) {
+
   object_obj <- oh$schema_obj$get_type(object_type)
 
-  resolver <- object_obj$.resolve
-  ret <- resolver(object_value, argument_values)
+  resolver_fn <- field_obj$.resolve
+
+  if (is.null(resolver_fn)) {
+    field_name_txt <- format(field_obj$name)
+
+    if (! (field_name_txt %in% names(object_value))) {
+      message(
+        "Error: No .resolve(obj, args, schema, ...) found for field: ", field_name_txt,
+        " for object of type: ", format(object_type), ".",
+        "  Could not find field in resolved object either.",
+        "  Returning NULL."
+      )
+      return(NULL)
+    }
+
+    ret <- object_value[[field_name_txt]]
+    if (is.function(ret)) {
+      ans <- ret(object_value, argument_values, oh$schema_obj)
+      return(ans)
+    }
+    return(ret)
+  }
+
+  ret <- resolver_fn(object_value, argument_values, oh$schema_obj)
   return(ret)
 }
 
@@ -238,11 +309,11 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     oh$schema_obj$is_enum(field_type)
   ) {
     # a. Return the result of “coercing” result, ensuring it is a legal value of fieldType, otherwise null.
-    field_obj <- ifnull(
+    type_obj <- ifnull(
       oh$schema_obj$get_scalar(field_type),
       oh$schema_obj$get_enum(field_type)
     )
-    resolved_result <- field_obj$.resolve(result, oh$schema_obj)
+    resolved_result <- type_obj$.parse_value(result)
     return(resolved_result)
   }
 
@@ -277,6 +348,9 @@ complete_value <- function(field_type, fields, result, ..., oh) {
 #   1. Return the result of calling the internal method provided by the type system for determining the Object type of abstractType given the value objectValue.
 resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ..., oh) {
 
+  stop("implement resolve_type")
+
+
   if (inherits(abstract_obj, "InterfaceTypeDefinition")) {
     # TODO
     type <- abstract_obj$resolve_type()
@@ -284,11 +358,12 @@ resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ...
 
   } else if (inherits(abstract_obj, "UnionTypeDefinition")) {
     # TODO
+    type <- abstract_obj$resolve_type()
     stop("asdf")
 
-  } else {
-    stop("Interface or Union objects can only resolve an abstract type")
   }
+
+  stop("Interface or Union objects can only resolve an abstract type")
 }
 
 
@@ -302,7 +377,7 @@ resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ...
 #   3. Return selectionSet.
 merge_selection_sets <- function(fields, ..., oh) {
   # 1. Let selectionSet be an empty list.
-  selection_set <- list()
+  selections <- list()
 
   # 2. For each field in fields:
   for (field in fields) {
@@ -314,11 +389,11 @@ merge_selection_sets <- function(fields, ..., oh) {
     if (length(field_selection_set) == 0) next
 
     # c. Append all selections in fieldSelectionSet to selectionSet.
-    selection_set <- append(selection_set, field_selection_set)
+    selections <- append(selections, field_selection_set$selections)
   }
-
   # 3. Return selectionSet.
-  selection_set
+  ret <- SelectionSet$new(selections = selections)
+  return(ret)
 }
 
 
@@ -336,6 +411,7 @@ merge_selection_sets <- function(fields, ..., oh) {
 #
 # If all fields from the root of the request to the source of the error return Non-Null types, then the "data" entry in the response should be null.
 is_nullish <- function(x) {
+  if (is.list(x)) return(FALSE)
   if (is.null(x)) return(TRUE)
   if (is.na(x)) return(TRUE)
   if (is.nan(x)) return(TRUE)
