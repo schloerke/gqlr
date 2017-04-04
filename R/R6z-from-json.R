@@ -46,24 +46,25 @@ r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, key
             fn_values_i <- list()
             fn_list_i <- list()
 
-            if (!is.null(fn_list)) {
-              # print(obj_name)
+            if (!is.null(fn_list) && length(fn_list) > 0) {
+              # cat("\n\n")
               # print(fn_list)
               # print(objClass)
+              # print(activeKey)
+              # str(objVal[[i]])
               # browser()
 
               if (objClass == "Document" && activeKey == "definitions") {
-                # for each definition, get the description and pass on the fields as functions list
-                obj_name <- objVal[[i]]$name$value
-                info_i <- fn_list[[obj_name]]
-                info_i <- get_resolve_and_description(info_i)
 
-                if (objVal[[i]]$kind == "ObjectTypeDefinition") {
-                  fn_list_i <- lapply(info_i$fields, get_resolve_and_description)
-                  fn_values_i <- info_i
-                  fn_values_i$fields <- NULL
-
+                if (objVal[[i]]$kind == "SchemaDefinition") {
+                  # do nothing for a SchemaDefinition
                 } else {
+                  # for each definition, get the description and pass on the fields as functions list
+                  obj_name <- objVal[[i]]$name$value
+                  info_i <- fn_list[[obj_name]]
+                  info_i <- get_resolve_and_description(info_i)
+
+                  # if (length(info_i$fields) == 0) browser()
                   fn_list_i <- lapply(info_i$fields, get_resolve_and_description)
                   fn_values_i <- info_i
                   fn_values_i$fields <- NULL
