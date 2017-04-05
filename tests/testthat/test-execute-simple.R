@@ -63,6 +63,7 @@ test_that("arbitrary code", {
       deeper {
         a
         b
+        rando
       }
     }
   }
