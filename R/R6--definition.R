@@ -620,19 +620,10 @@ ListValue = R6_from_args(
 )
 
 
-
 get_by_field <- function(field_obj) {
   field_name <- field_obj$name$value
   for (field in self$fields) {
     if (identical(field$name$value, field_name)) {
-      return(field)
-    }
-  }
-  return(NULL)
-}
-get_by_field_name = function(name_obj) {
-  for (field in self$fields) {
-    if (identical(field$name$value, name_obj$value)) {
       return(field)
     }
   }
