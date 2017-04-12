@@ -590,16 +590,19 @@ ErrorList <- R6Class("ErrorList",
       "5.1.1.1" = "Operation Name Uniqueness",
       "5.1.2" = "Anonymous Operation Definitions",
       "5.1.2.1" = "Lone Anonymous Operation",
+
       "5.2" = "Fields",
       "5.2.1" = "Field Selections on Objects, Interfaces, and Unions Types",
       "5.2.2" = "Field Selection Merging",
       "5.2.3" = "Leaf Field Selections",
+
       "5.3" = "Arguments",
       "5.3.1" = "Argument Names",
       "5.3.2" = "Argument Uniqueness",
       "5.3.3" = "Argument Values Type Correctness",
       "5.3.3.1" = "Compatible Values",
       "5.3.3.2" = "Required Non-Null Arguments",
+
       "5.4" = "Fragments",
       "5.4.1" = "Fragment Declarations",
       "5.4.1.1" = "Fragment Name Uniqueness",
@@ -614,19 +617,38 @@ ErrorList <- R6Class("ErrorList",
       "5.4.2.3.2" = "Abstract Spreads in Object Scope",
       "5.4.2.3.3" = "Object Spreads In Abstract Scope",
       "5.4.2.3.4" = "Abstract Spreads in Abstract Scope",
+
       "5.5" = "Values",
       "5.5.1" = "Input Object Field Uniqueness",
+
       "5.6" = "Directives",
       "5.6.1" = "Directives Are Defined",
       "5.6.2" = "Directives Are In Valid Locations",
       "5.6.3" = "Directives Are Unique Per Location",
+
       "5.7" = "Variables",
       "5.7.1" = "Variable Uniqueness",
       "5.7.2" = "Variable Default Values Are Correctly Typed",
       "5.7.3" = "Variables Are Input Types",
       "5.7.4" = "All Variable Uses Defined",
       "5.7.5" = "All Variables Used",
-      "5.7.6" = "All Variable Usages are Allowed"
+      "5.7.6" = "All Variable Usages are Allowed",
+
+      "6.1" = "Executing Requests",
+      "6.1.1" = "Validating Requests",
+      "6.1.2" = "Coercing Variable Values",
+
+      "6.2" = "Executing Operations",
+
+      "6.3" = "Executing Selection Sets",
+      "6.3.1" = "Normal and Serial Execution",
+      "6.3.2" = "Field Collection",
+
+      "6.4" = "Executing Fields",
+      "6.4.1" = "Coercing Field Arguments",
+      "6.4.2" = "Value Resolution",
+      "6.4.3" = "Value Completion",
+      "6.4.4" = "Errors and Non-Nullability"
     )
   ),
   public = list(
