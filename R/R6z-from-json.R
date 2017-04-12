@@ -109,7 +109,7 @@ r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, key
   # finally add description or resolve methods or any other methods
   # the information here should not exist in the first place, so stomping should not occur
   name_map <- list(
-    "resolve" = ".resolve"
+    "resolve_fn" = ".resolve"
   )
   if (is.list(fn_values)) {
     if (length(fn_values) > 0) {
