@@ -123,8 +123,8 @@ test_that("arbitrary code", {
       fn_list = list(
         Data = list(
           fields = list(
-            pic = function(obj, size, ...) {
-              obj$pic(size)
+            pic = function(obj, args, ...) {
+              obj$pic(args$size)
             }
           )
         )
