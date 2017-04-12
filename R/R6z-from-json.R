@@ -79,6 +79,7 @@ r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, key
                   # get the description or fields of an object or enum value
                   # pass them into the recursive definition so that they are added to the objects
                   obj_name <- objVal[[i]]$name$value
+                  # if (obj_name == "__schema") browser()
                   fn_values_i <- fn_list[[obj_name]]
                   fn_values_i <- get_resolve_and_description(fn_values_i)
                   fn_list_i <- list()
