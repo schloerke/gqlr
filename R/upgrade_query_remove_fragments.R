@@ -75,7 +75,11 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
   names(fragment_used_once) <- fragment_names
 
   # pretend you can see "fragment_used_once" globally
-  upgrade_fragments_in_field <- function(field_obj, matching_obj, seen_fragments = NULL) {
+  upgrade_fragments_in_field <- function(
+    field_obj,
+    matching_obj,
+    seen_fragments = NULL
+  ) {
 
     new_selections <- list()
     for (field in field_obj$selectionSet$selections) {
@@ -86,6 +90,18 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
 
           # need to recurse in field objects
           matching_field <- matching_obj$.get_field(field)
+          # if (is.null(matching_field)) {
+          #   if (vh$schema_obj$is_query_root_name(matching_obj$name)) {
+          #     matching_field <- Introspection__QueryRootFields$.get_field(field)
+          #   }
+            if (is.null(matching_field)) {
+              vh$error_list$add(
+                "5.2.1",
+                "Field can't be found for object of type: ", format(matching_obj$name)
+              )
+              next
+            }
+          # }
           matching_field_obj <- vh$schema_obj$get_object_interface_or_union(matching_field$type)
           field <- upgrade_fragments_in_field(field, matching_field_obj, seen_fragments)
         }
