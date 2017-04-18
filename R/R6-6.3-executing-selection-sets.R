@@ -125,7 +125,6 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
       # i. If skipDirective‘s if argument is true or is a variable in variableValues with the value true, continue with the next selection in selectionSet.
     # b. If selection provides the directive @include, let includeDirective be that directive.
       # i. If includeDirective‘s if argument is not true and is not a variable in variableValues with the value true, continue with the next selection in selectionSet.
-
     # if there any directives, solve them as they could be user defined
     if (!is.null(selection$directives)) {
       should_skip <- FALSE

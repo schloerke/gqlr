@@ -596,6 +596,7 @@ EnumValue = R6_from_args(
   inherit = Value,
   "EnumValue",
   " loc?: ?Location;
+    description?: ?string;
     value: string;",
   public = list(
     .format = function(...) {
@@ -885,8 +886,11 @@ ScalarTypeDefinition = R6_from_args(
       }
 
       if ((!missing(.parse_value)) || (!missing(.parse_literal))) {
-        if (missing(.parse_value) || missing(.parse_literal)) {
-          stop0(self$name, " must provide both .parse_value and .parse_literal functions")
+        if (missing(.parse_literal)) {
+          stop(self$name, " must provide both .parse_value and .parse_literal functions.  Please look at ?parse_literal for ideas")
+        }
+        if (missing(.parse_value)) {
+          stop0(self$name, " must provide both .parse_value and .parse_literal functions. .parse_value must correctly return a parsed value or NULL")
         }
         self$.parse_value = .parse_value
         self$.parse_literal = .parse_literal
@@ -901,6 +905,7 @@ ScalarTypeDefinition = R6_from_args(
         self$.parse_literal = function(x) { return(NULL) }
       }
 
+      invisible(self)
     }
   )
 )
@@ -1001,9 +1006,7 @@ FieldDefinition = R6_from_args(
       arguments = NULL,
       type,
       directives = NULL,
-      .resolve = function(object, args, schema, ...) {
-        return(object)
-      }
+      .resolve = NULL
     ) {
       self$loc <- loc
       self$description <- description
@@ -1022,6 +1025,7 @@ InputValueDefinition = R6_from_args(
   inherit = Node,
   "InputValueDefinition",
   " loc?: ?Location;
+    description?: ?string;
     name: Name;
     type: Type;
     defaultValue?: ?Value;

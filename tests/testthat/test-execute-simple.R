@@ -49,7 +49,7 @@ test_that("arbitrary code", {
     x: c
     ...c
     f
-    rando
+    # rando
     ...on Data {
       pic(size: $size)
       promise {
@@ -63,7 +63,7 @@ test_that("arbitrary code", {
       deeper {
         a
         b
-        rando
+        # rando
       }
     }
   }
@@ -74,27 +74,25 @@ test_that("arbitrary code", {
   "
 
   expected = list(
-    data = list(
-      a = "Apple",
-      b = "Banana",
-      x = "Cookie",
-      d = "Donut",
-      e = "Egg",
-      f = "Fish",
-      pic = "Pic of size: 100",
-      promise = list(a = "Apple"),
-      deep = list(
-        a = "Already Been Done",
-        b = "Boring",
-        c = list("Contrived", NULL, "Confusing"),
-        deeper = list(
-          list( a = "Apple", b = "Banana" ),
-          NULL,
-          list( a = "Apple", b = "Banana" )
-        )
+    a = "Apple",
+    b = "Banana",
+    x = "Cookie",
+    d = "Donut",
+    e = "Egg",
+    f = "Fish",
+    pic = "Pic of size: 100",
+    promise = list(a = "Apple"),
+    deep = list(
+      a = "Already Been Done",
+      b = "Boring",
+      c = list("Contrived", NULL, "Confusing"),
+      deeper = list(
+        list( a = "Apple", b = "Banana" ),
+        NULL,
+        list( a = "Apple", b = "Banana" )
       )
     )
-  );
+  )
 
   "
   type Data {
@@ -104,7 +102,7 @@ test_that("arbitrary code", {
     d: String
     e: String
     f: String
-    rando: Float
+    # rando: Float
     pic(size: Int): String
     deep: DeepDataType
     promise: Data
@@ -123,9 +121,9 @@ test_that("arbitrary code", {
       fn_list = list(
         Data = list(
           fields = list(
-            pic = function(obj, args, ...) {
-              obj$pic(args$size)
-            }
+            # pic = function(obj, args, ...) {
+            #   obj$pic(args$size)
+            # }
           )
         )
       )
@@ -148,8 +146,9 @@ test_that("arbitrary code", {
 
   # str(ans)
 
-  warning("update response check")
-  expect_true(TRUE)
+  expect_true(oh$error_list$has_no_errors())
+  # expect_true(all(names(expected$data) %in% names(ans$data)))
+  expect_equal(ans$data, expected)
 
 
 # expect(

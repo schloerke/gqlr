@@ -1,6 +1,8 @@
 #' @include R6--definition.R
 #' @include R6-3.2-directives.R
 #' @include R6-3.1.1-types-scalars.R
+#' @include R6-3.1.1-types-scalars.R
+#' @include R6-6.1-executing-requests.R
 
 
 # type Foo implements Bar {
@@ -165,7 +167,24 @@ GQLRSchema <- R6Class(
 
     objects_that_implement_interface_list = list(),
 
-    types = list()
+    add_introspection_fields_to_query_root = function() {
+      schema_def <- private$schema_definition
+      if (is.null(schema_def)) return()
+
+      query_obj <- self$get_query_object()
+      if (is.null(query_obj)) return()
+
+      for (intro_field in Introspection__QueryRootFields$fields) {
+        matching_query_field <- query_obj$.get_field(intro_field)
+        if (is.null(matching_query_field)) {
+          query_obj$fields <- append(query_obj$fields, intro_field)
+        }
+      }
+
+      return()
+    }
+
+
   ),
   public = list(
 
@@ -180,6 +199,14 @@ GQLRSchema <- R6Class(
       self$add(SkipDirective)
       self$add(IncludeDirective)
 
+      self$add(Introspection__Schema)
+      self$add(Introspection__Type)
+      self$add(Introspection__Field)
+      self$add(Introspection__InputValue)
+      self$add(Introspection__EnumValue)
+      self$add(Introspection__TypeKind)
+      self$add(Introspection__Directive)
+      self$add(Introspection__DirectiveLocation)
 
       if (!missing(document_obj)) {
         if (inherits(document_obj, "character")) {
@@ -192,12 +219,22 @@ GQLRSchema <- R6Class(
       return(invisible(self))
     },
 
-    # returns a NamedType
-    get_inner_type = function(type_obj) {
+    as_type = function(name_val) {
+      if (inherits(name_val, "Type")) {
+        return(name_val)
+      }
       if (is.character(type_obj)) {
         return(
           NamedType$new(name = Name$new(value = type_obj))
         )
+      }
+      stop("This should not be reached")
+    },
+
+    # returns a NamedType
+    get_inner_type = function(type_obj) {
+      if (is.character(type_obj)) {
+        return(self$as_type(type_obj))
       }
 
       while(
@@ -219,6 +256,7 @@ GQLRSchema <- R6Class(
         name_obj <- self$get_inner_type(name_obj)
         name_obj$name$value
       } else {
+        str(name_obj)
         stop("must supply a string, Name, or NamedType")
       }
     },
@@ -250,6 +288,11 @@ GQLRSchema <- R6Class(
     get_query_object = function() {
       query_type <- self$get_schema_definition("query")
       self$get_object_interface_or_union(query_type)
+    },
+    is_query_root_name = function(name_obj) {
+      query_type <- self$get_schema_definition("query")
+      query_name <- query_type$name
+      identical(format(name_obj), format(query_name))
     },
 
     get_scalar       = function(name) private$get_by_name(name, "scalars"),
@@ -292,10 +335,10 @@ GQLRSchema <- R6Class(
 
     get_possible_types = function(name_obj) {
       name_val <- self$name_helper(name_obj)
-      if (!is.null(self$get_object(name_val))) {
+      if (self$is_object(name_val)) {
         return(name_val)
       }
-      if (!is.null(self$get_interface(name_val))) {
+      if (self$is_interface(name_val) ) {
         return(self$objects_that_implement_interface(name_val))
       }
       union_obj <- self$get_union(name_val)
@@ -397,6 +440,8 @@ GQLRSchema <- R6Class(
           stop("Existing schema definition already found. Can not add a second definition")
         }
         private$schema_definition <- obj
+        private$add_introspection_fields_to_query_root()
+
         return(invisible(self))
       }
 
@@ -409,7 +454,6 @@ GQLRSchema <- R6Class(
       }
 
       if (obj_kind != "TypeExtensionDefinition") {
-
         # private$check_and_add_to_directives(obj)
 
         groups = list(
@@ -453,6 +497,8 @@ GQLRSchema <- R6Class(
               ]][[obj_name_val]] <- obj_name_val
             }
           }
+
+          private$add_introspection_fields_to_query_root()
         }
 
         return(invisible(self))

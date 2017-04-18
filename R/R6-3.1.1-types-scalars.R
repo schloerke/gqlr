@@ -40,7 +40,7 @@
 
 
 
-
+#' @export
 parse_literal = function(kind_val, parse_value) {
   fn <- function(obj) {
     if (obj$.kind == kind_val) {
@@ -136,7 +136,7 @@ coerce_float = function (value) {
 }
 Float = ScalarTypeDefinition$new(
   name = "Float",
-  description = str_c(
+  description = collapse(
     'The `Float` scalar type represents signed double-precision fractional ',
     'values as specified by ',
     '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).'
@@ -156,7 +156,7 @@ Float = ScalarTypeDefinition$new(
 
 String = ScalarTypeDefinition$new(
   name = "String",
-  description = str_c(
+  description = collapse(
     'The `String` scalar type represents textual data, represented as UTF-8 ',
     'character sequences. The String type is most often used by GraphQL to ',
     'represent free-form human-readable text.'
@@ -188,7 +188,7 @@ Boolean = ScalarTypeDefinition$new(
 # # no literal AST definition, but defining as such
 # ID = ScalarTypeDefinition$new(
 #   name = "ID",
-#   description = str_c(
+#   description = collapse(
 #     'The `ID` scalar type represents a unique identifier, often used to ',
 #     'refetch an object or as key for a cache. The ID type appears in a JSON ',
 #     'response as a String; however, it is not intended to be human-readable. ',

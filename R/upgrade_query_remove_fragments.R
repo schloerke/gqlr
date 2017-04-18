@@ -97,7 +97,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
             if (is.null(matching_field)) {
               vh$error_list$add(
                 "5.2.1",
-                "Field can't be found for object of type: ", format(matching_obj$name)
+                "Field: ", format(field$name), " can't be found for object of type: ", format(matching_obj$name)
               )
               next
             }

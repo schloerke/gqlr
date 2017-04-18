@@ -14,7 +14,18 @@ execute_query_mutation_helper <- function(root_def_name) {
         "6.2",
         "Can not find definition '", root_type, "' in schema definition"
       )
+      return(list(data = NULL, errors = oh$error_list))
     }
+
+    # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
+    initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
+      return__schema(schema_obj)
+    }
+    initial_value[["__type"]] <- function(z1, args, schema_obj) {
+      type_obj <- schema_obj$as_type(args$name)
+      return__type(type_obj, schema_obj)
+    }
+
 
     selection_set <- operation_obj$selectionSet
 

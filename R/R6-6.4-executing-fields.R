@@ -18,7 +18,7 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
   # 3. Let resolvedValue be ResolveFieldValue(objectType, objectValue, fieldName, argumentValues).
   resolved_value <- resolve_field_value(object_type, object_value, field_obj = field, argument_values, oh = oh)
 
-  # str(resolved_value)
+  # str(object_value)
 
   # 4. Return the result of CompleteValue(fieldType, fields, resolvedValue, variableValues).
   completed_value <- complete_value(field_type, fields, resolved_value, oh = oh)
@@ -203,11 +203,20 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
 
   object_obj <- oh$schema_obj$get_type(object_type)
 
-  resolver_fn <- field_obj$.resolve
+  resolver_fn <- object_obj$.get_field(field_obj)$.resolve
+  resolver_fn <- NULL
 
+  # cat("\n\n")
+  # print(list(
+  #   obj = object_obj,
+  #   value = object_value,
+  #   name = format(field_obj$name),
+  #   resolver = resolver_fn
+  # ))
+  # browser()
+
+  field_name_txt <- format(field_obj$name)
   if (is.null(resolver_fn)) {
-    field_name_txt <- format(field_obj$name)
-
     if (! (field_name_txt %in% names(object_value))) {
       message(
         "Error: No .resolve(obj, args, schema, ...) found for field: ", field_name_txt,
@@ -218,16 +227,17 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
       return(NULL)
     }
 
-    ret <- object_value[[field_name_txt]]
-    if (is.function(ret)) {
-      ans <- ret(object_value, argument_values, oh$schema_obj)
+    val <- object_value[[field_name_txt]]
+    if (is.function(val)) {
+      val_fn <- val
+      ans <- val_fn(object_value, argument_values, oh$schema_obj)
       return(ans)
     }
-    return(ret)
+    return(val)
   }
 
-  ret <- resolver_fn(object_value, argument_values, oh$schema_obj)
-  return(ret)
+  ret_val <- resolver_fn(object_value, argument_values, oh$schema_obj)
+  return(ret_val)
 }
 
 
@@ -265,9 +275,11 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     completed_result <- complete_value(inner_type, fields, result, oh = oh)
     # c. If completedResult is null, throw a field error.
     if (is.null(completed_result)) {
+      cat("\nis null non-null value for field: ", format(fields[[1]]$name), "\n")
+      browser()
       oh$error_list$add(
         "6.4.3",
-        "non null type returned a null value"
+        "non null type: ", format(field_type), " returned a null value"
       )
       return(NULL)
     }
@@ -300,6 +312,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     completed_result <- lapply(result, function(result_item) {
       complete_value(inner_type, fields, result_item, oh = oh)
     })
+    completed_result <- unname(completed_result)
     return(completed_result)
   }
 
