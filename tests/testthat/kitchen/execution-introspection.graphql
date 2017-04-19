@@ -1,4 +1,4 @@
-# https://gist.github.com/craigbeck/b90915d49fda19d5b2b17ead14dcd6da
+# https://github.com/graphql/graphql-js/blob/master/src/utilities/introspectionQuery.js
 query IntrospectionQuery {
   __schema {
     queryType { name }
@@ -10,14 +10,13 @@ query IntrospectionQuery {
     directives {
       name
       description
+      locations
       args {
         ...InputValue
       }
-      locations
     }
   }
 }
-
 fragment FullType on __Type {
   kind
   name
@@ -50,14 +49,12 @@ fragment FullType on __Type {
     ...TypeRef
   }
 }
-
 fragment InputValue on __InputValue {
   name
   description
   type { ...TypeRef }
   defaultValue
 }
-
 fragment TypeRef on __Type {
   kind
   name
@@ -70,6 +67,22 @@ fragment TypeRef on __Type {
       ofType {
         kind
         name
+        ofType {
+          kind
+          name
+          ofType {
+            kind
+            name
+            ofType {
+              kind
+              name
+              ofType {
+                kind
+                name
+              }
+            }
+          }
+        }
       }
     }
   }
