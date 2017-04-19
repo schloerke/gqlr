@@ -297,14 +297,14 @@ return__schema = function(schema_obj) {
     # types: [__Type!]!
     types = function(z1, z2, z3) {
       all_types <- list() %>%
-        append(schema_obj$get_scalars()) %>%
-        append(schema_obj$get_objects()) %>%
-        append(schema_obj$get_interfaces()) %>%
-        append(schema_obj$get_unions()) %>%
-        append(schema_obj$get_enums()) %>%
-        append(schema_obj$get_input_objects()) %>%
-        # append(schema_obj$get_directives()) %>%
-        append(schema_obj$get_values())
+        append(names(schema_obj$get_scalars())) %>%
+        append(names(schema_obj$get_objects())) %>%
+        append(names(schema_obj$get_interfaces())) %>%
+        append(names(schema_obj$get_unions())) %>%
+        append(names(schema_obj$get_enums())) %>%
+        append(names(schema_obj$get_input_objects())) %>%
+        # append(names(schema_obj$get_directives())) %>%
+        append(names(schema_obj$get_values()))
 
       all_types %>% lapply(return__type, schema_obj = schema_obj)
     },
@@ -503,6 +503,7 @@ return__type_kind <- function(type_obj, schema_obj) {
   if (schema_obj$is_union(type_obj)) return("UNION")
   if (schema_obj$is_enum(type_obj)) return("ENUM")
   if (schema_obj$is_input_object(type_obj)) return("INPUT_OBJECT")
+  str(type_obj)
   stop("this should not be reached")
 }
 

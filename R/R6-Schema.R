@@ -223,9 +223,9 @@ GQLRSchema <- R6Class(
       if (inherits(name_val, "Type")) {
         return(name_val)
       }
-      if (is.character(type_obj)) {
+      if (is.character(name_val)) {
         return(
-          NamedType$new(name = Name$new(value = type_obj))
+          NamedType$new(name = Name$new(value = name_val))
         )
       }
       stop("This should not be reached")
@@ -450,6 +450,7 @@ GQLRSchema <- R6Class(
       obj_kind <- obj$.kind
       obj_name <- obj$name$value
       if (is.null(obj_name) ) {
+        str(obj)
         stop("To add an object to a Schema, it must have a name.")
       }
 

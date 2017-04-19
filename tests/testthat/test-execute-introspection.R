@@ -5,73 +5,74 @@ context("execute-introspection")
 
 source("validate_helper.R")
 
-test_that("kitchen introspection", {
+read_kitchen <- function(file_name) {
+  collapse(readLines(file.path("kitchen", file_name)), collapse = "\n")
+}
 
+test_that("empty introspection", {
 
-  # expected <- list(
-  #   data = list(
-  #     a = "Apple",
-  #     b = "Banana",
-  #     x = "Cookie",
-  #     d = "Donut",
-  #     e = "Egg",
-  #     f = "Fish",
-  #     pic = "Pic of size: 100",
-  #     promise = list(a = "Apple"),
-  #     deep = list(
-  #       a = "Already Been Done",
-  #       b = "Boring",
-  #       c = list("Contrived", NULL, "Confusing"),
-  #       deeper = list(
-  #         list( a = "Apple", b = "Banana" ),
-  #         NULL,
-  #         list( a = "Apple", b = "Banana" )
-  #       )
-  #     )
-  #   )
-  # );
-
-  query <- readLines(file.path("kitchen", "execution-introspection.graphql")) %>% collapse()
-  query <- "
-  query IntrospectionQuery {
-    __schema {
-      queryType { name }
-      mutationType { name }
-      # subscriptionType { name }
-    # types {
-    #    ...FullType
-    # }
-    directives {
-      name
-      description
-      # args {
-      #   ...InputValue
-      # }
-      locations
-    }
-    }
-  }
   "
+  schema {
+    query: QueryRoot
+  }
+  type QueryRoot {
+    onlyField: String
+  }
+  " %>%
+    ObjectHelpers$new() ->
+  oh
 
-  oh <- ObjectHelpers$new(dog_cat_schema, ErrorList$new())
-
-  query_doc <- query %>%
+  introspection_query <-
+    read_kitchen("execution-introspection.graphql") %>%
     graphql2obj() %>%
     validate_query(vh = oh)
 
   ans <- execute_request(
-    query_doc,
+    introspection_query,
     operation_name = "IntrospectionQuery",
     initial_value = list(),
     oh = oh
   )
 
+  warning("update introspection response check")
+  expect_true(TRUE)
+
+  cat("\n\nans:\n")
+  str(ans)
+
+  if (is.null(ans)) {
+    cat("\n\n")
+    str(oh$error_list)
+  }
+
+})
+
+
+
+
+
+test_that("kitchen introspection", {
+
+
+  oh <- ObjectHelpers$new(dog_cat_schema)
+
+  introspection_query <-
+    read_kitchen("execution-introspection.graphql") %>%
+    graphql2obj() %>%
+    validate_query(vh = oh)
+
+  ans <- execute_request(
+    introspection_query,
+    operation_name = "IntrospectionQuery",
+    initial_value = list(),
+    oh = oh
+  )
 
   warning("update introspection response check")
   expect_true(TRUE)
 
-  # cat("\n\nans:\n")
-  # str(ans)
+  cat("\n\nans:\n")
+  str(ans)
 
   if (is.null(ans)) {
     cat("\n\n")

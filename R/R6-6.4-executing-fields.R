@@ -158,11 +158,11 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 
     # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType, throw a field error.
     type_obj <- oh$schema_obj$get_type(argument_type)
-    parse_fn <- type_obj$.parse_value
+    parse_fn <- type_obj$.parse_literal
     if (is.null(parse_fn)) {
       oh$error_list$add(
         "6.4.1",
-        "Could not find parse function for object of type: ", format(argument_type)
+        "Could not find '.parse_literal' function for object of type: ", format(argument_type)
       )
       next
     }
