@@ -61,7 +61,8 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
     response_value <- execute_field(object_type, object_value, matching_field_type, fields, oh = oh)
 
     # e. Set responseValue as the value for responseKey in resultMap.
-    result_map[[response_key]] <- response_value
+    result_map[response_key] <- list(response_value)
+    # result_map[[response_key]] <- response_value
   }
 
   # 4. Return resultMap.
