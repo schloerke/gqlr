@@ -427,12 +427,18 @@ GQLRSchema <- R6Class(
     #   self$validate()
     #   invisible(self)
     # },
-    add = function(obj, fnList) {
+    add = function(obj) {
+      # if (inherits(document_obj, "character")) {
+      #   obj <- graphql2obj(obj, fn_list = fn_list)
+      # }
       if (!inherits(obj, "AST")) {
         stop0(
           "Object must be of class AST to add to a Schema. Received: ",
           paste(class(obj), collapse = ", ")
         )
+      }
+      if (inherits(obj, "Document")) {
+        lapply(obj$definitions, self$add)
       }
 
       if (inherits(obj, "SchemaDefinition")) {
