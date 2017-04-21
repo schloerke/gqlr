@@ -5,8 +5,8 @@ context("execute-introspection")
 
 source("validate_helper.R")
 
-read_kitchen <- function(file_name) {
-  collapse(readLines(file.path("kitchen", file_name)), collapse = "\n")
+read_intro <- function(file_name) {
+  collapse(readLines(file.path("introspection", file_name)), collapse = "\n")
 }
 
 test_that("empty introspection", {
@@ -23,7 +23,7 @@ test_that("empty introspection", {
   oh
 
   introspection_query <-
-    read_kitchen("execution-introspection.graphql") %>%
+    read_intro("execution-introspection.graphql") %>%
     graphql2obj() %>%
     validate_query(vh = oh)
 
@@ -34,11 +34,8 @@ test_that("empty introspection", {
     oh = oh
   )
 
-  warning("update introspection response check")
-  expect_true(TRUE)
-
-  cat("\n\nans:\n")
-  str(ans)
+  ans_subset <- read_intro("introspection-empty-output.json") %>% from_json()
+  expect_subset(ans$data, ans_subset)
 
   if (is.null(ans)) {
     cat("\n\n")
@@ -57,7 +54,7 @@ test_that("kitchen introspection", {
   oh <- ObjectHelpers$new(dog_cat_schema)
 
   introspection_query <-
-    read_kitchen("execution-introspection.graphql") %>%
+    read_intro("execution-introspection.graphql") %>%
     graphql2obj() %>%
     validate_query(vh = oh)
 
@@ -68,20 +65,14 @@ test_that("kitchen introspection", {
     oh = oh
   )
 
-  warning("update introspection response check")
-  expect_true(TRUE)
+  # cat("\n\nans:\n")
+  # str(ans)
 
-  cat("\n\nans:\n")
-  str(ans)
+  ans_subset <- read_intro("introspection-dogcat.json") %>% from_json()
+  expect_subset(ans$data, ans_subset)
 
   if (is.null(ans)) {
     cat("\n\n")
     str(oh$error_list)
   }
-
-
-# expect(
-#   await execute(schema, ast, data, null, { size: 100 }, "Example")
-# ).to.deep.equal(expected);
-
 })
