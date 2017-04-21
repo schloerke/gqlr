@@ -495,7 +495,7 @@ return__field <- function(field_obj, obj, schema_obj) {
     args = lapply(field_obj$arguments, return__input_value, schema_obj = schema_obj),
     type = return__type(field_obj$type, schema_obj),
     isDeprecated = FALSE,
-    deprecationReason = FALSE
+    deprecationReason = NULL
   )
 }
 
