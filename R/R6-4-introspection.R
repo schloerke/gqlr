@@ -383,9 +383,8 @@ return__type = function(type_obj, schema_obj) {
         schema_obj$get_interface(type_obj)
       )
       fields <- obj$fields
-      if (length(fields) == 0) {
-        return(NULL)
-      }
+      if (is.null(fields)) return(NULL)
+      if (length(fields) == 0) return(NULL)
       lapply(fields, return__field, obj = obj, schema_obj = schema_obj)
     }
   }
@@ -407,12 +406,16 @@ return__type = function(type_obj, schema_obj) {
   if (schema_obj$is_interface(type_obj)) {
     ret$possibleTypes <- function(z1, z2, z3) {
       possible_types <- schema_obj$objects_that_implement_interface(type_obj)
+      if (is.null(possible_types)) return(NULL)
+      if (length(possible_types) == 0) return(NULL)
       lapply(possible_types, return__type, schema_obj = schema_obj)
     }
   } else if (schema_obj$is_union(type_obj)) {
     ret$possibleTypes <- function(z1, z2, z3) {
       union_obj <- schema_obj$get_union(type_obj)
       union_type_names <- union_obj$types
+      if (is.null(union_type_names)) return(NULL)
+      if (length(union_type_names) == 0) return(NULL)
       lapply(union_type_names, return__type, schema_obj = schema_obj)
     }
   }
@@ -425,6 +428,8 @@ return__type = function(type_obj, schema_obj) {
 
       enum_obj <- schema_obj$get_enum(type_obj)
       enum_values <- enum_obj$values
+      if (is.null(enum_values)) return(NULL)
+      if (length(enum_values) == 0) return(NULL)
       lapply(enum_values, return__enum_value, schema_obj = schema_obj)
     }
   }
@@ -435,6 +440,8 @@ return__type = function(type_obj, schema_obj) {
     ret$inputFields <- function(z1, z2, z3) {
       input_obj <- schema_obj$get_input_object(type_obj)
       input_obj_fields <- input_obj$fields
+      if (is.null(input_obj_fields)) return(NULL)
+      if (length(input_obj_fields) == 0) return(NULL)
       lapply(input_obj_fields, return__input_value, schema_obj = schema_obj)
     }
   }
