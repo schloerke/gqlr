@@ -1,5 +1,10 @@
 #' @include R6z-from-json.R
 
+to_json <- jsonlite::toJSON
+from_json <- function(..., simplifyDataFrame = FALSE, simplifyVector = FALSE) {
+  jsonlite::fromJSON(..., simplifyDataFrame = simplifyDataFrame, simplifyVector = simplifyVector)
+}
+
 clean_json <- function(obj, ...) {
   UseMethod("clean_json")
 }
@@ -28,7 +33,7 @@ graphql2list <- function(txt = test_string()) {
   # ct <- javascript_context()
   # ct$call("stringify", str) %>%
   graphql::graphql2json(txt) %>%
-    rjson::fromJSON() %>%
+    from_json() %>%
     clean_json()
 }
 

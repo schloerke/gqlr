@@ -38,6 +38,3 @@ test_obj <- function(...) {
   test_string(...) %>%
     graphql2obj()
 }
-
-from_json <- rjson::fromJSON
-to_json <- rjson::toJSON

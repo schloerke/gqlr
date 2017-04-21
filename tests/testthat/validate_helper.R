@@ -1,6 +1,10 @@
 source("dog_cat_schema.R")
 
 
+from_json <- function(...) {
+  jsonlite::fromJSON(..., simplifyDataFrame=FALSE, simplifyVector=FALSE)
+}
+
 expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 
   vh <- ObjectHelpers$new(schema_obj, ErrorList$new())
