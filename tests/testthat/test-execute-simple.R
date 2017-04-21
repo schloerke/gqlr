@@ -42,14 +42,14 @@ test_that("arbitrary code", {
 #   });
 # }
 
-  query <- "
+  simple_query <- "
   query Example($size: Int) {
     a,
     b,
     x: c
     ...c
     f
-    # rando
+    rando
     ...on Data {
       pic(size: $size)
       promise {
@@ -63,7 +63,7 @@ test_that("arbitrary code", {
       deeper {
         a
         b
-        # rando
+        rando
       }
     }
   }
@@ -102,7 +102,7 @@ test_that("arbitrary code", {
     d: String
     e: String
     f: String
-    # rando: Float
+    rando: Float
     pic(size: Int): String
     deep: DeepDataType
     promise: Data
@@ -117,22 +117,11 @@ test_that("arbitrary code", {
     query: Data
   }
   " %>%
-    graphql2obj(
-      fn_list = list(
-        Data = list(
-          fields = list(
-            # pic = function(obj, args, ...) {
-            #   obj$pic(args$size)
-            # }
-          )
-        )
-      )
-    ) ->
+    graphql2obj() ->
   schema_doc
 
   oh <- ObjectHelpers$new(schema_doc, ErrorList$new())
-
-  query_doc <- query %>%
+  query_doc <- simple_query %>%
     graphql2obj() %>%
     validate_query(vh = oh)
 
@@ -147,12 +136,31 @@ test_that("arbitrary code", {
   # str(ans)
 
   expect_true(oh$error_list$has_no_errors())
-  # expect_true(all(names(expected$data) %in% names(ans$data)))
-  expect_equal(ans$data, expected)
+  expect_subset(ans$data, expected)
+  expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[1]]$rando))
+  expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[3]]$rando))
 
 
-# expect(
-#   await execute(schema, ast, data, null, { size: 100 }, "Example")
-# ).to.deep.equal(expected);
+
+
+  oh <- ObjectHelpers$new(schema_doc, ErrorList$new())
+
+  # remove rando
+  query_doc_exact <- simple_query %>%
+    gsub(" rando", " ", .) %>%
+    graphql2obj() %>%
+    validate_query(vh = oh)
+
+  ans_exact <- execute_request(
+    query_doc_exact,
+    operation_name = "Example",
+    variable_values = list(size = 100),
+    initial_value = data,
+    oh = oh
+  )
+
+  # str(ans_exact)
+  expect_true(oh$error_list$has_no_errors())
+  expect_equal(ans_exact$data, expected)
 
 })

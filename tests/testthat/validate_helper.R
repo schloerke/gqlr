@@ -31,3 +31,7 @@ expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
     ...
   )
 }
+
+expect_subset <- function(bigger, smaller) {
+  sets::set_is_proper_subset(sets::as.set(smaller), sets::as.set(bigger))
+}
