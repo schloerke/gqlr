@@ -28,7 +28,7 @@ Remotes: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Encoding: UTF-8
-Collate:
+Collate: 
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'R6--definition.R'
@@ -49,6 +49,7 @@ Collate:
     'R6-6.2-executing-operations.R'
     'R6-6.3-executing-selection-sets.R'
     'R6-6.4-executing-fields.R'
+    'R6-7-response.R'
     'S3--aaa-setup.R'
     'S3-3.1.2.3-validation-object-type.R'
     'S3-str.R'

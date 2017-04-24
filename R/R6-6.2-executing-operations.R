@@ -32,7 +32,7 @@ execute_query_mutation_helper <- function(root_def_name) {
     # could parallelize here if wanted
     data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
 
-    return(list(data = data, errors = oh$error_list))
+    return(list(data = data, error_list = oh$error_list))
   })
 }
 
