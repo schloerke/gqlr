@@ -339,6 +339,7 @@ Field = R6_from_args(
           str_c(" ", self$selectionSet$.format(space_count = space_count, ...))
       )
     },
+    .show_in_format = TRUE,
     .get_matching_argument = function(argument) {
       self_args <- self$arguments
       if (is.null(self_args)) return(NULL)
@@ -924,19 +925,25 @@ ObjectTypeDefinition = R6_from_args(
     directives?: ?Array<Directive>;
     fields: Array<FieldDefinition>;",
   public = list(
-    .format = function(...) {
+    .format = function(..., all_fields = FALSE) {
+      fields <- self$fields
+      if (!isTRUE(all_fields)) {
+        show_fields <- lapply(fields, "[[", ".show_in_format") %>% unlist()
+        fields <- fields[show_fields]
+      }
+
       collapse(
         "type ",
         self$name$.format(),
         if (!is.null(self$interfaces))
           collapse(
             " implements ",
-            format_list(self$interfaces, .collapse = ", ")
+            format_list(self$interfaces, .collapse = ", ", ...)
           ),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " "),
+          format_list(self$directives, .before = " ", ...),
         " {\n",
-        format_list(self$fields, .before = "  ", .after = "\n"),
+        format_list(fields, .before = "  ", .after = "\n", ...),
         "}"
       )
     },
@@ -969,10 +976,13 @@ ObjectTypeDefinition = R6_from_args(
       self$name <- name
       self$interfaces <- interfaces
       self$directives <- directives
-      self$fields <- append(fields, FieldDefinition$new(
+
+      typename_field <- FieldDefinition$new(
         name = Name$new(value = "__typename"),
         type = NamedType$new(name = Name$new(value = "String"))
-      ))
+      )
+      typename_field$.show_in_format <- FALSE
+      self$fields <- append(fields, typename_field)
     }
   )
 )
@@ -1060,14 +1070,20 @@ InterfaceTypeDefinition = R6_from_args(
     fields: Array<FieldDefinition>;
     .resolve_type?: ?fn;",
   public = list(
-    .format = function(...) {
+    .format = function(..., all_fields = FALSE) {
+      fields <- self$fields
+      if (!isTRUE(all_fields)) {
+        show_fields <- lapply(fields, "[[", ".show_in_format") %>% unlist()
+        fields <- fields[show_fields]
+      }
+
       collapse(
         "interface ",
-        self$name$.format(),
+        self$name$.format(...),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " "),
+          format_list(self$directives, .before = " ", ...),
         " {\n",
-          format_list(self$fields, .before = "  ", .after = "\n"),
+          format_list(fields, .before = "  ", .after = "\n", ...),
         "}"
       )
     },
@@ -1083,10 +1099,12 @@ InterfaceTypeDefinition = R6_from_args(
       self$loc <- loc
       self$name <- name
       self$directives <- directives
-      self$fields <- append(fields, FieldDefinition$new(
+      typename_field <- FieldDefinition$new(
         name = Name$new(value = "__typename"),
         type = NamedType$new(name = Name$new(value = "String"))
-      ))
+      )
+      typename_field$.show_in_format <- FALSE
+      self$fields <- append(fields, typename_field)
       self$.resolve_type <- .resolve_type
 
       invisible(self)
