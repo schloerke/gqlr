@@ -13,15 +13,23 @@ raw_format <- function(x, ..., prompt = NULL, header = NULL) {
   format(x, ..., prompt = prompt, header = header)
 }
 #' @export
-format.AST <- function(x, ..., prompt = NULL, header = NULL) {
+format_all <- function(x, ..., prompt = NULL, header = NULL, all_fields = TRUE) {
+  format(x, ..., prompt = prompt, header = header, all_fields = all_fields)
+}
+#' @export
+format.AST <- function(x, ..., prompt = NULL, header = NULL, all_fields = FALSE) {
   collapse(
     if (!is.null(header)) collapse(header, "\n", prompt),
-    gsub("\n", collapse("\n", prompt), x$.format(), fixed = TRUE)
+    gsub("\n", collapse("\n", prompt), x$.format(..., all_fields = all_fields), fixed = TRUE)
   )
 }
 #' @export
 print.AST <- function(x, ..., prompt = "  | ", header = "<graphql definition>") {
   cat(format(x, ..., prompt = prompt, header = header), "\n", sep = "")
+}
+#' @export
+print_all <- function(x, ..., prompt = "  | ", header = "<graphql definition>") {
+  cat(format_all(x, ..., prompt = prompt, header = header), "\n", sep = "")
 }
 
 methods <- function(x, ...) {

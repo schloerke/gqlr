@@ -200,7 +200,7 @@ Document <- R6_from_args(
   ),
   public = list(
     .format = function(...) {
-      format_list(self$definitions, .collapse = "\n\n")
+      format_list(self$definitions, .collapse = "\n\n", ...)
     },
     .get_operations = function() {
       ret <- list()
@@ -239,15 +239,15 @@ OperationDefinition <- R6_from_args(
         name_txt <- variable_txt <- directive_txt <- NULL
 
         if (!is.null(self$name)) {
-          name_txt <- str_c(" ", self$name$.format())
+          name_txt <- str_c(" ", self$name$.format(...))
         }
         if (!is.null(self$variableDefinitions)) {
           variable_txt <- collapse(
-            "(", format_list(self$variableDefinitions, .collapse = ", "), ")"
+            "(", format_list(self$variableDefinitions, .collapse = ", ", ...), ")"
           )
         }
         if (!is.null(self$directives)) {
-          directive_txt <- format_list(self$directives, .before = " ")
+          directive_txt <- format_list(self$directives, .before = " ", ...)
         }
 
         pre_text <- collapse(self$operation, name_txt, variable_txt, directive_txt, " ")
@@ -256,7 +256,7 @@ OperationDefinition <- R6_from_args(
       }
 
       collapse(
-        pre_text, self$selectionSet$.format(sapce_count = 2)
+        pre_text, self$selectionSet$.format(space_count = 2, ...)
       )
     }
   )
@@ -273,8 +273,8 @@ VariableDefinition <- R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        self$variable$.format(), ": ", self$type$.format(),
-        if (!is.null(self$defaultValue)) str_c(" = ", self$defaultValue$.format())
+        self$variable$.format(...), ": ", self$type$.format(...),
+        if (!is.null(self$defaultValue)) str_c(" = ", self$defaultValue$.format(...))
       )
     },
     .get_name = function() {
@@ -298,7 +298,8 @@ SelectionSet <- R6_from_args(
           .before = collapse(rep(" ", space_count)),
           self$selections,
           .collapse = "\n",
-          space_count = space_count + 2
+          space_count = space_count + 2,
+          ...
         ), "\n",
         before_spaces, "}"
       )
@@ -328,14 +329,14 @@ Field = R6_from_args(
     .format = function(..., space_count = 0) {
       collapse(
         if (!is.null(self$alias))
-          collapse(self$alias$.format(), ": "),
-        self$name$.format(),
+          collapse(self$alias$.format(...), ": "),
+        self$name$.format(...),
         if (!is.null(self$arguments))
-          collapse("(", format_list(self$arguments, .collapse = ", "), ")"),
+          collapse("(", format_list(self$arguments, .collapse = ", ", ...), ")"),
         if (!is.null(self$directives))
-          collapse(" ", format_list(self$directives)),
+          collapse(" ", format_list(self$directives, ...)),
         if (!is.null(self$selectionSet))
-          str_c(" ", self$selectionSet$.format(space_count = space_count))
+          str_c(" ", self$selectionSet$.format(space_count = space_count, ...))
       )
     },
     .get_matching_argument = function(argument) {
@@ -365,9 +366,9 @@ Argument = R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        self$name$.format(),
+        self$name$.format(...),
         ": ",
-        self$value$.format()
+        self$value$.format(...)
       )
     }
   )
@@ -384,9 +385,9 @@ FragmentSpread = R6_from_args(
     .format = function(...) {
       collapse(
         "...",
-        self$name$.format(),
+        self$name$.format(...),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " ")
+          format_list(self$directives, .before = " ", ...)
       )
     }
   )
@@ -405,11 +406,11 @@ InlineFragment = R6_from_args(
       collapse(
         "...",
         if (!is.null(self$typeCondition))
-          collapse(" on ", self$typeCondition$.format()),
+          collapse(" on ", self$typeCondition$.format(...)),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " "),
+          format_list(self$directives, .before = " ", ...),
         " ",
-        self$selectionSet$.format(space_count = space_count)
+        self$selectionSet$.format(space_count = space_count, ...)
       )
     }
   )
@@ -429,12 +430,12 @@ FragmentDefinition = R6_from_args(
     .format = function(...) {
       collapse(
         "fragment ",
-        self$name$.format(),
+        self$name$.format(...),
         if (!is.null(self$typeCondition))
-          collapse(" on ", self$typeCondition$.format()),
+          collapse(" on ", self$typeCondition$.format(...)),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " "),
-        " ", self$selectionSet$.format(space_count = 2)
+          format_list(self$directives, .before = " ", ...),
+        " ", self$selectionSet$.format(space_count = 2, ...)
       )
     }
   )
@@ -475,7 +476,7 @@ Variable <- R6_from_args(
     name: Name; ",
   public = list(
     .format = function(...) {
-      collapse("$", self$name$.format())
+      collapse("$", self$name$.format(...))
     }
   )
 )
@@ -613,7 +614,7 @@ ListValue = R6_from_args(
     .format = function(...) {
       collapse(
         "[",
-        format_list(self$values, .collapse = ", "),
+        format_list(self$values, .collapse = ", ", ...),
         "]"
       )
     }
@@ -645,7 +646,7 @@ ObjectValue = R6_from_args(
     .format = function(...) {
       collapse(
         "{",
-        format_list(self$fields, collapse = ", "),
+        format_list(self$fields, collapse = ", ", ...),
         "}"
       )
     }
@@ -661,9 +662,9 @@ ObjectField = R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        self$name$.format(),
+        self$name$.format(...),
         ": ",
-        self$value$.format()
+        self$value$.format(...)
       )
     }
   )
@@ -683,9 +684,9 @@ Directive = R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        "@", self$name$.format(),
+        "@", self$name$.format(...),
         if (!is.null(self$arguments))
-          collapse("(", format_list(self$arguments, .collapse = ", "), ")")
+          collapse("(", format_list(self$arguments, .collapse = ", ", ...), ")")
       )
     }
   )
@@ -726,7 +727,7 @@ NamedType = R6_from_args(
     description?: ?string;",
   public = list(
     .format = function(...) {
-      self$name$.format()
+      self$name$.format(...)
     }
   )
 )
@@ -741,7 +742,7 @@ ListType = R6_from_args(
     .format = function(...) {
       collapse(
         "[",
-        self$type$.format(),
+        self$type$.format(...),
         "]"
       )
     }
@@ -757,7 +758,7 @@ NonNullType = R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        self$type$.format(),
+        self$type$.format(...),
         "!"
       )
     }
@@ -785,9 +786,9 @@ SchemaDefinition = R6_from_args(
       collapse(
         "schema",
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " "),
+          format_list(self$directives, .before = " ", ...),
         " {\n",
-          format_list(self$operationTypes, .before = "  ", .after = "\n"),
+          format_list(self$operationTypes, .before = "  ", .after = "\n", ...),
         "}"
       )
     },
@@ -819,7 +820,7 @@ OperationTypeDefinition = R6_from_args(
       collapse(
         self$operation,
         ": ",
-        self$type$.format()
+        self$type$.format(...)
       )
     }
   )
@@ -850,7 +851,7 @@ ScalarTypeDefinition = R6_from_args(
         "scalar ",
         self$name$.format(),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " ")
+          format_list(self$directives, .before = " ", ...)
       )
     },
     initialize = function(
@@ -992,13 +993,14 @@ FieldDefinition = R6_from_args(
       collapse(
         self$name$.format(),
         if (!is.null(self$arguments))
-          collapse("(", format_list(self$arguments, .collapse = ", "), ")"),
+          collapse("(", format_list(self$arguments, .collapse = ", ", ...), ")"),
         ": ",
         self$type$.format(),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " ")
+          format_list(self$directives, .before = " ", ...)
       )
     },
+    .show_in_format = TRUE,
     initialize = function(
       loc = NULL,
       description = NULL,
@@ -1033,13 +1035,13 @@ InputValueDefinition = R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        self$name$.format(),
+        self$name$.format(...),
         ": ",
-        self$type$.format(),
+        self$type$.format(...),
         if (!is.null(self$defaultValue))
-          collapse(" = ", self$defaultValue$.format()),
+          collapse(" = ", self$defaultValue$.format(...)),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " ")
+          format_list(self$directives, .before = " ", ...)
       )
     },
     .get_name = function() {
@@ -1106,11 +1108,11 @@ UnionTypeDefinition = R6_from_args(
     .format = function(...) {
       collapse(
         "union ",
-        self$name$.format(),
+        self$name$.format(...),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " "),
+          format_list(self$directives, .before = " ", ...),
         " = ",
-        format_list(self$types, .collapse = " | ")
+        format_list(self$types, .collapse = " | ", ...)
       )
     },
     initialize = function(
@@ -1159,11 +1161,11 @@ EnumTypeDefinition = R6_from_args(
     .format = function(...) {
       collapse(
           "enum ",
-          self$name$.format(),
+          self$name$.format(...),
           if (!is.null(self$directives))
-            format_list(self$directives, .before = " "),
+            format_list(self$directives, .before = " ", ...),
           " {\n",
-            format_list(self$values, .before = "  ", .after = "\n"),
+            format_list(self$values, .before = "  ", .after = "\n", ...),
           "}"
       )
     },
@@ -1235,9 +1237,9 @@ EnumValueDefinition = R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        self$name$.format(),
+        self$name$.format(...),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " ")
+          format_list(self$directives, .before = " ", ...)
       )
     }
   )
@@ -1255,11 +1257,11 @@ InputObjectTypeDefinition = R6_from_args(
     .format = function(...) {
       collapse(
         "input ",
-        self$name$.format(),
+        self$name$.format(...),
         if (!is.null(self$directives))
-          format_list(self$directives, .before = " "),
+          format_list(self$directives, .before = " ", ...),
         " {\n",
-          format_list(self$fields, .before = "  ", .after = "\n"),
+          format_list(self$fields, .before = "  ", .after = "\n", ...),
         "}"
       )
     },
@@ -1276,7 +1278,7 @@ TypeExtensionDefinition = R6_from_args(
     .format = function(...) {
       collapse(
         "extend ",
-        self$definition$.format()
+        self$definition$.format(...)
       )
     }
   )
@@ -1295,15 +1297,15 @@ DirectiveDefinition = R6_from_args(
   public = list(
     .format = function(...) {
       collapse(
-        "directive @", self$name$.format(),
+        "directive @", self$name$.format(...),
         if (!is.null(self$arguments))
           collapse(
             "(",
-            format_list(self$arguments, .collapse = ", "),
+            format_list(self$arguments, .collapse = ", ", ...),
             ")"
           ),
         "\n  on ",
-        format_list(self$locations, .collapse = "\n   | ")
+        format_list(self$locations, .collapse = "\n   | ", ...)
       )
     }
   )
