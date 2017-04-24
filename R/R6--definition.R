@@ -867,23 +867,21 @@ ScalarTypeDefinition = R6_from_args(
       }
       self$name = name
       if (!missing(.serialize)) {
-        self$.serialize = .serialize
+        self$.serialize <- .serialize
       } else {
         warning(
           str_c(
             "Scalar: '", self$name$value,
-            "': Setting '.serialize' to return 'NULL'"
+            "': Setting '.serialize' to throw error if called"
           )
         )
-        self$.serialize = function(x){ return(NULL) }
+        self$.serialize <- function(x){
+          stop(".serialize() not implemented for Scalar of type: ", format(self$name))
+        }
       }
 
-      if (!missing(description)) {
-        self$description = description
-      }
-      if (!missing(directives)) {
-        self$directives = directives
-      }
+      self$description <- description
+      self$directives <- directives
 
       if ((!missing(.parse_value)) || (!missing(.parse_literal))) {
         if (missing(.parse_literal)) {
@@ -892,17 +890,21 @@ ScalarTypeDefinition = R6_from_args(
         if (missing(.parse_value)) {
           stop0(self$name, " must provide both .parse_value and .parse_literal functions. .parse_value must correctly return a parsed value or NULL")
         }
-        self$.parse_value = .parse_value
-        self$.parse_literal = .parse_literal
+        self$.parse_value <- .parse_value
+        self$.parse_literal <- .parse_literal
       } else {
         warning(
           str_c(
             "Scalar: '", self$name$value,
-            "': Setting '.parse_value' and '.parse_literal' to return 'NULL'"
+            "': Setting '.parse_value' and '.parse_literal' to throw error if called"
           )
         )
-        self$.parse_value = function(x) { return(NULL) }
-        self$.parse_literal = function(x) { return(NULL) }
+        self$.parse_value <- function(x) {
+          stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
+        }
+        self$.parse_literal <- function(x) {
+          stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
+        }
       }
 
       invisible(self)
@@ -937,7 +939,7 @@ ObjectTypeDefinition = R6_from_args(
         "}"
       )
     },
-    .resolve_type = function(named_type) {
+    .has_interface = function(named_type) {
       interfaces <- self$interfaces
       if (is.null(interfaces)) {
         return(FALSE)
@@ -952,27 +954,25 @@ ObjectTypeDefinition = R6_from_args(
     .get_field = get_by_field,
     .contains_field = function(field_obj) {
       !is.null(self$.get_field(field_obj))
+    },
+    initialize = function(
+      loc = NULL,
+      description = NULL,
+      name,
+      interfaces = NULL,
+      directives = NULL,
+      fields
+    ) {
+      self$loc <- loc
+      self$description <- description
+      self$name <- name
+      self$interfaces <- interfaces
+      self$directives <- directives
+      self$fields <- append(fields, FieldDefinition$new(
+        name = Name$new(value = "__typename"),
+        type = NamedType$new(name = Name$new(value = "String"))
+      ))
     }
-    # initialize = function(
-    #   loc = NULL,
-    #   description = NULL,
-    #   name,
-    #   interfaces = NULL,
-    #   directives = NULL,
-    #   fields,
-    #   .resolve = NULL
-    # ) {
-    #   if (!missing(loc)) self$loc <- loc
-    #   if (!missing(description)) self$description <- description
-    #   self$name <- name
-    #   if (!missing(interfaces)) self$interfaces <- interfaces
-    #   if (!missing(directives)) self$directives <- directives
-    #   self$fields <- fields
-    #
-    #   if (missing(.resolve)) {
-    #     self$.resolve <- function()
-    #   }
-    # }
   )
 )
 
@@ -1055,7 +1055,8 @@ InterfaceTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    fields: Array<FieldDefinition>;",
+    fields: Array<FieldDefinition>;
+    .resolve_type?: ?fn;",
   public = list(
     .format = function(...) {
       collapse(
@@ -1068,6 +1069,26 @@ InterfaceTypeDefinition = R6_from_args(
         "}"
       )
     },
+    initialize = function(
+      loc = NULL,
+      name,
+      directives = NULL,
+      fields,
+      .resolve_type = function(obj, schema_obj) {
+        stop(".resolve_type not initialized for interface of type: ", format(self$name))
+      }
+    ) {
+      self$loc <- loc
+      self$name <- name
+      self$directives <- directives
+      self$fields <- append(fields, FieldDefinition$new(
+        name = Name$new(value = "__typename"),
+        type = NamedType$new(name = Name$new(value = "String"))
+      ))
+      self$.resolve_type <- .resolve_type
+
+      invisible(self)
+    },
     .get_field = get_by_field
   )
 )
@@ -1079,7 +1100,8 @@ UnionTypeDefinition = R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    types: Array<NamedType>;",
+    types: Array<NamedType>;
+    .resolve_type?: ?fn;",
   public = list(
     .format = function(...) {
       collapse(
@@ -1091,7 +1113,26 @@ UnionTypeDefinition = R6_from_args(
         format_list(self$types, .collapse = " | ")
       )
     },
-    .resolve_type = function(named_type) {
+    initialize = function(
+      loc = NULL,
+      description = NULL,
+      name,
+      directives = NULL,
+      types,
+      .resolve_type = function(obj, schema_obj) {
+        stop(".resolve_type not initialized for object of type: ", format(self$name))
+      }
+    ) {
+      self$loc <- loc
+      self$description <- description
+      self$name <- name
+      self$directives <- directives
+      self$types <- types
+      self$.resolve_type <- .resolve_type
+
+      invisible(self)
+    },
+    .has_type = function(named_type) {
       types <- self$types
       for (union_named_type in self$types) {
         if (union_named_type$.matches(named_type)) {
@@ -1132,18 +1173,18 @@ EnumTypeDefinition = R6_from_args(
       name,
       directives = NULL,
       values,
-      .serialize,
-      .parse_value,
-      .parse_literal
+      .serialize = NULL,
+      .parse_value = NULL,
+      .parse_literal = NULL
     ) {
       if (missing(.serialize)) .serialize <- self$.default_serialize
       if (missing(.parse_value)) .parse_value <- self$.default_parse_value
       if (missing(.parse_literal)) .parse_literal <- self$.default_parse_literal
 
-      if (!missing(loc)) self$loc <- loc
-      if (!missing(description)) self$description <- description
+      self$loc <- loc
+      self$description <- description
       self$name <- name
-      if (!missing(directives)) self$directives <- directives
+      self$directives <- directives
       self$values <- values
       self$.serialize <- .serialize
       self$.parse_value <- .parse_value
