@@ -1,136 +1,157 @@
 
 #' @export
-str.AST <- (function() {
+str.AST <- function(
+  x, ...,
+  max_level = -1,
+  show_loc = FALSE,
+  show_null = FALSE) {
+  cat(
+    format_str(
+      x, ...,
+      max_level = max_level,
+      show_loc = show_loc,
+      show_null = show_null,
+      space_count = 0,
+      is_first = TRUE
+    )
+  )
+}
 
-  cat_ret_spaces = function(spaces, ...) {
-    if (spaces > 2) {
-      cat("\n", rep(". ", floor((spaces - 2) / 2)), ". ", ..., sep = "")
-    } else if (spaces == 2) {
-      cat("\n", ". ", ..., sep = "")
-    } else {
-      cat("\n", ..., sep = "")
-    }
-    # cat("\n", rep(" ", spaces), ..., sep = "")
+
+str_c_ret_spaces = function(ret, spaces, ...) {
+  dots <- collapse(...)
+  if (spaces > 2) {
+    second <- str_c(
+      "\n", collapse(rep(". ", floor((spaces - 2) / 2))), ". ",
+      dots
+    )
+  } else if (spaces == 2) {
+    second <- str_c("\n", ". ", dots, sep = "")
+  } else {
+    second <- str_c("\n", dots, sep = "")
+  }
+  str_c(ret, second)
+}
+
+check_if_registered = function(fieldObj) {
+  key = fieldObj$.kind
+  if (is.null(key) ) {
+    stop0("Can not call format(object) on a unknown AST object")
+  }
+  if (!RegisterClassObj$is_registered(key)) {
+    stop0("'", key, "' is not registered. ")
+  }
+}
+
+
+format_str <- function(
+  object,
+  max_level = -1,
+  show_null = FALSE,
+  show_loc = FALSE,
+  space_count = 0,
+  is_first = FALSE,
+  ...
+) {
+  # if no more levels to show, return
+  if (max_level == 0) {
+    return(character(0))
   }
 
-  check_if_registered = function(fieldObj) {
-    key = fieldObj$.kind
-    if (is.null(key) ) {
-      stop0("Can not call str(object) on a unknown AST object")
-    }
-    if (!RegisterClassObj$is_registered(key)) {
-      stop0("'", key, "' is not registered. ")
-    }
+  ret <- str_c("<", object$.kind, ">", sep = "")
+  if (max_level == 1) {
+    ret <- str_c(ret, "...")
+    return(ret)
   }
 
+  field_names <- object$.argNames
 
-  function(
-    object,
-    maxLevel = -1,
-    showNull = FALSE,
-    showLoc = FALSE,
-    spaceCount = 0,
-    isFirst = TRUE,
-    ...
-  ) {
-    # if no more levels to show, return
-    if (maxLevel == 0) {
-      return()
-    }
-
-    cat("<", object$.kind, ">", sep = "")
-    if (maxLevel == 1) {
-      cat("...")
-      return()
-    }
-
-    fieldNames <- object$.argNames
-
-    for (fieldName in fieldNames) {
-      if (fieldName %in% c("loc")) {
-        if (! isTRUE(showLoc)) {
-          next
-        }
+  for (field_name in field_names) {
+    if (field_name %in% c("loc")) {
+      if (! isTRUE(show_loc)) {
+        next
       }
+    }
 
-      fieldVal <- object[[fieldName]]
+    field_val <- object[[field_name]]
 
-      if (!inherits(fieldVal, "R6")) {
-        if (is.list(fieldVal)) {
-          # is list
-          if (length(fieldVal) == 0) {
-            if (showNull) {
-              cat_ret_spaces(spaceCount + 2, fieldName, ":")
-              cat(" []")
-            }
-          } else {
-            cat_ret_spaces(spaceCount + 2, fieldName, ":")
-            for (itemPos in seq_along(fieldVal)) {
-              fieldItem <- fieldVal[[itemPos]]
-              cat_ret_spaces(spaceCount + 4, itemPos, " - ")
-
-              check_if_registered(fieldItem)
-              str(
-                fieldItem,
-                maxLevel = maxLevel - 1,
-                spaceCount = spaceCount + 4,
-                showNull = showNull,
-                showLoc = showLoc,
-                isFirst = FALSE
-              )
-            }
+    if (!inherits(field_val, "R6")) {
+      if (is.list(field_val)) {
+        # is list
+        if (length(field_val) == 0) {
+          if (show_null) {
+            ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ":")
+            ret <- ret %>% str_c(" []")
           }
-
         } else {
-          # is value
-          if (is.null(fieldVal)) {
-            fieldVal <- "NULL"
-            if (showNull) {
-              cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-            }
-          } else if (length(fieldVal) == 0) {
-            if (showNull) {
-              cat_ret_spaces(spaceCount + 2, fieldName, ": ", typeof(fieldVal), "(0)")
-            }
-          } else if (is.numeric(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-          } else if (is.character(fieldVal)) {
-            if (length(fieldVal) == 0) {
-              print("this should not happen")
-              browser()
-            }
-            cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
-          } else if (is.logical(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-          } else if (is.function(fieldVal)) {
-            cat_ret_spaces(spaceCount + 2, fieldName, ": ", "function")
-          } else {
-            print("type unknown (not char or number or bool). Fix this")
-            browser()
-            stop("type unknown (not char or number or bool). Fix this")
+          ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ":")
+          for (item_pos in seq_along(field_val)) {
+            field_item <- field_val[[item_pos]]
+            ret <- ret %>% str_c_ret_spaces(space_count + 4, item_pos, " - ")
+
+            check_if_registered(field_item)
+            ret <- str_c(ret,
+              format_str(
+                field_item,
+                max_level = max_level - 1,
+                space_count = space_count + 4,
+                show_null = show_null,
+                show_loc = show_loc
+              )
+            )
           }
         }
 
       } else {
-        # recursive call to_string
-        cat_ret_spaces(spaceCount + 2, fieldName, ": ")
-
-        check_if_registered(fieldVal)
-        str(
-          fieldVal,
-          maxLevel = maxLevel - 1,
-          spaceCount = spaceCount + 2,
-          showNull = showNull,
-          showLoc = showLoc,
-          isFirst = FALSE
-        )
+        # is value
+        if (is.null(field_val)) {
+          field_val <- "NULL"
+          if (show_null) {
+            ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", field_val)
+          }
+        } else if (length(field_val) == 0) {
+          if (show_null) {
+            ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", typeof(field_val), "(0)")
+          }
+        } else if (is.numeric(field_val)) {
+          ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", field_val)
+        } else if (is.character(field_val)) {
+          if (length(field_val) == 0) {
+            print("this should not happen")
+            browser()
+          }
+          ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": '", field_val, "'")
+        } else if (is.logical(field_val)) {
+          ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", field_val)
+        } else if (is.function(field_val)) {
+          ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", "function")
+        } else {
+          print("type unknown (not char or number or bool). Fix this")
+          browser()
+          stop("type unknown (not char or number or bool). Fix this")
+        }
       }
-    }
 
-    if (isFirst) {
-      cat("\n")
+    } else {
+      # recursive call to_string
+      ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ")
+
+      check_if_registered(field_val)
+      ret <- str_c(ret,
+        format_str(
+          field_val,
+          max_level = max_level - 1,
+          space_count = space_count + 2,
+          show_null = show_null,
+          show_loc = show_loc
+        )
+      )
     }
-    invisible(object)
   }
 
-})()
+  if (is_first) {
+    ret <- ret %>% str_c("\n")
+  }
+
+  ret
+}
