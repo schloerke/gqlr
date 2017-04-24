@@ -8,7 +8,7 @@
       {
         "kind": "SCALAR",
         "name": "Int",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -18,7 +18,7 @@
       {
         "kind": "SCALAR",
         "name": "Float",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -28,7 +28,7 @@
       {
         "kind": "SCALAR",
         "name": "String",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -38,7 +38,7 @@
       {
         "kind": "SCALAR",
         "name": "Boolean",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -48,7 +48,7 @@
       {
         "kind": "OBJECT",
         "name": "__Schema",
-        "description": null,
+
         "fields": [
           {
             "name": "types",
@@ -146,7 +146,7 @@
       {
         "kind": "OBJECT",
         "name": "__Type",
-        "description": null,
+
         "fields": [
           {
             "name": "kind",
@@ -342,7 +342,7 @@
       {
         "kind": "OBJECT",
         "name": "__Field",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -460,7 +460,7 @@
       {
         "kind": "OBJECT",
         "name": "__InputValue",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -538,7 +538,7 @@
       {
         "kind": "OBJECT",
         "name": "__EnumValue",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -616,7 +616,7 @@
       {
         "kind": "OBJECT",
         "name": "__Directive",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -714,7 +714,7 @@
       {
         "kind": "OBJECT",
         "name": "Dog",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -852,7 +852,7 @@
       {
         "kind": "OBJECT",
         "name": "Alien",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -908,7 +908,7 @@
       {
         "kind": "OBJECT",
         "name": "Human",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -964,7 +964,7 @@
       {
         "kind": "OBJECT",
         "name": "Cat",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -1063,7 +1063,7 @@
       {
         "kind": "OBJECT",
         "name": "Arguments",
-        "description": null,
+
         "fields": [
           {
             "name": "multipleReqs",
@@ -1362,7 +1362,7 @@
       {
         "kind": "OBJECT",
         "name": "SearchRoot",
-        "description": null,
+
         "fields": [
           {
             "name": "dog",
@@ -1553,7 +1553,7 @@
       {
         "kind": "INTERFACE",
         "name": "Sentient",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -1602,7 +1602,7 @@
       {
         "kind": "INTERFACE",
         "name": "Pet",
-        "description": null,
+
         "fields": [
           {
             "name": "name",
@@ -1651,7 +1651,7 @@
       {
         "kind": "UNION",
         "name": "CatOrDog",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1672,7 +1672,7 @@
       {
         "kind": "UNION",
         "name": "DogOrHuman",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1693,7 +1693,7 @@
       {
         "kind": "UNION",
         "name": "HumanOrAlien",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1714,7 +1714,7 @@
       {
         "kind": "ENUM",
         "name": "__TypeKind",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1773,7 +1773,7 @@
       {
         "kind": "ENUM",
         "name": "__DirectiveLocation",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1820,7 +1820,7 @@
       {
         "kind": "ENUM",
         "name": "DogCommand",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1849,7 +1849,7 @@
       {
         "kind": "ENUM",
         "name": "CatCommand",
-        "description": null,
+
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1866,7 +1866,7 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "ComplexInput",
-        "description": null,
+
         "fields": null,
         "inputFields": [
           {
