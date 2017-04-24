@@ -319,6 +319,47 @@ test_that("star wars test suite", {
       }'
     )
 
+  "
+  query humanQuery($id: String!) {
+    human(id: $id) {
+      name
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "human": null
+      }',
+      variable_values = list(id = "not valid id")
+    )
+
+  "
+  query UseFragment {
+    luke: human(id: \"1000\") {
+      ...HumanFragment
+    }
+    leia: human(id: \"1003\") {
+      ...HumanFragment
+    }
+  }
+  fragment HumanFragment on Human {
+    name
+    homePlanet
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "luke": {
+          "name": "Luke Skywalker",
+          "homePlanet": "Tatooine"
+        },
+        "leia": {
+          "name": "Leia Organa",
+          "homePlanet": "Alderaan"
+        }
+      }'
+    )
+
 })
 
 
