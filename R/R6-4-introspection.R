@@ -354,7 +354,7 @@ return__type = function(type_obj, schema_obj) {
       if (inherits(type_obj, "ListType")) return(NULL)
       if (inherits(type_obj, "NonNullType")) return(NULL)
       obj <- schema_obj$get_type(type_obj)
-      obj$.description
+      obj$description
     }
   )
 

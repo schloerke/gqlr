@@ -38,6 +38,9 @@ schema {
 }
 " %>%
   graphql2obj(fn_list = list(
+    Droid = list(
+      description = "A mechanical creature in the Star Wars universe."
+    ),
     Character = list(
       .resolve_type = function(obj, schema_obj) {
         # cat("\n\n")
