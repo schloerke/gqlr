@@ -6,3 +6,4 @@ man-roxygen
 ^node_modules
 ^_ignore
 ^TODO.txt$
+^\.travis\.yml$
