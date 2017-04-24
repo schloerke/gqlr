@@ -382,17 +382,14 @@ complete_value <- function(field_type, fields, result, ..., oh) {
 #   1. Return the result of calling the internal method provided by the type system for determining the Object type of abstractType given the value objectValue.
 resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ..., oh) {
 
-  stop("implement resolve_type")
-
-
   if (inherits(abstract_obj, "InterfaceTypeDefinition")) {
-    # TODO
-    type <- abstract_obj$resolve_type()
+    type <- abstract_obj$.resolve_type(object_value, oh$schema_obj)
+    type <- oh$schema_obj$as_type(type)
     return(type)
 
   } else if (inherits(abstract_obj, "UnionTypeDefinition")) {
-    # TODO
-    type <- abstract_obj$resolve_type()
+    type <- abstract_obj$.resolve_type(object_value, oh$schema_obj)
+    type <- oh$schema_obj$as_type(type)
     stop("asdf")
 
   }
@@ -445,7 +442,7 @@ merge_selection_sets <- function(fields, ..., oh) {
 #
 # If all fields from the root of the request to the source of the error return Non-Null types, then the "data" entry in the response should be null.
 is_nullish <- function(x) {
-  if (is.list(x)) return(FALSE)
+  if (is.list(x) || is.vector(x)) return(FALSE)
   if (is.null(x)) return(TRUE)
   if (is.na(x)) return(TRUE)
   if (is.nan(x)) return(TRUE)
