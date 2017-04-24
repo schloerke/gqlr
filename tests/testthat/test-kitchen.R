@@ -3,8 +3,10 @@
 context("kitchen")
 
 expect_str <- function(x, structure_txt) {
+  txt <- format_str(x)
+  lines <- strsplit(txt, "\n")[[1]]
   testthat::expect_equal(
-    capture.output(str(x)),
+    lines,
     strsplit(structure_txt, "\n")[[1]]
   )
 }
