@@ -7,6 +7,16 @@ context("star wars")
 source(file.path("starwars", "starwars_schema.R"))
 source(file.path("starwars", "starwars_data.R"))
 
+expect_sw_err <- function(...) {
+  expect_err(..., schema_obj = star_wars_schema)
+}
+expect_sw_r6 <- function(...) {
+  expect_r6(..., schema_obj = star_wars_schema)
+}
+
+
+source("validate_helper.R")
+
 
 test_that("star wars test suite", {
 
@@ -263,6 +273,326 @@ test_that("star wars test suite", {
         "hero": {
           "__typename": "Human",
           "name": "Luke Skywalker"
+        }
+      }'
+    )
+
+
+  "
+  query NestedQueryWithFragment {
+    hero {
+      ...NameAndAppearances
+      friends {
+        ...NameAndAppearances
+        friends {
+          ...NameAndAppearances
+        }
+      }
+    }
+  }
+  fragment NameAndAppearances on Character {
+    name
+    appearsIn
+  }
+  " %>%
+    expect_starwars_match(
+      '{"hero":
+        {"name": "R2-D2","appearsIn": ["NEWHOPE","EMPIRE","JEDI"],"friends":[
+          {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
+            {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"C-3PO","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
+          ]},
+          {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
+            {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
+          ]},
+          {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
+            {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"C-3PO","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+            {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
+          ]}
+        ]}
+      }'
+    )
+
+})
+
+
+test_that("validation", {
+
+
+  "
+  # INVALID: favoriteSpaceship does not exist on Character
+  query HeroSpaceshipQuery {
+    hero {
+      favoriteSpaceship
+    }
+  }
+  " %>%
+    expect_sw_err("missing field: 'favoriteSpaceship' for object: 'Character'")
+
+  "
+  # INVALID: hero is not a scalar, so fields are needed
+  query HeroNoFieldsQuery {
+    hero
+  }
+  " %>%
+    expect_sw_err("Missing children fields for field: 'hero'")
+
+  "
+  # INVALID: name is a scalar, so fields are not permitted
+  query HeroFieldsOnScalarQuery {
+    hero {
+      name {
+        firstCharacterOfName
+      }
+    }
+  }
+  " %>%
+    expect_sw_err("Not allowed to query deeper into leaf field selections")
+
+  "
+  # INVALID: primaryFunction does not exist on Character
+  query DroidFieldOnCharacter {
+    hero {
+      name
+      primaryFunction
+    }
+  }
+  " %>%
+    expect_sw_err("missing field: 'primaryFunction' for object: 'Character'")
+
+  "
+  query DroidFieldInFragment {
+    hero {
+      name
+      ...DroidFields
+    }
+  }
+  fragment DroidFields on Droid {
+    primaryFunction
+  }
+  " %>%
+    expect_sw_r6()
+
+  "
+  query DroidFieldInInlineFragment {
+    hero {
+      name
+      ... on Droid {
+        primaryFunction
+      }
+    }
+  }
+  " %>%
+    expect_sw_r6()
+})
+
+
+
+
+test_that("introspection", {
+
+  "
+  query IntrospectionTypeQuery {
+    __schema {
+      types {
+        name
+      }
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__schema": {
+          "types": [
+            {"name": "Int"},
+            {"name": "Float"},
+            {"name": "String"},
+            {"name": "Boolean"},
+            {"name": "__Schema"},
+            {"name": "__Type"},
+            {"name": "__Field"},
+            {"name": "__InputValue"},
+            {"name": "__EnumValue"},
+            {"name": "__Directive"},
+            {"name": "Human"},
+            {"name": "Droid"},
+            {"name": "Query"},
+            {"name": "Character"},
+            {"name": "__TypeKind"},
+            {"name": "__DirectiveLocation"},
+            {"name": "Episode"}
+          ]
+        }
+      }'
+    )
+
+  "
+  query IntrospectionQueryTypeQuery {
+    __schema {
+      queryType {
+        name
+      }
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__schema": {
+          "queryType": {"name": "Query"}
+        }
+      }'
+    )
+
+  "
+  query IntrospectionDroidTypeQuery {
+    __type(name: \"Droid\") {
+      name
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__type": {
+          "name": "Droid"
+        }
+      }'
+    )
+
+  "
+  query IntrospectionDroidKindQuery {
+    __type(name: \"Droid\") {
+      name
+      kind
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__type": {
+          "name": "Droid",
+          "kind": "OBJECT"
+        }
+      }'
+    )
+
+  "
+  query IntrospectionCharacterKindQuery {
+    __type(name: \"Character\") {
+      name
+      kind
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__type": {
+          "name": "Character",
+          "kind": "INTERFACE"
+        }
+      }'
+    )
+
+  "
+  query IntrospectionDroidFieldsQuery {
+    __type(name: \"Droid\") {
+      name
+      fields {
+        name
+        type {
+          name
+          kind
+        }
+      }
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__type": {
+          "name": "Droid",
+          "fields": [
+            {"name": "id","type": {"name": null,"kind": "NON_NULL"}},
+            {"name": "name","type": {"name": "String","kind": "SCALAR"}},
+            {"name": "friends","type": {"name": null,"kind": "LIST"}},
+            {"name": "appearsIn","type": {"name": null,"kind": "LIST"}},
+            {"name": "primaryFunction","type": {"name": "String","kind": "SCALAR"}},
+            {"name": "__typename","type": {"name": "String","kind": "SCALAR"}}
+          ]
+        }
+      }'
+    )
+
+  "
+  query IntrospectionDroidWrappedFieldsQuery {
+    __type(name: \"Droid\") {
+      name
+      fields {
+        name
+        type {
+          name
+          kind
+          ofType {
+            name
+            kind
+          }
+        }
+      }
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__type": {
+          "name": "Droid",
+          "fields": [
+            {
+              "name": "id",
+              "type": {"name": null,"kind": "NON_NULL","ofType": {"name": "String","kind": "SCALAR"}}
+            },
+            {
+              "name": "name",
+              "type": {"name": "String","kind": "SCALAR","ofType": null}
+            },
+            {
+              "name": "friends",
+              "type": {"name": null,"kind": "LIST","ofType": {"name": "Character","kind": "INTERFACE"}}
+            },
+            {
+              "name": "appearsIn",
+              "type": {"name": null,"kind": "LIST","ofType": {"name": "Episode","kind": "ENUM"}}
+            },
+            {
+              "name": "primaryFunction",
+              "type": {"name": "String","kind": "SCALAR","ofType": null}
+            },
+            {
+              "name": "__typename",
+              "type": {"name": "String","kind": "SCALAR","ofType": null}
+            }
+          ]
+        }
+      }'
+    )
+
+  "
+  query IntrospectionDroidDescriptionQuery {
+    __type(name: \"Droid\") {
+      name
+      description
+    }
+  }
+  " %>%
+    expect_starwars_match(
+      '{
+        "__type": {
+          "name": "Droid",
+          "description": "A mechanical creature in the Star Wars universe."
         }
       }'
     )

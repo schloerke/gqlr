@@ -81,5 +81,13 @@ expect_starwars_match <- function(query_txt, expected_json, variable_values = li
    ans_txt <- strsplit(ans_json, "\n")[[1]]
    expected_txt <- strsplit(expected_result, "\n")[[1]]
 
+   if (length(ans_txt) != length(expected_txt)) {
+     cat("\n\nans: \n")
+     cat(ans_txt, sep = "\n")
+     cat("\n\nexpected: \n")
+     cat(expected_txt, sep = "\n")
+    #  browser()
+   }
+
    expect_equal(ans_txt, expected_txt)
 }
