@@ -16,15 +16,26 @@ validate_fields_can_merge <- function(
   add_all_fields <- function(selection_set_, matching_obj_) {
     for (field in selection_set_) {
       if (inherits(field, "Field")) {
-        return_field <- matching_obj_$.get_field(field)
-        item <- list(
-          to_name = ifnull(field$alias$value, field$name$value),
-          name = field$name$value,
-          parent_type = matching_obj_$name$value,
-          field = field,
-          return_field = return_field,
-          return_type = return_field$type
-        )
+        if (field$name$value == "__typename") {
+          item <- list(
+            to_name = ifnull(field$alias$value, field$name$value),
+            name = field$name$value,
+            parent_type = matching_obj_$name$value,
+            field = field,
+            # return_field = return_field,
+            return_type = "String"
+          )
+        } else {
+          return_field <- matching_obj_$.get_field(field)
+          item <- list(
+            to_name = ifnull(field$alias$value, field$name$value),
+            name = field$name$value,
+            parent_type = matching_obj_$name$value,
+            field = field,
+            # return_field = return_field,
+            return_type = return_field$type
+          )
+        }
         field_information_list[[length(field_information_list) + 1]] <<- item
 
       } else if (inherits(field, "InlineFragment")) {
