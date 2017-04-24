@@ -16,7 +16,7 @@ result2json <- function(result, ...) {
     #   ),
     #   ...
     # )
-    ret$errors <- lapply(oh$error_list$errors, function(e) {
+    ret$errors <- lapply(result$error_list$errors, function(e) {
       list(message = e)
     })
   }
