@@ -128,6 +128,12 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Type'
+. . . . 8 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
 . . 3 - <ObjectTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedObject'
@@ -165,6 +171,12 @@
 . . . . . . 1 - <Directive>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'onField'
+. . . . 2 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
 . . 4 - <InterfaceTypeDefinition>
 . . . name: <Name>
 . . . . value: 'Bar'
@@ -190,6 +202,13 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'String'
+. . . . 3 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
+. . . .resolve_type: function
 . . 5 - <InterfaceTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedInterface'
@@ -219,6 +238,13 @@
 . . . . . . 1 - <Directive>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'onField'
+. . . . 2 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
+. . . .resolve_type: function
 . . 6 - <UnionTypeDefinition>
 . . . name: <Name>
 . . . . value: 'Feed'
@@ -232,6 +258,7 @@
 . . . . 3 - <NamedType>
 . . . . . name: <Name>
 . . . . . . value: 'Advert'
+. . . .resolve_type: function
 . . 7 - <UnionTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedUnion'
@@ -246,6 +273,7 @@
 . . . . 2 - <NamedType>
 . . . . . name: <Name>
 . . . . . . value: 'B'
+. . . .resolve_type: function
 . . 8 - <ScalarTypeDefinition>
 . . . name: <Name>
 . . . . value: 'CustomScalar'
@@ -352,6 +380,12 @@
 . . . . . . type: <NamedType>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'Type'
+. . . . . 2 - <FieldDefinition>
+. . . . . . name: <Name>
+. . . . . . . value: '__typename'
+. . . . . . type: <NamedType>
+. . . . . . . name: <Name>
+. . . . . . . . value: 'String'
 . . 15 - <DirectiveDefinition>
 . . . name: <Name>
 . . . . value: 'skip'

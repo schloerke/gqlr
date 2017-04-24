@@ -125,6 +125,17 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -310,6 +321,17 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -417,6 +439,17 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -484,6 +517,17 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -544,6 +588,17 @@
             "name": "deprecationReason",
             "description": null,
             "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -635,6 +690,17 @@
                   }
                 }
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -759,6 +825,17 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -797,6 +874,17 @@
             "name": "homePlanet",
             "description": null,
             "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -845,6 +933,17 @@
             "type": {
               "kind": "INTERFACE",
               "name": "Pet",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -933,6 +1032,17 @@
             "type": {
               "kind": "SCALAR",
               "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1231,6 +1341,17 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -1370,6 +1491,17 @@
             "deprecationReason": null
           },
           {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "__schema",
             "description": null,
             "args": [],
@@ -1438,6 +1570,17 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -1473,6 +1616,17 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "args": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1794,4 +1948,4 @@
       }
     ]
   }
-} 
+}
