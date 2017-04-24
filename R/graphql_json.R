@@ -1,6 +1,13 @@
 #' @include R6z-from-json.R
 
-to_json <- jsonlite::toJSON
+to_json <- function(..., pretty = TRUE) {
+  jsonlite::toJSON(
+    ...,
+    pretty = pretty,
+    auto_unbox = TRUE,
+    null = "null"
+  )
+}
 from_json <- function(..., simplifyDataFrame = FALSE, simplifyVector = FALSE) {
   jsonlite::fromJSON(..., simplifyDataFrame = simplifyDataFrame, simplifyVector = simplifyVector)
 }
