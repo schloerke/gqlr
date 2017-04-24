@@ -141,20 +141,21 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     if (inherits(value, "Variable")) {
       # i. Let variableName be the name of Variable value.
       variable_name <- format(value$name)
+      variable_to_name <- format(matching_arg$name)
 
       # ii. Let variableValue be the value provided in variableValues for the name variableName.
       # iii. If variableValue exists (including null):
       if (oh$has_variable_value(value)) {
         # 1. Add an entry to coercedValues named argName with the value variableValue.
         variable_value <- oh$get_variable_value(value)
-        coerced_values[[variable_name]] <- variable_value
+        coerced_values[[variable_to_name]] <- variable_value
         next
       }
 
       # iv. Otherwise, if defaultValue exists (including null):
       if (!is.null(default_value)) {
         # 1. Add an entry to coercedValues named argName with the value defaultValue.
-        coerced_values[[variable_name]] <- argument_definition$defaultValue$value
+        coerced_values[[variable_to_name]] <- argument_definition$defaultValue$value
         next
       }
 
