@@ -1,6 +1,7 @@
 #' @include R6z-from-json.R
 
 #' @export
+#' @import jsonlite
 to_json <- function(..., pretty = TRUE) {
   jsonlite::toJSON(
     ...,
@@ -37,7 +38,7 @@ clean_json.default <- function(obj, ...) {
   obj
 }
 
-#' @import graphql rjson
+#' @import graphql
 graphql2list <- function(txt = test_string()) {
   # ct <- javascript_context()
   # ct$call("stringify", str) %>%

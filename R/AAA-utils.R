@@ -6,10 +6,12 @@ str_trim <- function(x) {
   x
 }
 
+#' @export
 str_c <- function (..., sep = "", collapse = NULL) {
   paste(..., sep = sep, collapse = collapse)
 }
 
+#' @export
 collapse <- function(..., sep = "", collapse = "") {
   paste(..., sep = sep, collapse = collapse)
 }

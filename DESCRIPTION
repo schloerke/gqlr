@@ -20,7 +20,7 @@ Imports:
     memoise,
     pryr,
     R6,
-    rjson
+    jsonlite
 Suggests:
     roxygen2 (>= 5.0.0),
     testthat
@@ -28,7 +28,7 @@ Remotes: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Encoding: UTF-8
-Collate: 
+Collate:
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'R6--definition.R'

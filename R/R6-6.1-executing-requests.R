@@ -57,6 +57,7 @@
 #   4. Otherwise if operation is a mutation operation:
 #     a. Return ExecuteMutation(operation, schema, coercedVariableValues, initialValue).
 
+#' @export
 execute_request <- function(
   document_obj,
   operation_name = NULL,

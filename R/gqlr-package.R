@@ -1,6 +1,6 @@
 # ' @importFrom magrittr %>% equals
 #' @importFrom magrittr %>%
-#' @import rjson
+# ' @import rjson
 # @importFrom Rcpp sourceCpp
 #' @importFrom R6 R6Class
 #' @importFrom utils capture.output getFromNamespace str
