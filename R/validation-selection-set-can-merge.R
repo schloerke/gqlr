@@ -81,8 +81,8 @@ validate_fields_can_merge <- function(
               field_i_info$parent_type,
               field_j_info$parent_type
             ) ||
-            is.null(vh$schema_obj$get_object(field_i_info$parent_type)) ||
-            is.null(vh$schema_obj$get_object(field_j_info$parent_type))
+            (! vh$schema_obj$is_object(field_i_info$parent_type)) ||
+            (! vh$schema_obj$is_object(field_j_info$parent_type))
           ) {
             # fieldA and fieldB must have identical field names.
             if (field_i_info$name != field_j_info$name) {
