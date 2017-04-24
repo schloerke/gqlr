@@ -69,7 +69,7 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
     }
   }
   fragment inDirectFieldSelectionOnUnion on CatOrDog {
-    # TODO remove comment # __typename
+    __typename
     ... on Pet {
       name
     }
