@@ -251,8 +251,10 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
   if (
     oh$schema_obj$is_interface(fragment_type)
   ) {
-    interface_obj <- oh$schema_obj$get_interface(fragment_type)
-    ret <- interface_obj$.resolve_type(object_type)
+    obj <- oh$schema_obj$get_object(object_type)
+    ret <- obj$.has_interface(fragment_type)
+    # interface_obj <- oh$schema_obj$get_interface(fragment_type, oh$schema_obj)
+    # ret <- interface_obj$.resolve_type(object_type, oh$schema_obj)
     # object_obj <- oh$schema_obj$get_object(object_type)
     # ret <- object_obj$.does_implement(fragment_type)
     return(ret)
@@ -264,7 +266,7 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
     oh$schema_obj$is_union(fragment_type)
   ) {
     union_obj <- oh$schema_obj$get_union(object_type)
-    ret <- union_obj$.resolve_type(fragment_type)
+    ret <- union_obj$.has_type(fragment_type)
     return(ret)
   }
 
