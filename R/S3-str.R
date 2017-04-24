@@ -1,16 +1,11 @@
 
 #' @export
 str.AST <- function(
-  x, ...,
-  max_level = -1,
-  show_loc = FALSE,
-  show_null = FALSE) {
+  object, ...
+) {
   cat(
     format_str(
-      x, ...,
-      max_level = max_level,
-      show_loc = show_loc,
-      show_null = show_null,
+      object, ...,
       space_count = 0,
       is_first = TRUE
     )
