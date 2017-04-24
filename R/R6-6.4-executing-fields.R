@@ -12,6 +12,11 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
   # 1. Let field be the first entry in fields.
   field <- fields[[1]]
 
+  if (identical(format(field$name), "__typename")) {
+    completed_value <- resolve__typename(object_type, object_value, oh = oh)
+    return(completed_value)
+  }
+
   # 2. Let argumentValues be the result of CoerceArgumentValues(objectType, field, variableValues)
   argument_values <- coerce_argument_values(object_type, field, ..., oh = oh)
 
@@ -25,6 +30,17 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
   # cat('\n\n')
   # str(completed_value)
   completed_value
+}
+
+resolve__typename <- function(object_type, object_value, ..., oh) {
+  if (oh$schema_obj$is_object(object_type)) {
+    ret <- format(object_type)
+    return(ret)
+  }
+
+  obj <- ifnull(oh$schema_obj$get_interface(object_type), oh$schema_obj$get_union(object_type))
+  ret <- obj$.resolve_type(object_value, oh$schema_obj)
+  ret
 }
 
 

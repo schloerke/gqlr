@@ -165,6 +165,9 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., vh)
     } else if (inherits(selection_obj, "Field")) {
       # make sure all request names exist in return obj
       if (! (selection_obj$name$value %in% obj_field_names)) {
+        if (selection_obj$name$value == "__typename") {
+          next
+        }
         if (inherits(object, "UnionTypeDefinition")) {
           # 5.2.1 - can't query fields directly on a union object
           bad_field_names <- selection_names[! (selection_names %in% c("__typename"))]
@@ -174,6 +177,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., vh)
             "Not allowed to ask for fields: ", str_c(bad_field_names, collapse = ", ")
           )
           next
+
         } else {
           vh$error_list$add(
             "5.2.1",
