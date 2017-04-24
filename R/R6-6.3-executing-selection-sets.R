@@ -132,6 +132,7 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
       for (selection_directive in selection$directives) {
         directive_def <- oh$schema_obj$get_directive(selection_directive$name)
         # TODO
+        warning("resolve directive")
         directive_response <- directive_def$.resolve(selection_directive)
         if (!isTRUE(directive_response)) {
           should_skip <- TRUE
