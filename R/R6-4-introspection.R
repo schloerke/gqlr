@@ -228,14 +228,14 @@ type QueryRootFields {
 introspection_definitions
 
 
-Introspection__Schema <<- introspection_definitions[[1]]
-Introspection__Type <<- introspection_definitions[[2]]
-Introspection__Field <<- introspection_definitions[[3]]
-Introspection__InputValue <<- introspection_definitions[[4]]
-Introspection__EnumValue <<- introspection_definitions[[5]]
-Introspection__TypeKind <<- introspection_definitions[[6]]
-Introspection__Directive <<- introspection_definitions[[7]]
-Introspection__DirectiveLocation <<- introspection_definitions[[8]]
+Introspection__Schema <- introspection_definitions[[1]]
+Introspection__Type <- introspection_definitions[[2]]
+Introspection__Field <- introspection_definitions[[3]]
+Introspection__InputValue <- introspection_definitions[[4]]
+Introspection__EnumValue <- introspection_definitions[[5]]
+Introspection__TypeKind <- introspection_definitions[[6]]
+Introspection__Directive <- introspection_definitions[[7]]
+Introspection__DirectiveLocation <- introspection_definitions[[8]]
 
 
 # # types: [__Type!]!
@@ -276,7 +276,9 @@ Introspection__DirectiveLocation <<- introspection_definitions[[8]]
 
 
 
-Introspection__QueryRootFields <<- introspection_definitions[[9]]
+Introspection__QueryRootFields <- introspection_definitions[[9]]
+Introspection__QueryRootFields$fields[[1]]$.show_in_format <- FALSE
+Introspection__QueryRootFields$fields[[2]]$.show_in_format <- FALSE
 # DONE
 # Introspection__QueryRootFields$fields[[1]]$.resolve <- function(z1, z2, schema_obj) {
 #   return__schema(schema_obj)
