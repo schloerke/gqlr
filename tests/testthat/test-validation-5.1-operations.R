@@ -56,24 +56,6 @@ test_that('5.1.1.1 - Operation Name Uniqueness', {
   expect_err("has duplicate return name: dogOperation")
 
 
-  "
-  query HeroNameQuery1 {
-    ...HeroNameFrag
-  }
-  fragment HeroNameFrag on Query {
-    hero {
-      name
-    }
-  }
-  fragment HeroNameFrag on Query {
-    hero {
-      name
-    }
-  }
-  " %>%
-  expect_err("has duplicate return name")
-
-
 });
 
 
