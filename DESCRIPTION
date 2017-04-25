@@ -28,7 +28,7 @@ RemotesOLD: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Encoding: UTF-8
-Collate:
+Collate: 
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'R6--definition.R'
@@ -54,7 +54,6 @@ Collate:
     'S3-3.1.2.3-validation-object-type.R'
     'S3-str.R'
     'gqlr-package.R'
-    'start-tmp.R'
     'upgrade_query_remove_fragments.R'
     'validation-arguments.R'
     'validation-input-coercion.R'

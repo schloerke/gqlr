@@ -52,24 +52,27 @@ validate_operation_names <- function(document_obj, ..., vh) {
       next
     }
 
+    # is query or mutation
     if (!is.null(definition$operation)) {
       if (definition$operation %in% c("query", "mutation")) {
         query_mutation_count <- query_mutation_count + 1
+
+        name_val <- definition$name$value
+        if (is.null(name_val)) {
+          missing_count <- missing_count + 1
+        } else {
+          if (isTRUE(seen_names[[name_val]])) {
+            vh$error_list$add(
+              "5.1.1.1",
+              "document definition has duplicate return name: ", name_val
+            )
+          }
+          seen_names[[name_val]] <- TRUE
+        }
+
       }
     }
 
-    name_val <- definition$name$value
-    if (is.null(name_val)) {
-      missing_count <- missing_count + 1
-    } else {
-      if (isTRUE(seen_names[[name_val]])) {
-        vh$error_list$add(
-          "5.1.1.1",
-          "document definition has duplicate return name: ", name_val
-        )
-      }
-      seen_names[[name_val]] <- TRUE
-    }
 
   }
 

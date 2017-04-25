@@ -54,7 +54,7 @@ test_that("5.4.1.1 - Fragment Name Uniqueness", {
     }
   }
   " %>%
-  expect_err("has duplicate return name")
+  expect_err("Found duplicate fragment: fragmentOne")
 
 
   })

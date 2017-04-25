@@ -56,9 +56,9 @@ upgrade_query_remove_fragments <- function(document_obj, ..., vh) {
 
       # 5.4.1.1
       if (!is.null(fragment_list[[fragment_name]])) {
-        vh$error_list(
+        vh$error_list$add(
           "5.4.1.1",
-          "fragments must have a unique name. Found extra fragment: ", fragment_name
+          "fragments must have a unique name. Found duplicate fragment: ", fragment_name
         )
         next
       }

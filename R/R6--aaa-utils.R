@@ -374,148 +374,71 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
 }
 
 
-gqlr_str <- function(x, ...) {
-  x$.str(...)
-}
-# gqlr_str <- (function() {
-#   cat_ret_spaces <- function(spaces, ...) {
-#     cat("\n", rep(" ", spaces), ..., sep = "")
+
+
+# namedtype_from_txt <- function(txt) {
+#   if (!is.character(txt)) {
+#     return(txt)
 #   }
 #
-#   str_obj <- function(x, maxLevel = -1, spaceCount = 0, showNull) {
-#     if (maxLevel == 0) {
-#       return()
-#     }
-#
-#     r6ObjClass <- class(x)[1]
-#
-#     cat("<", r6ObjClass, ">", sep = "")
-#     if (maxLevel == 1) {
-#       cat("...")
-#       return()
-#     }
-#
-#     fieldNames <- x$.argNames
-#
-#     for (fieldName in fieldNames) {
-#       if (fieldName %in% c("loc")) {
-#         next
-#       }
-#
-#       fieldVal <- x[[fieldName]]
-#
-#       if (!inherits(fieldVal, "R6")) {
-#         if (is.list(fieldVal)) {
-#           # is list
-#           if (length(fieldVal) == 0) {
-#             if (showNull) {
-#               cat_ret_spaces(spaceCount + 2, fieldName, ":")
-#               cat(" []")
-#             }
-#           } else {
-#             cat_ret_spaces(spaceCount + 2, fieldName, ":")
-#             for (itemPos in seq_along(fieldVal)) {
-#               fieldItem <- fieldVal[[itemPos]]
-#               cat_ret_spaces(spaceCount + 4, itemPos, " - ")
-#               str_obj(fieldItem, maxLevel - 1, spaceCount + 4, showNull)
-#             }
-#           }
-#
-#         } else {
-#           # is value
-#           if (is.null(fieldVal)) {
-#             fieldVal <- "NULL"
-#             if (showNull) {
-#               cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-#             }
-#           } else if (is.numeric(fieldVal)) {
-#             cat_ret_spaces(spaceCount + 2, fieldName, ": ", fieldVal)
-#           } else if (is.character(fieldVal)) {
-#             cat_ret_spaces(spaceCount + 2, fieldName, ": '", fieldVal, "'")
-#           }
-#         }
-#
-#       } else {
-#         # recursive call to_string
-#         cat_ret_spaces(spaceCount + 2, fieldName, ": ")
-#         str_obj(fieldVal, maxLevel - 1, spaceCount + 2, showNull)
-#       }
-#
-#     }
+#   NamedType$new(name = name_from_txt(txt))
+# }
+# name_from_txt <- function(txt) {
+#   if (!is.character(txt)) {
+#     txt
 #   }
 #
-#   function(x, maxLevel = -1, showNull = FALSE) {
-#     str_obj(x, maxLevel, 0, showNull)
-#     cat("\n")
-#     invisible(x)
+#   Name$new(value = txt)
+# }
+#
+# type_from_txt <- function(txt) {
+#   if (!is.character(txt)) {
+#     return(txt)
 #   }
-# })()
-
-
-
-namedtype_from_txt <- function(txt) {
-  if (!is.character(txt)) {
-    return(txt)
-  }
-
-  NamedType$new(name = name_from_txt(txt))
-}
-name_from_txt <- function(txt) {
-  if (!is.character(txt)) {
-    txt
-  }
-
-  Name$new(value = txt)
-}
-
-type_from_txt <- function(txt) {
-  if (!is.character(txt)) {
-    return(txt)
-  }
-
-  txt <- str_trim(txt)
-  if (str_detect(txt, "!$")) {
-    # remove ! and recurse
-    txt <- str_replace(txt, "!$", "")
-    type_val <- type_from_txt(txt)
-    return(NonNullType$new(type = type_val))
-  }
-
-  if (str_detect(txt, "\\]$")) {
-    # remove brackets and recurse
-    txt <- str_replace(txt, "^\\[", "")
-    txt <- str_replace(txt, "\\]$", "")
-    type_val <- type_from_txt(txt)
-    return(ListType$new(type = type_val))
-  }
-
-  # must be the name
-  named_val <- namedtype_from_txt(txt)
-  return(named_val)
-}
-
-field_type_obj_from_txt <- function(name_txt, field_txt, description = NULL, ...) {
-  FieldDefinition$new(
-    description = description,
-    name = name_from_txt(name_txt),
-    type = type_from_txt(field_txt),
-    ...
-  )
-}
-
-input_value_from_txt <- function(name_txt, type_txt, ...) {
-
-  InputValueDefinition$new(
-    name = name_from_txt(name_txt),
-    type = type_from_txt(type_txt),
-    ...
-  )
-}
-
-
-object_field_from_txt <- function(name_txt, type_txt) {
-  ObjectField$new(
-    name = name_from_txt(name_txt),
-    value = type_from_txt(type_txt)
-  )
-}
+#
+#   txt <- str_trim(txt)
+#   if (str_detect(txt, "!$")) {
+#     # remove ! and recurse
+#     txt <- str_replace(txt, "!$", "")
+#     type_val <- type_from_txt(txt)
+#     return(NonNullType$new(type = type_val))
+#   }
+#
+#   if (str_detect(txt, "\\]$")) {
+#     # remove brackets and recurse
+#     txt <- str_replace(txt, "^\\[", "")
+#     txt <- str_replace(txt, "\\]$", "")
+#     type_val <- type_from_txt(txt)
+#     return(ListType$new(type = type_val))
+#   }
+#
+#   # must be the name
+#   named_val <- namedtype_from_txt(txt)
+#   return(named_val)
+# }
+#
+# field_type_obj_from_txt <- function(name_txt, field_txt, description = NULL, ...) {
+#   FieldDefinition$new(
+#     description = description,
+#     name = name_from_txt(name_txt),
+#     type = type_from_txt(field_txt),
+#     ...
+#   )
+# }
+#
+# input_value_from_txt <- function(name_txt, type_txt, ...) {
+#
+#   InputValueDefinition$new(
+#     name = name_from_txt(name_txt),
+#     type = type_from_txt(type_txt),
+#     ...
+#   )
+# }
+#
+#
+# object_field_from_txt <- function(name_txt, type_txt) {
+#   ObjectField$new(
+#     name = name_from_txt(name_txt),
+#     value = type_from_txt(type_txt)
+#   )
+# }
