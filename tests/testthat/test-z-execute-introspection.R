@@ -25,7 +25,7 @@ test_that("empty introspection", {
   introspection_query <-
     read_intro("execution-introspection.graphql") %>%
     graphql2obj() %>%
-    validate_query(vh = oh)
+    validate_query(oh = oh)
 
   ans <- execute_request(
     introspection_query,
@@ -56,7 +56,7 @@ test_that("kitchen introspection", {
   introspection_query <-
     read_intro("execution-introspection.graphql") %>%
     graphql2obj() %>%
-    validate_query(vh = oh)
+    validate_query(oh = oh)
 
   ans <- execute_request(
     introspection_query,

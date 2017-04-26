@@ -58,6 +58,7 @@ Collate:
     'validation-arguments.R'
     'validation-input-coercion.R'
     'validation-selection-set-can-merge.R'
+    'validation-query (conflict).R'
     'validation-query.R'
     'wrappers.R'
     'zzz.R'

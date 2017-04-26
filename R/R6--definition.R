@@ -981,6 +981,7 @@ ObjectTypeDefinition = R6_from_args(
         name = Name$new(value = "__typename"),
         type = NamedType$new(name = Name$new(value = "String"))
       )
+      typename_field$.allow_double_underscore <- TRUE
       typename_field$.show_in_format <- FALSE
       self$fields <- append(fields, typename_field)
     }
@@ -1010,6 +1011,7 @@ FieldDefinition = R6_from_args(
           format_list(self$directives, .before = " ", ...)
       )
     },
+    .allow_double_underscore = FALSE,
     .show_in_format = TRUE,
     initialize = function(
       loc = NULL,
@@ -1103,6 +1105,7 @@ InterfaceTypeDefinition = R6_from_args(
         name = Name$new(value = "__typename"),
         type = NamedType$new(name = Name$new(value = "String"))
       )
+      typename_field$.allow_double_underscore <- TRUE
       typename_field$.show_in_format <- FALSE
       self$fields <- append(fields, typename_field)
       self$.resolve_type <- .resolve_type

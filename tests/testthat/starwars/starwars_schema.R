@@ -66,7 +66,7 @@ expect_starwars_match <- function(query_txt, expected_json, variable_values = li
 
   query_doc <- query_txt %>%
     graphql2obj() %>%
-    validate_query(vh = oh)
+    validate_query(oh = oh)
 
   ans <- execute_request(
     query_doc,

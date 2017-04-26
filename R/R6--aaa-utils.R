@@ -19,8 +19,8 @@ coerce_helper = function(as_fn, is_fn) {
 }
 
 
-RegisterClassObj <- R6Class(
-  "RegisterdR6Classes",
+PkgObjsGen <- R6Class(
+  "PkgObjs",
   public = list(
     list = list(),
     is_registered = function(key) {
@@ -44,7 +44,8 @@ RegisterClassObj <- R6Class(
   )
   # private = privateList,
   # active = activeList
-)$new()
+)
+PkgObjs <- PkgObjsGen$new()
 
 
 
@@ -77,7 +78,6 @@ parse_args <- function(txt) {
       } else {
         canBeNull <- FALSE
         isArray <- FALSE
-        isNamedArray <- FALSE
         if (str_detect(value, "^\\?")) {
           canBeNull <- TRUE
           value <- str_replace(value, "^\\?", "")
@@ -85,13 +85,9 @@ parse_args <- function(txt) {
         if (str_detect(value, "^Array<")) {
           isArray <- TRUE
           value <- str_replace(value, "^Array<", "") %>% str_replace(">$", "")
-        } else if (str_detect(value, "^Dict<")) {
-          isArray <- TRUE
-          isNamedArray <- TRUE
-          value <- str_replace(value, "^Dict<", "") %>% str_replace(">$", "")
         }
 
-        retItem <- list(type = value, isArray = isArray, isNamedArray = isNamedArray, canBeNull = canBeNull, value = NULL)
+        retItem <- list(type = value, isArray = isArray, canBeNull = canBeNull, value = NULL)
       }
 
       list(key = key, value = retItem)
@@ -164,7 +160,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
   }
 
 
-  self_array_wrapper <- function(key, classVal, hasNames = FALSE) {
+  self_array_wrapper <- function(key, classVal) {
     function(value) {
       if (missing(value)) {
         return(self$.args[[key]]$value)
@@ -178,27 +174,6 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
           "Received ", paste(class(value), collapse = ", "),
           "Received object above."
         )
-      }
-      if (hasNames) {
-        valueNames <- names(value)
-        bad_name <- function() {
-          str(value, 3)
-          stop0(
-            "Attempting to set ", class(self)[1], ".", key, ".\n",
-            "Expected value should be a named array of ",
-              length(value), classVal, " objects.\n",
-            "Received object above which does not have the correct length of unique names."
-          )
-        }
-        if (is.null(valueNames)) {
-          bad_name()
-        }
-        if (any(is.na(valueNames) || is.null(valueNames))) {
-          bad_name()
-        }
-        if (length(unique(valueNames)) != length(value)) {
-          bad_name()
-        }
       }
 
       lapply(value, function(valItem) {
@@ -280,7 +255,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
 
     } else {
       if (argItem$isArray) {
-        fn <- self_array_wrapper(argName, argType, argItem$isNamedArray)
+        fn <- self_array_wrapper(argName, argType)
       } else {
         fn <- self_value_wrapper(argName, argType)
       }
@@ -368,7 +343,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
   )
   r6Class$inherit <- substitute(inherit)
 
-  RegisterClassObj$add(type, r6Class)
+  PkgObjs$add(type, r6Class)
 
   r6Class
 }

@@ -39,11 +39,3 @@ methods.AST <- function(x, ...) {
   r6_format <- getFromNamespace("format.R6", "R6")
   cat(r6_format(x, ...), "\n", sep = "")
 }
-
-validate <- function(x, schema_obj, ...) {
-  UseMethod("validate", x)
-}
-
-validate.default <- function(x, schema_obj, ...) {
-  return(invisible(NULL))
-}

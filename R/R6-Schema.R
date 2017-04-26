@@ -285,7 +285,9 @@ GQLRSchema <- R6Class(
       # self$get_object_interface_or_union(type_obj$type)
     },
 
+    is_valid = FALSE,
     add = function(obj) {
+      self$is_valid <- FALSE
       # if (inherits(document_obj, "character")) {
       #   obj <- graphql2obj(obj, fn_list = fn_list)
       # }
@@ -414,7 +416,8 @@ GQLRSchema <- R6Class(
       self[[extObjType]][[extObjName]] <- originalObject
 
       return(invisible(self))
-    }#,
+    }
+
 
 
     # validate = function() {

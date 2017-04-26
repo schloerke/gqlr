@@ -6,7 +6,7 @@
 validate_fields_can_merge <- function(
   selection_set_obj, matching_obj,
   ...,
-  vh,
+  oh,
   same_response_shape_only = FALSE
 ) {
 
@@ -43,7 +43,7 @@ validate_fields_can_merge <- function(
           # inline fragment with no type. get parent type
           item_matching_obj <- matching_obj_
         } else {
-          item_matching_obj <- vh$schema_obj$get_object_interface_or_union(field$typeCondition)
+          item_matching_obj <- oh$schema_obj$get_object_interface_or_union(field$typeCondition)
         }
         add_all_fields(field$selectionSet$selections, item_matching_obj)
       }
@@ -69,7 +69,7 @@ validate_fields_can_merge <- function(
           field_j_info <- field_list_sub[[j]]
 
           # SameResponseShape(fieldA, fieldB) must be true.
-          validate_fields_have_same_response_shape(field_i_info, field_j_info, vh = vh)
+          validate_fields_have_same_response_shape(field_i_info, field_j_info, oh = oh)
 
           if (same_response_shape_only) {
             next
@@ -81,12 +81,12 @@ validate_fields_can_merge <- function(
               field_i_info$parent_type,
               field_j_info$parent_type
             ) ||
-            (! vh$schema_obj$is_object(field_i_info$parent_type)) ||
-            (! vh$schema_obj$is_object(field_j_info$parent_type))
+            (! oh$schema_obj$is_object(field_i_info$parent_type)) ||
+            (! oh$schema_obj$is_object(field_j_info$parent_type))
           ) {
             # fieldA and fieldB must have identical field names.
             if (field_i_info$name != field_j_info$name) {
-              vh$error_list$add(
+              oh$error_list$add(
                 "5.2.2",
                 "Two matching return fields must have the same original field name\n",
                 "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info)
@@ -103,7 +103,7 @@ validate_fields_can_merge <- function(
                 capture.output(str(field_i_info$field$arguments)),
                 capture.output(str(field_j_info$field$arguments))
               )) {
-                vh$error_list$add(
+                oh$error_list$add(
                   "5.2.2",
                   "Two matching return fields must have identical arguments\n",
                   "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info)
@@ -128,8 +128,8 @@ validate_fields_can_merge <- function(
                   )
                 )
               )
-              return_type_obj <- vh$schema_obj$get_type(field_i_info$return_type_obj)
-              validate_fields_can_merge(merged_set, return_type_obj, vh = vh)
+              return_type_obj <- oh$schema_obj$get_type(field_i_info$return_type_obj)
+              validate_fields_can_merge(merged_set, return_type_obj, oh = oh)
             }
           }
 
@@ -151,7 +151,7 @@ field_string <- function(field_info) {
   }
 }
 
-validate_fields_have_same_response_shape <- function(field_i_info, field_j_info, ..., vh) {
+validate_fields_have_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
   # Let typeA be the return type of fieldA.
   type_i <- field_i_info$return_type
   # Let typeB be the return type of fieldB.
@@ -167,7 +167,7 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
         (!inherits(type_i, "NonNullType")) ||
         (!inherits(type_j, "NonNullType"))
       ) {
-        vh$error_list$add(
+        oh$error_list$add(
           "5.2.2",
           "Two matching return fields must both be NonNullType if one value is NonNullType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
@@ -188,7 +188,7 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
         (!inherits(type_i, "ListType")) ||
         (!inherits(type_j, "ListType"))
       ) {
-        vh$error_list$add(
+        oh$error_list$add(
           "5.2.2",
           "Two matching return fields must both be ListType if one value is ListType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
@@ -210,12 +210,12 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
 
   # If typeA or typeB is Scalar or Enum.
   if (
-    (!is.null(vh$schema_obj$get_scalar_or_enum(type_i))) ||
-    (!is.null(vh$schema_obj$get_scalar_or_enum(type_j)))
+    (!is.null(oh$schema_obj$get_scalar_or_enum(type_i))) ||
+    (!is.null(oh$schema_obj$get_scalar_or_enum(type_j)))
   ) {
     # typeA and typeB must be the same type.
     if (!identical(type_i_str, type_j_str)) {
-      vh$error_list$add(
+      oh$error_list$add(
         "5.2.2",
         "Two matching return names must return the same types. \n",
         "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
@@ -228,13 +228,13 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
   }
 
   # Assert: typeA and typeB are both composite types.
-  composite_i <- vh$schema_obj$get_object_interface_or_union(type_i)
-  composite_j <- vh$schema_obj$get_object_interface_or_union(type_j)
+  composite_i <- oh$schema_obj$get_object_interface_or_union(type_i)
+  composite_j <- oh$schema_obj$get_object_interface_or_union(type_j)
   if (
     is.null(composite_i) ||
     is.null(composite_j)
   ) {
-    vh$error_list$add(
+    oh$error_list$add(
       "5.2.2",
       "Two matching return names must return an Object, Interface, or Union ",
       "if they do not return a Scalar or Enum.  \n",
@@ -259,15 +259,15 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
       )
     )
   )
-  return_type_obj <- vh$schema_obj$get_type(field_i_info$return_type_obj)
+  return_type_obj <- oh$schema_obj$get_type(field_i_info$return_type_obj)
   # TODO double check logic here.
   validate_fields_can_merge(
     merged_set, return_type_obj,
-    vh = vh
+    oh = oh
   )
   # validate_fields_can_merge(
   #   selection_set, matching_obj,
-  #   vh = vh,
+  #   oh = oh,
   #   same_response_shape_only = TRUE
   # )
 

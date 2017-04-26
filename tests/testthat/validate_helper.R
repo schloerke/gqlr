@@ -7,30 +7,30 @@ from_json <- function(...) {
 
 expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 
-  vh <- ObjectHelpers$new(schema_obj, ErrorList$new())
+  oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 
   ans <- query %>%
     graphql2obj() %>%
-    validate_query(vh = vh)
+    validate_query(oh = oh)
 
-  expect_equal(vh$error_list$.format(), "<ErrorList> No errors")
+  expect_equal(oh$error_list$.format(), "<ErrorList> No errors")
 
   expect_true(R6::is.R6(ans), ...)
 }
 
 expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
 
-  vh <- ObjectHelpers$new(schema_obj, ErrorList$new())
+  oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 
   ans <- query %>%
     graphql2obj() %>%
-    validate_query(vh = vh)
+    validate_query(oh = oh)
 
-  expect_true(vh$error_list$has_any_errors())
+  expect_true(oh$error_list$has_any_errors())
 
   expect_error(
     {
-      stop(vh$error_list$.format())
+      stop(oh$error_list$.format())
     },
     ...
   )

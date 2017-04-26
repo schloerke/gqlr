@@ -18,7 +18,7 @@ r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, key
   level <- level + 1
 
 
-  r6Obj <- RegisterClassObj$get_class_obj(objClass)
+  r6Obj <- PkgObjs$get_class_obj(objClass)
 
   retList <- list()
 

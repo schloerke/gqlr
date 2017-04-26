@@ -4,7 +4,7 @@
 # 5.3.2 - Argument Uniqueness           - DONE
 # 5.3.3.1 - Compatible Values           - DONE
 # 5.3.3.2 - Required Non-Null Arguments - DONE
-validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_variables = FALSE) {
+validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_variables = FALSE) {
 
   if (
     is.null(argument_obj_list) &&
@@ -15,7 +15,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
 
 
   if (is.null(field_def_obj$arguments)) {
-    vh$error_list$add(
+    oh$error_list$add(
       "5.3.1",
       "Arguments supplied, but there are no arguments for field: ", format(field_def_obj$name)
     )
@@ -38,7 +38,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
 
     # 5.3.2 - Argument Uniqueness
     if (!is.null(values_seen[[arg_name_str]])) {
-      vh$error_list$add(
+      oh$error_list$add(
         "5.3.2",
         "duplicate arguments with same name: ", arg_name_str
       )
@@ -52,7 +52,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
 
     # 5.3.1 - Argument Names
     if (is.null(matching_arg_obj)) {
-      vh$error_list$add(
+      oh$error_list$add(
         "5.3.1",
         "could not find matching arg value with label: ", format(arg_name),
         " for field: ", format(field_def_obj$name)
@@ -70,17 +70,17 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
     #   The type of literalArgument must be coercible to type.
     if (inherits(arg_value, "Variable")) {
       if (!isTRUE(skip_variables)) {
-        vh$variable_validator$check_variable(arg_value, matching_arg_obj$type)
+        oh$variable_validator$check_variable(arg_value, matching_arg_obj$type)
       }
       next
     }
 
     # check type can be coerced
-    validate_value_can_be_coerced(arg_value, matching_arg_obj$type, vh = vh, rule_code = "5.3.3.1")
+    validate_value_can_be_coerced(arg_value, matching_arg_obj$type, oh = oh, rule_code = "5.3.3.1")
 
 
     if (inherits(arg_value, "ObjectValue")) {
-      validate_input_object_field_uniqueness(arg_value, vh = vh)
+      validate_input_object_field_uniqueness(arg_value, oh = oh)
     }
 
   }
@@ -105,7 +105,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., vh, skip_v
         is.null(arg_value) ||
         inherits(arg_value, "NullValue")
       ) {
-        vh$error_list$add(
+        oh$error_list$add(
           "5.3.3.2",
           "null or missing argument not allowed for argument: ", format(field_arg$name),
           " for field: ", format(field_def_obj$name)

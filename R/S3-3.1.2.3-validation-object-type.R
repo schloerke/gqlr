@@ -6,11 +6,11 @@ get_name_values <- function(list_obj) {
 
 
 # helper to check for more than one field and unique field names
-validate_field_names <- function(x, error_title, error_code, ..., vh) {
+validate_field_names <- function(x, error_title, error_code, ..., oh) {
   # must have one or more fields
   object_fields <- x$fields
   if (length(object_fields) == 0) {
-    vh$error_list$add(
+    oh$error_list$add(
       error_code,
       error_title, " definiiton: ", x$.title, " must have at least one field"
     )
@@ -21,7 +21,7 @@ validate_field_names <- function(x, error_title, error_code, ..., vh) {
   field_names <- get_name_values(object_fields)
 
   if (any(duplicated(field_names))) {
-    vh$error_list$add(
+    oh$error_list$add(
       error_code,
       error_title, " defintion: ", x$.title, " must have unique field names"
     )
@@ -37,9 +37,9 @@ validate_field_names <- function(x, error_title, error_code, ..., vh) {
 #   * An Interface type must define one or more fields.
 #   * The fields of an Interface type must have unique names within that Interface type;
 #     no two fields may share the same name.
-validate.InterfaceTypeDefinition <- function(x, ..., vh) {
+validate_interface_type_definition <- function(x, ..., oh) {
 
-  validate_field_names(x, "interface", "3.1.3.1", vh = vh)
+  validate_field_names(x, "interface", "3.1.3.1", oh = oh)
 
   return(invisible(TRUE))
 }
@@ -56,11 +56,11 @@ validate.InterfaceTypeDefinition <- function(x, ..., vh) {
 #   types of a Union.
 # * A Union type must define one or more member types.
 
-validate.UnionTypeDefinition <- function(x, ..., vh) {
+validate_union_type_definition <- function(x, ..., oh) {
 
   types <- x$types
   if (length(types) == 0) {
-    vh$error_list$add(
+    oh$error_list$add(
       "3.1.4.1",
       "union definition: ", x$.title, " must have at least one type."
     )
@@ -68,10 +68,10 @@ validate.UnionTypeDefinition <- function(x, ..., vh) {
   }
 
   lapply(types, function(type) {
-    type_object <- vh$schema_obj$get_object(type)
+    type_object <- oh$schema_obj$get_object(type)
 
     if (is.null(type_object)) {
-      vh$error_list$add(
+      oh$error_list$add(
         "3.1.4.1",
         "union definition: ", x$.title,
         " types can only be objects.",
@@ -95,14 +95,14 @@ validate.UnionTypeDefinition <- function(x, ..., vh) {
 #   no two fields may share the same name.
 # * The return types of each defined field must be an Input type.
 
-validate.InputObjectTypeDefinition <- function(x, ..., vh) {
-  validate_field_names(x, "input object", "3.1.6.1", vh = vh)
+validate_input_object_type_definition <- function(x, ..., oh) {
+  validate_field_names(x, "input object", "3.1.6.1", oh = oh)
 
   lapply(x$fields, function(field) {
-    type_obj <- vh$schema_obj$get_type(field$type)
+    type_obj <- oh$schema_obj$get_type(field$type)
 
     if (is.null(type_obj)) {
-      vh$error_list$add(
+      oh$error_list$add(
         "3.1.6.1",
         "input object: ", x$.title,
         " must return a InputType",
@@ -121,39 +121,51 @@ validate.InputObjectTypeDefinition <- function(x, ..., vh) {
 # Object types have the potential to be invalid if incorrectly defined. This set of rules must be
 # adhered to by every Object type in a GraphQL schema.
 #
-#   *√ An Object type must define one or more fields.
-#   *√ The fields of an Object type must have unique names within that Object type; no two fields
-#     may share the same name.
-#   * An object type must be a super‐set of all interfaces it implements:
-#     *√ The object type must include a field of the same name for every field defined in
+#   1. An Object type must define one or more fields.
+#   2. The fields of an Object type must have unique names within that Object type; no two fields may share the same name.
+#   3. Each field of an Object type must not have a name which begins with the characters "__" (two underscores).
+#   4. An object type must be a super‐set of all interfaces it implements:
+#     1. The object type must include a field of the same name for every field defined in
 #       an interface.
-#       * The object field must be of a type which is equal to or a sub‐type of the interface
+#       1. The object field must be of a type which is equal to or a sub‐type of the interface
 #         field (covariant).
-#         * An object field type is a valid sub‐type if it is equal to (the same type as) the
+#         1. An object field type is a valid sub‐type if it is equal to (the same type as) the
 #           interface field type.
-#         * An object field type is a valid sub‐type if it is an Object type and the interface
+#         2. An object field type is a valid sub‐type if it is an Object type and the interface
 #           field type is either an Interface type or a Union type and the object field type is a
 #           possible type of the interface field type.
-#         * An object field type is a valid sub‐type if it is a List type and the interface field
+#         3. An object field type is a valid sub‐type if it is a List type and the interface field
 #           type is also a List type and the list‐item type of the object field type is a valid
 #           sub‐type of the list‐item type of the interface field type.
-#         * An object field type is a valid sub‐type if it is a Non‐Null variant of a valid
+#         4. An object field type is a valid sub‐type if it is a Non‐Null variant of a valid
 #           sub‐type of the interface field type.
-#       *√ The object field must include an argument of the same name for every argument defined in
+#       2. The object field must include an argument of the same name for every argument defined in
 #         the interface field.
-#         *√ The object field argument must accept the same type (invariant) as the interface field
+#         1. The object field argument must accept the same type (invariant) as the interface field
 #           argument.
-#       *√ The object field may include additional arguments not defined in the interface field,
+#       3. The object field may include additional arguments not defined in the interface field,
 #         but any additional argument must not be required.
+validate_object_type_definition <- function(x, ..., oh) {
 
-
-
-validate.ObjectTypeDefinition <- function(x, ..., vh) {
-
-  validate_field_names(x, "object", "3.1.2.3", vh = vh)
+  # 1. An Object type must define one or more fields.
+  # 2. The fields of an Object type must have unique names within that Object type; no two fields may share the same name.
+  validate_field_names(x, "object", "3.1.2.3", oh = oh)
 
   object_fields <- x$fields
   field_names <- get_name_values(object_fields)
+
+  # 3. Each field of an Object type must not have a name which begins with the characters "__" (two underscores).
+  stars_with_double_underscore <- str_detect(field_names, "^__")
+  can_not_have_double_underscore <- lapply(object_fields, `[[`, ".allow_double_underscore") %>%
+    unlist() %>%
+    magrittr::not()
+
+  if (any(stars_with_double_underscore & can_not_have_double_underscore)) {
+    oh$error_list$add(
+      "3.1.2.3",
+      "object definition: ", format(x$name), " can not have any fields starting with '__'"
+    )
+  }
 
   interfaces <- x$interfaces
   if (is.null(interfaces)) {
@@ -161,8 +173,9 @@ validate.ObjectTypeDefinition <- function(x, ..., vh) {
   }
 
   # check for interfaces
+  #  4. An object type must be a super‐set of all interfaces it implements:
   lapply(interfaces, function(interface_named_type) {
-    interface_obj <- vh$schema_obj$get_interface(interface_named_type)
+    interface_obj <- oh$schema_obj$get_interface(interface_named_type)
 
     interface_fields <- interface_obj$fields
 
@@ -170,9 +183,16 @@ validate.ObjectTypeDefinition <- function(x, ..., vh) {
 
       interface_field_name <- interface_field$name$value
 
-      # object must implement every interface field name
+
+  # 1. An object field type is a valid sub‐type if it is equal to (the same type as) the interface field type.
+  # 2. An object field type is a valid sub‐type if it is an Object type and the interface field type is either an Interface type or a Union type and the object field type is a possible type of the interface field type.
+  # 3. An object field type is a valid sub‐type if it is a List type and the interface field type is also a List type and the list‐item type of the object field type is a valid sub‐type of the list‐item type of the interface field type.
+  # 4. An object field type is a valid sub‐type if it is a Non‐Null variant of a valid sub‐type of the interface field type.
+
+
+      # 1. The object type must include a field of the same name for every field defined in an interface.
       if (! (interface_field_name %in% field_names)) {
-        vh$error_list$add(
+        oh$error_list$add(
           "3.1.2.3",
           "object definition: ", x$.title, " must implement all fields of interface: ", interface_obj$.title, ". Missing field: ", interface_field_name
         )
@@ -183,6 +203,7 @@ validate.ObjectTypeDefinition <- function(x, ..., vh) {
       # check the type
 
       # TODO check the field type in the interface
+      # 1. The object field must be of a type which is equal to or a sub‐type of the interface field (covariant).
 
 
 
@@ -192,34 +213,33 @@ validate.ObjectTypeDefinition <- function(x, ..., vh) {
       matching_obj_field_args <- matching_obj_field$arguments
       matching_obj_field_arg_names <- get_name_values(matching_obj_field_args)
 
+      # 2. The object field must include an argument of the same name for every argument defined in the interface field.
       if (
-        length(interface_field_arg_names) != length(matching_obj_field_arg_names)
+        (! all(interface_field_arg_names %in% matching_obj_field_arg_names))
       ) {
-        vh$error_list$add(
+        oh$error_list$add(
           "3.1.2.3",
-          "object definition: ", x$.title,
-          " must have the same arguments",
-          " of interface: ", interface_obj$.title,
+          "object definition: ", format(x$name),
+          " must have at least the same argument names",
+          " of interface: ", format(interface_obj$name),
           " for field: ", interface_field_name
         )
         return(FALSE)
       }
 
-      # The object field may include additional arguments not defined in the interface field,
-      #         but any additional argument must not be required.
-      not_in_interface <- (interface_field_arg_names %in% matching_obj_field_arg_names)
-      field_args_not_in_interface <- interface_field_args[[not_in_interface]]
+      # 3. The object field may include additional arguments not defined in the interface field, but any additional argument must not be required.
+      not_in_interface <- !(matching_obj_field_arg_names %in% interface_field_arg_names)
+      field_args_not_in_interface <- matching_obj_field_args[not_in_interface]
       lapply(
-        interface_field_args[[not_in_interface]],
-        function(field_arg) {
-          defaultVal <- field_arg$defaultValue
-          if (!is.null(defaultVal)) {
-            vh$error_list$add(
+        field_args_not_in_interface,
+        function(extra_field_arg) {
+          if (inherits(extra_field_arg$type, "NonNullType")) {
+            oh$error_list$add(
               "3.1.2.3",
-              "object definition: ", x$.title,
-              " must have default values for non-interface argument: ", field_arg$name$value,
-              " when looking at interface: ", interface_obj$.title,
-              " for field: ", interface_field_name
+              "object definition: ", format(x$name),
+              " when looking at interface: ", format(interface_obj$name),
+              " for field: ", interface_field_name,
+              " all additional arguments (", format(extra_field_arg$name), ") must not be required"
             )
             return(FALSE)
           }
@@ -229,33 +249,23 @@ validate.ObjectTypeDefinition <- function(x, ..., vh) {
       # all interface args must exist and have the same type
       lapply(interface_field_arg_names, function(interface_field_arg_name) {
 
-        if (! (interface_field_arg_name %in% matching_obj_field_arg_names)) {
-          vh$error_list$add(
-            "3.1.2.3",
-            "object definition: ", x$.title,
-            " must implement argument: ", interface_field_arg_name,
-            " of interface: ", interface_obj$.title,
-            " for field: ", interface_field_name
-          )
-          return(FALSE)
-        }
-
-        interface_field_arg <- interface_field_args[[
+        interface_field_arg <- interface_field_args[[which(
           interface_field_arg_names == interface_field_arg_name
-        ]]
-        matching_obj_field_arg <- matching_obj_field_args[[
+        )]]
+        matching_obj_field_arg <- matching_obj_field_args[[which(
           matching_obj_field_arg_names == interface_field_arg_name
-        ]]
+        )]]
 
         # produce string representation of the type object.  Similar to '[__Type!]!'
         matching_obj_field_arg_type_txt <- format(matching_obj_field_arg$type)
         interface_field_arg_type_txt <- format(interface_field_arg$type)
 
+        # 1. The object field argument must accept the same type (invariant) as the interface field argument.
         if (matching_obj_field_arg_type_txt != interface_field_arg_type_txt) {
-          vh$error_list$add(
+          oh$error_list$add(
             "3.1.2.3",
-            "object definition: ", x$.title,
-            " of interface: ", interface_obj$.title,
+            "object definition: ", format(x$name),
+            " of interface: ", format(interface_obj$name),
             " for field: ", interface_field_name,
             " must input the same type: ", matching_obj_field_arg_type_txt,
             " for argument: ", interface_field_arg_name
@@ -270,6 +280,32 @@ validate.ObjectTypeDefinition <- function(x, ..., vh) {
 
   })
 
-  return(invisible(TRUE))
+  return(invisible(oh$error_list$has_no_errors()))
 
+}
+
+
+
+
+
+validate_schema <- function(..., oh) {
+  if (isTRUE(oh$schema_obj$is_valid)) {
+    return(TRUE)
+  }
+
+  interfaces <- oh$schema_obj$get_interfaces()
+  lapply(interfaces, validate_interface_type_definition, oh = oh)
+
+  unions <- oh$schema_obj$get_unions()
+  lapply(unions, validate_union_type_definition, oh = oh)
+
+  input_objects <- oh$schema_obj$get_input_objects()
+  lapply(input_objects, validate_input_object_type_definition, oh = oh)
+
+  objects <- oh$schema_obj$get_objects()
+  lapply(objects, validate_object_type_definition, oh = oh)
+
+  oh$schema_obj$is_valid <- TRUE
+
+  oh$error_list$has_no_errors()
 }

@@ -123,7 +123,7 @@ test_that("arbitrary code", {
   oh <- ObjectHelpers$new(schema_doc, ErrorList$new())
   query_doc <- simple_query %>%
     graphql2obj() %>%
-    validate_query(vh = oh)
+    validate_query(oh = oh)
 
   ans <- execute_request(
     query_doc,
@@ -149,7 +149,7 @@ test_that("arbitrary code", {
   query_doc_exact <- simple_query %>%
     gsub(" rando", " ", .) %>%
     graphql2obj() %>%
-    validate_query(vh = oh)
+    validate_query(oh = oh)
 
   ans_exact <- execute_request(
     query_doc_exact,

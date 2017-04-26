@@ -9,12 +9,12 @@ input_object_type_parse_literal = function(from_input) {
 
 }
 
-validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code) {
+validate_value_can_be_coerced = function(from_input, to_type, ..., oh, rule_code) {
 
   # A value must be provided if the type is non-null.
   if (inherits(to_type, "NonNullType")) {
     if (is.null(from_input)) {
-      vh$error_list$add(
+      oh$error_list$add(
         rule_code,
         "Expected ", format(to_type), " found missing value."
       )
@@ -22,13 +22,13 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
     }
 
     if (inherits(from_input, "NullValue")) {
-      vh$error_list$add(
+      oh$error_list$add(
         rule_code,
         "Expected ", format(to_type), " found null value."
       )
     }
     return(
-      validate_value_can_be_coerced(from_input, to_type$type, vh = vh, rule_code = rule_code)
+      validate_value_can_be_coerced(from_input, to_type$type, oh = oh, rule_code = rule_code)
     )
   }
   # if null, then return valid
@@ -48,25 +48,25 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
 
     if (inherits(from_input, "ListValue")) {
       for (from_value in from_input$values) {
-        validate_value_can_be_coerced(from_value, list_type, vh = vh, rule_code = rule_code)
+        validate_value_can_be_coerced(from_value, list_type, oh = oh, rule_code = rule_code)
       }
       return(TRUE)
     }
 
     # a single item can be given as a list of size one
     return(
-      validate_value_can_be_coerced(from_input, list_type, vh = vh, rule_code = rule_code)
+      validate_value_can_be_coerced(from_input, list_type, oh = oh, rule_code = rule_code)
     )
   }
 
-  to_obj <- vh$schema_obj$get_type(to_type)
+  to_obj <- oh$schema_obj$get_type(to_type)
   # to_obj %>% str()
   # browser()
 
   # // Input objects check each defined field and look for undefined fields.
   if (inherits(to_obj, "InputObjectTypeDefinition")) {
     if (!inherits(from_input, "ObjectValue")) {
-      vh$error_list$add(
+      oh$error_list$add(
         rule_code,
         "Expected ", to_obj$.kind, ", found not an object"
       )
@@ -74,7 +74,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
     }
 
     # validate field names are unique
-    validate_input_object_field_uniqueness(from_input, vh = vh)
+    validate_input_object_field_uniqueness(from_input, oh = oh)
 
     # for each field...
     for (from_field in from_input$fields) {
@@ -82,7 +82,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
 
       # ensure matching field exists
       if (is.null(to_field)) {
-        vh$error_list$add(
+        oh$error_list$add(
           rule_code,
           "In field: ", from_field$name$value, ": unknown field"
         )
@@ -93,7 +93,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
     for (to_field in to_obj$fields) {
       from_field <- from_input$.get_field(to_field)
       # ensure field is valid
-      validate_value_can_be_coerced(from_field$value, to_field$type, vh = vh, rule_code = rule_code)
+      validate_value_can_be_coerced(from_field$value, to_field$type, oh = oh, rule_code = rule_code)
     }
 
     return(TRUE)
@@ -124,7 +124,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., vh, rule_code
   # make sure the resulting type can be coerced.  if it produces a NULL value, it can not be coerced
   result <- to_obj$.parse_literal(from_input)
   if (is.null(result)) {
-    vh$error_list$add(
+    oh$error_list$add(
       rule_code,
       "Expected type ", format(to_type), ", found ", from_input$.kind
     )

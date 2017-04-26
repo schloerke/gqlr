@@ -278,7 +278,10 @@ Introspection__DirectiveLocation <- introspection_definitions[[8]]
 
 Introspection__QueryRootFields <- introspection_definitions[[9]]
 Introspection__QueryRootFields$fields[[1]]$.show_in_format <- FALSE
+Introspection__QueryRootFields$fields[[1]]$.allow_double_underscore <- TRUE
 Introspection__QueryRootFields$fields[[2]]$.show_in_format <- FALSE
+Introspection__QueryRootFields$fields[[2]]$.allow_double_underscore <- TRUE
+
 # DONE
 # Introspection__QueryRootFields$fields[[1]]$.resolve <- function(z1, z2, schema_obj) {
 #   return__schema(schema_obj)

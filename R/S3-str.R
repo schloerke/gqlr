@@ -33,7 +33,7 @@ check_if_registered = function(fieldObj) {
   if (is.null(key) ) {
     stop0("Can not call format(object) on a unknown AST object")
   }
-  if (!RegisterClassObj$is_registered(key)) {
+  if (!PkgObjs$is_registered(key)) {
     stop0("'", key, "' is not registered. ")
   }
 }
