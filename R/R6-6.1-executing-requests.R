@@ -116,7 +116,7 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
   }
 
   for (operation in operations) {
-    operation_name_val <- operation$name$value
+    operation_name_val <- format(operation$name)
 
     if (identical(operation_name, operation_name_val)) {
       return(operation)
@@ -181,16 +181,7 @@ coerce_variable_values <- function(operation, variable_values, ..., oh) {
         coerced_value <- NULL
       } else {
         variable_obj <- oh$schema_obj$get_type(variable_type)
-        parse_fn <- variable_obj$.parse_value
-        if (is.null(parse_fn)) {
-          oh$error_list$add(
-            "6.1.2",
-            "Could not find parse functino for object of type: ", variable_type$.kind
-          )
-          next
-        }
-
-        coerced_value <- parse_fn(value)
+        coerced_value <- variable_obj$.parse_value(value)
         if (is.null(coerced_value)) {
           oh$error_list$add(
             "6.1.2",
