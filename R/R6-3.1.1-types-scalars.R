@@ -93,7 +93,7 @@ parse_literal = function(kind_val, parse_value) {
 coerce_int = function (value) {
   MAX_INT =  2147483647
   MIN_INT = -2147483648
-  num <- as.integer(value)
+  num <- suppressWarnings(as.integer(value))
   if (!is.na(num)) {
     if (num <= MAX_INT && num >= MIN_INT) {
       return(num)
@@ -127,7 +127,7 @@ Int <- ScalarTypeDefinition$new(
 
 
 coerce_float = function (value) {
-  num <- as.numeric(value)
+  num <- suppressWarnings(as.numeric(value))
   if (is.numeric(num)) {
     return(num)
   } else {
@@ -154,6 +154,14 @@ Float = ScalarTypeDefinition$new(
 )
 
 
+coerce_string <- function(value) {
+  char <- suppressWarnings(as.character(value))
+  if (is.character(char)) {
+    return(char)
+  } else {
+    return(NULL)
+  }
+}
 String = ScalarTypeDefinition$new(
   name = "String",
   description = collapse(
@@ -161,14 +169,14 @@ String = ScalarTypeDefinition$new(
     'character sequences. The String type is most often used by GraphQL to ',
     'represent free-form human-readable text.'
   ),
-  .serialize = as.character,
-  .parse_value = as.character,
-  .parse_literal = parse_literal("StringValue", as.character)
+  .serialize = coerce_string,
+  .parse_value = coerce_string,
+  .parse_literal = parse_literal("StringValue", coerce_string)
 )
 
 
 coerce_boolean = function (value) {
-  val <- as.logical(value)
+  val <- suppressWarnings(as.logical(value))
   if (is.logical(val)) {
     return(val)
   } else {
