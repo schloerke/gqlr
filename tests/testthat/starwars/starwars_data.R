@@ -141,8 +141,24 @@ query_data = list(
     }
   },
   droid = function(obj, args, schema_obj) {
-    if (is_droid(obj)) {
+    if (args$id %in% names(droid_data)) {
       wrap_droid(droid_data[[args$id]])
+    } else {
+      NULL
+    }
+  },
+  by_id = function(obj, args, schema_obj) {
+    id_char <- as.character(args$id)
+    if (id_char %in% names(all_characters)) {
+      wrap_character_by_id(id_char)
+    } else {
+      NULL
+    }
+  },
+  humanoid = function(obj, args, schema_obj) {
+    id_char <- args$id
+    if (id_char %in% names(all_characters)) {
+      wrap_character_by_id(id_char)
     } else {
       NULL
     }

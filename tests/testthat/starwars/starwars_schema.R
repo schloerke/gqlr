@@ -26,11 +26,19 @@ type Droid implements Character {
   primaryFunction: String
 }
 
+union HumanOrDroid = Human | Droid
+
 type Query {
   hero(episode: Episode): Character
   human(id: String!): Human
   droid(id: String!): Droid
+  by_id(id: Int!): Character
+  humanoid(id: String!): HumanOrDroid
 }
+
+directive @notskip on FIELD
+ | FRAGMENT_SPREAD
+ | INLINE_FRAGMENT
 
 schema {
   query: Query
@@ -38,6 +46,15 @@ schema {
 }
 " %>%
   graphql2obj(fn_list = list(
+    HumanOrDroid = list(
+      .resolve_type = function(obj, schema_obj) {
+        if (is_droid(obj)) {
+          "Droid"
+        } else {
+          "Human"
+        }
+      }
+    ),
     Droid = list(
       description = "A mechanical creature in the Star Wars universe."
     ),
@@ -57,37 +74,3 @@ schema {
 star_wars_doc
 
 star_wars_schema <- GQLRSchema$new(star_wars_doc)
-
-
-expect_starwars_match <- function(query_txt, expected_json, variable_values = list()) {
-  expected_result <- to_json(list(data = from_json(expected_json)))
-
-  oh <- ObjectHelpers$new(star_wars_schema)
-
-  query_doc <- query_txt %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
-
-  ans <- execute_request(
-    query_doc,
-    operation_name = NULL,
-    variable_values = variable_values,
-    initial_value = query_data,
-    oh = oh
-  )
-
-   ans_json <- result2json(ans)
-
-   ans_txt <- strsplit(ans_json, "\n")[[1]]
-   expected_txt <- strsplit(expected_result, "\n")[[1]]
-
-   if (length(ans_txt) != length(expected_txt)) {
-     cat("\n\nans: \n")
-     cat(ans_txt, sep = "\n")
-     cat("\n\nexpected: \n")
-     cat(expected_txt, sep = "\n")
-    #  browser()
-   }
-
-   expect_equal(ans_txt, expected_txt)
-}
