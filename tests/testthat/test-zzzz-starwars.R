@@ -1,8 +1,10 @@
 
 
-# testthat::test_file(file.path("tests", "testthat", "test-zzzz-starwars.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-zzzz-starwars.R"))
 
 context("star wars")
+
+source("validate_helper.R")
 
 source(file.path("starwars", "starwars_schema.R"))
 source(file.path("starwars", "starwars_data.R"))
@@ -13,6 +15,15 @@ expect_sw_err <- function(...) {
 expect_sw_r6 <- function(...) {
   expect_r6(..., schema_obj = star_wars_schema)
 }
+
+expect_sw_request <- function(...) {
+  expect_request(..., schema_obj = star_wars_schema)
+}
+
+expect_sw_request_err <- function(...) {
+  expect_request_err(..., schema_obj = star_wars_schema)
+}
+
 
 
 source("validate_helper.R")
@@ -27,12 +38,12 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "hero": {
           "name": "R2-D2"
         }
-      }'
+      }}'
     )
 
 
@@ -43,12 +54,12 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "hero": {
           "name": "R2-D2"
         }
-      }'
+      }}'
     )
 
 
@@ -64,8 +75,8 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "hero": {
           "id": "2001",
           "name": "R2-D2",
@@ -84,7 +95,7 @@ test_that("star wars test suite", {
             }
           ]
         }
-      }'
+      }}'
     )
 
 
@@ -102,8 +113,8 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "hero": {
           "name": "R2-D2",
           "friends": [
@@ -138,7 +149,7 @@ test_that("star wars test suite", {
             }
           ]
         }
-      }'
+      }}'
     )
 
 
@@ -149,12 +160,12 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "human": {
           "name": "Luke Skywalker"
         }
-      }'
+      }}'
     )
 
   "
@@ -164,12 +175,12 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "human": {
           "name": "Luke Skywalker"
         }
-      }',
+      }}',
       variable_values = list(
         someId = "1000"
       )
@@ -183,12 +194,12 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "luke": {
           "name": "Luke Skywalker"
         }
-      }'
+      }}'
     )
 
 
@@ -202,15 +213,15 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "luke": {
           "name": "Luke Skywalker"
         },
         "leia": {
           "name": "Leia Organa"
         }
-      }'
+      }}'
     )
 
 
@@ -222,14 +233,26 @@ test_that("star wars test suite", {
     leia: human(id: \"1003\") {
       ...HumanFragment
     }
+    humanoid(id: \"1000\") {
+      ...HumanAndDroid
+    }
+  }
+  fragment HumanAndDroid on HumanOrDroid {
+    __typename
+    ...HumanFragment
+    ...DroidFragment
   }
   fragment HumanFragment on Human {
     name
     homePlanet
   }
+  fragment DroidFragment on Droid {
+    name
+    primaryFunction
+  }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "luke": {
           "name": "Luke Skywalker",
           "homePlanet": "Tatooine"
@@ -237,8 +260,13 @@ test_that("star wars test suite", {
         "leia": {
           "name": "Leia Organa",
           "homePlanet": "Alderaan"
+        },
+        "humanoid": {
+          "__typename": "Human",
+          "name": "Luke Skywalker",
+          "homePlanet": "Tatooine"
         }
-      }'
+      }}'
     )
 
 
@@ -250,13 +278,13 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "hero": {
           "__typename": "Droid",
           "name": "R2-D2"
         }
-      }'
+      }}'
     )
 
 
@@ -268,13 +296,13 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "hero": {
           "__typename": "Human",
           "name": "Luke Skywalker"
         }
-      }'
+      }}'
     )
 
 
@@ -295,27 +323,29 @@ test_that("star wars test suite", {
     appearsIn
   }
   " %>%
-    expect_starwars_match(
-      '{"hero":
-        {"name": "R2-D2","appearsIn": ["NEWHOPE","EMPIRE","JEDI"],"friends":[
-          {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
-            {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"C-3PO","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
-          ]},
-          {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
-            {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
-          ]},
-          {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
-            {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"C-3PO","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
-            {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
+    expect_sw_request(
+      '{ "data": {
+        "hero":
+          {"name": "R2-D2","appearsIn": ["NEWHOPE","EMPIRE","JEDI"],"friends":[
+            {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
+              {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"C-3PO","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
+            ]},
+            {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
+              {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
+            ]},
+            {"name":"Leia Organa","appearsIn":["NEWHOPE","EMPIRE","JEDI"],"friends":[
+              {"name":"Luke Skywalker","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"Han Solo","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"C-3PO","appearsIn":["NEWHOPE","EMPIRE","JEDI"]},
+              {"name":"R2-D2","appearsIn":["NEWHOPE","EMPIRE","JEDI"]}
+            ]}
           ]}
-        ]}
+        }
       }'
     )
 
@@ -326,10 +356,10 @@ test_that("star wars test suite", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "human": null
-      }',
+      }}',
       variable_values = list(id = "not valid id")
     )
 
@@ -347,8 +377,8 @@ test_that("star wars test suite", {
     homePlanet
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "luke": {
           "name": "Luke Skywalker",
           "homePlanet": "Tatooine"
@@ -357,7 +387,7 @@ test_that("star wars test suite", {
           "name": "Leia Organa",
           "homePlanet": "Alderaan"
         }
-      }'
+      }}'
     )
 
 })
@@ -447,8 +477,8 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__schema": {
           "types": [
             {"name": "Int"},
@@ -465,12 +495,13 @@ test_that("introspection", {
             {"name": "Droid"},
             {"name": "Query"},
             {"name": "Character"},
+            {"name": "HumanOrDroid"},
             {"name": "__TypeKind"},
             {"name": "__DirectiveLocation"},
             {"name": "Episode"}
           ]
         }
-      }'
+      }}'
     )
 
   "
@@ -482,12 +513,12 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__schema": {
           "queryType": {"name": "Query"}
         }
-      }'
+      }}'
     )
 
   "
@@ -497,12 +528,12 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__type": {
           "name": "Droid"
         }
-      }'
+      }}'
     )
 
   "
@@ -513,13 +544,13 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__type": {
           "name": "Droid",
           "kind": "OBJECT"
         }
-      }'
+      }}'
     )
 
   "
@@ -530,13 +561,13 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__type": {
           "name": "Character",
           "kind": "INTERFACE"
         }
-      }'
+      }}'
     )
 
   "
@@ -553,8 +584,8 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__type": {
           "name": "Droid",
           "fields": [
@@ -566,7 +597,7 @@ test_that("introspection", {
             {"name": "__typename","type": {"name": "String","kind": "SCALAR"}}
           ]
         }
-      }'
+      }}'
     )
 
   "
@@ -587,8 +618,8 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__type": {
           "name": "Droid",
           "fields": [
@@ -618,7 +649,7 @@ test_that("introspection", {
             }
           ]
         }
-      }'
+      }}'
     )
 
   "
@@ -629,14 +660,195 @@ test_that("introspection", {
     }
   }
   " %>%
-    expect_starwars_match(
-      '{
+    expect_sw_request(
+      '{ "data": {
         "__type": {
           "name": "Droid",
           "description": "A mechanical creature in the Star Wars universe."
         }
+      }}'
+    )
+
+
+})
+
+
+
+test_that("operations", {
+
+  "
+  query IntrospectionDroidDescriptionQuery {
+    __type(name: \"Droid\") {
+      name
+      description
+    }
+  }
+  " %>%
+    expect_sw_request_err(
+      operation_name = "Barret",
+      '{
+        "data": null,
+        "errors": [
+          {
+            "message": "6.1: Executing Requests\\nOperation: Barret can\'t be found in the document object"
+          }
+        ]
       }'
     )
 
+  "
+  query Name1 {
+    __type(name: \"Droid\") {
+      name
+    }
+  }
+  query Name2 {
+    __type(name: \"Droid\") {
+      name
+    }
+  }
+  " %>%
+    expect_sw_request_err(
+      operation_name = NULL,
+      '{
+        "data": null,
+        "errors": [
+          {
+            "message": "6.1: Executing Requests\\nIf operation name is null, the document may only contain one operation"
+          }
+        ]
+      }'
+    )
+
+})
+
+
+test_that("directives", {
+
+  "
+  query FetchLukeAndLeiaAliased {
+    luke: human(id: \"1000\") @skip(if: false)  {
+      name
+    }
+    leia: human(id: \"1003\") @skip(if: true) {
+      name
+    }
+  }
+  " %>%
+    expect_sw_request(
+      '{ "data": {
+        "luke": {
+          "name": "Luke Skywalker"
+        }
+      }}'
+    )
+
+  "
+  {
+    luke: human(id: \"1000\") @include(if: true) {
+      name
+    }
+    leia: human(id: \"1003\") @include(if: false) {
+      name
+    }
+  }
+  " %>%
+    expect_sw_request(
+      '{ "data": {
+        "luke": {
+          "name": "Luke Skywalker"
+        }
+      }}'
+    )
+
+  "
+  {
+    luke: human(id: \"1000\") @notskip {
+      name
+    }
+  }
+  " %>%
+    expect_sw_request_err(
+      '{
+        "data": {
+          "luke": {
+            "name": "Luke Skywalker"
+          }
+        },
+        "errors": [
+          {
+            "message": "6.3.2: Field Collection\\nNon skip or include directive found. Extra directives are not allowed."
+          }
+        ]
+      }'
+    )
+
+})
+
+
+
+test_that("variables", {
+
+  "
+  query Variable($someId: String!) {
+    __type(name: $someId) {
+      name
+    }
+  }
+  " %>%
+    expect_sw_request_err(
+      variable_values = list(someId = NULL),
+      '{
+        "data": null,
+        "errors": [
+          {
+            "message": "6.1.2: Coercing Variable Values\\nNon nullible type variable did not have value or default value"
+          }
+        ]
+      }'
+    )
+
+  "
+  query Variable($someInt: Int!) {
+    by_id(id: $someInt) {
+      name
+    }
+  }
+  " %>%
+    expect_sw_request_err(
+      variable_values = list(someInt = "Barret"),
+      '{
+        "data": null,
+        "errors": [
+          {
+            "message": "6.1.2: Coercing Variable Values\\nValue cannot be coerced according to the input coercion rules"
+          }
+        ]
+      }'
+    )
+
+  "
+  query Name1 {
+    __type(name: \"Droid\") {
+      name
+    }
+  }
+  query Name2 {
+    __type(name: \"Droid\") {
+      name
+    }
+  }
+  " %>%
+    expect_sw_request_err(
+      operation_name = NULL,
+      '{
+        "data": null,
+        "errors": [
+          {
+            "message": "6.1: Executing Requests\\nIf operation name is null, the document may only contain one operation"
+          }
+        ]
+      }'
+    )
 
 })
