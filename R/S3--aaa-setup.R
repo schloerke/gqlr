@@ -9,10 +9,6 @@
 # If you're implementing more complicated print() methods, it's a better idea to implement format() methods that return a string, and then implement print.class <- function(x, ...) cat(format(x, ...), "\n". This makes for methods that are much easier to compose, because the side-effects are isolated to a single place.
 
 #' @export
-raw_format <- function(x, ..., prompt = NULL, header = NULL) {
-  format(x, ..., prompt = prompt, header = header)
-}
-#' @export
 format_all <- function(x, ..., prompt = NULL, header = NULL, all_fields = TRUE) {
   format(x, ..., prompt = prompt, header = header, all_fields = all_fields)
 }
@@ -32,10 +28,10 @@ print_all <- function(x, ..., prompt = "  | ", header = "<graphql definition>") 
   cat(format_all(x, ..., prompt = prompt, header = header), "\n", sep = "")
 }
 
-methods <- function(x, ...) {
-  UseMethod("methods", x)
-}
-methods.AST <- function(x, ...) {
-  r6_format <- getFromNamespace("format.R6", "R6")
-  cat(r6_format(x, ...), "\n", sep = "")
+#' @export
+as_R6 <- function(x) {
+  if (inherits(x, "R6")) {
+    class(x) <- "R6"
+  }
+  x
 }
