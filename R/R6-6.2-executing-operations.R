@@ -4,40 +4,6 @@
 #
 # If the operation is a query, the result of the operation is the result of executing the query’s top level selection set with the query root object type.
 
-execute_query_mutation_helper <- function(root_def_name) {
-  pryr_unenclose(function(operation_obj, initial_value, ..., oh) {
-
-    root_type <- oh$schema_obj$get_schema_definition(root_def_name)
-    root_type_object <- oh$schema_obj$get_type(root_type)
-    if (is.null(root_type_object)) {
-      oh$error_list$add(
-        "6.2",
-        "Can not find definition '", root_type, "' in schema definition"
-      )
-      return(list(data = NULL, errors = oh$error_list))
-    }
-
-    # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
-    initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
-      return__schema(schema_obj)
-    }
-    initial_value[["__type"]] <- function(z1, args, schema_obj) {
-      type_obj <- schema_obj$as_type(args$name)
-      return__type(type_obj, schema_obj)
-    }
-
-
-    selection_set <- operation_obj$selectionSet
-
-    # could parallelize here if wanted
-    data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
-
-    return(list(data = data, error_list = oh$error_list))
-  })
-}
-
-
-
 
 #
 # An initial value may be provided when executing a query.
@@ -51,8 +17,35 @@ execute_query_mutation_helper <- function(root_def_name) {
 
 #   oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 # oh$set_variable_values(variable_values)
-execute_query <- execute_query_mutation_helper("query")
-# DONE
+execute_query <- function(operation_obj, initial_value, ..., oh) {
+
+  root_type <- oh$schema_obj$get_schema_definition("query")
+  root_type_object <- oh$schema_obj$get_type(root_type)
+  if (is.null(root_type_object)) {
+    oh$error_list$add(
+      "6.2",
+      "Can not find definition '", root_type, "' in schema definition"
+    )
+    return(list(data = NULL, errors = oh$error_list))
+  }
+
+  # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
+  initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
+    return__schema(schema_obj)
+  }
+  initial_value[["__type"]] <- function(z1, args, schema_obj) {
+    type_obj <- schema_obj$as_type(args$name)
+    return__type(type_obj, schema_obj)
+  }
+
+
+  selection_set <- operation_obj$selectionSet
+
+  # could parallelize here if wanted
+  data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
+
+  return(list(data = data, error_list = oh$error_list))
+}
 
 
 
@@ -67,5 +60,32 @@ execute_query <- execute_query_mutation_helper("query")
 #   4. Let data be the result of running ExecuteSelectionSet(selectionSet, mutationType, initialValue, variableValues) serially.
 #   5. Let errors be any field errors produced while executing the selection set.
 #   6. Return an unordered map containing data and errors.
-execute_mutation <- execute_query_mutation_helper("mutation")
-# DONE
+execute_mutation <- function(operation_obj, initial_value, ..., oh) {
+
+  root_type <- oh$schema_obj$get_schema_definition("mutation")
+  root_type_object <- oh$schema_obj$get_type(root_type)
+  if (is.null(root_type_object)) {
+    oh$error_list$add(
+      "6.2",
+      "Can not find definition '", root_type, "' in schema definition"
+    )
+    return(list(data = NULL, errors = oh$error_list))
+  }
+
+  # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
+  initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
+    return__schema(schema_obj)
+  }
+  initial_value[["__type"]] <- function(z1, args, schema_obj) {
+    type_obj <- schema_obj$as_type(args$name)
+    return__type(type_obj, schema_obj)
+  }
+
+
+  selection_set <- operation_obj$selectionSet
+
+  # could parallelize here if wanted
+  data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
+
+  return(list(data = data, error_list = oh$error_list))
+}
