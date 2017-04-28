@@ -105,7 +105,7 @@ coerce_int = function (value) {
 
 
 Int <- ScalarTypeDefinition$new(
-  name = "Int",
+  name = Name$new(value = "Int"),
   description = paste0(
     "The Int scalar type represents a signed 32-bit numeric non-fractional value. ",
     "Response formats that support a 32-bit integer or a number type should use that ",
@@ -135,7 +135,7 @@ coerce_float = function (value) {
   }
 }
 Float = ScalarTypeDefinition$new(
-  name = "Float",
+  name = Name$new(value = "Float"),
   description = collapse(
     'The `Float` scalar type represents signed double-precision fractional ',
     'values as specified by ',
@@ -163,7 +163,7 @@ coerce_string <- function(value) {
   }
 }
 String = ScalarTypeDefinition$new(
-  name = "String",
+  name = Name$new(value = "String"),
   description = collapse(
     'The `String` scalar type represents textual data, represented as UTF-8 ',
     'character sequences. The String type is most often used by GraphQL to ',
@@ -184,7 +184,7 @@ coerce_boolean = function (value) {
   }
 }
 Boolean = ScalarTypeDefinition$new(
-  name = "Boolean",
+  name = Name$new(value = "Boolean"),
   description = 'The `Boolean` scalar type represents `TRUE` or `FALSE`.',
   .serialize = coerce_boolean,
   .parse_value = coerce_boolean,
@@ -195,7 +195,7 @@ Boolean = ScalarTypeDefinition$new(
 ## Not including in R setup
 # # no literal AST definition, but defining as such
 # ID = ScalarTypeDefinition$new(
-#   name = "ID",
+#   name = Name$new(value = "ID"),
 #   description = collapse(
 #     'The `ID` scalar type represents a unique identifier, often used to ',
 #     'refetch an object or as key for a cache. The ID type appears in a JSON ',
