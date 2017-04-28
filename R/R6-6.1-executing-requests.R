@@ -68,10 +68,10 @@ execute_request <- function(
 ) {
 
   operation <- get_operation(document_obj, operation_name, oh = oh)
-  if (oh$error_list$has_any_errors()) return(NULL)
+  if (oh$error_list$has_any_errors()) return(list(data = NULL, error_list = oh$error_list))
 
   coerced_variable_values <- coerce_variable_values(operation, variable_values, oh = oh)
-  if (oh$error_list$has_any_errors()) return(NULL)
+  if (oh$error_list$has_any_errors()) return(list(data = NULL, error_list = oh$error_list))
   oh$set_coerced_variables(coerced_variable_values)
 
   operation_type <- operation$operation
