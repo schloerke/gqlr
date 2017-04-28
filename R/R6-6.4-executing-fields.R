@@ -343,6 +343,9 @@ complete_value <- function(field_type, fields, result, ..., oh) {
       oh$schema_obj$get_enum(field_type)
     )
     resolved_result <- type_obj$.parse_value(result)
+    if (length(resolved_result) == 0) {
+      return(NULL)
+    }
     return(resolved_result)
   }
 
@@ -440,7 +443,9 @@ merge_selection_sets <- function(fields, ..., oh) {
 #
 # If all fields from the root of the request to the source of the error return Non-Null types, then the "data" entry in the response should be null.
 is_nullish <- function(x) {
-  if (is.list(x) || is.vector(x)) return(FALSE)
+  if (is.list(x) || is.vector(x)) {
+    return(FALSE)
+  }
   if (is.null(x)) return(TRUE)
   if (is.na(x)) return(TRUE)
   if (is.nan(x)) return(TRUE)
