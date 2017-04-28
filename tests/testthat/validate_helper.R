@@ -36,6 +36,107 @@ expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
   )
 }
 
+
+expect_request <- function(
+  query_txt,
+  expected_json,
+  variable_values = list(),
+  operation_name = NULL,
+  schema_obj
+) {
+  expected_result <- to_json(from_json(expected_json))
+
+  oh <- ObjectHelpers$new(schema_obj)
+
+  query_doc <- query_txt %>%
+    graphql2obj() %>%
+    validate_query(oh = oh)
+
+  ans <- execute_request(
+    query_doc,
+    operation_name = operation_name,
+    variable_values = variable_values,
+    initial_value = query_data,
+    oh = oh
+  )
+
+  expect_true(ans$error_list$has_no_errors())
+
+  ans_json <- result2json(ans)
+
+  ans_txt <- strsplit(ans_json, "\n")[[1]]
+  expected_txt <- strsplit(expected_result, "\n")[[1]]
+
+  if (length(ans_txt) != length(expected_txt)) {
+    cat("\n\nans: \n")
+    cat(ans_txt, sep = "\n")
+    cat("\n\nexpected: \n")
+    cat(expected_txt, sep = "\n")
+    #  browser()
+  }
+
+  expect_equal(ans_txt, expected_txt)
+}
+
+
+
+expect_request_err <- function(
+  query_txt,
+  expected_json,
+  variable_values = list(),
+  operation_name = NULL,
+  schema_obj
+) {
+  expected_result <- to_json(from_json(expected_json))
+
+  oh <- ObjectHelpers$new(schema_obj)
+
+  query_doc <- query_txt %>%
+    graphql2obj() %>%
+    validate_query(oh = oh)
+
+  ans <- execute_request(
+    query_doc,
+    operation_name = operation_name,
+    variable_values = variable_values,
+    initial_value = query_data,
+    oh = oh
+  )
+
+  expect_true(ans$error_list$has_any_errors())
+
+  ans_json <- result2json(ans)
+
+  ans_txt <- strsplit(ans_json, "\n")[[1]]
+  expected_txt <- strsplit(expected_result, "\n")[[1]]
+
+  if (length(ans_txt) != length(expected_txt)) {
+    cat("\n\nans: \n")
+    cat(ans_txt, sep = "\n")
+    cat("\n\nexpected: \n")
+    cat(expected_txt, sep = "\n")
+    #  browser()
+  }
+
+  expect_equal(ans_txt, expected_txt)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 expect_subset <- function(bigger, smaller, verbose = TRUE) {
   ans <- sub_rec(bigger, smaller, verbose = verbose)
   expect_true(ans)
