@@ -28,7 +28,7 @@ RemotesOLD: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Encoding: UTF-8
-Collate: 
+Collate:
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'R6--definition.R'
@@ -60,5 +60,4 @@ Collate:
     'validation-selection-set-can-merge.R'
     'validation-query (conflict).R'
     'validation-query.R'
-    'wrappers.R'
     'zzz.R'
