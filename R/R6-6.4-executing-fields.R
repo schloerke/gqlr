@@ -389,8 +389,7 @@ resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ...
   } else if (inherits(abstract_obj, "UnionTypeDefinition")) {
     type <- abstract_obj$.resolve_type(object_value, oh$schema_obj)
     type <- oh$schema_obj$as_type(type)
-    stop("asdf")
-
+    return(type)
   }
 
   stop("Interface or Union objects can only resolve an abstract type")
