@@ -275,8 +275,8 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
   if (
     oh$schema_obj$is_union(fragment_type)
   ) {
-    union_obj <- oh$schema_obj$get_union(object_type)
-    ret <- union_obj$.has_type(fragment_type)
+    union_obj <- oh$schema_obj$get_union(fragment_type)
+    ret <- union_obj$.has_type(object_type)
     return(ret)
   }
 
