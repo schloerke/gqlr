@@ -175,8 +175,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 
     # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType, throw a field error.
     type_obj <- oh$schema_obj$get_type(argument_type)
-    parse_fn <- type_obj$.parse_literal
-    if (is.null(parse_fn)) {
+    if (is.null(type_obj$.parse_literal)) {
       oh$error_list$add(
         "6.4.1",
         "Could not find '.parse_literal' function for object of type: ", format(argument_type)
@@ -185,7 +184,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     }
 
     # h. Let coercedValue be the result of coercing value according to the input coercion rules of argType.
-    coerced_value <- parse_fn(value)
+    coerced_value <- type_obj$.parse_literal(value)
     if (!is.null(value) && is.null(coerced_value)) {
       oh$error_list$add(
         "6.4.1",
@@ -293,7 +292,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     # c. If completedResult is null, throw a field error.
     if (is.null(completed_result)) {
       cat("\nis null non-null value for field: ", format(fields[[1]]$name), "\n")
-      browser()
+      # browser()
       oh$error_list$add(
         "6.4.3",
         "non null type: ", format(field_type), " returned a null value"
