@@ -3,17 +3,17 @@ if (FALSE) {
 
   # load_all(); source("tests/testthat/dog_cat_schema.R"); query %>% graphql2obj() %>% validate_query(dog_cat_schema) %>% str()
 
-  load_all(); test_obj("simple-query") %>% str()
+  # load_all(); test_obj("simple-query") %>% str()
 
-  load_all(); test_obj("kitchen-query") %>% str()
+  # load_all(); test_obj("kitchen-query") %>% str()
 
-  load_all(); test_obj("kitchen-query") %>% str(maxLevel = 2)
+  # load_all(); test_obj("kitchen-query") %>% str(maxLevel = 2)
 
   # load_all(); test_obj("simple-schema") %>% str()
   # load_all(); test_obj("kitchen-schema") %>% str()
 
   # load_all(); test_obj("film-schema") %>% str()
-  load_all(); test_obj("film-query") %>% str()
+  # load_all(); test_obj("film-query") %>% str()
 
 
 

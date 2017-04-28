@@ -455,20 +455,7 @@ FragmentDefinition = R6_from_args(
 #                   | EnumValue
 #                   | ListValue
 #                   | ObjectValue
-Value <- R6_from_args("Value",
-  inherit = Node,
-  public = list(
-    # serialize = function(x) {
-    #   x
-    # },
-    # .parse_value = function(x) {
-    #   x
-    # },
-    # .parse_literal = function(...) {
-    #   self$.parse_value(...)
-    # }
-  )
-)
+Value <- R6_from_args("Value", inherit = Node)
 
 Variable <- R6_from_args(
   inherit = Value,
@@ -515,11 +502,6 @@ IntValue = (function(){
       .format = function(...) {
         as.character(self$value)
       }
-      # .parse_literal = coerce_int,
-      # .serialize = coerce_int,
-      # .parse_value = coerce_int,
-      # .MAX_INT =  2147483647,
-      # .MIN_INT = -2147483648
     ),
     active = list(
       # value = scalar_active_value
@@ -536,9 +518,6 @@ FloatValue = R6_from_args(
     .format = function(...) {
       as.character(self$value)
     }
-    # .parse_literal = coerce_helper(as.numeric, is.numeric),
-    # .serialize = coerce_helper(as.numeric, is.numeric),
-    # .parse_value = coerce_helper(as.numeric, is.numeric)
   ),
   active = list(
     # value = scalar_active_value
@@ -554,9 +533,6 @@ StringValue = R6_from_args(
     .format = function(...) {
       collapse("\"", as.character(self$value), "\"")
     }
-    # .parse_literal = coerce_helper(as.character, is.character),
-    # .serialize = coerce_helper(as.character, is.character),
-    # .parse_value = coerce_helper(as.character, is.character)
   ),
   active = list(
     # value = scalar_active_value
@@ -576,9 +552,6 @@ BooleanValue = R6_from_args(
         "false"
       }
     }
-    # .parse_literal = coerce_helper(as.logical, is.logical),
-    # .serialize = coerce_helper(as.logical, is.logical),
-    # .parse_value = coerce_helper(as.logical, is.logical)
   ),
   active = list(
     # value = scalar_active_value
@@ -844,7 +817,7 @@ ScalarTypeDefinition = R6_from_args(
     name: Name;
     directives?: ?Array<Directive>;
     .serialize?: ?fn;
-    .parse_value?: ?fn;
+    .parse_value: fn;
     .parse_literal?: ?fn;",
   public = list(
     .format = function(...) {
@@ -860,53 +833,24 @@ ScalarTypeDefinition = R6_from_args(
       description = NULL,
       name,
       directives = NULL,
-      .serialize = NULL,    # takes in a raw value, such as: "5", 5, 5.0
-      .parse_value = NULL,  # takes in a raw value, such as: "5", 5, 5.0
-      .parse_literal = NULL # takes in AST value object: <BooleanValue>
+      # takes in a raw value, such as: "5", 5, 5.0
+      .serialize = as.character,
+      # takes in a raw value, such as: "5", 5, 5.0
+      .parse_value = function(x) {
+        stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
+      },
+      # takes in AST value object: <BooleanValue>
+      .parse_literal = NULL
     ) {
-      if (is.character(name)) {
-        name = Name$new(value = name)
-      }
       self$name = name
-      if (!missing(.serialize)) {
-        self$.serialize <- .serialize
-      } else {
-        warning(
-          str_c(
-            "Scalar: '", self$name$value,
-            "': Setting '.serialize' to throw error if called"
-          )
-        )
-        self$.serialize <- function(x){
-          stop(".serialize() not implemented for Scalar of type: ", format(self$name))
-        }
-      }
-
+      self$.serialize <- .serialize
       self$description <- description
       self$directives <- directives
-
-      if ((!missing(.parse_value)) || (!missing(.parse_literal))) {
-        if (missing(.parse_literal)) {
-          stop(self$name, " must provide both .parse_value and .parse_literal functions.  Please look at ?parse_literal for ideas")
-        }
-        if (missing(.parse_value)) {
-          stop0(self$name, " must provide both .parse_value and .parse_literal functions. .parse_value must correctly return a parsed value or NULL")
-        }
-        self$.parse_value <- .parse_value
-        self$.parse_literal <- .parse_literal
+      self$.parse_value <- .parse_value
+      if (missing(.parse_literal)) {
+        self$.parse_literal <- parse_literal(format(self$name), .parse_value)
       } else {
-        warning(
-          str_c(
-            "Scalar: '", self$name$value,
-            "': Setting '.parse_value' and '.parse_literal' to throw error if called"
-          )
-        )
-        self$.parse_value <- function(x) {
-          stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
-        }
-        self$.parse_literal <- function(x) {
-          stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
-        }
+        self$.parse_literal <- .parse_literal
       }
 
       invisible(self)

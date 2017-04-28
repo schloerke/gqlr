@@ -39,7 +39,7 @@ clean_json.default <- function(obj, ...) {
 }
 
 #' @import graphql
-graphql2list <- function(txt = test_string()) {
+graphql2list <- function(txt) {
   # ct <- javascript_context()
   # ct$call("stringify", str) %>%
   graphql::graphql2json(txt) %>%
@@ -48,7 +48,7 @@ graphql2list <- function(txt = test_string()) {
 }
 
 #' @export
-graphql2obj <- function(txt = test_string(), ...) {
+graphql2obj <- function(txt, ...) {
   graphql2list(txt) %>%
     r6_from_list(...)
 }
