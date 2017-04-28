@@ -46,9 +46,14 @@ schema {
 }
 " %>%
   graphql2obj(fn_list = list(
+    Human = list(
+      .resolve = function(id, args, schema_obj) {
+        get_human_by_id(id)
+      }
+    ),
     HumanOrDroid = list(
-      .resolve_type = function(obj, schema_obj) {
-        if (is_droid(obj)) {
+      .resolve_type = function(id, schema_obj) {
+        if (is_droid(id)) {
           "Droid"
         } else {
           "Human"
@@ -56,14 +61,14 @@ schema {
       }
     ),
     Droid = list(
-      description = "A mechanical creature in the Star Wars universe."
+      description = "A mechanical creature in the Star Wars universe.",
+      .resolve = function(id, schema_obj) {
+        get_droid_by_id(id)
+      }
     ),
     Character = list(
-      .resolve_type = function(obj, schema_obj) {
-        # cat("\n\n")
-        # str(obj)
-        # cat("\n\n")
-        if (is_droid(obj)) {
+      .resolve_type = function(id, schema_obj) {
+        if (is_droid(id)) {
           "Droid"
         } else {
           "Human"

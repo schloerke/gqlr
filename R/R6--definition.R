@@ -867,7 +867,8 @@ ObjectTypeDefinition = R6_from_args(
     name: Name;
     interfaces?: ?Array<NamedType>;
     directives?: ?Array<Directive>;
-    fields: Array<FieldDefinition>;",
+    fields: Array<FieldDefinition>;
+    .resolve?: ?fn;",
   public = list(
     .format = function(..., all_fields = FALSE) {
       fields <- self$fields
@@ -913,7 +914,8 @@ ObjectTypeDefinition = R6_from_args(
       name,
       interfaces = NULL,
       directives = NULL,
-      fields
+      fields,
+      .resolve = NULL
     ) {
       self$loc <- loc
       self$description <- description
@@ -928,6 +930,10 @@ ObjectTypeDefinition = R6_from_args(
       typename_field$.allow_double_underscore <- TRUE
       typename_field$.show_in_format <- FALSE
       self$fields <- append(fields, typename_field)
+
+      self$.resolve = .resolve
+
+      invisible(self)
     }
   )
 )

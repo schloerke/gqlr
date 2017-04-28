@@ -74,8 +74,7 @@ droid_data = list(
 
 all_characters = list() %>% append(human_data) %>% append(droid_data)
 
-is_droid <- function(x) {
-  id <- x$id
+is_droid <- function(id) {
   if (is.null(id)) {
     str(x)
     stop("unknown object")
@@ -83,39 +82,18 @@ is_droid <- function(x) {
   id %in% names(droid_data)
 }
 
-get_friends <- function(x) {
-  function(obj, args, schema_obj) {
-    lapply(x$friends, wrap_character_by_id)
+get_human_by_id <- function(id) {
+  human <- human_data[[id]]
+  if (is.null(human)) return(NULL)
+  human$totalCredits <- function(obj, args, schema_obj) {
+    length(human$appearsIn)
   }
+  human
 }
-
-wrap_human <- function(x) {
-  list(
-    id = x$id,
-    name = x$name,
-    friends = get_friends(x),
-    appearsIn = x$appearsIn,
-    # starships = x$starships
-    totalCredits = length(x$appearsIn),
-    homePlanet = x$homePlanet
-  )
-}
-wrap_droid <- function(x) {
-  list(
-    id = x$id,
-    name = x$name,
-    friends = get_friends(x),
-    appearsIn = x$appearsIn,
-    primaryFunction = x$primaryFunction
-  )
-}
-wrap_character_by_id <- function(id) {
-  obj <- all_characters[[id]]
-  if (is_droid(obj)) {
-    wrap_droid(obj)
-  } else {
-    wrap_human(obj)
-  }
+get_droid_by_id <- function(id) {
+  droid <- droid_data[[id]]
+  if (is.null(droid)) return(NULL)
+  droid
 }
 
 
@@ -125,42 +103,22 @@ wrap_character_by_id <- function(id) {
 query_data = list(
   hero = function(obj, args, schema_obj) {
     episode = args$episode
-    # str(episode)
-    # if (is.null(episode)) return(wrap_droid(luke))
     if (identical(episode, 5) || identical(episode, "EMPIRE")) {
-      wrap_human(luke)
+      luke$id
     } else {
-      wrap_droid(artoo)
+      artoo$id
     }
   },
   human = function(obj, args, schema_obj) {
-    if (args$id %in% names(human_data)) {
-      wrap_human(human_data[[args$id]])
-    } else {
-      NULL
-    }
+    args$id
   },
   droid = function(obj, args, schema_obj) {
-    if (args$id %in% names(droid_data)) {
-      wrap_droid(droid_data[[args$id]])
-    } else {
-      NULL
-    }
+    args$id
   },
   by_id = function(obj, args, schema_obj) {
-    id_char <- as.character(args$id)
-    if (id_char %in% names(all_characters)) {
-      wrap_character_by_id(id_char)
-    } else {
-      NULL
-    }
+    args$id
   },
   humanoid = function(obj, args, schema_obj) {
-    id_char <- args$id
-    if (id_char %in% names(all_characters)) {
-      wrap_character_by_id(id_char)
-    } else {
-      NULL
-    }
+    args$id
   }
 )

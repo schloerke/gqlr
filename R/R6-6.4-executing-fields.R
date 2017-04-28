@@ -368,6 +368,17 @@ complete_value <- function(field_type, fields, result, ..., oh) {
       object_type <- resolve_abstract_type(field_type, result, field_obj, oh = oh)
     }
 
+    object_obj <- oh$schema_obj$get_object(object_type)
+    # if the object has it's own resolver function, call it.
+    # ex: all friends are stored as id values.  should return full object
+    if (is.function(object_obj$.resolve)) {
+      result <- object_obj$.resolve(result, schema_obj = oh$schema_obj)
+      # if a nullish result is returned, return null
+      if (is_nullish(result)) {
+        return(NULL)
+      }
+    }
+
     # c. Let subSelectionSet be the result of calling MergeSelectionSets(fields).
     sub_selection_set <- merge_selection_sets(fields, oh = oh)
 
