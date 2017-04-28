@@ -130,18 +130,28 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
     if (!is.null(selection$directives)) {
       should_skip <- FALSE
       for (selection_directive in selection$directives) {
-        directive_def <- oh$schema_obj$get_directive(selection_directive$name)
-        # TODO
-        warning("resolve directive")
-        directive_response <- directive_def$.resolve(selection_directive)
-        if (!isTRUE(directive_response)) {
-          should_skip <- TRUE
+        directive_name <- format(selection_directive$name)
+        if (directive_name == "skip" || directive_name == "include") {
+          directive_def <- oh$schema_obj$get_directive(selection_directive$name)
+          if_arg <- selection_directive$arguments[[1]]
+          if_val <- Boolean$.parse_literal(if_arg$value)
+          directive_response <- directive_def$.resolve(if_val)
+          if (!isTRUE(directive_response)) {
+            should_skip <- TRUE
+            break
+          }
+        } else {
+          oh$error_list$add(
+            "6.3.2",
+            "Non skip or include directive found. Extra directives are not allowed."
+          )
+          next
         }
-      }
+      } # end for loop
       if (isTRUE(should_skip)) {
-        next
+        next # go to next field
       }
-    }
+    } # end directives
 
     # c. If selection is a Field:
     if (inherits(selection, "Field")) {
