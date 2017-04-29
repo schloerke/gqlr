@@ -95,30 +95,3 @@ get_droid_by_id <- function(id) {
   if (is.null(droid)) return(NULL)
   droid
 }
-
-
-# hero(episode: Episode): Character
-# human(id: String!): Human
-# droid(id: String!): Droid
-query_data = list(
-  hero = function(obj, args, schema_obj) {
-    episode = args$episode
-    if (identical(episode, 5) || identical(episode, "EMPIRE")) {
-      luke$id
-    } else {
-      artoo$id
-    }
-  },
-  human = function(obj, args, schema_obj) {
-    args$id
-  },
-  droid = function(obj, args, schema_obj) {
-    args$id
-  },
-  by_id = function(obj, args, schema_obj) {
-    args$id
-  },
-  humanoid = function(obj, args, schema_obj) {
-    args$id
-  }
-)
