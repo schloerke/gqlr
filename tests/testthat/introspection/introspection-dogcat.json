@@ -8,7 +8,7 @@
       {
         "kind": "SCALAR",
         "name": "Int",
-
+        "description": "The Int scalar type represents a signed 32-bit numeric non-fractional value. Response formats that support a 32-bit integer or a number type should use that type to represent this scalar.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -18,7 +18,7 @@
       {
         "kind": "SCALAR",
         "name": "Float",
-
+        "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -28,7 +28,7 @@
       {
         "kind": "SCALAR",
         "name": "String",
-
+        "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -38,7 +38,7 @@
       {
         "kind": "SCALAR",
         "name": "Boolean",
-
+        "description": "The `Boolean` scalar type represents `TRUE` or `FALSE`.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -48,7 +48,7 @@
       {
         "kind": "OBJECT",
         "name": "__Schema",
-
+        "description": "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.  Subscriptions are not implemented in gqlr.",
         "fields": [
           {
             "name": "types",
@@ -128,7 +128,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -146,7 +147,7 @@
       {
         "kind": "OBJECT",
         "name": "__Type",
-
+        "description": null,
         "fields": [
           {
             "name": "kind",
@@ -324,7 +325,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -342,7 +344,7 @@
       {
         "kind": "OBJECT",
         "name": "__Field",
-
+        "description": "Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.",
         "fields": [
           {
             "name": "name",
@@ -442,7 +444,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -460,7 +463,7 @@
       {
         "kind": "OBJECT",
         "name": "__InputValue",
-
+        "description": "Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.",
         "fields": [
           {
             "name": "name",
@@ -520,7 +523,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -538,7 +542,7 @@
       {
         "kind": "OBJECT",
         "name": "__EnumValue",
-
+        "description": "One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.",
         "fields": [
           {
             "name": "name",
@@ -598,7 +602,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -616,7 +621,7 @@
       {
         "kind": "OBJECT",
         "name": "__Directive",
-
+        "description": "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
         "fields": [
           {
             "name": "name",
@@ -696,7 +701,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -714,7 +720,7 @@
       {
         "kind": "OBJECT",
         "name": "Dog",
-
+        "description": null,
         "fields": [
           {
             "name": "name",
@@ -828,7 +834,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -852,7 +859,7 @@
       {
         "kind": "OBJECT",
         "name": "Alien",
-
+        "description": null,
         "fields": [
           {
             "name": "name",
@@ -884,7 +891,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -908,7 +916,7 @@
       {
         "kind": "OBJECT",
         "name": "Human",
-
+        "description": null,
         "fields": [
           {
             "name": "name",
@@ -940,7 +948,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -964,7 +973,7 @@
       {
         "kind": "OBJECT",
         "name": "Cat",
-
+        "description": null,
         "fields": [
           {
             "name": "name",
@@ -1039,7 +1048,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1063,7 +1073,7 @@
       {
         "kind": "OBJECT",
         "name": "Arguments",
-
+        "description": null,
         "fields": [
           {
             "name": "multipleReqs",
@@ -1344,7 +1354,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1362,7 +1373,7 @@
       {
         "kind": "OBJECT",
         "name": "SearchRoot",
-
+        "description": null,
         "fields": [
           {
             "name": "dog",
@@ -1492,7 +1503,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1553,7 +1565,7 @@
       {
         "kind": "INTERFACE",
         "name": "Sentient",
-
+        "description": null,
         "fields": [
           {
             "name": "name",
@@ -1573,7 +1585,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1602,7 +1615,7 @@
       {
         "kind": "INTERFACE",
         "name": "Pet",
-
+        "description": null,
         "fields": [
           {
             "name": "name",
@@ -1622,7 +1635,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -1651,7 +1665,7 @@
       {
         "kind": "UNION",
         "name": "CatOrDog",
-
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1672,7 +1686,7 @@
       {
         "kind": "UNION",
         "name": "DogOrHuman",
-
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1693,7 +1707,7 @@
       {
         "kind": "UNION",
         "name": "HumanOrAlien",
-
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1714,7 +1728,7 @@
       {
         "kind": "ENUM",
         "name": "__TypeKind",
-
+        "description": "An enum describing what kind of type a given `__Type` is.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1773,7 +1787,7 @@
       {
         "kind": "ENUM",
         "name": "__DirectiveLocation",
-
+        "description": "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1820,7 +1834,7 @@
       {
         "kind": "ENUM",
         "name": "DogCommand",
-
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1849,7 +1863,7 @@
       {
         "kind": "ENUM",
         "name": "CatCommand",
-
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1866,7 +1880,7 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "ComplexInput",
-
+        "description": null,
         "fields": null,
         "inputFields": [
           {

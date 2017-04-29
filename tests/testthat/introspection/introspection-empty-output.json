@@ -1,14 +1,14 @@
 {
   "__schema": {
-    "mutationType": null,
-    "subscriptionType": null,
     "queryType": {
       "name": "QueryRoot"
     },
+    "mutationType": null,
     "types": [
       {
         "kind": "SCALAR",
         "name": "Int",
+        "description": "The Int scalar type represents a signed 32-bit numeric non-fractional value. Response formats that support a 32-bit integer or a number type should use that type to represent this scalar.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -18,6 +18,7 @@
       {
         "kind": "SCALAR",
         "name": "Float",
+        "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -27,6 +28,7 @@
       {
         "kind": "SCALAR",
         "name": "String",
+        "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -36,6 +38,7 @@
       {
         "kind": "SCALAR",
         "name": "Boolean",
+        "description": "The `Boolean` scalar type represents `TRUE` or `FALSE`.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -45,10 +48,12 @@
       {
         "kind": "OBJECT",
         "name": "__Schema",
+        "description": "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.  Subscriptions are not implemented in gqlr.",
         "fields": [
           {
             "name": "types",
-            "args": null,
+            "description": "A list of all types supported by this server.",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -60,7 +65,8 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "__Type"
+                    "name": "__Type",
+                    "ofType": null
                   }
                 }
               }
@@ -70,7 +76,8 @@
           },
           {
             "name": "queryType",
-            "args": null,
+            "description": "The type that query operations will be rooted at.",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -85,7 +92,8 @@
           },
           {
             "name": "mutationType",
-            "args": null,
+            "description": "The type that mutation operations will be rooted at.",
+            "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "__Type",
@@ -96,7 +104,8 @@
           },
           {
             "name": "directives",
-            "args": null,
+            "description": "A list of all directives supported by this server.",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -108,7 +117,8 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "__Directive"
+                    "name": "__Directive",
+                    "ofType": null
                   }
                 }
               }
@@ -118,7 +128,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -136,10 +147,12 @@
       {
         "kind": "OBJECT",
         "name": "__Type",
+        "description": null,
         "fields": [
           {
             "name": "kind",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -154,7 +167,8 @@
           },
           {
             "name": "name",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -165,7 +179,8 @@
           },
           {
             "name": "description",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -176,9 +191,11 @@
           },
           {
             "name": "fields",
+            "description": null,
             "args": [
               {
                 "name": "includeDeprecated",
+                "description": null,
                 "type": {
                   "kind": "SCALAR",
                   "name": "Boolean",
@@ -205,7 +222,8 @@
           },
           {
             "name": "interfaces",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -224,7 +242,8 @@
           },
           {
             "name": "possibleTypes",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -243,9 +262,11 @@
           },
           {
             "name": "enumValues",
+            "description": null,
             "args": [
               {
                 "name": "includeDeprecated",
+                "description": null,
                 "type": {
                   "kind": "SCALAR",
                   "name": "Boolean",
@@ -272,7 +293,8 @@
           },
           {
             "name": "inputFields",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -291,7 +313,8 @@
           },
           {
             "name": "ofType",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "__Type",
@@ -302,7 +325,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -320,10 +344,12 @@
       {
         "kind": "OBJECT",
         "name": "__Field",
+        "description": "Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.",
         "fields": [
           {
             "name": "name",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -338,7 +364,8 @@
           },
           {
             "name": "description",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -349,7 +376,8 @@
           },
           {
             "name": "args",
-            "args": null,
+            "description": "returns a List of __InputValue representing the arguments this field accepts",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -361,7 +389,8 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "__InputValue"
+                    "name": "__InputValue",
+                    "ofType": null
                   }
                 }
               }
@@ -371,7 +400,8 @@
           },
           {
             "name": "type",
-            "args": null,
+            "description": "must return a __Type that represents the type of value returned by this field",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -386,7 +416,8 @@
           },
           {
             "name": "isDeprecated",
-            "args": null,
+            "description": "returns true if this field should no longer be used, otherwise false",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -401,7 +432,8 @@
           },
           {
             "name": "deprecationReason",
-            "args": null,
+            "description": "optionally provides a reason why this field is deprecated",
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -412,7 +444,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -430,10 +463,12 @@
       {
         "kind": "OBJECT",
         "name": "__InputValue",
+        "description": "Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.",
         "fields": [
           {
             "name": "name",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -448,7 +483,8 @@
           },
           {
             "name": "description",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -459,7 +495,8 @@
           },
           {
             "name": "type",
-            "args": null,
+            "description": "must return a __Type that represents the type this input value expects",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -474,7 +511,8 @@
           },
           {
             "name": "defaultValue",
-            "args": null,
+            "description": "may return a String encoding (using the GraphQL language) of the default value used by this input value in the condition a value is not provided at runtime. If this input value has no default value, returns null.",
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -485,7 +523,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -503,10 +542,12 @@
       {
         "kind": "OBJECT",
         "name": "__EnumValue",
+        "description": "One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.",
         "fields": [
           {
             "name": "name",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -521,7 +562,8 @@
           },
           {
             "name": "description",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -532,7 +574,8 @@
           },
           {
             "name": "isDeprecated",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -547,7 +590,8 @@
           },
           {
             "name": "deprecationReason",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -558,7 +602,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -576,10 +621,12 @@
       {
         "kind": "OBJECT",
         "name": "__Directive",
+        "description": "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
         "fields": [
           {
             "name": "name",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -594,7 +641,8 @@
           },
           {
             "name": "description",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -605,7 +653,8 @@
           },
           {
             "name": "locations",
-            "args": null,
+            "description": "returns a List of __DirectiveLocation representing the valid locations this directive may be placed",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -617,7 +666,8 @@
                   "name": null,
                   "ofType": {
                     "kind": "ENUM",
-                    "name": "__DirectiveLocation"
+                    "name": "__DirectiveLocation",
+                    "ofType": null
                   }
                 }
               }
@@ -627,7 +677,8 @@
           },
           {
             "name": "args",
-            "args": null,
+            "description": "returns a List of __InputValue representing the arguments this directive accepts",
+            "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -639,7 +690,8 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "__InputValue"
+                    "name": "__InputValue",
+                    "ofType": null
                   }
                 }
               }
@@ -649,7 +701,8 @@
           },
           {
             "name": "__typename",
-            "args": null,
+            "description": null,
+            "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -667,6 +720,76 @@
       {
         "kind": "OBJECT",
         "name": "QueryRoot",
+        "description": null,
+        "fields": [
+          {
+            "name": "onlyField",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__typename",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__schema",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "__Schema",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "__type",
+            "description": null,
+            "args": [
+              {
+                "name": "name",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "__Type",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "inputFields": null,
         "interfaces": null,
         "enumValues": null,
@@ -675,47 +798,56 @@
       {
         "kind": "ENUM",
         "name": "__TypeKind",
+        "description": "An enum describing what kind of type a given `__Type` is.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
             "name": "SCALAR",
+            "description": "Indicates this type is a scalar.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "OBJECT",
+            "description": "Indicates this type is an object. `fields` and `interfaces` are valid fields.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INTERFACE",
+            "description": "Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "UNION",
+            "description": "Indicates this type is a union. `possibleTypes` is a valid field.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ENUM",
+            "description": "Indicates this type is an enum. `enumValues` is a valid field.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INPUT_OBJECT",
+            "description": "Indicates this type is an input object. `inputFields` is a valid field.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "LIST",
+            "description": "Indicates this type is a list. `ofType` is a valid field.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "NON_NULL",
+            "description": "Indicates this type is a non-null. `ofType` is a valid field.",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -725,33 +857,46 @@
       {
         "kind": "ENUM",
         "name": "__DirectiveLocation",
+        "description": "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
             "name": "QUERY",
-            "isDeprecated": false
+            "description": "Location adjacent to a query",
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "MUTATION",
-            "isDeprecated": false
+            "description": "Location adjacent to a mutation",
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "FIELD",
-            "isDeprecated": false
+            "description": "Location adjacent to a field",
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "FRAGMENT_DEFINITION",
-            "isDeprecated": false
+            "description": "Location adjacent to a fragment definition",
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "FRAGMENT_SPREAD",
-            "isDeprecated": false
+            "description": "Location adjacent to a fragment spread",
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "INLINE_FRAGMENT",
-            "isDeprecated": false
+            "description": "Location adjacent to a inline fragment",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -760,6 +905,7 @@
     "directives": [
       {
         "name": "skip",
+        "description": null,
         "locations": [
           "FIELD",
           "FRAGMENT_SPREAD",
@@ -767,8 +913,8 @@
         ],
         "args": [
           {
-            "defaultValue": null,
             "name": "if",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -777,12 +923,14 @@
                 "name": "Boolean",
                 "ofType": null
               }
-            }
+            },
+            "defaultValue": null
           }
         ]
       },
       {
         "name": "include",
+        "description": null,
         "locations": [
           "FIELD",
           "FRAGMENT_SPREAD",
@@ -790,8 +938,8 @@
         ],
         "args": [
           {
-            "defaultValue": null,
             "name": "if",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -800,7 +948,8 @@
                 "name": "Boolean",
                 "ofType": null
               }
-            }
+            },
+            "defaultValue": null
           }
         ]
       }
