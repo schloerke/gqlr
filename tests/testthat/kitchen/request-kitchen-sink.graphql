@@ -34,18 +34,18 @@ mutation likeStory {
   }
 }
 
-subscription StoryLikeSubscription($input: StoryLikeSubscribeInput) {
-  storyLikeSubscribe(input: $input) {
-    story {
-      likers {
-        count
-      }
-      likeSentence {
-        text
-      }
-    }
-  }
-}
+# subscription StoryLikeSubscription($input: StoryLikeSubscribeInput) {
+#   storyLikeSubscribe(input: $input) {
+#     story {
+#       likers {
+#         count
+#       }
+#       likeSentence {
+#         text
+#       }
+#     }
+#   }
+# }
 
 fragment frag on Friend {
   foo(size: $size, bar: $b, obj: {key: "value"})

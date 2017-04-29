@@ -149,54 +149,7 @@
 . . . . . . . . . . . 1 - <Field>
 . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . value: 'id'
-. . 3 - <OperationDefinition>
-. . . operation: 'subscription'
-. . . name: <Name>
-. . . . value: 'StoryLikeSubscription'
-. . . variableDefinitions:
-. . . . 1 - <VariableDefinition>
-. . . . . variable: <Variable>
-. . . . . . name: <Name>
-. . . . . . . value: 'input'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'StoryLikeSubscribeInput'
-. . . selectionSet: <SelectionSet>
-. . . . selections:
-. . . . . 1 - <Field>
-. . . . . . name: <Name>
-. . . . . . . value: 'storyLikeSubscribe'
-. . . . . . arguments:
-. . . . . . . 1 - <Argument>
-. . . . . . . . name: <Name>
-. . . . . . . . . value: 'input'
-. . . . . . . . value: <Variable>
-. . . . . . . . . name: <Name>
-. . . . . . . . . . value: 'input'
-. . . . . . selectionSet: <SelectionSet>
-. . . . . . . selections:
-. . . . . . . . 1 - <Field>
-. . . . . . . . . name: <Name>
-. . . . . . . . . . value: 'story'
-. . . . . . . . . selectionSet: <SelectionSet>
-. . . . . . . . . . selections:
-. . . . . . . . . . . 1 - <Field>
-. . . . . . . . . . . . name: <Name>
-. . . . . . . . . . . . . value: 'likers'
-. . . . . . . . . . . . selectionSet: <SelectionSet>
-. . . . . . . . . . . . . selections:
-. . . . . . . . . . . . . . 1 - <Field>
-. . . . . . . . . . . . . . . name: <Name>
-. . . . . . . . . . . . . . . . value: 'count'
-. . . . . . . . . . . 2 - <Field>
-. . . . . . . . . . . . name: <Name>
-. . . . . . . . . . . . . value: 'likeSentence'
-. . . . . . . . . . . . selectionSet: <SelectionSet>
-. . . . . . . . . . . . . selections:
-. . . . . . . . . . . . . . 1 - <Field>
-. . . . . . . . . . . . . . . name: <Name>
-. . . . . . . . . . . . . . . . value: 'text'
-. . 4 - <FragmentDefinition>
+. . 3 - <FragmentDefinition>
 . . . name: <Name>
 . . . . value: 'frag'
 . . . typeCondition: <NamedType>
@@ -230,7 +183,7 @@
 . . . . . . . . . . . . value: 'key'
 . . . . . . . . . . . value: <StringValue>
 . . . . . . . . . . . . value: 'value'
-. . 5 - <OperationDefinition>
+. . 4 - <OperationDefinition>
 . . . operation: 'query'
 . . . selectionSet: <SelectionSet>
 . . . . selections:
