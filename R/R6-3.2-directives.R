@@ -42,7 +42,7 @@ directive @include(if: Boolean!)
    | FRAGMENT_SPREAD
    | INLINE_FRAGMENT
 " %>%
-  graphql2obj(fn_list = list(
+  graphql2obj(
     skip = list(
       # description = "awesome!",
       .resolve = function(if_val) {
@@ -54,7 +54,7 @@ directive @include(if: Boolean!)
         isTRUE(if_val)
       }
     )
-  )) ->
+  ) ->
 directive_document
 
 # ' @export

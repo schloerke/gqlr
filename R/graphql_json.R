@@ -49,6 +49,17 @@ graphql2list <- function(txt) {
 
 #' @export
 graphql2obj <- function(txt, ...) {
+  info_list <- list(...)
+  if (length(info_list) > 0) {
+    info_names <- names(info_list)
+    if (
+      is.null(info_names) ||
+      length(unique(info_names)) != length(info_list) ||
+      any(nchar(info_names) == 0)
+    ) {
+      stop("graphql2obj() extra arguments must be uniquely named arguments")
+    }
+  }
   graphql2list(txt) %>%
-    r6_from_list(...)
+    r6_from_list(fn_list = info_list)
 }
