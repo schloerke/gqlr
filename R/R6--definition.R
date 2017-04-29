@@ -1,4 +1,5 @@
 #' @include R6--aaa-utils.R
+#' @include S3--aaa-setup.R
 
 if(getRversion() >= "2.15.1") {
   utils::globalVariables(c("self"))
@@ -202,6 +203,16 @@ Document <- R6_from_args(
     .format = function(...) {
       format_list(self$definitions, .collapse = "\n\n", ...)
     },
+    .get_definition = function(name) {
+      for (definition in self$definitions) {
+        if (inherits(definition, "TypeSystemDefinition")) {
+          if (identical(format(definition$name), name)) {
+            return(definition)
+          }
+        }
+      }
+      return(NULL)
+    },
     .get_operations = function() {
       ret <- list()
       for (definition in self$definitions) {
@@ -209,7 +220,6 @@ Document <- R6_from_args(
           ret <- append(ret, definition)
         }
       }
-
       ret
     }
   )
