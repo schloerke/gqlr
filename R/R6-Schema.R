@@ -311,6 +311,7 @@ GQLRSchema <- R6Class(
       }
       if (inherits(obj, "Document")) {
         lapply(obj$definitions, self$add)
+        return(invisible(self))
       }
 
       if (inherits(obj, "SchemaDefinition")) {
@@ -357,6 +358,13 @@ GQLRSchema <- R6Class(
         }
 
         private[[obj_group]][[obj_name]] <- obj
+
+        # order the items by name
+        group_names <- names(private[[obj_group]])
+        sorted_group_names <- sort(group_names)
+        if (!identical(sorted_group_names, group_names)) {
+          private[[obj_group]] <- private[[obj_group]][group_names]
+        }
 
         if (obj_kind == "ObjectTypeDefinition") {
           if (!is.null(obj$interfaces)) {
