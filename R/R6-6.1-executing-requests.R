@@ -62,7 +62,7 @@ execute_request <- function(
   document_obj,
   operation_name = NULL,
   variable_values = list(),
-  initial_value,
+  initial_value = NULL,
   ...,
   oh
 ) {
