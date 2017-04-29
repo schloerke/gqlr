@@ -33,7 +33,10 @@
 upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
 
   fragment_list <- list()
-  query_list <- list()
+  query_mutation_list <- list(
+    query = list(),
+    mutation = list()
+  )
   # mutation_list <- list()
 
   for (operation in document_obj$definitions) {
@@ -41,13 +44,12 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       # is operation
       if (operation$operation == "query") {
         if (is.null(operation$name)) {
-          query_list[[""]] <- operation
+          query_mutation_list$query[[""]] <- operation
         } else {
-          query_list[[format(operation$name)]] <- operation
+          query_mutation_list$query[[format(operation$name)]] <- operation
         }
       } else {
-        # TODO
-        stop("TODO implement mutation")
+        query_mutation_list$mutation[[format(operation$name)]] <- operation
       }
     } else {
 
@@ -221,13 +223,18 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
   }
 
 
-
-
-  #TODO make lapply
+  # upgrade all mutation and query objects be full trees, not many fragment objects
+  # (circular dependencies are not allowed by graphql definition)
   upgraded_operations <- list()
 
+  mutation_root <- oh$schema_obj$get_query_object()
+  for (mutation_obj in query_mutation_list$mutation) {
+    mutation_obj <- upgrade_fragments_in_field(mutation_obj, query_root, NULL)
+    upgraded_operations <- append(upgraded_operations, mutation_obj)
+  }
+
   query_root <- oh$schema_obj$get_query_object()
-  for (query_obj in query_list) {
+  for (query_obj in query_mutation_list$query) {
     query_obj <- upgrade_fragments_in_field(query_obj, query_root, NULL)
     upgraded_operations <- append(upgraded_operations, query_obj)
   }

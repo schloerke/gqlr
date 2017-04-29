@@ -47,14 +47,12 @@ type __Schema {
               # append(names(schema_obj$get_directives())) %>%
               append(names(schema_obj$get_values()))
 
-            # all_types %>% lapply(return__type, schema_obj = schema_obj)
             all_types
           },
 
           # queryType: __Type!
           queryType = function(z1, z2, z3) {
             query_type <- schema_obj$get_schema_definition("query")
-            # return__type(query_type, schema_obj = schema_obj)
             query_type
           },
 
@@ -62,14 +60,12 @@ type __Schema {
           mutationType = function(z1, z2, z3) {
             mutation_type <- schema_obj$get_schema_definition("mutation")
             if (is.null(mutation_type)) return(NULL)
-            # return__type(mutation_type, schema_obj = schema_obj)
             mutation_type
           },
 
           # directives: [__Directive!]!
           directives = function(z1, z2, z3) {
             directives <- schema_obj$get_directives()
-            # lapply(directives, return__directive, schema_obj = schema_obj)
             directives
           }
         )

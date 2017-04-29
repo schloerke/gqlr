@@ -81,7 +81,6 @@ execute_request <- function(
     )
 
   } else if (identical(operation_type, "mutation")) {
-    stop("TODO - mutation not implemented")
     return(
       execute_mutation(operation, initial_value, oh = oh)
     )
