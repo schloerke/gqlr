@@ -7,7 +7,7 @@ context("object validation")
 expect_validate_err <- function(txt, ...) {
   txt %>%
     graphql2obj() %>%
-    ObjectHelpers$new() ->
+    gqlr:::ObjectHelpers$new() ->
   oh
 
   validate_schema(oh = oh)

@@ -1,9 +1,13 @@
 source("dog_cat_schema.R")
 
 
-from_json <- function(...) {
-  jsonlite::fromJSON(..., simplifyDataFrame=FALSE, simplifyVector=FALSE)
-}
+to_json <- gqlr:::to_json
+from_json <- gqlr:::from_json
+str_trim <- gqlr:::str_trim
+str_c <- gqlr:::str_c
+collapse <- gqlr:::collapse
+
+
 
 expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 

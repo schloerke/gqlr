@@ -14,9 +14,6 @@
 #   4. Let data be the result of running ExecuteSelectionSet(selectionSet, queryType, initialValue, variableValues) normally (allowing parallelization).
 #   5. Let errors be any field errors produced while executing the selection set.
 #   6. Return an unordered map containing data and errors.
-
-#   oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
-# oh$set_variable_values(variable_values)
 get_initial_value <- function(initial_value, root_type_object, ..., oh) {
   if (is.null(initial_value)) {
     resolve_fn <- root_type_object$.resolve

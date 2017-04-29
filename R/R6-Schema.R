@@ -53,8 +53,8 @@
 
 
 #' @export
-GQLRSchema <- R6Class(
-  "GQLRSchema",
+Schema <- R6Class(
+  "Schema",
   private = list(
     is_done = FALSE,
 

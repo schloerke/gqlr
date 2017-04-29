@@ -66,8 +66,8 @@ execute_request <- function(
   initial_value = NULL,
   ...
 ) {
-  oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
-  
+  oh <- ObjectHelpers$new(schema_obj)
+
   document_obj <- validate_document(document_obj, oh = oh)
 
   operation <- get_operation(document_obj, operation_name, oh = oh)

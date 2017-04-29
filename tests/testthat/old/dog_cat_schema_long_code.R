@@ -1,5 +1,5 @@
 
-dog_cat_schema <- GQLRSchema$new()
+dog_cat_schema <- Schema$new()
 
 "
 enum DogCommand { SIT, DOWN, HEEL }

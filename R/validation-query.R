@@ -20,7 +20,6 @@
 
 
 
-# oh <- ObjectHelpers$new(schema_obj, error_list)
 #' @export
 validate_query <- function(document_obj, ..., oh) {
 
@@ -738,7 +737,6 @@ str.ErrorList <- function(x, ...) {
 
 
 
-#' @export
 ObjectHelpers <- R6Class(
   "ObjectHelpers",
   private = list(
@@ -804,14 +802,14 @@ ObjectHelpers <- R6Class(
         return(private$schema_obj_val)
       }
 
-      if (inherits(value, "character")) {
-        value <- GQLRSchema$new(value)
-      }
-      if (inherits(value, "Document")) {
-        value <- GQLRSchema$new(value)
+      if (
+        inherits(value, "character") ||
+        inherits(value, "Document")
+      ) {
+        value <- Schema$new(value)
       }
 
-      if (!inherits(value, "GQLRSchema")) {
+      if (!inherits(value, "Schema")) {
         stop("must supply a object of class 'Schema'")
       }
 

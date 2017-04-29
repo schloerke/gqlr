@@ -7,7 +7,7 @@ source("validate_helper.R")
 
 test_that("small input objects", {
 
-  test_schema <- GQLRSchema$new()
+  test_schema <- Schema$new()
   "
   input ExampleInputObject {
     a: String

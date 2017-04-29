@@ -77,4 +77,4 @@ schema {
   graphql2obj() ->
 dog_cat_doc
 
-dog_cat_schema <- GQLRSchema$new(dog_cat_doc)
+dog_cat_schema <- Schema$new(dog_cat_doc)

@@ -1,6 +1,5 @@
 #' @include R6z-from-json.R
 
-#' @export
 #' @import jsonlite
 to_json <- function(..., pretty = TRUE) {
   jsonlite::toJSON(
@@ -10,7 +9,6 @@ to_json <- function(..., pretty = TRUE) {
     null = "null"
   )
 }
-#' @export
 from_json <- function(..., simplifyDataFrame = FALSE, simplifyVector = FALSE) {
   jsonlite::fromJSON(..., simplifyDataFrame = simplifyDataFrame, simplifyVector = simplifyVector)
 }

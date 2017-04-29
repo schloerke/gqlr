@@ -2,7 +2,7 @@
 # Star Wars example is:
 
 
-star_wars_schema <- GQLRSchema$new()
+star_wars_schema <- Schema$new()
 
 "
 enum Episode { NEWHOPE, EMPIRE, JEDI }
