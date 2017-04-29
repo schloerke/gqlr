@@ -1,36 +1,6 @@
 #' @include R6--definition.R
 #' @include graphql_json.R
 
-#
-# DirectiveLocationNames <- (function() {
-#   ret <- list()
-#   for (name in c(
-#     # operations
-#     "QUERY",
-#     "MUTATION",
-#     # "SUBSCRIPTION",
-#     "FIELD",
-#     "FRAGMENT_DEFINITION",
-#     "FRAGMENT_SPREAD",
-#     "INLINE_FRAGMENT",
-#     # Schema Definitions
-#     "SCHEMA",
-#     "SCALAR",
-#     "OBJECT",
-#     "FIELD_DEFINITION",
-#     "ARGUMENT_DEFINITION",
-#     "INTERFACE",
-#     "UNION",
-#     "ENUM",
-#     "ENUM_VALUE",
-#     "INPUT_OBJECT",
-#     "INPUT_FIELD_DEFINITION"
-#   )) {
-#     ret[[name]] <- Name$new(value = name)
-#   }
-#   ret
-# })()
-
 
 "
 directive @skip(if: Boolean!)
