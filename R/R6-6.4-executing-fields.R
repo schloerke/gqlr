@@ -451,12 +451,23 @@ merge_selection_sets <- function(fields, ..., oh) {
 #
 # If all fields from the root of the request to the source of the error return Non-Null types, then the "data" entry in the response should be null.
 is_nullish <- function(x) {
-  if (R6::is.R6(x)) return(FALSE)
-  if (is.list(x) || is.vector(x)) {
-    return(FALSE)
-  }
-  if (is.null(x)) return(TRUE)
-  if (is.na(x)) return(TRUE)
-  if (is.nan(x)) return(TRUE)
-  return(FALSE)
+  type_of_value <- typeof(x)
+
+  # typeof(NULL) # "NULL"
+  # typeof(NA) # "logical"
+  # typeof(NaN) # "double"
+  switch(type_of_value,
+    "NULL" = TRUE,
+    "logical" =,
+    "integer" =,
+    "double" =,
+    "numeric" = {
+      if (length(x) > 0) {
+        FALSE
+      } else {
+        is.na(x) || is.nan(x)
+      }
+    },
+    FALSE
+  )
 }
