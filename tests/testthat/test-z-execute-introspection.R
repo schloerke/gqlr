@@ -47,20 +47,14 @@ test_that("empty introspection", {
   type QueryRoot {
     onlyField: String
   }
-  " %>%
-    ObjectHelpers$new() ->
-  oh
+  " ->
+    schema_doc
 
-  introspection_query <-
-    read_intro("execution-introspection.graphql") %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
+  introspection_query <- read_intro("execution-introspection.graphql")
 
   ans <- execute_request(
     introspection_query,
-    operation_name = "IntrospectionQuery",
-    initial_value = list(),
-    oh = oh
+    schema_doc
   )
 
   compare_ans_and_expected(ans, "introspection-empty-output.json")
@@ -69,21 +63,13 @@ test_that("empty introspection", {
 
 
 test_that("kitchen introspection", {
-  oh <- ObjectHelpers$new(dog_cat_schema)
 
-  introspection_query <-
-    read_intro("execution-introspection.graphql") %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
-  browser()
+  introspection_query <- read_intro("execution-introspection.graphql")
 
   ans <- execute_request(
     introspection_query,
-    operation_name = "IntrospectionQuery",
-    initial_value = list(),
-    oh = oh
+    dog_cat_schema
   )
 
   compare_ans_and_expected(ans, "introspection-dogcat.json")
-
 })

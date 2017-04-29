@@ -7,11 +7,8 @@ from_json <- function(...) {
 
 expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 
-  oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
-
-  ans <- query %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
+  oh <- gqlr:::ObjectHelpers$new(schema_obj)
+  ans <- gqlr:::validate_document(query, oh = oh)
 
   expect_equal(oh$error_list$.format(), "<ErrorList> No errors")
 
@@ -20,11 +17,8 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 
 expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
 
-  oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
-
-  ans <- query %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
+  oh <- gqlr:::ObjectHelpers$new(schema_obj)
+  ans <- gqlr:::validate_document(query, oh = oh)
 
   expect_true(oh$error_list$has_any_errors())
 
@@ -46,17 +40,11 @@ expect_request <- function(
 ) {
   expected_result <- to_json(from_json(expected_json))
 
-  oh <- ObjectHelpers$new(schema_obj)
-
-  query_doc <- query_txt %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
-
   ans <- execute_request(
-    query_doc,
+    query_txt,
+    schema_obj,
     operation_name = operation_name,
-    variable_values = variable_values,
-    oh = oh
+    variable_values = variable_values
   )
 
   expect_true(ans$error_list$has_no_errors())
@@ -88,17 +76,11 @@ expect_request_err <- function(
 ) {
   expected_result <- to_json(from_json(expected_json))
 
-  oh <- ObjectHelpers$new(schema_obj)
-
-  query_doc <- query_txt %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
-
   ans <- execute_request(
-    query_doc,
+    query_txt,
+    schema_obj,
     operation_name = operation_name,
-    variable_values = variable_values,
-    oh = oh
+    variable_values = variable_values
   )
 
   expect_true(ans$error_list$has_any_errors())

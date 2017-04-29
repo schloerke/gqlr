@@ -60,12 +60,15 @@
 #' @export
 execute_request <- function(
   document_obj,
+  schema_obj,
   operation_name = NULL,
   variable_values = list(),
   initial_value = NULL,
-  ...,
-  oh
+  ...
 ) {
+  oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
+  
+  document_obj <- validate_document(document_obj, oh = oh)
 
   operation <- get_operation(document_obj, operation_name, oh = oh)
   if (oh$error_list$has_any_errors()) return(list(data = NULL, error_list = oh$error_list))
@@ -88,6 +91,16 @@ execute_request <- function(
   }
 
   stop("Operation type not implemented: ", operation_type)
+}
+
+
+
+validate_document <- function(document_obj, ..., oh) {
+  if (is.character(document_obj)) {
+    document_obj <- graphql2obj(document_obj)
+  }
+  document_obj <- validate_query(document_obj, oh = oh)
+  document_obj
 }
 
 

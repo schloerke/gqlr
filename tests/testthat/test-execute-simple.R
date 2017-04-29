@@ -120,46 +120,34 @@ test_that("arbitrary code", {
     graphql2obj() ->
   schema_doc
 
-  oh <- ObjectHelpers$new(schema_doc, ErrorList$new())
-  query_doc <- simple_query %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
-
   ans <- execute_request(
-    query_doc,
+    simple_query,
+    schema_doc,
     operation_name = "Example",
     variable_values = list(size = 100),
-    initial_value = data,
-    oh = oh
+    initial_value = data
   )
 
   # str(ans)
 
-  expect_true(oh$error_list$has_no_errors())
+  expect_true(ans$error_list$has_no_errors())
   expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[1]]$rando))
   expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[3]]$rando))
 
 
-
-
-  oh <- ObjectHelpers$new(schema_doc, ErrorList$new())
-
   # remove rando
-  query_doc_exact <- simple_query %>%
-    gsub(" rando", " ", .) %>%
-    graphql2obj() %>%
-    validate_query(oh = oh)
+  query_doc_exact <- gsub(" rando", " ", simple_query)
 
   ans_exact <- execute_request(
     query_doc_exact,
+    schema_doc,
     operation_name = "Example",
     variable_values = list(size = 100),
-    initial_value = data,
-    oh = oh
+    initial_value = data
   )
 
   # str(ans_exact)
-  expect_true(oh$error_list$has_no_errors())
+  expect_true(ans$error_list$has_no_errors())
   expect_equal(ans_exact$data, expected)
 
 })
