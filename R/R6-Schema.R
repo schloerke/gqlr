@@ -285,6 +285,21 @@ GQLRSchema <- R6Class(
       # self$get_object_interface_or_union(type_obj$type)
     },
 
+    get_schema = function() {
+      definitions <- list() %>%
+        append(self$get_scalars()) %>%
+        append(self$get_enums()) %>%
+        append(self$get_objects()) %>%
+        append(self$get_interfaces()) %>%
+        append(self$get_unions()) %>%
+        append(self$get_input_objects()) %>%
+        append(self$get_directives()) %>%
+        append(self$get_values())
+
+      document_obj <- Document$new(definitions = definitions)
+      document_obj
+    },
+
     is_valid = FALSE,
     add = function(obj) {
       self$is_valid <- FALSE
