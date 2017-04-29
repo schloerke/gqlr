@@ -115,14 +115,10 @@ validate_field_selections <- function(document_obj, ..., oh) {
         oh = oh
       )
 
-      if (operation$operation == "query") {
-        validate_fields_in_selection_set(
-          operation$selectionSet, oh$schema_obj$get_query_object(),
-          oh = oh
-        )
-      } else if (operation$operation == "mutation") {
-        stop("TODO. not implemented")
-      }
+      validate_fields_in_selection_set(
+        operation$selectionSet, oh$schema_obj$get_query_object(),
+        oh = oh
+      )
 
       oh$variable_validator$finally()
       oh$unset_variable_validator()
