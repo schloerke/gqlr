@@ -41,10 +41,10 @@
 
 
 #' @export
-parse_literal = function(kind_val, parse_value) {
-  fn <- function(obj) {
+parse_literal = function(kind_val, parse_value_fn) {
+  fn <- function(obj, schema_obj) {
     if (obj$.kind == kind_val) {
-      parse_value(obj$value)
+      parse_value_fn(obj$value, schema_obj)
     } else {
       NULL
     }
@@ -90,7 +90,7 @@ parse_literal = function(kind_val, parse_value) {
 #   )
 # )
 
-coerce_int = function (value) {
+coerce_int = function (value, ...) {
   MAX_INT =  2147483647
   MIN_INT = -2147483648
   num <- suppressWarnings(as.integer(value))
@@ -126,7 +126,7 @@ Int <- ScalarTypeDefinition$new(
 
 
 
-coerce_float = function (value) {
+coerce_float = function (value, ...) {
   num <- suppressWarnings(as.numeric(value))
   if (is.numeric(num)) {
     return(num)
@@ -143,10 +143,10 @@ Float = ScalarTypeDefinition$new(
   ),
   .serialize = coerce_float,
   .parse_value = coerce_float,
-  .parse_literal = pryr_unenclose(function(obj) {
+  .parse_literal = pryr_unenclose(function(obj, schema_obj) {
     kind = obj$.kind
     if (kind == "IntValue" || kind == "FloatValue") {
-      coerce_float(obj$value)
+      coerce_float(obj$value, schema_obj)
     } else {
       NULL
     }
@@ -154,7 +154,7 @@ Float = ScalarTypeDefinition$new(
 )
 
 
-coerce_string <- function(value) {
+coerce_string <- function(value, ...) {
   char <- suppressWarnings(as.character(value))
   if (is.character(char)) {
     return(char)
@@ -175,7 +175,7 @@ String = ScalarTypeDefinition$new(
 )
 
 
-coerce_boolean = function (value) {
+coerce_boolean = function (value, ...) {
   val <- suppressWarnings(as.logical(value))
   if (is.logical(val)) {
     return(val)

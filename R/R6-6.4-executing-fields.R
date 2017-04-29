@@ -175,8 +175,9 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 
     type_obj <- oh$schema_obj$get_type(argument_type)
 
+    # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType, throw a field error.
     # h. Let coercedValue be the result of coercing value according to the input coercion rules of argType.
-    coerced_value <- type_obj$.parse_literal(value)
+    coerced_value <- type_obj$.parse_literal(value, oh$schema_obj)
     if (!is.null(value) && is.null(coerced_value)) {
       oh$error_list$add(
         "6.4.1",
@@ -332,7 +333,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
       oh$schema_obj$get_scalar(field_type),
       oh$schema_obj$get_enum(field_type)
     )
-    resolved_result <- type_obj$.parse_value(result)
+    resolved_result <- type_obj$.parse_value(result, oh$schema_obj)
     if (length(resolved_result) == 0) {
       return(NULL)
     }

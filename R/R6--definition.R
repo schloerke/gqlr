@@ -825,7 +825,7 @@ ScalarTypeDefinition = R6_from_args(
       # takes in a raw value, such as: "5", 5, 5.0
       .serialize = as.character,
       # takes in a raw value, such as: "5", 5, 5.0
-      .parse_value = function(x) {
+      .parse_value = function(x, schema_obj) {
         stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
       },
       # takes in AST value object: <BooleanValue>
@@ -1154,15 +1154,15 @@ EnumTypeDefinition = R6_from_args(
 
       invisible(self)
     },
-    .default_serialize = function(x) {
+    .default_serialize = function(x, schema_obj) {
       if (is_nullish(x)) return(NULL)
       as.character(toupper(x))
     },
-    .default_parse_value = function(x) {
+    .default_parse_value = function(x, schema_obj) {
       if (is_nullish(x)) return(NULL)
       as.character(toupper(x))
     },
-    .default_parse_literal = function(value_obj) {
+    .default_parse_literal = function(value_obj, schema_obj) {
 
       # if (inherits(value_obj, "IntValue")) {
       #   int_val <- value_obj$value

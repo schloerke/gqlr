@@ -181,7 +181,7 @@ coerce_variable_values <- function(operation, variable_values, ..., oh) {
         coerced_value <- NULL
       } else {
         variable_obj <- oh$schema_obj$get_type(variable_type)
-        coerced_value <- variable_obj$.parse_value(value)
+        coerced_value <- variable_obj$.parse_value(value, oh$schema_obj)
         if (is.null(coerced_value)) {
           oh$error_list$add(
             "6.1.2",
