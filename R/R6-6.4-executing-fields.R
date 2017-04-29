@@ -359,11 +359,17 @@ complete_value <- function(field_type, fields, result, ..., oh) {
       object_type <- resolve_abstract_type(field_type, result, field_obj, oh = oh)
     }
 
-    object_obj <- oh$schema_obj$get_object(object_type)
     # if the object has it's own resolver function, call it.
     # ex: all friends are stored as id values.  should return full object
+    object_obj <- oh$schema_obj$get_object(object_type)
     if (is.function(object_obj$.resolve)) {
+      # pre_result <- result
+      # cat('\n\n\n')
+      # str(result)
       result <- object_obj$.resolve(result, schema_obj = oh$schema_obj)
+      # cat("\n\n")
+      # str(result)
+      # browser()
       # if a nullish result is returned, return null
       if (is_nullish(result)) {
         return(NULL)
