@@ -451,6 +451,7 @@ merge_selection_sets <- function(fields, ..., oh) {
 #
 # If all fields from the root of the request to the source of the error return Non-Null types, then the "data" entry in the response should be null.
 is_nullish <- function(x) {
+  if (R6::is.R6(x)) return(FALSE)
   if (is.list(x) || is.vector(x)) {
     return(FALSE)
   }
