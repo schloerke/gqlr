@@ -136,7 +136,6 @@ test_that("arbitrary code", {
   # str(ans)
 
   expect_true(oh$error_list$has_no_errors())
-  expect_subset(ans$data, expected)
   expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[1]]$rando))
   expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[3]]$rando))
 

@@ -15,11 +15,9 @@ expect_sw_err <- function(...) {
 expect_sw_r6 <- function(...) {
   expect_r6(..., schema_obj = star_wars_schema)
 }
-
 expect_sw_request <- function(...) {
   expect_request(..., schema_obj = star_wars_schema)
 }
-
 expect_sw_request_err <- function(...) {
   expect_request_err(..., schema_obj = star_wars_schema)
 }
@@ -491,8 +489,8 @@ test_that("introspection", {
             {"name": "__InputValue"},
             {"name": "__EnumValue"},
             {"name": "__Directive"},
-            {"name": "Human"},
             {"name": "Droid"},
+            {"name": "Human"},
             {"name": "Query"},
             {"name": "Character"},
             {"name": "HumanOrDroid"},

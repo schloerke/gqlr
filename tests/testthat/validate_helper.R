@@ -56,7 +56,6 @@ expect_request <- function(
     query_doc,
     operation_name = operation_name,
     variable_values = variable_values,
-    initial_value = query_data,
     oh = oh
   )
 
@@ -99,7 +98,6 @@ expect_request_err <- function(
     query_doc,
     operation_name = operation_name,
     variable_values = variable_values,
-    initial_value = query_data,
     oh = oh
   )
 

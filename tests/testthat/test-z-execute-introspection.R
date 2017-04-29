@@ -1,4 +1,4 @@
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-execute-introspection.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-introspection.R"))
 
 
 context("execute-introspection")
@@ -34,8 +34,11 @@ test_that("empty introspection", {
     oh = oh
   )
 
-  ans_subset <- read_intro("introspection-empty-output.json") %>% from_json()
-  expect_subset(ans$data, ans_subset)
+  expect_true(ans$error_list$has_no_errors())
+  expected <- strsplit(read_intro("introspection-empty-output.json"), "\n")[[1]]
+
+  ans_txt <- strsplit(to_json(ans$data), "\n")[[1]]
+  expect_equal(ans_txt, expected)
 
   if (is.null(ans)) {
     cat("\n\n")
@@ -68,8 +71,11 @@ test_that("kitchen introspection", {
   # cat("\n\nans:\n")
   # str(ans)
 
-  ans_subset <- read_intro("introspection-dogcat.json") %>% from_json()
-  expect_subset(ans$data, ans_subset)
+  expect_true(ans$error_list$has_no_errors())
+  expected <- strsplit(read_intro("introspection-dogcat.json"), "\n")[[1]]
+
+  ans_txt <- strsplit(to_json(ans$data), "\n")[[1]]
+  expect_equal(ans_txt, expected)
 
   if (is.null(ans)) {
     cat("\n\n")

@@ -33,7 +33,7 @@ test_that("formatting", {
     )
   )
 
-  expect_subset(ans, expected)
+  expect_equal(ans, expected)
 
 })
 
