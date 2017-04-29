@@ -479,15 +479,6 @@ Variable <- R6_from_args(
   )
 )
 
-scalar_active_value <- function(value) {
-  if (missing(value)) {
-    return(self$.args[["value"]]$value)
-  }
-
-  self$.args[["value"]]$value <- self$.parse_value(value)
-  return(invisible(value))
-}
-
 IntValue = (function(){
   # coerce_int = function (value) {
   #   MAX_INT =  2147483647
@@ -512,9 +503,6 @@ IntValue = (function(){
       .format = function(...) {
         as.character(self$value)
       }
-    ),
-    active = list(
-      # value = scalar_active_value
     )
   )
 })()
@@ -528,9 +516,6 @@ FloatValue = R6_from_args(
     .format = function(...) {
       as.character(self$value)
     }
-  ),
-  active = list(
-    # value = scalar_active_value
   )
 )
 
@@ -543,9 +528,6 @@ StringValue = R6_from_args(
     .format = function(...) {
       collapse("\"", as.character(self$value), "\"")
     }
-  ),
-  active = list(
-    # value = scalar_active_value
   )
 )
 
@@ -562,9 +544,6 @@ BooleanValue = R6_from_args(
         "false"
       }
     }
-  ),
-  active = list(
-    # value = scalar_active_value
   )
 )
 NullValue = R6_from_args(

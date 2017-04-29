@@ -288,9 +288,6 @@ GQLRSchema <- R6Class(
     is_valid = FALSE,
     add = function(obj) {
       self$is_valid <- FALSE
-      # if (inherits(document_obj, "character")) {
-      #   obj <- graphql2obj(obj, fn_list = fn_list)
-      # }
       if (!inherits(obj, "AST")) {
         stop0(
           "Object must be of class AST to add to a Schema. Received: ",

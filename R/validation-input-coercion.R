@@ -1,13 +1,4 @@
 
-# "InputObjectTypeDefinition",
-# " loc?: ?Location;
-#   description?: ?string;
-#   name: Name;
-#   directives?: ?Array<Directive>;
-#   fields: Array<InputValueDefinition>;",
-input_object_type_parse_literal = function(from_input) {
-
-}
 
 validate_value_can_be_coerced = function(from_input, to_type, ..., oh, rule_code) {
 
