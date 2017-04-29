@@ -17,6 +17,29 @@
 
 #   oh <- ObjectHelpers$new(schema_obj, ErrorList$new())
 # oh$set_variable_values(variable_values)
+get_initial_value <- function(initial_value, root_type_object, ..., oh) {
+  if (is.null(initial_value)) {
+    resolve_fn <- root_type_object$.resolve
+    if (is.function(resolve_fn)) {
+      initial_value <- root_type_object$.resolve(NULL, oh$schema_obj)
+    }
+  }
+  if (is.null(initial_value) || is.logical(initial_value)) {
+    initial_value <- list()
+  }
+
+  # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
+  initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
+    schema_obj
+  }
+  initial_value[["__type"]] <- function(z1, args, schema_obj) {
+    type_obj <- schema_obj$as_type(args$name)
+    type_obj
+  }
+
+  initial_value
+}
+
 execute_query <- function(operation_obj, initial_value, ..., oh) {
 
   root_type <- oh$schema_obj$get_schema_definition("query")
@@ -29,15 +52,8 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
     return(list(data = NULL, errors = oh$error_list))
   }
 
-  # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
-  initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
-    return__schema(schema_obj)
-  }
-  initial_value[["__type"]] <- function(z1, args, schema_obj) {
-    type_obj <- schema_obj$as_type(args$name)
-    return__type(type_obj, schema_obj)
-  }
-
+  # get default value and add introspection fields
+  initial_value <- get_initial_value(initial_value, root_type_object, oh = oh)
 
   selection_set <- operation_obj$selectionSet
 
@@ -72,15 +88,8 @@ execute_mutation <- function(operation_obj, initial_value, ..., oh) {
     return(list(data = NULL, errors = oh$error_list))
   }
 
-  # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
-  initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
-    return__schema(schema_obj)
-  }
-  initial_value[["__type"]] <- function(z1, args, schema_obj) {
-    type_obj <- schema_obj$as_type(args$name)
-    return__type(type_obj, schema_obj)
-  }
-
+  # get default value and add introspection fields
+  initial_value <- get_initial_value(initial_value, root_type_object, oh = oh)
 
   selection_set <- operation_obj$selectionSet
 

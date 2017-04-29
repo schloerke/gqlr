@@ -76,33 +76,12 @@ execute_request <- function(
 
   operation_type <- operation$operation
   if (identical(operation_type, "query")) {
-    if (missing(initial_value)) {
-      resolve_fn <- oh$schema_obj$get_schema_definition("query")$.resolve
-      if (is.function(resolve_fn)) {
-        initial_value <- resolve_fn(NULL, oh$schema_obj)
-      }
-    }
-    if (is.null(initial_value)) {
-      initial_value <- list()
-    }
-
     return(
       execute_query(operation, initial_value, oh = oh)
     )
 
   } else if (identical(operation_type, "mutation")) {
     stop("TODO - mutation not implemented")
-
-    if (missing(initial_value)) {
-      resolve_fn <- oh$schema_obj$get_schema_definition("mutation")$.resolve
-      if (is.function(resolve_fn)) {
-        initial_value <- resolve_fn(NULL, oh$schema_obj)
-      }
-    }
-    if (is.null(initial_value)) {
-      initial_value <- list()
-    }
-
     return(
       execute_mutation(operation, initial_value, oh = oh)
     )
