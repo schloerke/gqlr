@@ -235,7 +235,7 @@ OperationDefinition <- R6_from_args(
   inherit = Definition,
   "OperationDefinition",
   " loc?: ?Location;
-    operation: 'query' | 'mutation' | 'subscription';
+    operation: 'query' | 'mutation';
     name?: ?Name;
     variableDefinitions?: ?Array<VariableDefinition>;
     directives?: ?Array<Directive>;
@@ -776,7 +776,7 @@ OperationTypeDefinition = R6_from_args(
   inherit = Node,
   "OperationTypeDefinition",
   " loc?: ?Location;
-    operation: 'query' | 'mutation' | 'subscription';
+    operation: 'query' | 'mutation';
     type: NamedType;",
   public = list(
     .format = function(...) {
