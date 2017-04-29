@@ -45,6 +45,16 @@ test_that("empty introspection", {
     str(oh$error_list)
   }
 
+  if (length(ans_txt) != length(expected)) {
+    e1 <- tempfile()
+    e2 <- tempfile()
+    cat(ans_txt, sep = "\n", file = e1)
+    cat(expected, sep = "\n", file = e2)
+    system(str_c("diff ", e1, " ", e2))
+
+    cat(e1, "\n")
+  }
+
 })
 
 
@@ -81,4 +91,13 @@ test_that("kitchen introspection", {
     cat("\n\n")
     str(oh$error_list)
   }
+  if (length(ans_txt) != length(expected)) {
+    e1 <- tempfile()
+    e2 <- tempfile()
+    cat(ans_txt, sep = "\n", file = e1)
+    cat(expected, sep = "\n", file = e2)
+    system(str_c("diff ", e1, " ", e2))
+    cat(e1, "\n")
+  }
+
 })
