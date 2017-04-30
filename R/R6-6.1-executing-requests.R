@@ -67,32 +67,29 @@ execute_request <- function(
   ...
 ) {
   oh <- ObjectHelpers$new(schema_obj)
-
   validate_schema(oh = oh)
 
   document_obj <- validate_document(document_obj, oh = oh)
 
+  ret <- Result$new(oh$error_list)
+
   operation <- get_operation(document_obj, operation_name, oh = oh)
-  if (oh$error_list$has_any_errors()) return(list(data = NULL, error_list = oh$error_list))
+  if (oh$error_list$has_any_errors()) return(ret)
 
   coerced_variable_values <- coerce_variable_values(operation, variable_values, oh = oh)
-  if (oh$error_list$has_any_errors()) return(list(data = NULL, error_list = oh$error_list))
+  if (oh$error_list$has_any_errors()) return(ret)
   oh$set_coerced_variables(coerced_variable_values)
 
   operation_type <- operation$operation
   if (identical(operation_type, "query")) {
-    return(
-      execute_query(operation, initial_value, oh = oh)
-    )
+    data <- execute_query(operation, initial_value, oh = oh)
 
   } else if (identical(operation_type, "mutation")) {
-    return(
-      execute_mutation(operation, initial_value, oh = oh)
-    )
-
+    data <- execute_mutation(operation, initial_value, oh = oh)
   }
 
-  stop("Operation type not implemented: ", operation_type)
+  ret$data <- data
+  return(ret)
 }
 
 

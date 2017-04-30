@@ -148,6 +148,3 @@ ErrorList <- R6Class("ErrorList",
 format.ErrorList <- function(x, ...) {
   x$.format(...)
 }
-str.ErrorList <- function(x, ...) {
-  print(x)
-}

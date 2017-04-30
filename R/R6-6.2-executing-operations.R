@@ -46,7 +46,7 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
       "6.2",
       "Can not find definition '", root_type, "' in schema definition"
     )
-    return(list(data = NULL, errors = oh$error_list))
+    return(NULL)
   }
 
   # get default value and add introspection fields
@@ -57,7 +57,7 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
   # could parallelize here if wanted
   data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
 
-  return(list(data = data, error_list = oh$error_list))
+  return(data)
 }
 
 
@@ -82,7 +82,7 @@ execute_mutation <- function(operation_obj, initial_value, ..., oh) {
       "6.2",
       "Can not find definition '", root_type, "' in schema definition"
     )
-    return(list(data = NULL, errors = oh$error_list))
+    return(NULL)
   }
 
   # get default value and add introspection fields
@@ -93,5 +93,5 @@ execute_mutation <- function(operation_obj, initial_value, ..., oh) {
   # could parallelize here if wanted
   data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
 
-  return(list(data = data, error_list = oh$error_list))
+  return(data)
 }

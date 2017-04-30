@@ -14,7 +14,7 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
   oh <- gqlr:::ObjectHelpers$new(schema_obj)
   ans <- gqlr:::validate_document(query, oh = oh)
 
-  expect_equal(oh$error_list$.format(), "<ErrorList> No errors")
+  expect_equal(format(oh$error_list), "<ErrorList> No errors")
 
   expect_true(R6::is.R6(ans), ...)
 }
@@ -28,7 +28,7 @@ expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
 
   expect_error(
     {
-      stop(oh$error_list$.format())
+      stop(format(oh$error_list))
     },
     ...
   )

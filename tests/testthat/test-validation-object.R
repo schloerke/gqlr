@@ -16,7 +16,7 @@ expect_validate_err <- function(txt, ...) {
 
   expect_error(
     {
-      stop(oh$error_list$.format())
+      stop(format(oh$error_list))
     },
     ...
   )
