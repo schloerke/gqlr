@@ -20,7 +20,7 @@
 
 
 
-#' @export
+# ' @export
 validate_query <- function(document_obj, ..., oh) {
 
   validate_operation_names(document_obj, oh = oh)

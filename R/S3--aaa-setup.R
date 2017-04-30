@@ -9,10 +9,6 @@
 # If you're implementing more complicated print() methods, it's a better idea to implement format() methods that return a string, and then implement print.class <- function(x, ...) cat(format(x, ...), "\n". This makes for methods that are much easier to compose, because the side-effects are isolated to a single place.
 
 #' @export
-format_all <- function(x, ..., prompt = NULL, header = NULL, all_fields = TRUE) {
-  format(x, ..., prompt = prompt, header = header, all_fields = all_fields)
-}
-#' @export
 format.AST <- function(x, ..., prompt = NULL, header = NULL, all_fields = FALSE) {
   collapse(
     if (!is.null(header)) collapse(header, "\n", prompt),
@@ -20,12 +16,8 @@ format.AST <- function(x, ..., prompt = NULL, header = NULL, all_fields = FALSE)
   )
 }
 #' @export
-print.AST <- function(x, ..., prompt = "  | ", header = "<graphql definition>") {
-  cat(format(x, ..., prompt = prompt, header = header), "\n", sep = "")
-}
-#' @export
-print_all <- function(x, ..., prompt = "  | ", header = "<graphql definition>") {
-  cat(format_all(x, ..., prompt = prompt, header = header), "\n", sep = "")
+print.AST <- function(x, ..., prompt = "  | ", header = "<graphql definition>", all_fields = FALSE) {
+  cat(format(x, ..., prompt = prompt, header = header, all_fields = all_fields), "\n", sep = "")
 }
 
 #' @export
