@@ -18,3 +18,6 @@ Result <- R6Class(
     }
   )
 )
+format.Result <- function(x, ...) {
+  x$as_json(...)
+}
