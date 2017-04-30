@@ -6,8 +6,8 @@
 #   get_operation           - DONE
 #   coerce_variable_values  - DONE
 
-# 6.2 - Execute Query       - DONE
-#   Execute Mutation (TODO later)
+# 6.2 - Execute Query    - DONE
+#       Execute Mutation - DONE
 
 # 6.3 - Executing Selection Sets - DONE
 #   collect_fields - Test
@@ -67,6 +67,8 @@ execute_request <- function(
   ...
 ) {
   oh <- ObjectHelpers$new(schema_obj)
+
+  validate_schema(oh = oh)
 
   document_obj <- validate_document(document_obj, oh = oh)
 
