@@ -94,6 +94,9 @@ Source <- R6_from_args(
       }
       self$.args$name$value <- value
       value
+    },
+    .format = function(...) {
+      stop("implement!")
     }
   )
 )
@@ -107,13 +110,9 @@ Location <- R6_from_args(
     end: number;
     source?: ?Source;",
   public = list(
-    # .str = function(maxLevel = -1, ...) {
-    #   if (maxLevel == 0) {
-    #     return()
-    #   }
-    #
-    #   cat("<", self$.kind, "> (", self$start, ", ", self$end, ")", sep = "")
-    # }
+    .format = function(...) {
+      stop("implement!")
+    }
   )
 )
 
@@ -1227,7 +1226,7 @@ InputObjectTypeDefinition = R6_from_args(
 )
 
 TypeExtensionDefinition = R6_from_args(
-  inherit = Definition,
+  inherit = TypeSystemDefinition,
   "TypeExtensionDefinition",
   " loc?: ?Location;
     definition: ObjectTypeDefinition;",
@@ -1243,7 +1242,7 @@ TypeExtensionDefinition = R6_from_args(
 
 
 DirectiveDefinition = R6_from_args(
-  inherit = Definition,
+  inherit = TypeSystemDefinition,
   "DirectiveDefinition",
   " loc?: ?Location;
     description?: ?string;

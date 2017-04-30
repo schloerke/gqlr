@@ -1,21 +1,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# TODO
-  # implement mutation
-
 # DONE
 # 5.4.1
   # √5.4.1.1 - Fragment Name Uniqueness
@@ -37,10 +22,9 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
     query = list(),
     mutation = list()
   )
-  # mutation_list <- list()
 
   for (operation in document_obj$definitions) {
-    if (!is.null(operation$operation)) {
+    if (inherits(operation, "OperationDefinition")) {
       # is operation
       if (operation$operation == "query") {
         if (is.null(operation$name)) {
