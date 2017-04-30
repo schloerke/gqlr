@@ -326,70 +326,92 @@ Schema <- R6Class(
 
       private$is_done <- FALSE
 
-      obj_kind <- obj$.kind
-      obj_name <- obj$name$value
-      if (is.null(obj_name) ) {
+      if (!inherits(obj, "TypeSystemDefinition")) {
         str(obj)
         stop("To add an object to a Schema, it must have a name.")
       }
 
-      if (obj_kind != "TypeExtensionDefinition") {
-        # private$check_and_add_to_directives(obj)
-
-        groups = list(
-          "ObjectTypeDefinition" = "objects",
-          "InterfaceTypeDefinition" = "interfaces",
-          "UnionTypeDefinition" = "unions",
-          "ScalarTypeDefinition" = "scalars",
-          "EnumTypeDefinition" = "enums",
-          "InputObjectTypeDefinition" = "input_objects",
-          "DirectiveDefinition" = "directives"
-        )
-        obj_group <- groups[[obj_kind]]
-
-        if (is.null(obj_group)) {
-          print(obj)
-          stop0("Unknown object type requested to be added to schema. Type: ", obj_kind)
+      # extend a current object definition
+      if (inherits(obj, "TypeExtensionDefinition")) {
+        extend_def <- obj$definition
+        cur_obj <- self$get_object(extend_def$name)
+        if (is.null(cur_obj)) {
+          stop(
+            "Object of type: ", format(extend_def$name),
+            " can not be extended as it can not be found."
+          )
         }
+        # since it is and R6 object, no need to re-store the cur_obj
+        cur_obj$fields <- append(cur_obj$fields, extend_def$fields)
 
-        if (!is.null(private[[obj_group]][[obj_name]])) {
-          print(private[[obj_group]][[obj_name]])
-          stop0(obj_name, " already defined in ", obj_kind)
-        }
-
-        private[[obj_group]][[obj_name]] <- obj
-
-        # order the items by name
-        group_names <- names(private[[obj_group]])
-        sorted_group_names <- sort(group_names)
-        if (!identical(sorted_group_names, group_names)) {
-          private[[obj_group]] <- private[[obj_group]][group_names]
-        }
-
-        if (obj_kind == "ObjectTypeDefinition") {
-          if (!is.null(obj$interfaces)) {
-            obj_name_val <- self$name_helper(obj$name)
-            for (interface_obj in obj$interfaces) {
-              interface_obj_name <- self$name_helper(interface_obj$name)
-              if (
-                is.null(
-                  private$objects_that_implement_interface_list[[interface_obj_name]]
-                )
-              ) {
-                private$objects_that_implement_interface_list[[interface_obj_name]] <- list()
-              }
-
-              private$objects_that_implement_interface_list[[
-                interface_obj_name
-              ]][[obj_name_val]] <- obj_name_val
-            }
+        if (is.function(extend_def$.resolve)) {
+          if (is.function(cur_obj$.resolve)) {
+            warning("Replacing .resolve() method for object of type: ", format(extend_def$name))
           }
-
-          private$add_introspection_fields_to_query_root()
+          cur_obj$.resolve <- extend_def$.resolve
         }
 
         return(invisible(self))
       }
+
+      groups = list(
+        "ObjectTypeDefinition" = "objects",
+        "InterfaceTypeDefinition" = "interfaces",
+        "UnionTypeDefinition" = "unions",
+        "ScalarTypeDefinition" = "scalars",
+        "EnumTypeDefinition" = "enums",
+        "InputObjectTypeDefinition" = "input_objects",
+        "DirectiveDefinition" = "directives"
+      )
+
+      obj_name <- format(obj$name)
+      obj_kind <- class(obj)[1]
+      obj_group <- groups[[obj_kind]]
+
+      if (is.null(obj_group)) {
+        print(obj)
+        stop0("Unknown object type requested to be added to schema. Type: ", obj_kind)
+      }
+
+      if (!is.null(private[[obj_group]][[obj_name]])) {
+        print(private[[obj_group]][[obj_name]])
+        stop0(obj_name, " already defined in ", obj_kind)
+      }
+
+      private[[obj_group]][[obj_name]] <- obj
+
+      # order the items by name
+      group_names <- names(private[[obj_group]])
+      sorted_group_names <- sort(group_names)
+      if (!identical(sorted_group_names, group_names)) {
+        private[[obj_group]] <- private[[obj_group]][group_names]
+      }
+
+      # add object name to list of objects that implement a particular interfaces
+      if (obj_kind == "ObjectTypeDefinition") {
+        if (!is.null(obj$interfaces)) {
+          obj_name_val <- self$name_helper(obj$name)
+          for (interface_obj in obj$interfaces) {
+            interface_obj_name <- self$name_helper(interface_obj$name)
+            if (
+              is.null(
+                private$objects_that_implement_interface_list[[interface_obj_name]]
+              )
+            ) {
+              private$objects_that_implement_interface_list[[interface_obj_name]] <- list()
+            }
+
+            private$objects_that_implement_interface_list[[
+              interface_obj_name
+            ]][[obj_name_val]] <- obj_name_val
+          }
+        }
+
+        private$add_introspection_fields_to_query_root()
+      }
+
+      return(invisible(self))
+
 
       ## object is a TypeExtensionDefinition object
       #
@@ -404,7 +426,6 @@ Schema <- R6Class(
       #   fields: Array<FieldDefinition>;"
 
       # TODO
-      stop("implement later!")
 
       extObj <- obj$definition
       extObjName <- extObj$name
