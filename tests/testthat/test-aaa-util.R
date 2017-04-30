@@ -1,6 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-aaa-util.R"))
 
-context("expect_subset() works")
+context("Test helper functions")
 
 source("validate_helper.R")
 
@@ -113,9 +113,17 @@ test_that("format()", {
     sum() %>%
     expect_equal(0)
 
-  capture.output(print_all(dog_cat_doc)) %>%
+  capture.output(print(dog_cat_doc, all_fields = TRUE)) %>%
     str_detect("__typename") %>%
     sum() %>%
     expect_equal(8)
+
+})
+
+
+test_that("get_definition()", {
+
+  dog_obj <- gqlr:::get_definition(dog_cat_doc, "Dog")
+  expect_equal(format(dog_obj$name), "Dog")
 
 })
