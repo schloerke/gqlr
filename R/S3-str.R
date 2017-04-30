@@ -29,7 +29,7 @@ str_c_ret_spaces = function(ret, spaces, ...) {
 }
 
 check_if_registered = function(fieldObj) {
-  key = fieldObj$.kind
+  key = class(fieldObj)[1]
   if (is.null(key) ) {
     stop0("Can not call format(object) on a unknown AST object")
   }
@@ -53,7 +53,7 @@ format_str <- function(
     return(character(0))
   }
 
-  ret <- str_c("<", object$.kind, ">", sep = "")
+  ret <- str_c("<", class(object)[1], ">", sep = "")
   if (max_level == 1) {
     ret <- str_c(ret, "...")
     return(ret)

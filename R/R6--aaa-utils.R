@@ -1,10 +1,5 @@
 
 
-with_description <- function(fn, description = NULL) {
-  attr(fn, "description") <- description
-  fn
-}
-
 coerce_helper = function(as_fn, is_fn) {
   fn <- function(value) {
     val <- as_fn(value)
@@ -222,7 +217,6 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
 
   args <- parse_args(txt)
   args$kind <- NULL
-  args$.kind <- NULL
 
   activeList <- list()
 
@@ -304,7 +298,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
               function(e) { NULL }
             else
               function(e) {
-                stop0("Did not receive: '", .argName, "'. '", .argName, "' must be supplied to object of class: ", self$.kind)
+                stop0("Did not receive: '", .argName, "'. '", .argName, "' must be supplied to object of class: ", class(self)[1])
               }
           )
         )

@@ -43,7 +43,7 @@
 #' @export
 parse_literal = function(kind_val, parse_value_fn) {
   fn <- function(obj, schema_obj) {
-    if (obj$.kind == kind_val) {
+    if (inherits(obj, kind_val)) {
       parse_value_fn(obj$value, schema_obj)
     } else {
       NULL
@@ -114,13 +114,6 @@ Int <- ScalarTypeDefinition$new(
   .serialize = coerce_int,
   .parse_value = coerce_int,
   .parse_literal = parse_literal("IntValue", coerce_int)
-  # .parse_literal = pryr_unenclose(function(obj) {
-  #   if (obj$.kind == "IntValue") {
-  #     coerce_int(obj$value)
-  #   } else {
-  #     NULL
-  #   }
-  # })
 
 )
 
@@ -144,8 +137,10 @@ Float = ScalarTypeDefinition$new(
   .serialize = coerce_float,
   .parse_value = coerce_float,
   .parse_literal = pryr_unenclose(function(obj, schema_obj) {
-    kind = obj$.kind
-    if (kind == "IntValue" || kind == "FloatValue") {
+    if (
+      inherits(obj, "IntValue") ||
+      inherits(obj, "FloatValue")
+    ) {
       coerce_float(obj$value, schema_obj)
     } else {
       NULL
@@ -207,8 +202,8 @@ Boolean = ScalarTypeDefinition$new(
 #   .parse_value = as.character,
 #   .parse_literal = function(astObj) {
 #     if (
-#       astObj$.kind == "String" ||
-#       astObj$.kind == "Int"
+#       inherits(astObj, "String") ||
+#       inherits(astObj, "Int")
 #     ) {
 #       return(as.character(astObj$value))
 #     } else {

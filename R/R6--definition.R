@@ -58,15 +58,12 @@ AST <- R6Class("AST",
   active = list(
     .title = function() {
       if (!is.null(self$name)) {
-        return(self$name$.format())
+        return(format(self$name))
       }
-      self$.kind
+      class(self)[1]
     },
     .argNames = function() {
       names(self$.args)
-    },
-    .kind = function() {
-      class(self)[1]
     }
 
   )

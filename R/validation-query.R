@@ -323,7 +323,7 @@ validate_directive <- function(directive_obj, parent_obj, ..., oh, skip_variable
 
 directive_current_location <- function(parent_obj) {
 
-  parent_kind <- parent_obj$.kind
+  parent_kind <- class(parent_obj)[1]
 
   switch(parent_kind,
     # query

@@ -59,7 +59,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., oh, rule_code
     if (!inherits(from_input, "ObjectValue")) {
       oh$error_list$add(
         rule_code,
-        "Expected ", to_obj$.kind, ", found not an object"
+        "Expected ", class(to_obj)[1], ", found not an object"
       )
       return(FALSE)
     }
@@ -117,7 +117,7 @@ validate_value_can_be_coerced = function(from_input, to_type, ..., oh, rule_code
   if (is.null(result)) {
     oh$error_list$add(
       rule_code,
-      "Expected type ", format(to_type), ", found ", from_input$.kind
+      "Expected type ", format(to_type), ", found ", class(from_input)[1]
     )
   }
 
