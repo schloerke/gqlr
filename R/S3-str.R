@@ -1,11 +1,14 @@
 
 #' @export
 str.AST <- function(
-  object, ...
+  object, ..., max_level = -1, all_fields = FALSE, show_null = FALSE
 ) {
   cat(
     format_str(
-      object, ...,
+      object,
+      max_level = max_level,
+      all_fields = all_fields,
+      show_null = show_null,
       space_count = 0,
       is_first = TRUE
     )
@@ -42,11 +45,10 @@ check_if_registered <- function(fieldObj) {
 format_str <- function(
   object,
   max_level = -1,
+  all_fields = FALSE,
   show_null = FALSE,
-  show_loc = FALSE,
   space_count = 0,
-  is_first = FALSE,
-  ...
+  is_first = FALSE
 ) {
   # if no more levels to show, return
   if (max_level == 0) {
@@ -62,26 +64,34 @@ format_str <- function(
   field_names <- object$.argNames
 
   for (field_name in field_names) {
-    if (field_name %in% c("loc")) {
-      if (! isTRUE(show_loc)) {
+    field_val <- object[[field_name]]
+
+    if (!isTRUE(all_fields)) {
+      if (field_name %in% c("loc")) {
         next
       }
     }
-
-    field_val <- object[[field_name]]
 
     if (!inherits(field_val, "R6")) {
       if (is.list(field_val)) {
         # is list
         if (length(field_val) == 0) {
-          if (show_null) {
-            ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ":")
-            ret <- ret %>% str_c(" []")
-          }
+          ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ":")
+          ret <- ret %>% str_c(" []")
         } else {
           ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ":")
           for (item_pos in seq_along(field_val)) {
             field_item <- field_val[[item_pos]]
+
+            if (inherits(field_item, "FieldDefinition")) {
+              if (!isTRUE(field_item$.show_in_format)) {
+                if (!isTRUE(all_fields)) {
+                  next
+                }
+              }
+            }
+
+
             ret <- ret %>% str_c_ret_spaces(space_count + 4, item_pos, " - ")
 
             check_if_registered(field_item)
@@ -91,7 +101,7 @@ format_str <- function(
                 max_level = max_level - 1,
                 space_count = space_count + 4,
                 show_null = show_null,
-                show_loc = show_loc
+                all_fields = all_fields
               )
             )
           }
@@ -101,11 +111,11 @@ format_str <- function(
         # is value
         if (is.null(field_val)) {
           field_val <- "NULL"
-          if (show_null) {
+          if (isTRUE(show_null)) {
             ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", field_val)
           }
         } else if (length(field_val) == 0) {
-          if (show_null) {
+          if (isTRUE(show_null)) {
             ret <- ret %>%
               str_c_ret_spaces(space_count + 2, field_name, ": ", typeof(field_val), "(0)")
           }
@@ -139,7 +149,7 @@ format_str <- function(
           max_level = max_level - 1,
           space_count = space_count + 2,
           show_null = show_null,
-          show_loc = show_loc
+          all_fields = all_fields
         )
       )
     }

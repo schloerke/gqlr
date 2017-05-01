@@ -18,12 +18,9 @@ clean_json <- function(obj, ...) {
 }
 
 clean_json.list <- function(obj, ...) {
-  ## remove all "loc" variables.  take up space
-  # obj$loc <- NULL
-
   if (!is.null(obj$loc)) {
     obj$loc$kind <- "Location"
-    # class(obj$loc) <- "Location"
+    class(obj$loc) <- "Location"
   }
   kind <- obj$kind
   ret <- lapply(obj, function(x) clean_json(x))

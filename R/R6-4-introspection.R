@@ -486,3 +486,21 @@ Introspection__QueryRootFields$fields[[1]]$.show_in_format <- FALSE
 Introspection__QueryRootFields$fields[[1]]$.allow_double_underscore <- TRUE
 Introspection__QueryRootFields$fields[[2]]$.show_in_format <- FALSE
 Introspection__QueryRootFields$fields[[2]]$.allow_double_underscore <- TRUE
+
+Introspection__QueryRootFields$loc <- NULL
+Introspection__QueryRootFields$name$loc <- NULL
+
+Introspection__QueryRootFields$fields[[1]]$loc <- NULL
+Introspection__QueryRootFields$fields[[1]]$name$loc <- NULL
+Introspection__QueryRootFields$fields[[1]]$type$loc <- NULL
+Introspection__QueryRootFields$fields[[1]]$type$type$name$loc <- NULL
+
+Introspection__QueryRootFields$fields[[2]]$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$name$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$type$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$type$name$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$name$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$loc <- NULL
+Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$name$loc <- NULL
