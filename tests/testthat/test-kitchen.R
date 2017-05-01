@@ -16,7 +16,7 @@ txt_to_obj <- function(txt) {
 }
 
 expect_format <- function(txt, clean_txt) {
-  final_txt <- txt %>% txt_to_obj() %>% format()
+  final_txt <- txt %>% txt_to_obj() %>% format() # nolint
 
   clean_lines <- strsplit(clean_txt, "\n")[[1]]
   final_lines <- strsplit(final_txt, "\n")[[1]]

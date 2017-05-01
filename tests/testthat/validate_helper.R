@@ -22,7 +22,7 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
 expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
 
   oh <- gqlr:::ObjectHelpers$new(schema_obj)
-  ans <- gqlr:::validate_document(query, oh = oh)
+  ans <- gqlr:::validate_document(query, oh = oh) # nolint
 
   expect_true(oh$error_list$has_any_errors())
 

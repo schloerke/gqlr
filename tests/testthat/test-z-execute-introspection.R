@@ -12,14 +12,14 @@ read_intro <- function(file_name) {
 compare_ans_and_expected <- function(ans, expected_file_name) {
 
   expect_true(ans$error_list$has_no_errors())
-  expected <- strsplit(read_intro(expected_file_name), "\n")[[1]]
+  expected <- strsplit(read_intro(expected_file_name), "\n")[[1]] # nolint
 
   ans_txt <- strsplit(to_json(ans$data), "\n")[[1]]
   expect_equal(ans_txt, expected)
 
   if (is.null(ans)) {
     cat("\n\n")
-    str(oh$error_list)
+    str(ans$error_list)
   }
 
   if (length(ans_txt) != length(expected)) {

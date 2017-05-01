@@ -153,8 +153,8 @@ Schema <- R6Class(
       schema_def$.get_definition_type(def_name)
     },
     get_mutation_object = function() {
-      query_type <- self$get_schema_definition("mutation")
-      self$get_object_interface_or_union(query_type)
+      mutation_type <- self$get_schema_definition("mutation")
+      self$get_object_interface_or_union(mutation_type)
     },
     get_query_object = function() {
       query_type <- self$get_schema_definition("query")
@@ -229,6 +229,7 @@ Schema <- R6Class(
       )
     },
     get_object_interface_or_union = function(name_obj) {
+      if (is.null(name_obj)) return(NULL)
       name_val <- self$name_helper(name_obj)
       ifnull(
         self$get_object(name_val),

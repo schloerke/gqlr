@@ -76,8 +76,7 @@ all_characters <- list() %>% append(human_data) %>% append(droid_data)
 
 is_droid <- function(id) {
   if (is.null(id)) {
-    str(x)
-    stop("unknown object")
+    stop("NULL id supplied")
   }
   id %in% names(droid_data)
 }

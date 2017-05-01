@@ -99,7 +99,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
   if (length(argument_values) == 0) return(coerced_values)
 
   # 3. Let fieldName be the name of field.
-  field_name <- field$name
+  # field_name <- field$name
 
   # 4. Let argumentDefinitions be the arguments defined by objectType for the field named fieldName.
   field_parent_obj <- oh$schema_obj$get_object(object_type)
@@ -146,7 +146,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     # e. If value is a Variable:
     if (inherits(value, "Variable")) {
       # i. Let variableName be the name of Variable value.
-      variable_name <- format(value$name)
+      # variable_name <- format(value$name)
       variable_to_name <- format(matching_arg$name)
 
       # ii. Let variableValue be the value provided in variableValues for the name variableName.

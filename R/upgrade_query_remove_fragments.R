@@ -214,16 +214,34 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
   # (circular dependencies are not allowed by graphql definition)
   upgraded_operations <- list()
 
-  mutation_root <- oh$schema_obj$get_query_object()
-  for (mutation_obj in query_mutation_list$mutation) {
-    mutation_obj <- upgrade_fragments_in_field(mutation_obj, query_root, NULL)
-    upgraded_operations <- append(upgraded_operations, mutation_obj)
+  if (length(query_mutation_list$mutation) > 0) {
+    mutation_root <- oh$schema_obj$get_mutation_object()
+    if (is.null(mutation_root)) {
+      oh$error_list$add(
+        "3.3",
+        "mutation type can not be found in schema definition"
+      )
+      return(NULL)
+    }
+    for (mutation_obj in query_mutation_list$mutation) {
+      mutation_obj <- upgrade_fragments_in_field(mutation_obj, mutation_root, NULL)
+      upgraded_operations <- append(upgraded_operations, mutation_obj)
+    }
   }
 
-  query_root <- oh$schema_obj$get_query_object()
-  for (query_obj in query_mutation_list$query) {
-    query_obj <- upgrade_fragments_in_field(query_obj, query_root, NULL)
-    upgraded_operations <- append(upgraded_operations, query_obj)
+  if (length(query_mutation_list$query) > 0) {
+    query_root <- oh$schema_obj$get_query_object()
+    if (is.null(query_root)) {
+      oh$error_list$add(
+        "3.3",
+        "query type can not be found in schema definition"
+      )
+      return(NULL)
+    }
+    for (query_obj in query_mutation_list$query) {
+      query_obj <- upgrade_fragments_in_field(query_obj, query_root, NULL)
+      upgraded_operations <- append(upgraded_operations, query_obj)
+    }
   }
 
   # 5.4.1.4 - Fragments Must Be Used
