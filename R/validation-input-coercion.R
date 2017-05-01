@@ -1,6 +1,6 @@
 
 
-validate_value_can_be_coerced = function(from_input, to_type, ..., oh, rule_code) {
+validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_code) {
 
   # A value must be provided if the type is non-null.
   if (inherits(to_type, "NonNullType")) {

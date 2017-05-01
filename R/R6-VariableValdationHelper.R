@@ -133,7 +133,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
     initialize = function(vars, oh) {
       self$variables <- list()
-      self$oh = oh
+      self$oh <- oh
 
       if (is.null(vars)) {
         return(invisible(self))

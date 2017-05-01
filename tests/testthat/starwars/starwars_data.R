@@ -33,7 +33,7 @@ leia <- list(
   homePlanet = 'Alderaan'
 )
 
-tarkin = list(
+tarkin <- list(
   id = '1004',
   name = 'Wilhuff Tarkin',
   friends = c('1001'),
@@ -41,7 +41,7 @@ tarkin = list(
   appearsIn = c("NEWHOPE")
 )
 
-human_data = list(
+human_data <- list(
   "1000" = luke,
   "1001" = vader,
   "1002" = han,
@@ -67,12 +67,12 @@ artoo <- list(
   primaryFunction = 'Astromech'
 )
 
-droid_data = list(
+droid_data <- list(
   "2000" = threepio,
   "2001" = artoo
 )
 
-all_characters = list() %>% append(human_data) %>% append(droid_data)
+all_characters <- list() %>% append(human_data) %>% append(droid_data)
 
 is_droid <- function(id) {
   if (is.null(id)) {

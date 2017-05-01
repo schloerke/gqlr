@@ -1,6 +1,6 @@
 
 
-coerce_helper = function(as_fn, is_fn) {
+coerce_helper <- function(as_fn, is_fn) {
   fn <- function(value) {
     val <- as_fn(value)
     if (is_fn(val)) {
@@ -25,7 +25,7 @@ PkgObjsGen <- R6Class(
       self$list[[key]] <- value
     },
     get_class_obj = function(key) {
-      obj = self$list[[key]]
+      obj <- self$list[[key]]
       if (is.null(obj)) {
         stop0("Could not find object with class: ", key)
       }

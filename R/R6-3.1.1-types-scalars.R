@@ -41,7 +41,7 @@
 
 
 #' @export
-parse_literal = function(kind_val, parse_value_fn) {
+parse_literal <- function(kind_val, parse_value_fn) {
   fn <- function(obj, schema_obj) {
     if (inherits(obj, kind_val)) {
       parse_value_fn(obj$value, schema_obj)
@@ -90,9 +90,9 @@ parse_literal = function(kind_val, parse_value_fn) {
 #   )
 # )
 
-coerce_int = function (value, ...) {
-  MAX_INT =  2147483647
-  MIN_INT = -2147483648
+coerce_int <- function (value, ...) {
+  MAX_INT <-  2147483647
+  MIN_INT <- -2147483648
   num <- suppressWarnings(as.integer(value))
   if (!is.na(num)) {
     if (num <= MAX_INT && num >= MIN_INT) {
@@ -119,7 +119,7 @@ Int <- ScalarTypeDefinition$new(
 
 
 
-coerce_float = function (value, ...) {
+coerce_float <- function (value, ...) {
   num <- suppressWarnings(as.numeric(value))
   if (is.numeric(num)) {
     return(num)
@@ -127,7 +127,7 @@ coerce_float = function (value, ...) {
     return(NULL)
   }
 }
-Float = ScalarTypeDefinition$new(
+Float <- ScalarTypeDefinition$new(
   name = Name$new(value = "Float"),
   description = collapse(
     'The `Float` scalar type represents signed double-precision fractional ',
@@ -157,7 +157,7 @@ coerce_string <- function(value, ...) {
     return(NULL)
   }
 }
-String = ScalarTypeDefinition$new(
+String <- ScalarTypeDefinition$new(
   name = Name$new(value = "String"),
   description = collapse(
     'The `String` scalar type represents textual data, represented as UTF-8 ',
@@ -170,7 +170,7 @@ String = ScalarTypeDefinition$new(
 )
 
 
-coerce_boolean = function (value, ...) {
+coerce_boolean <- function (value, ...) {
   val <- suppressWarnings(as.logical(value))
   if (is.logical(val)) {
     return(val)
@@ -178,7 +178,7 @@ coerce_boolean = function (value, ...) {
     return(NULL)
   }
 }
-Boolean = ScalarTypeDefinition$new(
+Boolean <- ScalarTypeDefinition$new(
   name = Name$new(value = "Boolean"),
   description = 'The `Boolean` scalar type represents `TRUE` or `FALSE`.',
   .serialize = coerce_boolean,

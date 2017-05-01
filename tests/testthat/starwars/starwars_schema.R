@@ -82,7 +82,7 @@ schema {
     Query = function(null, schema_obj) {
       list(
         hero = function(obj, args, schema_obj) {
-          episode = args$episode
+          episode <- args$episode
           if (identical(episode, 5) || identical(episode, "EMPIRE")) {
             luke$id
           } else {

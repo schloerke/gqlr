@@ -59,8 +59,8 @@ test_that("chai tests", {
   expect_subset(5, 5)
   expect_subset("hi", "hi")
 
-  child = list()
-  parent = list(children = list(child))
+  child <- list()
+  parent <- list(children = list(child))
   expect_subset(
     list(a = 1, b = 'two', c = parent),
     list(c = parent)

@@ -7,7 +7,7 @@ source("validate_helper.R")
 
 test_that("arbitrary code", {
 
-  data = list(
+  data <- list(
     a = "Apple",
     b = function(...) {
       return("Banana")
@@ -35,7 +35,7 @@ test_that("arbitrary code", {
     }
   )
 
-  deepData = list(
+  deepData <- list(
     a = function(...) {
       return("Already Been Done");
     },
@@ -89,7 +89,7 @@ test_that("arbitrary code", {
   }
   "
 
-  expected = list(
+  expected <- list(
     a = "Apple",
     b = "Banana",
     x = "Cookie",

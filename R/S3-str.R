@@ -13,7 +13,7 @@ str.AST <- function(
 }
 
 
-str_c_ret_spaces = function(ret, spaces, ...) {
+str_c_ret_spaces <- function(ret, spaces, ...) {
   dots <- collapse(...)
   if (spaces > 2) {
     second <- str_c(
@@ -28,8 +28,8 @@ str_c_ret_spaces = function(ret, spaces, ...) {
   str_c(ret, second)
 }
 
-check_if_registered = function(fieldObj) {
-  key = class(fieldObj)[1]
+check_if_registered <- function(fieldObj) {
+  key <- class(fieldObj)[1]
   if (is.null(key) ) {
     stop0("Can not call format(object) on a unknown AST object")
   }

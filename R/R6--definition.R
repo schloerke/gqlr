@@ -33,7 +33,7 @@ if (getRversion() >= "2.15.1") {
 # )
 
 
-format_list = function(list_vals, .before = "", .after = "", .collapse = "", ...) {
+format_list <- function(list_vals, .before = "", .after = "", .collapse = "", ...) {
   if (is.null(list_vals)) stop("received null list")
   if (length(list_vals) == 0) return(NULL)
 
@@ -318,11 +318,11 @@ SelectionSet <- R6_from_args(
 # export type Selection = Field
 #                       | FragmentSpread
 #                       | InlineFragment
-Selection = R6_from_args("Selection", inherit = Node)
+Selection <- R6_from_args("Selection", inherit = Node)
 
 
 
-Field = R6_from_args(
+Field <- R6_from_args(
   inherit = Selection,
   "Field",
   " loc?: ?Location;
@@ -364,7 +364,7 @@ Field = R6_from_args(
 )
 
 
-Argument = R6_from_args(
+Argument <- R6_from_args(
   inherit = Node,
   "Argument",
   " loc?: ?Location;
@@ -382,7 +382,7 @@ Argument = R6_from_args(
 )
 
 
-FragmentSpread = R6_from_args(
+FragmentSpread <- R6_from_args(
   inherit = Selection,
   "FragmentSpread",
   " loc?: ?Location;
@@ -401,7 +401,7 @@ FragmentSpread = R6_from_args(
 )
 
 
-InlineFragment = R6_from_args(
+InlineFragment <- R6_from_args(
   inherit = Selection,
   "InlineFragment",
   " loc?: ?Location;
@@ -425,7 +425,7 @@ InlineFragment = R6_from_args(
 
 
 
-FragmentDefinition = R6_from_args(
+FragmentDefinition <- R6_from_args(
   inherit = Definition,
   "FragmentDefinition",
   " loc?: ?Location;
@@ -475,7 +475,7 @@ Variable <- R6_from_args(
   )
 )
 
-IntValue = (function(){
+IntValue <- (function(){
   # coerce_int = function (value) {
   #   MAX_INT =  2147483647
   #   MIN_INT = -2147483648
@@ -503,7 +503,7 @@ IntValue = (function(){
   )
 })()
 
-FloatValue = R6_from_args(
+FloatValue <- R6_from_args(
   inherit = Value,
   "FloatValue",
   " loc?: ?Location;
@@ -515,7 +515,7 @@ FloatValue = R6_from_args(
   )
 )
 
-StringValue = R6_from_args(
+StringValue <- R6_from_args(
   inherit = Value,
   "StringValue",
   " loc?: ?Location;
@@ -527,7 +527,7 @@ StringValue = R6_from_args(
   )
 )
 
-BooleanValue = R6_from_args(
+BooleanValue <- R6_from_args(
   inherit = Value,
   "BooleanValue",
   " loc?: ?Location;
@@ -542,7 +542,7 @@ BooleanValue = R6_from_args(
     }
   )
 )
-NullValue = R6_from_args(
+NullValue <- R6_from_args(
   inherit = Value,
   "NullValue",
   " loc?: ?Location;",
@@ -552,7 +552,7 @@ NullValue = R6_from_args(
     }
   )
 )
-EnumValue = R6_from_args(
+EnumValue <- R6_from_args(
   inherit = Value,
   "EnumValue",
   " loc?: ?Location;
@@ -564,7 +564,7 @@ EnumValue = R6_from_args(
     }
   )
 )
-ListValue = R6_from_args(
+ListValue <- R6_from_args(
   inherit = Value,
   "ListValue",
   " loc?: ?Location;
@@ -590,7 +590,7 @@ get_by_field <- function(field_obj) {
   }
   return(NULL)
 }
-ObjectValue = R6_from_args(
+ObjectValue <- R6_from_args(
   inherit = Value,
   "ObjectValue",
   " loc?: ?Location;
@@ -611,7 +611,7 @@ ObjectValue = R6_from_args(
     }
   )
 )
-ObjectField = R6_from_args(
+ObjectField <- R6_from_args(
   inherit = Node,
   "ObjectField",
   " loc?: ?Location;
@@ -633,7 +633,7 @@ ObjectField = R6_from_args(
 
 # // Directives
 
-Directive = R6_from_args(
+Directive <- R6_from_args(
   inherit = Node,
   "Directive",
   " loc?: ?Location;
@@ -658,7 +658,7 @@ Directive = R6_from_args(
 # export type Type = NamedType
 #                  | ListType
 #                  | NonNullType
-Type = R6_from_args(
+Type <- R6_from_args(
   inherit = Node,
   "Type",
   public = list(
@@ -678,7 +678,7 @@ Type = R6_from_args(
 )
 
 
-NamedType = R6_from_args(
+NamedType <- R6_from_args(
   inherit = Type,
   "NamedType",
   " loc?: ?Location;
@@ -691,7 +691,7 @@ NamedType = R6_from_args(
   )
 )
 
-ListType = R6_from_args(
+ListType <- R6_from_args(
   inherit = Type,
   "ListType",
   " loc?: ?Location;
@@ -708,7 +708,7 @@ ListType = R6_from_args(
   )
 )
 
-NonNullType = R6_from_args(
+NonNullType <- R6_from_args(
   inherit = Type,
   "NonNullType",
   " loc?: ?Location;
@@ -731,9 +731,9 @@ NonNullType = R6_from_args(
 #                                    | TypeDefinition
 #                                    | TypeExtensionDefinition
 #                                    | DirectiveDefinition
-TypeSystemDefinition = R6_from_args("TypeSystemDefinition", inherit = Definition)
+TypeSystemDefinition <- R6_from_args("TypeSystemDefinition", inherit = Definition)
 
-SchemaDefinition = R6_from_args(
+SchemaDefinition <- R6_from_args(
   inherit = TypeSystemDefinition,
   "SchemaDefinition",
   # Changed default behavior of directives to be optional
@@ -768,7 +768,7 @@ SchemaDefinition = R6_from_args(
 )
 
 
-OperationTypeDefinition = R6_from_args(
+OperationTypeDefinition <- R6_from_args(
   inherit = Node,
   "OperationTypeDefinition",
   " loc?: ?Location;
@@ -791,9 +791,9 @@ OperationTypeDefinition = R6_from_args(
 #                            | UnionTypeDefinition
 #                            | EnumTypeDefinition
 #                            | InputObjectTypeDefinition
-TypeDefinition = R6_from_args("TypeDefinition", inherit = TypeSystemDefinition)
+TypeDefinition <- R6_from_args("TypeDefinition", inherit = TypeSystemDefinition)
 
-ScalarTypeDefinition = R6_from_args(
+ScalarTypeDefinition <- R6_from_args(
   inherit = TypeDefinition,
   "ScalarTypeDefinition",
   # Changed default behavior of directives to be optional
@@ -827,7 +827,7 @@ ScalarTypeDefinition = R6_from_args(
       # takes in AST value object: <BooleanValue>
       .parse_literal = NULL
     ) {
-      self$name = name
+      self$name <- name
       self$.serialize <- .serialize
       self$description <- description
       self$directives <- directives
@@ -844,7 +844,7 @@ ScalarTypeDefinition = R6_from_args(
 )
 
 
-ObjectTypeDefinition = R6_from_args(
+ObjectTypeDefinition <- R6_from_args(
   inherit = TypeDefinition,
   "ObjectTypeDefinition",
   " loc?: ?Location;
@@ -916,14 +916,14 @@ ObjectTypeDefinition = R6_from_args(
       typename_field$.show_in_format <- FALSE
       self$fields <- append(fields, typename_field)
 
-      self$.resolve = .resolve
+      self$.resolve <- .resolve
 
       invisible(self)
     }
   )
 )
 
-FieldDefinition = R6_from_args(
+FieldDefinition <- R6_from_args(
   inherit = TypeDefinition,
   # Changed default behavior of arguments to be optional
   "FieldDefinition",
@@ -970,7 +970,7 @@ FieldDefinition = R6_from_args(
   )
 )
 
-InputValueDefinition = R6_from_args(
+InputValueDefinition <- R6_from_args(
   inherit = Node,
   "InputValueDefinition",
   " loc?: ?Location;
@@ -997,7 +997,7 @@ InputValueDefinition = R6_from_args(
   )
 )
 
-InterfaceTypeDefinition = R6_from_args(
+InterfaceTypeDefinition <- R6_from_args(
   inherit = TypeDefinition,
   "InterfaceTypeDefinition",
   " loc?: ?Location;
@@ -1051,7 +1051,7 @@ InterfaceTypeDefinition = R6_from_args(
   )
 )
 
-UnionTypeDefinition = R6_from_args(
+UnionTypeDefinition <- R6_from_args(
   inherit = TypeDefinition,
   "UnionTypeDefinition",
   " loc?: ?Location;
@@ -1102,7 +1102,7 @@ UnionTypeDefinition = R6_from_args(
   )
 )
 
-EnumTypeDefinition = R6_from_args(
+EnumTypeDefinition <- R6_from_args(
   inherit = TypeDefinition,
   "EnumTypeDefinition",
   " loc?: ?Location;
@@ -1183,7 +1183,7 @@ EnumTypeDefinition = R6_from_args(
   )
 )
 
-EnumValueDefinition = R6_from_args(
+EnumValueDefinition <- R6_from_args(
   inherit = Node,
   "EnumValueDefinition",
   " loc?: ?Location;
@@ -1201,7 +1201,7 @@ EnumValueDefinition = R6_from_args(
   )
 )
 
-InputObjectTypeDefinition = R6_from_args(
+InputObjectTypeDefinition <- R6_from_args(
   inherit = TypeDefinition,
   "InputObjectTypeDefinition",
   " loc?: ?Location;
@@ -1225,7 +1225,7 @@ InputObjectTypeDefinition = R6_from_args(
   )
 )
 
-TypeExtensionDefinition = R6_from_args(
+TypeExtensionDefinition <- R6_from_args(
   inherit = TypeSystemDefinition,
   "TypeExtensionDefinition",
   " loc?: ?Location;
@@ -1241,7 +1241,7 @@ TypeExtensionDefinition = R6_from_args(
 )
 
 
-DirectiveDefinition = R6_from_args(
+DirectiveDefinition <- R6_from_args(
   inherit = TypeSystemDefinition,
   "DirectiveDefinition",
   " loc?: ?Location;
