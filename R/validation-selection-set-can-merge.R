@@ -112,10 +112,15 @@ validate_fields_can_merge <- function(
               }
             }
 
-            # Let mergedSet be the result of adding the selection set of fieldA and the selection set of fieldB.
+            # Let mergedSet be the result of adding the selection set of fieldA and the selection
+            #  set of fieldB.
             # FieldsInSetCanMerge(mergedSet) must be true.
-            if (!is.null(field_i_info$field$selectionSet) || !is.null(field_j_info$field$selectionSet)) {
-              # Let mergedSet be the result of adding the selection set of fieldA and the selection set of fieldB.
+            if (
+              (!is.null(field_i_info$field$selectionSet)) ||
+              (!is.null(field_j_info$field$selectionSet))
+            ) {
+              # Let mergedSet be the result of adding the selection set of fieldA
+              #  and the selection set of fieldB.
               merged_set <- SelectionSet$new(
                 selections = append(
                   InlineFragment$new(
@@ -243,8 +248,10 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
     return(FALSE)
   }
 
-  # Let mergedSet be the result of adding the selection set of fieldA and the selection set of fieldB.
-  # Let fieldsForName be the set of selections with a given response name in mergedSet including visiting fragments and inline fragments.
+  # Let mergedSet be the result of adding the selection set of fieldA and
+  #  the selection set of fieldB.
+  # Let fieldsForName be the set of selections with a given response name
+  #  in mergedSet including visiting fragments and inline fragments.
   # Given each pair of members subfieldA and subfieldB in fieldsForName:
     # SameResponseShape(subfieldA, subfieldB) must be true.
   merged_set <- SelectionSet$new(

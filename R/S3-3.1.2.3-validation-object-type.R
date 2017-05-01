@@ -148,13 +148,15 @@ validate_input_object_type_definition <- function(x, ..., oh) {
 validate_object_type_definition <- function(x, ..., oh) {
 
   # 1. An Object type must define one or more fields.
-  # 2. The fields of an Object type must have unique names within that Object type; no two fields may share the same name.
+  # 2. The fields of an Object type must have unique names within that Object type;
+  #    no two fields may share the same name.
   validate_field_names(x, "object", "3.1.2.3", oh = oh)
 
   object_fields <- x$fields
   field_names <- get_name_values(object_fields)
 
-  # 3. Each field of an Object type must not have a name which begins with the characters "__" (two underscores).
+  # 3. Each field of an Object type must not have a name which begins
+  #    with the characters "__" (two underscores).
   stars_with_double_underscore <- str_detect(field_names, "^__")
   can_not_have_double_underscore <- lapply(object_fields, `[[`, ".allow_double_underscore") %>%
     unlist() %>%
@@ -184,17 +186,24 @@ validate_object_type_definition <- function(x, ..., oh) {
       interface_field_name <- interface_field$name$value
 
 
-  # 1. An object field type is a valid sub‐type if it is equal to (the same type as) the interface field type.
-  # 2. An object field type is a valid sub‐type if it is an Object type and the interface field type is either an Interface type or a Union type and the object field type is a possible type of the interface field type.
-  # 3. An object field type is a valid sub‐type if it is a List type and the interface field type is also a List type and the list‐item type of the object field type is a valid sub‐type of the list‐item type of the interface field type.
-  # 4. An object field type is a valid sub‐type if it is a Non‐Null variant of a valid sub‐type of the interface field type.
+      # 1. An object field type is a valid sub‐type if it is equal to (the same type as)
+      #    the interface field type.
+      # 2. An object field type is a valid sub‐type if it is an Object type and the interface field
+      #    type is either an Interface type or a Union type and the object field type is a possible
+      #    type of the interface field type.
+      # 3. An object field type is a valid sub‐type if it is a List type and the interface field
+      #    type is also a List type and the list‐item type of the object field type is a valid
+      #    sub‐type of the list‐item type of the interface field type.
+      # 4. An object field type is a valid sub‐type if it is a Non‐Null variant of a valid
+      #    sub‐type of the interface field type.
 
-
-      # 1. The object type must include a field of the same name for every field defined in an interface.
+      # 1. The object type must include a field of the same name for every field defined in an
+      #    interface.
       if (! (interface_field_name %in% field_names)) {
         oh$error_list$add(
           "3.1.2.3",
-          "object definition: ", x$.title, " must implement all fields of interface: ", interface_obj$.title, ". Missing field: ", interface_field_name
+          "object definition: ", x$.title, " must implement all fields of interface: ",
+          interface_obj$.title, ". Missing field: ", interface_field_name
         )
         return(FALSE)
       }
@@ -203,7 +212,8 @@ validate_object_type_definition <- function(x, ..., oh) {
       # check the type
 
       # TODO check the field type in the interface
-      # 1. The object field must be of a type which is equal to or a sub‐type of the interface field (covariant).
+      # 1. The object field must be of a type which is equal to or a sub‐type of the interface
+      #    field (covariant).
 
 
 
@@ -213,7 +223,8 @@ validate_object_type_definition <- function(x, ..., oh) {
       matching_obj_field_args <- matching_obj_field$arguments
       matching_obj_field_arg_names <- get_name_values(matching_obj_field_args)
 
-      # 2. The object field must include an argument of the same name for every argument defined in the interface field.
+      # 2. The object field must include an argument of the same name for every argument defined
+      #    in the interface field.
       if (
         (! all(interface_field_arg_names %in% matching_obj_field_arg_names))
       ) {
@@ -227,7 +238,8 @@ validate_object_type_definition <- function(x, ..., oh) {
         return(FALSE)
       }
 
-      # 3. The object field may include additional arguments not defined in the interface field, but any additional argument must not be required.
+      # 3. The object field may include additional arguments not defined in the interface field,
+      #    but any additional argument must not be required.
       not_in_interface <- !(matching_obj_field_arg_names %in% interface_field_arg_names)
       field_args_not_in_interface <- matching_obj_field_args[not_in_interface]
       lapply(
@@ -260,7 +272,8 @@ validate_object_type_definition <- function(x, ..., oh) {
         matching_txt <- format(matching_obj_field_arg$type)
         int_txt <- format(interface_field_arg$type)
 
-        # 1. The object field argument must accept the same type (invariant) as the interface field argument.
+        # 1. The object field argument must accept the same type (invariant) as the interface
+        #    field argument.
         if (matching_txt != int_txt) {
           oh$error_list$add(
             "3.1.2.3",

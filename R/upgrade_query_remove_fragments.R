@@ -83,7 +83,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             if (is.null(matching_field)) {
               oh$error_list$add(
                 "5.2.1",
-                "Field: ", format(field$name), " can't be found for object of type: ", format(matching_obj$name)
+                "Field: ", format(field$name), " can't be found for object of type: ",
+                format(matching_obj$name)
               )
               next
             }
@@ -158,7 +159,9 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           matching_frag_obj <- matching_obj
           matching_type_condition <- matching_obj$name
         } else {
-          matching_frag_obj <- oh$schema_obj$get_object_interface_or_union(fragment_obj$typeCondition)
+          matching_frag_obj <- oh$schema_obj$get_object_interface_or_union(
+            fragment_obj$typeCondition
+          )
           matching_type_condition <- fragment_obj$typeCondition
         }
 

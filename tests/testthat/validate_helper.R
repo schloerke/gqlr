@@ -197,7 +197,12 @@ sub_rec <- function(bigger, smaller, key = NULL, verbose = FALSE) {
     } else {
       # is array
       if (length(bigger) != length(smaller)) {
-        return(show_error("subset list (", length(smaller), ") is not same length as expected list (", length(bigger), ")"))
+        return(
+          show_error(
+            "subset list (", length(smaller), ")",
+            " is not same length as expected list (", length(bigger), ")"
+          )
+        )
       }
 
       for (pos in seq_along(smaller)) {

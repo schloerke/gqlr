@@ -175,7 +175,10 @@ Name <- R6_from_args(
         return(self$.args$value$value)
       }
       if (!str_detect(value, "^[_A-Za-z][_0-9A-Za-z]*$")) {
-        stop0("Name value must match the regex of: /[_A-Za-z][_0-9A-Za-z]*/. Received value: '", value, "'")
+        stop0(
+          "Name value must match the regex of: /[_A-Za-z][_0-9A-Za-z]*/. ",
+          "Received value: '", value, "'"
+        )
       }
       self$.args$value$value <- value
       value

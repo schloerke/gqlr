@@ -197,20 +197,6 @@ test_that("5.2.2 - Field Selection Merging", {
   " %>%
   expect_err("Two matching return fields must have identical arguments")
 
-  # "
-  # {
-  #   dog {
-  #     ...differingArgs
-  #   }
-  # }
-  # fragment differingArgs on Dog {
-  #   doesKnowCommand(dogCommand: SIT)
-  #   doesKnowCommand
-  # }
-  # " %>%
-  # expect_err("fails due to missing argument.  can't test specifically for this case as it's covered by missing args")
-
-
 
   "
   {

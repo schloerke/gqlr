@@ -1,5 +1,5 @@
 linters: with_defaults(
-    line_length_linter = NULL, # 283
+    line_length_linter(100),
     commented_code_linter = NULL, # 278
     camel_case_linter = NULL, # 269
     object_usage_linter = NULL, # 32

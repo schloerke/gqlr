@@ -264,7 +264,13 @@ validate_directives <- function(directive_objs, parent_obj, ..., oh, skip_variab
     return(directive_objs)
   }
 
-  directives <- lapply(directive_objs, validate_directive, parent_obj = parent_obj, oh = oh, skip_variables = skip_variables)
+  directives <- lapply(
+    directive_objs,
+    validate_directive,
+    parent_obj = parent_obj,
+    oh = oh,
+    skip_variables = skip_variables
+  )
 
   if (length(directives) > 0) {
     directive_names <- lapply(directives, `[[`, "name") %>% lapply(`[[`, "value") %>% unlist()
@@ -273,7 +279,8 @@ validate_directives <- function(directive_objs, parent_obj, ..., oh, skip_variab
       oh$error_list$add(
         "5.6.3",
         "All directives must be unique when used in on the same object.",
-        "  Currently found the following directives: '", str_c(directive_names, collapse = "', '"), "'"
+        "  Currently found the following directives: '",
+        str_c(directive_names, collapse = "', '"), "'"
       )
     }
   }
@@ -296,7 +303,12 @@ validate_directive <- function(directive_obj, parent_obj, ..., oh, skip_variable
     )
   }
 
-  validate_arguments(directive_obj$arguments, directive_definition, oh = oh, skip_variables = skip_variables)
+  validate_arguments(
+    directive_obj$arguments,
+    directive_definition,
+    oh = oh,
+    skip_variables = skip_variables
+  )
 
   # [Name]
   directive_definition$locations %>%

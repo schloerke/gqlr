@@ -348,14 +348,14 @@ enum __TypeKind {
     "__TypeKind" = list(
       description = "An enum describing what kind of type a given `__Type` is.",
       fields = list(
-        SCALAR = "Indicates this type is a scalar.",
-        OBJECT = "Indicates this type is an object. `fields` and `interfaces` are valid fields.",
-        INTERFACE = "Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.",
-        UNION = "Indicates this type is a union. `possibleTypes` is a valid field.",
-        ENUM = "Indicates this type is an enum. `enumValues` is a valid field.",
-        INPUT_OBJECT = "Indicates this type is an input object. `inputFields` is a valid field.",
-        LIST = "Indicates this type is a list. `ofType` is a valid field.",
-        NON_NULL = "Indicates this type is a non-null. `ofType` is a valid field."
+  SCALAR = "Indicates this type is a scalar.",
+  OBJECT = "Indicates this type is an object. `fields` and `interfaces` are valid fields.",
+  INTERFACE = "Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.",
+  UNION = "Indicates this type is a union. `possibleTypes` is a valid field.",
+  ENUM = "Indicates this type is an enum. `enumValues` is a valid field.",
+  INPUT_OBJECT = "Indicates this type is an input object. `inputFields` is a valid field.",
+  LIST = "Indicates this type is a list. `ofType` is a valid field.",
+  NON_NULL = "Indicates this type is a non-null. `ofType` is a valid field."
       ),
       .parse_value = function(type_obj, schema_obj) {
         if (inherits(type_obj, "NonNullType")) return("NON_NULL")
@@ -394,7 +394,10 @@ type __Directive {
         "describing additional information to the executor."
       ),
       fields = list(
-        locations = "returns a List of __DirectiveLocation representing the valid locations this directive may be placed",
+        locations = collapse(
+          "returns a List of __DirectiveLocation representing the valid locations ",
+          "this directive may be placed"
+        ),
         args = "returns a List of __InputValue representing the arguments this directive accepts"
       ),
       .resolve = function(directive_obj, schema_obj) {

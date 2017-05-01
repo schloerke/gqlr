@@ -621,30 +621,30 @@ test_that("introspection", {
         "__type": {
           "name": "Droid",
           "fields": [
-            {
-              "name": "id",
-              "type": {"name": null,"kind": "NON_NULL","ofType": {"name": "String","kind": "SCALAR"}}
-            },
-            {
-              "name": "name",
-              "type": {"name": "String","kind": "SCALAR","ofType": null}
-            },
-            {
-              "name": "friends",
-              "type": {"name": null,"kind": "LIST","ofType": {"name": "Character","kind": "INTERFACE"}}
-            },
-            {
-              "name": "appearsIn",
-              "type": {"name": null,"kind": "LIST","ofType": {"name": "Episode","kind": "ENUM"}}
-            },
-            {
-              "name": "primaryFunction",
-              "type": {"name": "String","kind": "SCALAR","ofType": null}
-            },
-            {
-              "name": "__typename",
-              "type": {"name": "String","kind": "SCALAR","ofType": null}
-            }
+      {
+        "name": "id",
+        "type": {"name": null,"kind": "NON_NULL","ofType": {"name": "String","kind": "SCALAR"}}
+      },
+      {
+        "name": "name",
+        "type": {"name": "String","kind": "SCALAR","ofType": null}
+      },
+      {
+        "name": "friends",
+        "type": {"name": null,"kind": "LIST","ofType": {"name": "Character","kind": "INTERFACE"}}
+      },
+      {
+        "name": "appearsIn",
+        "type": {"name": null,"kind": "LIST","ofType": {"name": "Episode","kind": "ENUM"}}
+      },
+      {
+        "name": "primaryFunction",
+        "type": {"name": "String","kind": "SCALAR","ofType": null}
+      },
+      {
+        "name": "__typename",
+        "type": {"name": "String","kind": "SCALAR","ofType": null}
+      }
           ]
         }
       }}'
@@ -688,7 +688,7 @@ test_that("operations", {
         "data": null,
         "errors": [
           {
-            "message": "6.1: Executing Requests\\nOperation: Barret can\'t be found in the document object"
+    "message": "6.1: Executing Requests\\nOperation: Barret can\'t be found in the document object"
           }
         ]
       }'
@@ -708,6 +708,7 @@ test_that("operations", {
   " %>%
     expect_sw_request_err(
       operation_name = NULL,
+      # nolint start
       '{
         "data": null,
         "errors": [
@@ -716,6 +717,7 @@ test_that("operations", {
           }
         ]
       }'
+      # nolint end
     )
 
 })
@@ -767,6 +769,7 @@ test_that("directives", {
   }
   " %>%
     expect_sw_request_err(
+      # nolint start
       '{
         "data": {
           "luke": {
@@ -779,6 +782,7 @@ test_that("directives", {
           }
         ]
       }'
+      # nolint end
     )
 
 })
@@ -796,6 +800,7 @@ test_that("variables", {
   " %>%
     expect_sw_request_err(
       variable_values = list(someId = NULL),
+      # nolint start
       '{
         "data": null,
         "errors": [
@@ -804,6 +809,7 @@ test_that("variables", {
           }
         ]
       }'
+      # nolint end
     )
 
   "
@@ -815,6 +821,7 @@ test_that("variables", {
   " %>%
     expect_sw_request_err(
       variable_values = list(someInt = "Barret"),
+      # nolint start
       '{
         "data": null,
         "errors": [
@@ -823,6 +830,7 @@ test_that("variables", {
           }
         ]
       }'
+      # nolint end
     )
 
   "
@@ -839,6 +847,7 @@ test_that("variables", {
   " %>%
     expect_sw_request_err(
       operation_name = NULL,
+      # nolint start
       '{
         "data": null,
         "errors": [
@@ -847,6 +856,7 @@ test_that("variables", {
           }
         ]
       }'
+      # nolint end
     )
 
 })

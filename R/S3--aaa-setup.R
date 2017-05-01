@@ -16,7 +16,12 @@ format.AST <- function(x, ..., prompt = NULL, header = NULL, all_fields = FALSE)
   )
 }
 #' @export
-print.AST <- function(x, ..., prompt = "  | ", header = "<graphql definition>", all_fields = FALSE) {
+print.AST <- function(
+  x, ...,
+  prompt = "  | ",
+  header = "<graphql definition>",
+  all_fields = FALSE
+) {
   cat(format(x, ..., prompt = prompt, header = header, all_fields = all_fields), "\n", sep = "")
 }
 

@@ -21,7 +21,13 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
   argument_values <- coerce_argument_values(object_type, field, ..., oh = oh)
 
   # 3. Let resolvedValue be ResolveFieldValue(objectType, objectValue, fieldName, argumentValues).
-  resolved_value <- resolve_field_value(object_type, object_value, field_obj = field, argument_values, oh = oh)
+  resolved_value <- resolve_field_value(
+    object_type,
+    object_value,
+    field_obj = field,
+    argument_values,
+    oh = oh
+  )
 
   # str(object_value)
 
@@ -175,8 +181,10 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 
     type_obj <- oh$schema_obj$get_type(argument_type)
 
-    # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType, throw a field error.
-    # h. Let coercedValue be the result of coercing value according to the input coercion rules of argType.
+    # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType,
+    #    throw a field error.
+    # h. Let coercedValue be the result of coercing value according to the input coercion rules of
+    #    argType.
     coerced_value <- type_obj$.parse_literal(value, oh$schema_obj)
     if (!is.null(value) && is.null(coerced_value)) {
       oh$error_list$add(
@@ -280,7 +288,8 @@ complete_value <- function(field_type, fields, result, ..., oh) {
   if (inherits(field_type, "NonNullType")) {
     # a. Let innerType be the inner type of fieldType.
     inner_type <- field_type$type
-    # b. Let completedResult be the result of calling CompleteValue(innerType, fields, result, variableValues).
+    # b. Let completedResult be the result of calling CompleteValue(innerType, fields, result,
+    #    variableValues).
     completed_result <- complete_value(inner_type, fields, result, oh = oh)
     # c. If completedResult is null, throw a field error.
     if (is.null(completed_result)) {
@@ -294,7 +303,8 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     return(completed_result)
   }
 
-  # 2. If result is null (or another internal value similar to null such as undefined or NaN), return null.
+  # 2. If result is null (or another internal value similar to null such as undefined or NaN),
+  #    return null.
   if (is_nullish(result)) {
     return(NULL)
   }
@@ -315,7 +325,8 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     }
     # b. Let innerType be the inner type of fieldType.
     inner_type <- field_type$type
-    # c. Return a list where each list item is the result of calling CompleteValue(innerType, fields, resultItem, variableValues), where resultItem is each item in result.
+    # c. Return a list where each list item is the result of calling CompleteValue(innerType,
+    #    fields, resultItem, variableValues), where resultItem is each item in result.
     completed_result <- lapply(result, function(result_item) {
       complete_value(inner_type, fields, result_item, oh = oh)
     })
@@ -328,7 +339,8 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     oh$schema_obj$is_scalar(field_type) ||
     oh$schema_obj$is_enum(field_type)
   ) {
-    # a. Return the result of “coercing” result, ensuring it is a legal value of fieldType, otherwise null.
+    # a. Return the result of “coercing” result, ensuring it is a legal value of fieldType,
+    #    otherwise null.
     type_obj <- ifnull(
       oh$schema_obj$get_scalar(field_type),
       oh$schema_obj$get_enum(field_type)
@@ -379,7 +391,8 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     # c. Let subSelectionSet be the result of calling MergeSelectionSets(fields).
     sub_selection_set <- merge_selection_sets(fields, oh = oh)
 
-    # d. Return the result of evaluating ExecuteSelectionSet(subSelectionSet, objectType, result, variableValues) normally (allowing for parallelization).
+    # d. Return the result of evaluating ExecuteSelectionSet(subSelectionSet, objectType, result,
+    #    variableValues) normally (allowing for parallelization).
     ret <- execute_selection_set(sub_selection_set, object_type, result, oh = oh)
     return(ret)
   }
@@ -389,7 +402,8 @@ complete_value <- function(field_type, fields, result, ..., oh) {
 
 
 # ResolveAbstractType(abstractType, objectValue)
-#   1. Return the result of calling the internal method provided by the type system for determining the Object type of abstractType given the value objectValue.
+#   1. Return the result of calling the internal method provided by the type system for determining
+#      the Object type of abstractType given the value objectValue.
 resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ..., oh) {
 
   if (inherits(abstract_obj, "InterfaceTypeDefinition")) {

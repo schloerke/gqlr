@@ -106,7 +106,8 @@ format_str <- function(
           }
         } else if (length(field_val) == 0) {
           if (show_null) {
-            ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", typeof(field_val), "(0)")
+            ret <- ret %>%
+              str_c_ret_spaces(space_count + 2, field_name, ": ", typeof(field_val), "(0)")
           }
         } else if (is.numeric(field_val)) {
           ret <- ret %>% str_c_ret_spaces(space_count + 2, field_name, ": ", field_val)

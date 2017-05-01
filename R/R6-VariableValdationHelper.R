@@ -43,7 +43,8 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
       }
 
       # If argumentType and variableType have different list dimensions, return false
-      # If any list level of variableType is not non‐null, and the corresponding level in argument is non‐null, the types are not compatible.
+      # If any list level of variableType is not non‐null, and the corresponding level in argument
+      # is non‐null, the types are not compatible.
       cur_var_type <- variable_type
       cur_arg_type <- argument_type
       while (

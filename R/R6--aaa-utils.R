@@ -69,7 +69,12 @@ parse_args <- function(txt) {
           str_replace("'", "") %>%
           str_trim()
 
-        retItem <- list(type = "string", is_array = FALSE, can_be_null = FALSE, possible_values = values)
+        retItem <- list(
+          type = "string",
+          is_array = FALSE,
+          can_be_null = FALSE,
+          possible_values = values
+        )
       } else {
         can_be_null <- FALSE
         is_array <- FALSE
@@ -82,7 +87,12 @@ parse_args <- function(txt) {
           value <- str_replace(value, "^Array<", "") %>% str_replace(">$", "")
         }
 
-        retItem <- list(type = value, is_array = is_array, can_be_null = can_be_null, value = NULL)
+        retItem <- list(
+          type = value,
+          is_array = is_array,
+          can_be_null = can_be_null,
+          value = NULL
+        )
       }
 
       list(key = key, value = retItem)
@@ -103,8 +113,10 @@ parse_args <- function(txt) {
 
 
 
-R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), private = list(), active = list()) {
-  # R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;", inherit = AST)
+# R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;", inherit = AST)
+R6_from_args <- function(
+  type, txt = NULL, inherit = NULL, public = list(), private = list(), active = list()
+) {
 
   self_value_wrapper <- function(key, classVal) {
     possibleClassValues <- strsplit(classVal, "\\|")[[1]] %>% lapply(str_trim) %>% unlist()
@@ -206,7 +218,10 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
       }
       value <- parse_fn(value)
       if (! (value %in% values)) {
-        stop0("Value supplied to key '", key, "' not in accepted values: ", str_c(values, collapse = ", "), ".")
+        stop0(
+          "Value supplied to key '", key, "' not in accepted values: ",
+          str_c(values, collapse = ", "), "."
+        )
       }
       self$.args[[key]]$value <- value
       value
@@ -300,7 +315,10 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
               }
             } else {
               function(e) {
-                stop0("Did not receive: '", .argName, "'. '", .argName, "' must be supplied to object of class: ", class(self)[1])
+                stop0(
+                  "Did not receive: '", .argName, "'. ",
+                  "'", .argName, "' must be supplied to object of class: ", class(self)[1]
+                )
               }
             }
           )
@@ -344,73 +362,3 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
 
   r6Class
 }
-
-
-
-
-# namedtype_from_txt <- function(txt) {
-#   if (!is.character(txt)) {
-#     return(txt)
-#   }
-#
-#   NamedType$new(name = name_from_txt(txt))
-# }
-# name_from_txt <- function(txt) {
-#   if (!is.character(txt)) {
-#     txt
-#   }
-#
-#   Name$new(value = txt)
-# }
-#
-# type_from_txt <- function(txt) {
-#   if (!is.character(txt)) {
-#     return(txt)
-#   }
-#
-#   txt <- str_trim(txt)
-#   if (str_detect(txt, "!$")) {
-#     # remove ! and recurse
-#     txt <- str_replace(txt, "!$", "")
-#     type_val <- type_from_txt(txt)
-#     return(NonNullType$new(type = type_val))
-#   }
-#
-#   if (str_detect(txt, "\\]$")) {
-#     # remove brackets and recurse
-#     txt <- str_replace(txt, "^\\[", "")
-#     txt <- str_replace(txt, "\\]$", "")
-#     type_val <- type_from_txt(txt)
-#     return(ListType$new(type = type_val))
-#   }
-#
-#   # must be the name
-#   named_val <- namedtype_from_txt(txt)
-#   return(named_val)
-# }
-#
-# field_type_obj_from_txt <- function(name_txt, field_txt, description = NULL, ...) {
-#   FieldDefinition$new(
-#     description = description,
-#     name = name_from_txt(name_txt),
-#     type = type_from_txt(field_txt),
-#     ...
-#   )
-# }
-#
-# input_value_from_txt <- function(name_txt, type_txt, ...) {
-#
-#   InputValueDefinition$new(
-#     name = name_from_txt(name_txt),
-#     type = type_from_txt(type_txt),
-#     ...
-#   )
-# }
-#
-#
-# object_field_from_txt <- function(name_txt, type_txt) {
-#   ObjectField$new(
-#     name = name_from_txt(name_txt),
-#     value = type_from_txt(type_txt)
-#   )
-# }

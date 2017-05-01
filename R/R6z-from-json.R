@@ -1,5 +1,13 @@
 
-r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, keys = c(), objPos = NULL, verbose = FALSE) {
+r6_from_list <- function(
+  obj,
+  fn_list = NULL,
+  fn_values = list(),
+  level = 0,
+  keys = c(),
+  objPos = NULL,
+  verbose = FALSE
+) {
   vcat <- function(...) {
     if (verbose) {
       cat(..., sep = "")
@@ -59,7 +67,8 @@ r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, key
                 if (objVal[[i]]$kind == "SchemaDefinition") {
                   # do nothing for a SchemaDefinition
                 } else {
-                  # for each definition, get the description and pass on the fields as functions list
+                  # for each definition,
+                  #   get the description and pass on the fields as functions list
                   obj_name <- objVal[[i]]$name$value
                   info_i <- fn_list[[obj_name]]
                   info_i <- get_resolve_and_description(info_i)
@@ -92,14 +101,27 @@ r6_from_list <- function(obj, fn_list = NULL, fn_values = list(), level = 0, key
 
             }
 
-            r6_from_list(objVal[[i]], fn_list = fn_list_i, fn_values = fn_values_i, keys = keys, level = level, objPos = i, verbose = verbose)
+            r6_from_list(
+              objVal[[i]],
+              fn_list = fn_list_i, fn_values = fn_values_i,
+              keys = keys, level = level,
+              objPos = i,
+              verbose = verbose
+            )
+
           })
         } else {
           # going into another object, such as "Name" or "Location"
           # print(list(objClass, activeKey, 1))
           # if (objClass == "DirectiveDefinition") browser()
 
-          retList[[activeKey]] <- r6_from_list(objVal, fn_list = fn_list, keys = keys, level = level, verbose = verbose)
+          retList[[activeKey]] <- r6_from_list(
+            objVal,
+            fn_list = fn_list,
+            keys = keys,
+            level = level,
+            verbose = verbose
+          )
         }
       }
     } else {

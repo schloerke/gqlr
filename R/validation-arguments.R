@@ -65,7 +65,8 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_v
     # 5.3.3.1 - Compatible Values
     # If value is not a Variable
     #   Let argumentName be the Name of argument.
-    #   Let argumentDefinition be the argument definition provided by the parent field or definition named argumentName.
+    #   Let argumentDefinition be the argument definition provided by
+    #    the parent field or definition named argumentName.
     #   Let type be the type expected by argumentDefinition.
     #   The type of literalArgument must be coercible to type.
     if (inherits(arg_value, "Variable")) {
