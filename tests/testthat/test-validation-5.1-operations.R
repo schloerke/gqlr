@@ -7,7 +7,7 @@ context("validation-5.1-operations")
 source("validate_helper.R")
 
 
-test_that('5.1.1.1 - Operation Name Uniqueness', {
+test_that("5.1.1.1 - Operation Name Uniqueness", {
 
   "
   query getDogName {
@@ -61,7 +61,7 @@ test_that('5.1.1.1 - Operation Name Uniqueness', {
 
 
 
-test_that('5.1.2.1 - Lone Anonymous Operation', {
+test_that("5.1.2.1 - Lone Anonymous Operation", {
 
   "
   {

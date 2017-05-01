@@ -6,26 +6,26 @@ source("validate_helper.R")
 
 test_that("chai tests", {
   tested_object <- list(
-    a = 'b',
-    c = 'd'
+    a = "b",
+    c = "d"
   )
 
-  # expect_subset(tested_object, list(a = 'b'))
-  # expect_subset(tested_object, list(a = 'b', c = 'd'))
-  expect_false(sub_rec(tested_object, list(a = 'notB')))
+  # expect_subset(tested_object, list(a = "b"))
+  # expect_subset(tested_object, list(a = "b", c = "d"))
+  expect_false(sub_rec(tested_object, list(a = "notB")))
 
 
   tested_object <- list(
-    a = 'b',
-    c = 'd',
+    a = "b",
+    c = "d",
     e = list(
       list(
         foo = "a"
       ),
       list(
-        foo = 'bar',
+        foo = "bar",
         baz = list(
-          qux = 'quux'
+          qux = "quux"
         )
       )
     )
@@ -33,20 +33,20 @@ test_that("chai tests", {
 
   expect_subset(
     tested_object,
-    list(a = 'b', e = list(list(foo = "a"), list(foo = 'bar')))
+    list(a = "b", e = list(list(foo = "a"), list(foo = "bar")))
   )
   expect_subset(
     tested_object,
-    list(e = list(list(foo = "a"), list(foo = 'bar', baz = list(qux = 'quux'))))
+    list(e = list(list(foo = "a"), list(foo = "bar", baz = list(qux = "quux"))))
   )
   expect_subset(
     tested_object,
-    list(a = 'b', c = 'd', e = list(list(foo = "a"), list(foo = 'bar', baz = list(qux = 'quux'))))
+    list(a = "b", c = "d", e = list(list(foo = "a"), list(foo = "bar", baz = list(qux = "quux"))))
   )
 
   expect_false(sub_rec(
     tested_object,
-    list(e = list(list(foo = "a"), list(foo = 'bar', baz = list(qux = 'notAQuux'))))
+    list(e = list(list(foo = "a"), list(foo = "bar", baz = list(qux = "notAQuux"))))
   ))
 
   expect_false(sub_rec(
@@ -62,7 +62,7 @@ test_that("chai tests", {
   child <- list()
   parent <- list(children = list(child))
   expect_subset(
-    list(a = 1, b = 'two', c = parent),
+    list(a = 1, b = "two", c = parent),
     list(c = parent)
   )
 

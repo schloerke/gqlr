@@ -130,9 +130,9 @@ coerce_float <- function (value, ...) {
 Float <- ScalarTypeDefinition$new(
   name = Name$new(value = "Float"),
   description = collapse(
-    'The `Float` scalar type represents signed double-precision fractional ',
-    'values as specified by ',
-    '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).'
+    "The `Float` scalar type represents signed double-precision fractional ",
+    "values as specified by ",
+    "[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point)."
   ),
   .serialize = coerce_float,
   .parse_value = coerce_float,
@@ -160,9 +160,9 @@ coerce_string <- function(value, ...) {
 String <- ScalarTypeDefinition$new(
   name = Name$new(value = "String"),
   description = collapse(
-    'The `String` scalar type represents textual data, represented as UTF-8 ',
-    'character sequences. The String type is most often used by GraphQL to ',
-    'represent free-form human-readable text.'
+    "The `String` scalar type represents textual data, represented as UTF-8 ",
+    "character sequences. The String type is most often used by GraphQL to ",
+    "represent free-form human-readable text."
   ),
   .serialize = coerce_string,
   .parse_value = coerce_string,
@@ -180,7 +180,7 @@ coerce_boolean <- function (value, ...) {
 }
 Boolean <- ScalarTypeDefinition$new(
   name = Name$new(value = "Boolean"),
-  description = 'The `Boolean` scalar type represents `TRUE` or `FALSE`.',
+  description = "The `Boolean` scalar type represents `TRUE` or `FALSE`.",
   .serialize = coerce_boolean,
   .parse_value = coerce_boolean,
   .parse_literal = parse_literal("BooleanValue", coerce_boolean)
@@ -192,11 +192,11 @@ Boolean <- ScalarTypeDefinition$new(
 # ID = ScalarTypeDefinition$new(
 #   name = Name$new(value = "ID"),
 #   description = collapse(
-#     'The `ID` scalar type represents a unique identifier, often used to ',
-#     'refetch an object or as key for a cache. The ID type appears in a JSON ',
-#     'response as a String; however, it is not intended to be human-readable. ',
-#     'When expected as an input type, any string (such as `"4"`) or integer ',
-#     '(such as `4`) input value will be accepted as an ID.'
+#     "The `ID` scalar type represents a unique identifier, often used to ",
+#     "refetch an object or as key for a cache. The ID type appears in a JSON ",
+#     "response as a String; however, it is not intended to be human-readable. ",
+#     "When expected as an input type, any string (such as `"4"`) or integer ",
+#     "(such as `4`) input value will be accepted as an ID."
 #   ),
 #   .serialize = as.character,
 #   .parse_value = as.character,
