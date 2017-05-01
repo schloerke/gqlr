@@ -5,7 +5,5 @@ linters: with_defaults(
     single_quotes_linter = NULL, # 68
     assignment_linter = NULL, # 65
     object_usage_linter = NULL, # 32
-    open_curly_linter = NULL, # 16
-    closed_curly_linter = NULL, # 13
     NULL
   )

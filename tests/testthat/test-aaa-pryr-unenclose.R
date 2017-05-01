@@ -9,7 +9,9 @@ test_that("pryr fails", {
     myList <- list()
 
     for (item in c("A", "B", "C")) {
-      my_fn <- function() { item }
+      my_fn <- function() {
+        item
+      }
       # cat("my_fn: "); print(my_fn)
       # cat("my_fn: "); print(pryr::unenclose(my_fn))
       myList[[item]] <- pryr::unenclose(my_fn)
@@ -38,7 +40,9 @@ test_that("lapply works", {
     names(myVec) <- myVec
     myList <- lapply(myVec, function(item) {
       myItem <- force(item)
-      my_fn <- function() { myItem }
+      my_fn <- function() {
+        myItem
+      }
       # cat("my_fn: "); print(my_fn)
       my_fn <- pryr::unenclose(my_fn)
       environment(my_fn) <- globalenv()
@@ -147,7 +151,9 @@ test_that("pryr_unenclose works", {
     myList <- list()
 
     for (item in c("A", "B", "C")) {
-      my_fn <- function() { item }
+      my_fn <- function() {
+        item
+      }
       myList[[item]] <- pryr_unenclose(my_fn)
     }
 

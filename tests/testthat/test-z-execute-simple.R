@@ -9,12 +9,16 @@ test_that("arbitrary code", {
 
   data = list(
     a = "Apple",
-    b = function(...) { return("Banana") },
+    b = function(...) {
+      return("Banana")
+    },
     c = "Cookie",
     d = "Donut",
     e = "Egg",
     f = "Fish",
-    rando = function(...) { return(runif(1))},
+    rando = function(...) {
+      return(runif(1))
+    },
     pic = function(obj, args, schema, ...) {
       size <- args$size
       if (is.null(size)) {
@@ -22,16 +26,28 @@ test_that("arbitrary code", {
       }
       return(str_c("Pic of size: ", size))
     },
-    deep = function(...) { return(deepData) },
+    deep = function(...) {
+      return(deepData)
+    },
     # promise(...) { return(promiseData()) }
-    promise = function(...) { return(data) }
+    promise = function(...) {
+      return(data)
+    }
   )
 
   deepData = list(
-    a = function(...) { return("Already Been Done"); },
-    b = function(...) { return("Boring"); },
-    c = function(...) { return(list("Contrived", NULL, "Confusing")) },
-    deeper = function(...) { return(list(data, NULL, data)) }
+    a = function(...) {
+      return("Already Been Done");
+    },
+    b = function(...) {
+      return("Boring");
+    },
+    c = function(...) {
+      return(list("Contrived", NULL, "Confusing"))
+    },
+    deeper = function(...) {
+      return(list(data, NULL, data))
+    }
   )
 
 # function promiseData() {
@@ -87,9 +103,9 @@ test_that("arbitrary code", {
       b = "Boring",
       c = list("Contrived", NULL, "Confusing"),
       deeper = list(
-        list( a = "Apple", b = "Banana" ),
+        list(a = "Apple", b = "Banana"),
         NULL,
-        list( a = "Apple", b = "Banana" )
+        list(a = "Apple", b = "Banana")
       )
     )
   )

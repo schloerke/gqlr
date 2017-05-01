@@ -295,7 +295,9 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
           get(.argName, inherit = FALSE),
           error = (
             if (self$.args[[.argName]]$can_be_null) {
-              function(e) { NULL }
+              function(e) {
+                NULL
+              }
             } else {
               function(e) {
                 stop0("Did not receive: '", .argName, "'. '", .argName, "' must be supplied to object of class: ", class(self)[1])

@@ -54,7 +54,13 @@ AnsGen <- R6_from_args(
   )
 )
 
-ans <- AnsGen$new(operation = "query", char = "5", func = function() { "hi!"})
+ans <- AnsGen$new(
+  operation = "query",
+  char = "5",
+  func = function() {
+    "hi!"
+  }
+)
 
 txt <- format_str(ans)
 
