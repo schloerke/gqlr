@@ -1,7 +1,7 @@
 luke <- list(
   id = '1000',
   name = 'Luke Skywalker',
-  friends = c('1002', '1003', '2000', '2001' ),
+  friends = c('1002', '1003', '2000', '2001'),
   # appearsIn = c(4, 5, 6),
   appearsIn = c("NEWHOPE", "EMPIRE", "JEDI"),
   homePlanet = 'Tatooine'
@@ -10,7 +10,7 @@ luke <- list(
 vader <- list(
   id = '1001',
   name = 'Darth Vader',
-  friends = c('1004') ,
+  friends = c('1004'),
   # appearsIn = c(4, 5, 6),
   appearsIn = c("NEWHOPE", "EMPIRE", "JEDI"),
   homePlanet = 'Tatooine'

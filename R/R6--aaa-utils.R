@@ -69,20 +69,20 @@ parse_args <- function(txt) {
           str_replace("'", "") %>%
           str_trim()
 
-        retItem <- list(type = "string", isArray = FALSE, canBeNull = FALSE, possibleValues = values)
+        retItem <- list(type = "string", is_array = FALSE, can_be_null = FALSE, possible_values = values)
       } else {
-        canBeNull <- FALSE
-        isArray <- FALSE
+        can_be_null <- FALSE
+        is_array <- FALSE
         if (str_detect(value, "^\\?")) {
-          canBeNull <- TRUE
+          can_be_null <- TRUE
           value <- str_replace(value, "^\\?", "")
         }
         if (str_detect(value, "^Array<")) {
-          isArray <- TRUE
+          is_array <- TRUE
           value <- str_replace(value, "^Array<", "") %>% str_replace(">$", "")
         }
 
-        retItem <- list(type = value, isArray = isArray, canBeNull = canBeNull, value = NULL)
+        retItem <- list(type = value, is_array = is_array, can_be_null = can_be_null, value = NULL)
       }
 
       list(key = key, value = retItem)
@@ -115,7 +115,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
 
 
       if (is.null(value)) {
-        if (! self$.args[[key]]$canBeNull) {
+        if (! self$.args[[key]]$can_be_null) {
           stop0("Can not set value to NULL for ", classVal, "$", key)
         }
         self$.args[[key]]$value <- value
@@ -240,15 +240,15 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
         })
       )
 
-      possibleValues <- argItem$possibleValues
-      if (! is.null(possibleValues)) {
-        fn <- self_base_values_wrapper(argName, type_fn, possibleValues)
+      possible_values <- argItem$possible_values
+      if (! is.null(possible_values)) {
+        fn <- self_base_values_wrapper(argName, type_fn, possible_values)
       } else {
         fn <- self_base_wrapper(argName, type_fn)
       }
 
     } else {
-      if (argItem$isArray) {
+      if (argItem$is_array) {
         fn <- self_array_wrapper(argName, argType)
       } else {
         fn <- self_value_wrapper(argName, argType)
@@ -270,12 +270,12 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
   publicList$.args <- args
 
 
-  canBeNull <- lapply(args, "[[", "canBeNull") %>% unlist()
-  canBeNullTxt <- rep("", length(canBeNull))
-  canBeNullTxt[canBeNull] <- "NULL"
+  can_be_null <- lapply(args, "[[", "can_be_null") %>% unlist()
+  can_be_null_txt <- rep("", length(can_be_null))
+  can_be_null_txt[can_be_null] <- "NULL"
   initTxt <- str_c(
     "alist(",
-      str_c(names(args), canBeNullTxt, sep = " = ", collapse = ", "),
+      str_c(names(args), can_be_null_txt, sep = " = ", collapse = ", "),
     ")"
   )
 
@@ -294,7 +294,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
         self[[.argName]] <- tryCatch(
           get(.argName, inherit = FALSE),
           error = (
-            if(self$.args[[.argName]]$canBeNull)
+            if(self$.args[[.argName]]$can_be_null)
               function(e) { NULL }
             else
               function(e) {

@@ -252,7 +252,7 @@ Schema <- R6Class(
       if (self$is_object(name_val)) {
         return(name_val)
       }
-      if (self$is_interface(name_val) ) {
+      if (self$is_interface(name_val)) {
         return(self$objects_that_implement_interface(name_val))
       }
       union_obj <- self$get_union(name_val)

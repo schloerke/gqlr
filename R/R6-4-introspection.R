@@ -24,7 +24,7 @@ type __Schema {
       description = collapse(
         "A GraphQL Schema defines the capabilities of a GraphQL server. It ",
         "exposes all available types and directives on the server, as well as ",
-        "the entry points for query, mutation, and subscription operations." ,
+        "the entry points for query, mutation, and subscription operations.",
         "  Subscriptions are not implemented in gqlr."
       ),
       fields = list(

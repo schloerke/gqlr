@@ -16,20 +16,20 @@ test_that("formatting", {
 
   expected <- list(
     operation = list(
-      type = "string", isArray = FALSE,canBeNull = FALSE,
-      possibleValues = c("query","mutation","subscription")
+      type = "string", is_array = FALSE, can_be_null = FALSE,
+      possible_values = c("query", "mutation", "subscription")
     ),
     name = list(
-      type = "Name", isArray = FALSE, canBeNull = TRUE, value = NULL
+      type = "Name", is_array = FALSE, can_be_null = TRUE, value = NULL
     ),
     variableDefinitions = list(
-      type = "VariableDefinition", isArray = TRUE, canBeNull = TRUE, value = NULL
+      type = "VariableDefinition", is_array = TRUE, can_be_null = TRUE, value = NULL
     ),
     char = list(
-      type = "string", isArray = FALSE, canBeNull = FALSE, value = NULL
+      type = "string", is_array = FALSE, can_be_null = FALSE, value = NULL
     ),
     func = list(
-      type = "fn", isArray = FALSE, canBeNull = FALSE, value = NULL
+      type = "fn", is_array = FALSE, can_be_null = FALSE, value = NULL
     )
   )
 
