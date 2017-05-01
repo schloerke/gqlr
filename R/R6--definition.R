@@ -1,7 +1,7 @@
 #' @include R6--aaa-utils.R
 #' @include S3--aaa-setup.R
 
-if(getRversion() >= "2.15.1") {
+if (getRversion() >= "2.15.1") {
   utils::globalVariables(c("self"))
 }
 
@@ -752,7 +752,7 @@ SchemaDefinition = R6_from_args(
       )
     },
     .get_definition_type = function(def_name) {
-      if(!(def_name %in% c("query", "mutation"))) {
+      if (!(def_name %in% c("query", "mutation"))) {
         stop("'def_name' must be either 'query' or 'mutation'")
       }
 

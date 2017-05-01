@@ -158,7 +158,7 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
   type_j <- field_j_info$return_type
 
   do_again <- TRUE
-  while(do_again) {
+  while (do_again) {
     do_again <- FALSE
     # If typeA or typeB is Non‐Null.
     if (inherits(type_i, "NonNullType") || inherits(type_j, "NonNullType")) {

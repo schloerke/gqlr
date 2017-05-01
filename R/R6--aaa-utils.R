@@ -137,7 +137,7 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
         }
       } else {
         mayInherit <- length(posClassValues)
-        while(mayInherit > 0) {
+        while (mayInherit > 0) {
           if (inherits(value, posClassValues[mayInherit])) {
             # found it
             break
@@ -294,12 +294,13 @@ R6_from_args <- function(type, txt = NULL, inherit = NULL, public = list(), priv
         self[[.argName]] <- tryCatch(
           get(.argName, inherit = FALSE),
           error = (
-            if(self$.args[[.argName]]$can_be_null)
+            if (self$.args[[.argName]]$can_be_null) {
               function(e) { NULL }
-            else
+            } else {
               function(e) {
                 stop0("Did not receive: '", .argName, "'. '", .argName, "' must be supplied to object of class: ", class(self)[1])
               }
+            }
           )
         )
 

@@ -257,17 +257,17 @@ validate_object_type_definition <- function(x, ..., oh) {
         )]]
 
         # produce string representation of the type object.  Similar to '[__Type!]!'
-        matching_obj_field_arg_type_txt <- format(matching_obj_field_arg$type)
-        interface_field_arg_type_txt <- format(interface_field_arg$type)
+        matching_txt <- format(matching_obj_field_arg$type)
+        int_txt <- format(interface_field_arg$type)
 
         # 1. The object field argument must accept the same type (invariant) as the interface field argument.
-        if (matching_obj_field_arg_type_txt != interface_field_arg_type_txt) {
+        if (matching_txt != int_txt) {
           oh$error_list$add(
             "3.1.2.3",
             "object definition: ", format(x$name),
             " of interface: ", format(interface_obj$name),
             " for field: ", interface_field_name,
-            " must input the same type: ", matching_obj_field_arg_type_txt,
+            " must input the same type: ", matching_txt,
             " for argument: ", interface_field_arg_name
           )
           return(FALSE)

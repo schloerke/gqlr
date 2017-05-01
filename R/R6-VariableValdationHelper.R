@@ -46,7 +46,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
       # If any list level of variableType is not non‐null, and the corresponding level in argument is non‐null, the types are not compatible.
       cur_var_type <- variable_type
       cur_arg_type <- argument_type
-      while(
+      while (
         inherits(cur_var_type, "NonNullType") ||
         inherits(cur_var_type, "ListType") ||
         inherits(cur_arg_type, "NonNullType") ||

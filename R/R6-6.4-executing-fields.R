@@ -458,9 +458,9 @@ is_nullish <- function(x) {
   # typeof(NaN) # "double"
   switch(type_of_value,
     "NULL" = TRUE,
-    "logical" = ,
-    "integer" = ,
-    "double" = ,
+    "logical" = , # nolint
+    "integer" = , # nolint
+    "double" = , # nolint
     "numeric" = {
       if (length(x) > 0) {
         FALSE

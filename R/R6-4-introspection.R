@@ -175,7 +175,7 @@ type __Type {
         # possibleTypes: [__Type!]
         if (schema_obj$is_interface(type_obj)) {
           ret$possibleTypes <- function(z1, z2, z3) {
-            possible_types <- schema_obj$objects_that_implement_interface(type_obj)
+            possible_types <- schema_obj$implements_interface(type_obj)
             if (is.null(possible_types)) return(NULL)
             possible_types
           }

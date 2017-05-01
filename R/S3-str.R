@@ -17,7 +17,7 @@ str_c_ret_spaces = function(ret, spaces, ...) {
   dots <- collapse(...)
   if (spaces > 2) {
     second <- str_c(
-      "\n", collapse(rep(". ", floor((spaces - 2) / 2))), ". ",
+      "\n", collapse(rep(". ", floor( (spaces - 2) / 2) )), ". ",
       dots
     )
   } else if (spaces == 2) {

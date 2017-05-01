@@ -79,9 +79,9 @@ Schema <- R6Class(
       private[[obj_list_txt]][[name_val]]
     },
 
-    objects_that_implement_interface_list = list(),
+    implements_interface_list = list(),
 
-    add_introspection_fields_to_query_root = function() {
+    add_introspection_fields = function() {
       schema_def <- private$schema_definition
       if (is.null(schema_def)) return()
 
@@ -151,7 +151,7 @@ Schema <- R6Class(
         return(self$as_type(type_obj))
       }
 
-      while(
+      while (
         inherits(type_obj, "NonNullType") ||
         inherits(type_obj, "ListType")
       ) {
@@ -199,6 +199,10 @@ Schema <- R6Class(
       }
       schema_def$.get_definition_type(def_name)
     },
+    get_mutation_object = function() {
+      query_type <- self$get_schema_definition("mutation")
+      self$get_object_interface_or_union(query_type)
+    },
     get_query_object = function() {
       query_type <- self$get_schema_definition("query")
       self$get_object_interface_or_union(query_type)
@@ -242,9 +246,9 @@ Schema <- R6Class(
 
 
     # returns a char vector or NULL of names of objs that implement a particular interface
-    objects_that_implement_interface = function(name) {
+    implements_interface = function(name) {
       name_val <- self$name_helper(name)
-      names(private$objects_that_implement_interface_list[[name_val]])
+      names(private$implements_interface_list[[name_val]])
     },
 
     get_possible_types = function(name_obj) {
@@ -253,7 +257,7 @@ Schema <- R6Class(
         return(name_val)
       }
       if (self$is_interface(name_val)) {
-        return(self$objects_that_implement_interface(name_val))
+        return(self$implements_interface(name_val))
       }
       union_obj <- self$get_union(name_val)
       if (!is.null(union_obj)) {
@@ -319,7 +323,7 @@ Schema <- R6Class(
           stop("Existing schema definition already found. Can not add a second definition")
         }
         private$schema_definition <- obj
-        private$add_introspection_fields_to_query_root()
+        private$add_introspection_fields()
 
         return(invisible(self))
       }
@@ -395,19 +399,19 @@ Schema <- R6Class(
             interface_obj_name <- self$name_helper(interface_obj$name)
             if (
               is.null(
-                private$objects_that_implement_interface_list[[interface_obj_name]]
+                private$implements_interface_list[[interface_obj_name]]
               )
             ) {
-              private$objects_that_implement_interface_list[[interface_obj_name]] <- list()
+              private$implements_interface_list[[interface_obj_name]] <- list()
             }
 
-            private$objects_that_implement_interface_list[[
+            private$implements_interface_list[[
               interface_obj_name
             ]][[obj_name_val]] <- obj_name_val
           }
         }
 
-        private$add_introspection_fields_to_query_root()
+        private$add_introspection_fields()
       }
 
       return(invisible(self))
