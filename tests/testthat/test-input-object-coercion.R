@@ -29,19 +29,19 @@ test_that("small input objects", {
     Schema$new() ->
   ts
 
-  "{ field(arg: { a: \"abc\", b: 123 }) }" %>% expect_r6(schema_obj = ts)
-  "{ field(arg: {b: 123 }) }" %>% expect_r6(schema_obj = ts)
-  "{ field(arg: {a: \"abc\" }) }" %>% expect_err("found missing value", schema_obj = ts)
-  "{ field(arg: {a: \"abc\", b: null }) }" %>% expect_err("found null value", schema_obj = ts)
+  "{ field(arg: { a: \"abc\", b: 123 }) }" %>% expect_r6(schema = ts)
+  "{ field(arg: {b: 123 }) }" %>% expect_r6(schema = ts)
+  "{ field(arg: {a: \"abc\" }) }" %>% expect_err("found missing value", schema = ts)
+  "{ field(arg: {a: \"abc\", b: null }) }" %>% expect_err("found null value", schema = ts)
 
-  "{ list_field(arg: { a: [5], b: [5], c: [5], d: [5] }) }" %>% expect_r6(schema_obj = ts)
-  "{ list_field(arg: { a: 5, b: 5, c: 5, d: 5 }) }" %>% expect_r6(schema_obj = ts)
-  "{ list_field(arg: { a: [], b: [], c: [5], d: [5] }) }" %>% expect_r6(schema_obj = ts)
-  "{ list_field(arg: { b: [], d: [5] }) }" %>% expect_r6(schema_obj = ts)
-  "{ list_field(arg: { b: [null], d: [5] }) }" %>% expect_r6(schema_obj = ts)
+  "{ list_field(arg: { a: [5], b: [5], c: [5], d: [5] }) }" %>% expect_r6(schema = ts)
+  "{ list_field(arg: { a: 5, b: 5, c: 5, d: 5 }) }" %>% expect_r6(schema = ts)
+  "{ list_field(arg: { a: [], b: [], c: [5], d: [5] }) }" %>% expect_r6(schema = ts)
+  "{ list_field(arg: { b: [], d: [5] }) }" %>% expect_r6(schema = ts)
+  "{ list_field(arg: { b: [null], d: [5] }) }" %>% expect_r6(schema = ts)
   "{ list_field(arg: { b: [], c: [null], d: [5] }) }" %>%
-    expect_err("found null value", schema_obj = ts)
-  "{ list_field(arg: { d: [5] }) }" %>% expect_err("found missing value", schema_obj = ts)
+    expect_err("found null value", schema = ts)
+  "{ list_field(arg: { d: [5] }) }" %>% expect_err("found missing value", schema = ts)
 
 })
 

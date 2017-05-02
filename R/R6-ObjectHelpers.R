@@ -3,7 +3,7 @@
 ObjectHelpers <- R6Class(
   "ObjectHelpers",
   private = list(
-    schema_obj_val = NULL,
+    schema_val = NULL,
     error_list_val = NULL
   ),
   public = list(
@@ -38,8 +38,8 @@ ObjectHelpers <- R6Class(
     #   }
     # },
 
-    initialize = function(schema_obj, error_list = ErrorList$new()) {
-      self$schema_obj <- schema_obj
+    initialize = function(schema, error_list = ErrorList$new()) {
+      self$schema <- schema
       self$error_list <- error_list
 
       invisible(self)
@@ -60,9 +60,9 @@ ObjectHelpers <- R6Class(
       invisible(self)
     },
 
-    schema_obj = function(value) {
+    schema = function(value) {
       if (missing(value)) {
-        return(private$schema_obj_val)
+        return(private$schema_val)
       }
 
       if (
@@ -76,7 +76,7 @@ ObjectHelpers <- R6Class(
         stop("must supply a object of class 'Schema'")
       }
 
-      private$schema_obj_val <- value
+      private$schema_val <- value
 
       invisible(self)
     }

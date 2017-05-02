@@ -175,7 +175,7 @@ gqlr_schema <- function(txt, ...) {
 
         if (store_name == "fields") {
           for (field_name in names(item$fields)) {
-            field_name_obj <- schema$as_type(field_name)
+            field_name_obj <- as_type(field_name)
             obj_field <- obj$.get_field(field_name_obj)
             if (is.null(obj_field)) {
               stop("Could not find field for Object: ", item_name)

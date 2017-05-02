@@ -9,7 +9,7 @@ enum Episode { NEWHOPE, EMPIRE, JEDI }
 " %>%
   gqlr_schema(
     Episode = list(
-      parse_value = function(episode_id, schema_obj) {
+      parse_value = function(episode_id, schema) {
         switch(as.character(episode_id),
           "4" = "NEWHOPE",
           "5" = "EMPIRE",
@@ -32,7 +32,7 @@ interface Character {
 " %>%
   gqlr_schema(
     Character = list(
-      resolve_type = function(id, schema_obj) {
+      resolve_type = function(id, schema) {
         if (is_droid(id)) {
           "Droid"
         } else {
@@ -62,13 +62,13 @@ type Human implements Character {
 " %>%
   gqlr_schema(
     Human = list(
-      resolve = function(id, args, schema_obj) {
+      resolve = function(id, args, schema) {
         get_human_by_id(id)
       }
     ),
     Droid = list(
       description = "A mechanical creature in the Star Wars universe.",
-      resolve = function(id, schema_obj) {
+      resolve = function(id, schema) {
         get_droid_by_id(id)
       }
     )
@@ -90,9 +90,9 @@ schema {
 }
 " %>%
   gqlr_schema(
-    Query = function(null, schema_obj) {
+    Query = function(null, schema) {
       list(
-        hero = function(obj, args, schema_obj) {
+        hero = function(obj, args, schema) {
           episode <- args$episode
           if (identical(episode, 5) || identical(episode, "EMPIRE")) {
             luke$id
@@ -100,16 +100,16 @@ schema {
             artoo$id
           }
         },
-        human = function(obj, args, schema_obj) {
+        human = function(obj, args, schema) {
           args$id
         },
-        droid = function(obj, args, schema_obj) {
+        droid = function(obj, args, schema) {
           args$id
         },
-        by_id = function(obj, args, schema_obj) {
+        by_id = function(obj, args, schema) {
           args$id
         },
-        humanoid = function(obj, args, schema_obj) {
+        humanoid = function(obj, args, schema) {
           args$id
         }
       )
@@ -129,7 +129,7 @@ directive @notskip on FIELD
 " %>%
   gqlr_schema(
     HumanOrDroid = list(
-      resolve_type = function(id, schema_obj) {
+      resolve_type = function(id, schema) {
         if (is_droid(id)) {
           "Droid"
         } else {

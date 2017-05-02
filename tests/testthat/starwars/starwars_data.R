@@ -77,7 +77,7 @@ is_droid <- function(id) {
 get_human_by_id <- function(id) {
   human <- human_data[[id]] # nolint
   if (is.null(human)) return(NULL)
-  human$totalCredits <- function(obj, args, schema_obj) {
+  human$totalCredits <- function(obj, args, schema) {
     length(human$appearsIn)
   }
   human

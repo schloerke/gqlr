@@ -26,13 +26,13 @@ test_that("5.5.1 - Input Object Field Uniqueness", {
     field(arg: { arg: true })
   }
   " %>%
-  expect_r6(schema_obj = schema_txt)
+  expect_r6(schema = schema_txt)
 
   "
   {
     field(arg: { arg: true, arg: false })
   }
   " %>%
-  expect_err("must have unique field names", schema_obj = schema_txt)
+  expect_err("must have unique field names", schema = schema_txt)
 
 })

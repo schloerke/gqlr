@@ -16,22 +16,21 @@
 #   6. Return an unordered map containing data and errors.
 # nolint end
 get_initial_value <- function(initial_value, root_type_object, ..., oh) {
-  if (is.null(initial_value)) {
-    resolve_fn <- root_type_object$.resolve
-    if (is.function(resolve_fn)) {
-      initial_value <- root_type_object$.resolve(NULL, oh$schema)
-    }
+
+  resolve_fn <- root_type_object$.resolve
+  if (is.function(resolve_fn)) {
+    initial_value <- root_type_object$.resolve(initial_value, oh$schema)
   }
   if (is.null(initial_value) || is.logical(initial_value)) {
     initial_value <- list()
   }
 
   # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
-  initial_value[["__schema"]] <- function(z1, z2, schema_obj) {
-    schema_obj
+  initial_value[["__schema"]] <- function(z1, z2, schema) {
+    schema
   }
-  initial_value[["__type"]] <- function(z1, args, schema_obj) {
-    type_obj <- schema_obj$as_type(args$name)
+  initial_value[["__type"]] <- function(z1, args, schema) {
+    type_obj <- as_type(args$name)
     type_obj
   }
 
@@ -40,8 +39,9 @@ get_initial_value <- function(initial_value, root_type_object, ..., oh) {
 
 execute_query <- function(operation_obj, initial_value, ..., oh) {
 
-  root_type <- oh$schema$get_schema_definition("query")
-  root_type_object <- oh$schema$get_type(root_type)
+  root_type_object <- oh$schema$get_query_object()
+  root_type <- root_type_object$name
+
   if (is.null(root_type_object)) {
     oh$error_list$add(
       "6.2",
@@ -78,12 +78,13 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
 # nolint end
 execute_mutation <- function(operation_obj, initial_value, ..., oh) {
 
-  root_type <- oh$schema$get_schema_definition("mutation")
-  root_type_object <- oh$schema$get_type(root_type)
+  root_type_object <- oh$schema$get_mutation_object()
+  root_type <- root_type_object$name
+
   if (is.null(root_type_object)) {
     oh$error_list$add(
       "6.2",
-      "Can not find definition '", root_type, "' in schema definition"
+      "Can not find definition mutation type in schema definition"
     )
     return(NULL)
   }

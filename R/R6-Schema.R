@@ -6,6 +6,54 @@
 
 completed_introspection <- FALSE
 
+
+
+as_type = function(name_val) {
+  if (inherits(name_val, "Type")) {
+    return(name_val)
+  }
+  if (inherits(name_val, "Name")) {
+    return(NamedType$new(name = name_val))
+  }
+  if (is.character(name_val)) {
+    return(
+      NamedType$new(name = Name$new(value = name_val))
+    )
+  }
+  str(name_val)
+  stop("as_type only understands a single character name or Type object")
+}
+
+# returns a NamedType
+get_inner_type = function(type_obj) {
+  type_obj <- as_type(type_obj)
+
+  while (
+    inherits(type_obj, "NonNullType") ||
+    inherits(type_obj, "ListType")
+  ) {
+    type_obj <- type_obj$type
+  }
+  type_obj
+}
+
+name_value = function(name_obj) {
+  if (is.character(name_obj)) {
+    name_obj
+  } else if (inherits(name_obj, "Name")) {
+    name_obj$value
+  } else if (inherits(name_obj, "Type")) {
+    # non null, list, named
+    name_obj <- get_inner_type(name_obj)
+    name_obj$name$value
+  } else {
+    str(name_obj)
+    stop("must supply a string, Name, or NamedType to name_value(name_obj)")
+  }
+}
+
+
+
 #' @export
 Schema <- R6Class(
   "Schema",
@@ -25,11 +73,11 @@ Schema <- R6Class(
 
     # has_directive_list = list(),
     exists_by_name = function(name_obj, obj_list_txt) {
-      name_val <- self$name_helper(name_obj)
+      name_val <- name_value(name_obj)
       name_val %in% names(private[[obj_list_txt]])
     },
     get_by_name = function(name_obj, obj_list_txt) {
-      name_val <- self$name_helper(name_obj)
+      name_val <- name_value(name_obj)
       private[[obj_list_txt]][[name_val]]
     },
 
@@ -50,7 +98,16 @@ Schema <- R6Class(
       }
 
       return()
+    },
+
+    get_schema_definition = function(def_name) {
+      schema_def <- private$schema_definition
+      if (is.null(schema_def)) {
+        stop("schema definition not found")
+      }
+      schema_def$.get_definition_type(def_name)
     }
+
 
 
   ),
@@ -89,48 +146,6 @@ Schema <- R6Class(
       return(invisible(self))
     },
 
-    as_type = function(name_val) {
-      if (inherits(name_val, "Type")) {
-        return(name_val)
-      }
-      if (is.character(name_val)) {
-        return(
-          NamedType$new(name = Name$new(value = name_val))
-        )
-      }
-      stop("This should not be reached")
-    },
-
-    # returns a NamedType
-    get_inner_type = function(type_obj) {
-      if (is.character(type_obj)) {
-        return(self$as_type(type_obj))
-      }
-
-      while (
-        inherits(type_obj, "NonNullType") ||
-        inherits(type_obj, "ListType")
-      ) {
-        type_obj <- type_obj$type
-      }
-      type_obj
-    },
-
-    name_helper = function(name_obj) {
-      if (is.character(name_obj)) {
-        name_obj
-      } else if (inherits(name_obj, "Name")) {
-        name_obj$value
-      } else if (inherits(name_obj, "Type")) {
-        # non null, list, named
-        name_obj <- self$get_inner_type(name_obj)
-        name_obj$name$value
-      } else {
-        str(name_obj)
-        stop("must supply a string, Name, or NamedType")
-      }
-    },
-
     is_scalar       = function(name) private$exists_by_name(name, "scalars"),
     is_enum         = function(name) private$exists_by_name(name, "enums"),
     is_object       = function(name) private$exists_by_name(name, "objects"),
@@ -148,23 +163,16 @@ Schema <- R6Class(
       )
     },
 
-    get_schema_definition = function(def_name) {
-      schema_def <- private$schema_definition
-      if (is.null(schema_def)) {
-        stop("schema definition not found")
-      }
-      schema_def$.get_definition_type(def_name)
-    },
     get_mutation_object = function() {
-      mutation_type <- self$get_schema_definition("mutation")
+      mutation_type <- private$get_schema_definition("mutation")
       self$get_object_interface_or_union(mutation_type)
     },
     get_query_object = function() {
-      query_type <- self$get_schema_definition("query")
+      query_type <- private$get_schema_definition("query")
       self$get_object_interface_or_union(query_type)
     },
     is_query_root_name = function(name_obj) {
-      query_type <- self$get_schema_definition("query")
+      query_type <- private$get_schema_definition("query")
       query_name <- query_type$name
       identical(format(name_obj), format(query_name))
     },
@@ -203,12 +211,12 @@ Schema <- R6Class(
 
     # returns a char vector or NULL of names of objs that implement a particular interface
     implements_interface = function(name) {
-      name_val <- self$name_helper(name)
+      name_val <- name_value(name)
       names(private$implements_interface_list[[name_val]])
     },
 
     get_possible_types = function(name_obj) {
-      name_val <- self$name_helper(name_obj)
+      name_val <- name_value(name_obj)
       if (self$is_object(name_val)) {
         return(name_val)
       }
@@ -217,7 +225,7 @@ Schema <- R6Class(
       }
       union_obj <- self$get_union(name_val)
       if (!is.null(union_obj)) {
-        union_names <- unlist(lapply(union_obj$types, self$name_helper))
+        union_names <- unlist(lapply(union_obj$types, name_value))
         return(union_names)
       }
       stop("type: ", name_val, " is not an object, interface, or union")
@@ -225,7 +233,7 @@ Schema <- R6Class(
     },
 
     get_scalar_or_enum = function(name_obj) {
-      name_val <- self$name_helper(name_obj)
+      name_val <- name_value(name_obj)
       ifnull(
         self$get_scalar(name_val),
         self$get_enum(name_val)
@@ -233,7 +241,7 @@ Schema <- R6Class(
     },
     get_object_interface_or_union = function(name_obj) {
       if (is.null(name_obj)) return(NULL)
-      name_val <- self$name_helper(name_obj)
+      name_val <- name_value(name_obj)
       ifnull(
         self$get_object(name_val),
         ifnull(
@@ -375,9 +383,9 @@ Schema <- R6Class(
       # add object name to list of objects that implement a particular interfaces
       if (obj_kind == "ObjectTypeDefinition") {
         if (!is.null(obj$interfaces)) {
-          obj_name_val <- self$name_helper(obj$name)
+          obj_name_val <- name_value(obj$name)
           for (interface_obj in obj$interfaces) {
-            interface_obj_name <- self$name_helper(interface_obj$name)
+            interface_obj_name <- name_value(interface_obj$name)
             if (
               is.null(
                 private$implements_interface_list[[interface_obj_name]]

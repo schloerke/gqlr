@@ -135,11 +135,11 @@ test_that("arbitrary code", {
   }
   " %>%
     gqlr_schema() ->
-  schema_obj
+  schema
 
   ans <- execute_request(
     simple_query,
-    schema_obj,
+    schema,
     operation_name = "Example",
     variable_values = list(size = 100),
     initial_value = data
@@ -155,7 +155,7 @@ test_that("arbitrary code", {
 
   ans_exact <- execute_request(
     query_doc_exact,
-    schema_obj,
+    schema,
     operation_name = "Example",
     variable_values = list(size = 100),
     initial_value = data

@@ -154,7 +154,7 @@ r6_from_list <- function(
 }
 
 
-default_resolve_key_value <- function(obj, args, schema_obj, ...) {
+default_resolve_key_value <- function(obj, args, schema, ...) {
   return(obj)
 }
 

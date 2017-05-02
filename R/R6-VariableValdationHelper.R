@@ -165,7 +165,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
             default_val <- var$defaultValue$value
             if (!is.null(default_val)) {
-              type_obj <- self$oh$schema$get_type(self$oh$schema$name_helper(var$type))
+              type_obj <- self$oh$schema$get_type(name_value(var$type))
 
               self$default_value_can_be_coerced(
                 from_input = var$defaultValue,
@@ -176,7 +176,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
 
 
           # 5.7.3 - Variables Are Input Types
-          core_var_type <- self$oh$schema$get_inner_type(var$type)
+          core_var_type <- get_inner_type(var$type)
           matching_core_type_object <- ifnull(
             self$oh$schema$get_scalar(core_var_type), ifnull(
             self$oh$schema$get_enum(core_var_type),
@@ -187,7 +187,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
             self$oh$error_list$add(
               "5.7.3",
               "Can not find matching Scalar, Enum, or Input Object with type: ",
-              self$oh$schema$name_helper(var$type),
+              format(var$type),
               " for variable: ", name
             )
             return(name)

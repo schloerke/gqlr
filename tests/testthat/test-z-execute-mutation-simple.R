@@ -29,7 +29,7 @@ test_that("small counter", {
       AddCounter = list(
         resolve = function(...) {
           list(
-            value = function(z1, z2, schema_obj) {
+            value = function(z1, z2, schema) {
               count_total <<- count_total + 1
               count_total
             }

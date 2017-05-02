@@ -46,15 +46,15 @@ type __Schema {
 
           # queryType: __Type!
           queryType = function(z1, z2, z3) {
-            query_type <- schema$get_schema_definition("query")
-            query_type
+            query_type <- schema$get_query_object()
+            query_type$name
           },
 
           # mutationType: __Type
           mutationType = function(z1, z2, z3) {
-            mutation_type <- schema$get_schema_definition("mutation")
+            mutation_type <- schema$get_mutation_object()
             if (is.null(mutation_type)) return(NULL)
-            mutation_type
+            mutation_type$name
           },
 
           # directives: [__Directive!]!
@@ -100,7 +100,7 @@ type __Type {
   gqlr_schema(
     "__Type" = list(
       resolve = function(type_obj, schema) {
-        type_obj <- schema$as_type(type_obj)
+        type_obj <- as_type(type_obj)
         # kind: __TypeKind!
         # name: String
         # description: String
@@ -109,7 +109,7 @@ type __Type {
           name = function(z1, z2, z3) {
             if (inherits(type_obj, "ListType")) return(NULL)
             if (inherits(type_obj, "NonNullType")) return(NULL)
-            schema$name_helper(type_obj)
+            name_value(type_obj)
           },
           description = function(z1, z2, z3) {
             if (inherits(type_obj, "ListType")) return(NULL)

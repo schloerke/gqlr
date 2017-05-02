@@ -257,8 +257,8 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
 # nolint end
 does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
 
-  fragment_type <- oh$schema$get_inner_type(fragment_type)
-  object_type <- oh$schema$get_inner_type(object_type)
+  fragment_type <- get_inner_type(fragment_type)
+  object_type <- get_inner_type(object_type)
 
   #   1. If fragmentType is an Object Type:
   #     a. if objectType and fragmentType are the same type, return true, otherwise return false.

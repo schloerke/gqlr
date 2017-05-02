@@ -53,11 +53,11 @@ test_that("formatting", {
 
 test_that("structure", {
 
-  schema_obj <- read_kitchen("schema-kitchen-sink.graphql") %>% txt_to_obj()
+  schema <- read_kitchen("schema-kitchen-sink.graphql") %>% txt_to_obj()
 
   # expect structure output to match
-  expect_str(schema_obj, read_kitchen("schema-kitchen-sink-str.txt"))
-  expect_str(schema_obj, read_kitchen("schema-kitchen-sink-str-all.txt"), all_fields = TRUE)
+  expect_str(schema, read_kitchen("schema-kitchen-sink-str.txt"))
+  expect_str(schema, read_kitchen("schema-kitchen-sink-str-all.txt"), all_fields = TRUE)
 
 
   request_obj <- read_kitchen("request-kitchen-sink.graphql") %>% txt_to_obj()

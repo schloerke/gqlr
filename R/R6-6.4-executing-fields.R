@@ -222,9 +222,6 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
 
   object_obj <- oh$schema$get_type(object_type)
 
-  resolver_fn <- object_obj$.get_field(field_obj)$.resolve
-  resolver_fn <- NULL
-
   # # nolint start
   # cat("\n\n")
   # print(list(
@@ -237,28 +234,18 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
   # # nolint end
 
   field_name_txt <- format(field_obj$name)
-  if (is.null(resolver_fn)) {
-    if (! (field_name_txt %in% names(object_value))) {
-      message(
-        "Error: No .resolve(obj, args, schema, ...) found for field: ", field_name_txt,
-        " for object of type: ", format(object_type), ".",
-        "  Could not find field in resolved object either.",
-        "  Returning NULL."
-      )
-      return(NULL)
-    }
-
-    val <- object_value[[field_name_txt]]
-    if (is.function(val)) {
-      val_fn <- val
-      ans <- val_fn(object_value, argument_values, oh$schema)
-      return(ans)
-    }
-    return(val)
+  if (! (field_name_txt %in% names(object_value))) {
+    # can not find field in list obj
+    return(NULL)
   }
 
-  ret_val <- resolver_fn(object_value, argument_values, oh$schema)
-  return(ret_val)
+  val <- object_value[[field_name_txt]]
+  if (is.function(val)) {
+    val_fn <- val
+    ans <- val_fn(object_value, argument_values, oh$schema)
+    return(ans)
+  }
+  return(val)
 }
 
 
@@ -385,7 +372,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
       # pre_result <- result
       # cat('\n\n\n')
       # str(result)
-      result <- object_obj$.resolve(result, schema_obj = oh$schema)
+      result <- object_obj$.resolve(result, schema = oh$schema)
       # cat("\n\n")
       # str(result)
       # browser()
@@ -419,12 +406,12 @@ resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ...
 
   if (inherits(abstract_obj, "InterfaceTypeDefinition")) {
     type <- abstract_obj$.resolve_type(object_value, oh$schema)
-    type <- oh$schema$as_type(type)
+    type <- as_type(type)
     return(type)
 
   } else if (inherits(abstract_obj, "UnionTypeDefinition")) {
     type <- abstract_obj$.resolve_type(object_value, oh$schema)
-    type <- oh$schema$as_type(type)
+    type <- as_type(type)
     return(type)
   }
 

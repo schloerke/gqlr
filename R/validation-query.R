@@ -200,7 +200,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
     )
 
     if (!is.null(selection_obj$selectionSet)) {
-      matching_type <- oh$schema$get_inner_type(matching_obj_field$type)
+      matching_type <- get_inner_type(matching_obj_field$type)
       matching_obj <- oh$schema$get_object_interface_or_union(matching_type$name)
       if (is.null(matching_obj)) {
         # 5.2.3 - if is leaf, can not dig deeper

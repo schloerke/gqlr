@@ -9,9 +9,9 @@ collapse <- gqlr:::collapse
 
 
 
-expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
+expect_r6 <- function(query, ..., schema = dog_cat_schema) {
 
-  oh <- gqlr:::ObjectHelpers$new(schema_obj)
+  oh <- gqlr:::ObjectHelpers$new(schema)
   ans <- gqlr:::validate_document(query, oh = oh)
 
   testthat::expect_equal(gqlr:::format.ErrorList(oh$error_list), "<ErrorList> No errors")
@@ -19,9 +19,9 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
   testthat::expect_true(R6::is.R6(ans), ...)
 }
 
-expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
+expect_err <- function(query, ..., schema = dog_cat_schema) {
 
-  oh <- gqlr:::ObjectHelpers$new(schema_obj)
+  oh <- gqlr:::ObjectHelpers$new(schema)
   ans <- gqlr:::validate_document(query, oh = oh) # nolint
 
   testthat::expect_true(oh$error_list$has_any_errors())
@@ -39,13 +39,13 @@ expect_request <- function(
   expected_json,
   variable_values = list(),
   operation_name = NULL,
-  schema_obj
+  schema
 ) {
   expected_result <- to_json(from_json(expected_json))
 
   ans <- execute_request(
     query_txt,
-    schema_obj,
+    schema,
     operation_name = operation_name,
     variable_values = variable_values
   )
@@ -75,13 +75,13 @@ expect_request_err <- function(
   expected_json,
   variable_values = list(),
   operation_name = NULL,
-  schema_obj
+  schema
 ) {
   expected_result <- to_json(from_json(expected_json))
 
   ans <- execute_request(
     query_txt,
-    schema_obj,
+    schema,
     operation_name = operation_name,
     variable_values = variable_values
   )
