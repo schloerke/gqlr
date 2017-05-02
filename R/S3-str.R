@@ -34,10 +34,10 @@ str_c_ret_spaces <- function(ret, spaces, ...) {
 check_if_registered <- function(fieldObj) {
   key <- class(fieldObj)[1]
   if (is.null(key) ) {
-    stop0("Can not call format(object) on a unknown AST object")
+    stop("Can not call format(object) on a unknown AST object")
   }
   if (!PkgObjs$is_registered(key)) {
-    stop0("'", key, "' is not registered. ")
+    stop("'", key, "' is not registered. ")
   }
 }
 

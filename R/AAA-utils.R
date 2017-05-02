@@ -22,10 +22,6 @@ str_detect <- function(string, pattern, ...) {
   grepl(pattern, string, ...)
 }
 
-stop0 <- function(...) {
-  stop(paste0(...))
-}
-
 ifnull <- function(a, b) {
   if (is.null(a)) {
     b
