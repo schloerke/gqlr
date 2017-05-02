@@ -76,19 +76,15 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
 
           # need to recurse in field objects
           matching_field <- matching_obj$.get_field(field)
-          # if (is.null(matching_field)) {
-          #   if (oh$schema_obj$is_query_root_name(matching_obj$name)) {
-          #     matching_field <- Introspection__QueryRootFields$.get_field(field)
-          #   }
-            if (is.null(matching_field)) {
-              oh$error_list$add(
-                "5.2.1",
-                "Field: ", format(field$name), " can't be found for object of type: ",
-                format(matching_obj$name)
-              )
-              next
-            }
-          # }
+          if (is.null(matching_field)) {
+            oh$error_list$add(
+              "5.2.1",
+              "Field: ", format(field$name), " can't be found for object of type: ",
+              format(matching_obj$name)
+            )
+            next
+          }
+
           matching_field_obj <- oh$schema_obj$get_object_interface_or_union(matching_field$type)
           field <- upgrade_fragments_in_field(field, matching_field_obj, seen_fragments)
         }

@@ -123,7 +123,7 @@ test_that("format()", {
 
 test_that("get_definition()", {
 
-  dog_obj <- gqlr:::get_definition(dog_cat_doc, "Dog")
+  dog_obj <- gqlr:::get_definition(dog_cat_schema, "Dog")
   expect_equal(format(dog_obj$name), "Dog")
 
 })

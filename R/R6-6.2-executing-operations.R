@@ -5,7 +5,7 @@
 # If the operation is a query, the result of the operation is the result of executing the query’s top level selection set with the query root object type.
 
 
-#
+# nolint start
 # An initial value may be provided when executing a query.
 # ExecuteQuery(query, schema, variableValues, initialValue)
 #   1. Let queryType be the root Query type in schema.
@@ -14,6 +14,7 @@
 #   4. Let data be the result of running ExecuteSelectionSet(selectionSet, queryType, initialValue, variableValues) normally (allowing parallelization).
 #   5. Let errors be any field errors produced while executing the selection set.
 #   6. Return an unordered map containing data and errors.
+# nolint end
 get_initial_value <- function(initial_value, root_type_object, ..., oh) {
   if (is.null(initial_value)) {
     resolve_fn <- root_type_object$.resolve
@@ -62,6 +63,7 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
 
 
 
+# nolint start
 # If the operation is a mutation, the result of the operation is the result of executing the mutation’s top level selection set on the mutation root object type. This selection set should be executed serially.
 #
 # It is expected that the top level fields in a mutation operation perform side‐effects on the underlying data system. Serial execution of the provided mutations ensures against race conditions during these side‐effects.
@@ -73,6 +75,7 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
 #   4. Let data be the result of running ExecuteSelectionSet(selectionSet, mutationType, initialValue, variableValues) serially.
 #   5. Let errors be any field errors produced while executing the selection set.
 #   6. Return an unordered map containing data and errors.
+# nolint end
 execute_mutation <- function(operation_obj, initial_value, ..., oh) {
 
   root_type <- oh$schema_obj$get_schema_definition("mutation")

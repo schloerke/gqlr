@@ -1,16 +1,3 @@
-# The fundamental unit of any GraphQL Schema is the type. There are eight kinds of types in GraphQL.
-# Scalar
-# Enum
-# Object
-# Interface
-# Union
-# List
-# Non-Null
-# Input Object
-
-# ID ?
-
-
 
 # Scalars
 #
@@ -52,43 +39,6 @@ parse_literal <- function(kind_val, parse_value_fn) {
   pryr_unenclose(fn)
 }
 
-# do_if_not_null <- function(parse_fn, fn) {
-#   function(value) {
-#     if (is.null(value)) return(NULL)
-#     fn(parse_fn(value))
-#   }
-#   # pryr_unenclose(ret)
-# }
-
-## Use ScalarTypeDefinition instead!!
-# GraphQLScalarType <- ScalarTypeDefinition$new(
-#   "GQL_Scalar_Type",
-#   " name: string;
-#     description?: ?string;
-#     serialize: fn;
-#     parse_value?: ?fn;
-#     parse_literal?: ?fn;",
-#   public = list(
-#     initialize = function(name, description, serialize, parse_value, parse_literal) {
-#       self$name = name
-#       self$serialize = serialize
-#       if (!missing(description)) {
-#         self$description = description
-#       }
-#       if ((!missing(parse_value)) || (!missing(parse_literal))) {
-#         if (missing(parse_value) || missing(parse_literal)) {
-#           stop0(self$name, " must provide both parse_value and parse_literal functions")
-#         }
-#         self$parse_value = parse_value
-#         self$parse_literal = parse_literal
-#       } else {
-#         warning("Setting 'parse_value' and 'parse_literal' to return 'NULL'")
-#         self$parse_value = function(x) { return(NULL) }
-#         self$parse_literal = function(x) { return(NULL) }
-#       }
-#     }
-#   )
-# )
 
 coerce_int <- function (value, ...) {
   MAX_INT <-  2147483647
@@ -187,6 +137,8 @@ Boolean <- ScalarTypeDefinition$new(
 )
 
 
+# nolint start
+
 ## Not including in R setup
 # # no literal AST definition, but defining as such
 # ID = ScalarTypeDefinition$new(
@@ -211,3 +163,5 @@ Boolean <- ScalarTypeDefinition$new(
 #     }
 #   }
 # )
+
+# nolint end

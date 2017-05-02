@@ -6,33 +6,6 @@ if (getRversion() >= "2.15.1") {
 }
 
 
-# 4.1.4
-# http://facebook.github.io/graphql/#sec-Type-Name-Introspection
-# Type Name Introspection
-#
-# GraphQL supports type name introspection at any point within a query by the meta field __typename: String! when querying against any Object, Interface, or Union. It returns the name of the object type currently being queried.
-#
-# This is most often used when querying against Interface or Union types to identify which actual type of the possible types has been returned.
-#
-# This field is implicit and does not appear in the fields list in any defined type.
-# introspection_typename = function() {
-#   return(self$type)
-# }
-
-
-
-# ASTTypes <- list(
-#   SCALAR = "SCALAR",
-#   OBJECT = "OBJECT",
-#   INTERFACE = "INTERFACE",
-#   UNION = "UNION",
-#   ENUM = "ENUM",
-#   INPUT_OBJECT = "INPUT_OBJECT",
-#   LIST = "LIST",
-#   NON_NULL = "NON_NULL"
-# )
-
-
 format_list <- function(list_vals, .before = "", .after = "", .collapse = "", ...) {
   if (is.null(list_vals)) stop("received null list")
   if (length(list_vals) == 0) return(NULL)
@@ -46,6 +19,10 @@ format_list <- function(list_vals, .before = "", .after = "", .collapse = "", ..
 
   collapse(.before, txt_arr, .after, collapse = .collapse)
 }
+
+
+
+
 
 
 AST <- R6Class("AST",
@@ -175,7 +152,7 @@ Name <- R6_from_args(
         return(self$.args$value$value)
       }
       if (!str_detect(value, "^[_A-Za-z][_0-9A-Za-z]*$")) {
-        stop0(
+        stop(
           "Name value must match the regex of: /[_A-Za-z][_0-9A-Za-z]*/. ",
           "Received value: '", value, "'"
         )
@@ -193,11 +170,6 @@ Document <- R6_from_args(
   "Document",
   " loc?: ?Location;
     definitions: Array<Definition>;",
-  private = list(
-    # init_validate = function() {
-    #   validate_operation_names(self)
-    # }
-  ),
   public = list(
     .format = function(...) {
       format_list(self$definitions, .collapse = "\n\n", ...)
@@ -478,33 +450,17 @@ Variable <- R6_from_args(
   )
 )
 
-IntValue <- (function(){
-  # coerce_int = function (value) {
-  #   MAX_INT =  2147483647
-  #   MIN_INT = -2147483648
-  #   num <- as.integer(value)
-  #   if (is.integer(num)) {
-  #     if (length(num) == 1) {
-  #       if (num <= MAX_INT && num >= MIN_INT) {
-  #         return(num)
-  #       }
-  #     }
-  #   }
-  #   return(NULL)
-  # }
-
-  R6_from_args(
-    inherit = Value,
-    "IntValue",
-    " loc?: ?Location;
-      value: string;",
-    public = list(
-      .format = function(...) {
-        as.character(self$value)
-      }
-    )
+IntValue <- R6_from_args(
+  inherit = Value,
+  "IntValue",
+  " loc?: ?Location;
+    value: string;",
+  public = list(
+    .format = function(...) {
+      as.character(self$value)
+    }
   )
-})()
+)
 
 FloatValue <- R6_from_args(
   inherit = Value,
@@ -598,11 +554,6 @@ ObjectValue <- R6_from_args(
   "ObjectValue",
   " loc?: ?Location;
     fields: Array<ObjectField>;",
-  private = list(
-    # init_validate = function() {
-    #   validate_input_object_field_uniqueness(self)
-    # }
-  ),
   public = list(
     .get_field = get_by_field,
     .format = function(...) {
@@ -1162,14 +1113,6 @@ EnumTypeDefinition <- R6_from_args(
       as.character(toupper(x))
     },
     .default_parse_literal = function(value_obj, schema_obj) {
-
-      # if (inherits(value_obj, "IntValue")) {
-      #   int_val <- value_obj$value
-      #   if (int_val > 0 & int_val <= length(self$values)) {
-      #     return(self$values[[int_val]]$name$value)
-      #   }
-      #   return(NULL)
-      # }
 
       if (!inherits(value_obj, "EnumValue")) {
         return(NULL)

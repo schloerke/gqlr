@@ -1,10 +1,12 @@
 #' @export
 ErrorList <- R6Class("ErrorList",
   private = list(
+    # nolint start
     # http://facebook.github.io/graphql/
     # document.querySelectorAll( "#sec-Validation section" ).forEach(
     #  function(x,i){console.log(x.firstChild.innerText)}
     # )
+    # nolint end
     rule_names = list(
 
       "3.1.1" = "Scalars",

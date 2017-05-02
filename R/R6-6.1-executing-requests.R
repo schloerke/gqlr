@@ -1,6 +1,6 @@
 
 
-
+# nolint start
 
 # 6.1 - Execute request     - DONE
 #   get_operation           - DONE
@@ -14,14 +14,14 @@
 #   does_fragment_type_apply - Test
 
 # 6.4 - Executing Fields
-#   execute_field - Test
-#   coerce_argument_values - TODO
-#   resolve_field_value - Implement defaults
-#   complete_value - Test
-#   resolve_abstract_type - Implement defaults
+#   execute_field - DONE
+#   coerce_argument_values - DONE
+#   resolve_field_value - DONE
+#   complete_value - DONE
+#   resolve_abstract_type - DONE
 #   merge_selection_sets - test
 
-
+# nolint end
 
 
 
@@ -44,11 +44,12 @@
 
 
 
-# 6.1 - Executing Requests - TODO
+# 6.1 - Executing Requests
 
 # To execute a request, the executor must have a parsed Document (as defined in the “Query Language” part of this spec) and a selected operation name to run if the document defines multiple operations, otherwise the document is expected to only contain a single operation. The result of the request is determined by the result of executing this operation according to the “Executing Operations” section below.
 #
 
+# nolint start
 # ExecuteRequest(schema, document, operationName, variableValues, initialValue)
 #   1. Let operation be the result of GetOperation(document, operationName).
 #   2. Let coercedVariableValues be the result of CoerceVariableValues(schema, operation, variableValues).
@@ -56,6 +57,7 @@
 #     a. Return ExecuteQuery(operation, schema, coercedVariableValues, initialValue).
 #   4. Otherwise if operation is a mutation operation:
 #     a. Return ExecuteMutation(operation, schema, coercedVariableValues, initialValue).
+# nolint end
 
 #' @export
 execute_request <- function(
@@ -102,7 +104,7 @@ validate_document <- function(document_obj, ..., oh) {
   document_obj
 }
 
-
+# nolint start
 # GetOperation(document, operationName)
 #   1. If operationName is null:
 #     a. If document contains exactly one operation.
@@ -112,6 +114,8 @@ validate_document <- function(document_obj, ..., oh) {
 #     a. Let operation be the Operation named operationName in document.
 #     b. If operation was not found, produce a query error.
 #     c. Return operation.
+# nolint end
+
 get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
   operations <- document_obj$.get_operations()
 
@@ -143,6 +147,7 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
 
 
 
+# nolint start
 # CoerceVariableValues(schema, operation, variableValues)
 #   1. Let coercedValues be an empty unordered Map.
 #   2. Let variableDefinitions be the variables defined by operation.
@@ -160,6 +165,7 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
 #     g. Let coercedValue be the result of coercing value according to the input coercion rules of variableType.
 #     h. Add an entry to coercedValues named variableName with the value coercedValue.
 #   4. Return coercedValues.
+# nolint end
 
 # variable_values is a named list according to the variable name
 coerce_variable_values <- function(operation, variable_values, ..., oh) {

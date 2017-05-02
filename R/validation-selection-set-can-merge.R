@@ -272,11 +272,13 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
     merged_set, return_type_obj,
     oh = oh
   )
+  # # nolint start
   # validate_fields_can_merge(
   #   selection_set, matching_obj,
   #   oh = oh,
   #   same_response_shape_only = TRUE
   # )
+  # # nolint end
 
   TRUE
 }

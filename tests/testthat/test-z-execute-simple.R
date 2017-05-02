@@ -1,5 +1,4 @@
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-execute-simple.R"))
-
+# # load_all(); testthat::test_file(file.path("tests", "testthat", "test-execute-simple.R"))
 
 context("execute-simple")
 
@@ -144,8 +143,6 @@ test_that("arbitrary code", {
     initial_value = data
   )
 
-  # str(ans)
-
   expect_true(ans$error_list$has_no_errors())
   expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[1]]$rando))
   expect_true(!identical(ans$data$rando, ans$data$deep$deeper[[3]]$rando))
@@ -162,7 +159,6 @@ test_that("arbitrary code", {
     initial_value = data
   )
 
-  # str(ans_exact)
   expect_true(ans$error_list$has_no_errors())
   expect_equal(ans_exact$data, expected)
 

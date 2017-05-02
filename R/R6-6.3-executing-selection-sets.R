@@ -4,6 +4,7 @@
 #
 # First, the selection set is turned into a grouped field set; then, each represented field in the grouped field set produces an entry into a response map.
 
+# nolint start
 # ExecuteSelectionSet(selectionSet, objectType, objectValue, variableValues)
 #   1. Let groupedFieldSet be the result of CollectFields(objectType, selectionSet, variableValues).
 #   2. Initialize resultMap to an empty ordered map.
@@ -15,6 +16,7 @@
 #     d. Let responseValue be ExecuteField(objectType, objectValue, fields, fieldType, variableValues).
 #     e. Set responseValue as the value for responseKey in resultMap.
 #   4. Return resultMap.
+# nolint end
 
   # NOTE: responseMap is ordered by which fields appear first in the query. This is explained in greater detail in the Field Collection section below.
 
@@ -22,9 +24,6 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
 
   # 1. Let groupedFieldSet be the result of CollectFields(objectType, selectionSet, variableValues).
   grouped_field_set <- collect_fields(object_type, selection_set, oh = oh)
-
-  # print(grouped_field_set)
-  # browser()
 
   # 2. Initialize resultMap to an empty ordered map.
   result_map <- list()
@@ -38,16 +37,18 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
     # a. Let fieldName be the name of the first entry in fields.
     # Note: This value is unaffected if an alias is used.
     first_field <- fields[[1]]
-    # field_name <- first_field$name
+    # field_name <- first_field$name # nolint
     matching_field <- object_obj$.get_field(first_field)
     # b. Let fieldType be the return type defined for the field fieldName of objectType.
     matching_field_type <- matching_field$type
 
+    # # nolint start
     # cat('\n')
     # str(fields)
     # str(matching_field)
     # cat('\n')
     # browser()
+    # # nolint end
 
     # c. If fieldType is null:
     #   i. Continue to the next iteration of groupedFieldSet.
@@ -64,7 +65,6 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
 
     # e. Set responseValue as the value for responseKey in resultMap.
     result_map[response_key] <- list(response_value)
-    # result_map[[response_key]] <- response_value
   }
 
   # 4. Return resultMap.
@@ -76,6 +76,7 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
 
 # The depth‐first‐search order of the field groups produced by CollectFields() is maintained through execution, ensuring that fields appear in the executed response in a stable and predictable order.
 #
+# nolint start
 # CollectFields(objectType, selectionSet, variableValues, visitedFragments)
 #   1. If visitedFragments if not provided, initialize it to the empty set.
 #   2. Initialize groupedFields to an empty ordered map of lists.
@@ -112,11 +113,8 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
 #         2. Let groupForResponseKey be the list in groupedFields for responseKey; if no such list exists, create it as an empty list.
 #         3. Append all items in fragmentGroup to groupForResponseKey.
 #   4. Return groupedFields.
+# nolint end
 collect_fields <- function(object_type, selection_set, ..., oh, visited_fragments = c()) {
-
-  # print(selection_set)
-  # print(object_type)
-  # browser()
 
   # 2. Initialize groupedFields to an empty ordered map of lists.
   grouped_fields <- list()
@@ -235,7 +233,6 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
   }
 
   # 4. Return groupedFields.
-  # str(grouped_fields)
   return(grouped_fields)
 }
 
@@ -247,6 +244,7 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
 
 
 
+# nolint start
 # DoesFragmentTypeApply(objectType, fragmentType)
 #   1. If fragmentType is an Object Type:
 #     a. if objectType and fragmentType are the same type, return true, otherwise return false.
@@ -254,6 +252,7 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
 #     a. if objectType is an implementation of fragmentType, return true otherwise return false.
 #   3. If fragmentType is a Union:
 #     a. if objectType is a possible type of fragmentType, return true otherwise return false.
+# nolint end
 does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
 
   fragment_type <- oh$schema_obj$get_inner_type(fragment_type)
@@ -275,10 +274,6 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
   ) {
     obj <- oh$schema_obj$get_object(object_type)
     ret <- obj$.has_interface(fragment_type)
-    # interface_obj <- oh$schema_obj$get_interface(fragment_type, oh$schema_obj)
-    # ret <- interface_obj$.resolve_type(object_type, oh$schema_obj)
-    # object_obj <- oh$schema_obj$get_object(object_type)
-    # ret <- object_obj$.does_implement(fragment_type)
     return(ret)
   }
 

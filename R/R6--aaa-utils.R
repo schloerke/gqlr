@@ -27,7 +27,7 @@ PkgObjsGen <- R6Class(
     get_class_obj = function(key) {
       obj <- self$list[[key]]
       if (is.null(obj)) {
-        stop0("Could not find object with class: ", key)
+        stop("Could not find object with class: ", key)
       }
       obj
     }
@@ -37,8 +37,6 @@ PkgObjsGen <- R6Class(
       names(self$list)
     }
   )
-  # private = privateList,
-  # active = activeList
 )
 PkgObjs <- PkgObjsGen$new()
 
@@ -113,7 +111,6 @@ parse_args <- function(txt) {
 
 
 
-# R6_from_args("Document", "kind: 'Document'; loc?: ?Location; definitions: Array<Definition>;", inherit = AST)
 R6_from_args <- function(
   type, txt = NULL, inherit = NULL, public = list(), private = list(), active = list()
 ) {
@@ -128,14 +125,14 @@ R6_from_args <- function(
 
       if (is.null(value)) {
         if (! self$.args[[key]]$can_be_null) {
-          stop0("Can not set value to NULL for ", classVal, "$", key)
+          stop("Can not set value to NULL for ", classVal, "$", key)
         }
         self$.args[[key]]$value <- value
         return(value)
       }
 
       bad_inherits <- function() {
-        stop0(
+        stop(
           "Attempting to set ", class(self)[1], ".", key, ".\n",
           "Expected value with class of |", classVal, "|.\n",
           "Received ", paste(class(value), collapse = ", ")
@@ -175,7 +172,7 @@ R6_from_args <- function(
 
       if (inherits(value, "R6")) {
         str(value, 3)
-        stop0(
+        stop(
           "Attempting to set ", class(self)[1], ".", key, ".\n",
           "Expected value should be an array of ", classVal, " objects.\n",
           "Received ", paste(class(value), collapse = ", "),
@@ -186,7 +183,7 @@ R6_from_args <- function(
       lapply(value, function(valItem) {
         if (!inherits(valItem, classVal)) {
           str(value, 3)
-          stop0(
+          stop(
             "Attempting to set ", class(self)[1], ".", key, ".\n",
             "Expected value with class of |", classVal, "|.\n",
             "Received ", paste(class(valItem), collapse = ", "),
@@ -218,7 +215,7 @@ R6_from_args <- function(
       }
       value <- parse_fn(value)
       if (! (value %in% values)) {
-        stop0(
+        stop(
           "Value supplied to key '", key, "' not in accepted values: ",
           str_c(values, collapse = ", "), "."
         )
@@ -248,7 +245,7 @@ R6_from_args <- function(
         fn = pryr_unenclose(function(x) {
           if (!is.null(x)) {
             if (!is.function(x)) {
-              stop0("can not set ", argName, " to a non function value.")
+              stop("can not set ", argName, " to a non function value.")
             }
           }
           x
@@ -273,9 +270,6 @@ R6_from_args <- function(
     # replace all "argName" and "type_fn" or "argType" with the actual values
     # this allows R6 to work with functions that should be closures,
     # after unenclose'ing the function, it is no long a closure
-    # if (type == "Name") browser()
-
-    # fn <- pryr::unenclose(pryr::unenclose(fn))
     fn <- pryr_unenclose(fn)
 
     activeList[[argName]] <- fn
@@ -315,7 +309,7 @@ R6_from_args <- function(
               }
             } else {
               function(e) {
-                stop0(
+                stop(
                   "Did not receive: '", .argName, "'. ",
                   "'", .argName, "' must be supplied to object of class: ", class(self)[1]
                 )
@@ -324,10 +318,6 @@ R6_from_args <- function(
           )
         )
 
-      }
-
-      if (!is.null(private$init_validate)) {
-        private$init_validate()
       }
 
       return(invisible(self))

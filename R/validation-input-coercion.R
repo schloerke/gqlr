@@ -51,8 +51,6 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
   }
 
   to_obj <- oh$schema_obj$get_type(to_type)
-  # to_obj %>% str()
-  # browser()
 
   # // Input objects check each defined field and look for undefined fields.
   if (inherits(to_obj, "InputObjectTypeDefinition")) {
@@ -106,11 +104,6 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
     browser()
     stop("Must be input type")
   }
-
-  # from_input %>% str()
-  # cat("\n")
-  # to_type %>% str()
-  #
 
   # make sure the resulting type can be coerced.  if it produces a NULL value, it can not be coerced
   result <- to_obj$.parse_literal(from_input, oh$schema_obj)

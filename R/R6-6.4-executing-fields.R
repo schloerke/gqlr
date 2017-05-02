@@ -1,3 +1,4 @@
+# nolint start
 # 6.4 - Executing Fields
 #
 # Each field requested in the grouped field set that is defined on the selected objectType will result in an entry in the response map. Field execution first coerces any provided argument values, then resolves a value for the field, and finally completes that value either by recursively executing another selection set or coercing a scalar value.
@@ -7,6 +8,7 @@
 #   2. Let argumentValues be the result of CoerceArgumentValues(objectType, field, variableValues)
 #   3. Let resolvedValue be ResolveFieldValue(objectType, objectValue, fieldName, argumentValues).
 #   4. Return the result of CompleteValue(fieldType, fields, resolvedValue, variableValues).
+# nolint end
 execute_field <- function(object_type, object_value, field_type, fields, ..., oh) {
 
   # 1. Let field be the first entry in fields.
@@ -29,12 +31,8 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
     oh = oh
   )
 
-  # str(object_value)
-
   # 4. Return the result of CompleteValue(fieldType, fields, resolvedValue, variableValues).
   completed_value <- complete_value(field_type, fields, resolved_value, oh = oh)
-  # cat('\n\n')
-  # str(completed_value)
   completed_value
 }
 
@@ -52,6 +50,7 @@ resolve__typename <- function(object_type, object_value, ..., oh) {
 
 
 
+# nolint start
 # 6.4.1 - Coercing Field Arguments
 #
 # Fields may include arguments which are provided to the underlying runtime in order to correctly produce a value. These arguments are defined by the field in the type system to have a specific input type: Scalars, Enum, Input Object, or List or Non‐Null wrapped variations of these three.
@@ -87,6 +86,7 @@ resolve__typename <- function(object_type, object_value, ..., oh) {
 #     i. Add an entry to coercedValues named argName with the value coercedValue.
 #   6. Return coercedValues.
 # Note: Variable values are not coerced because they are expected to be coerced before executing the operation in CoerceVariableValues(), and valid queries must only allow usage of variables of appropriate types.
+# nolint end
 coerce_argument_values <- function(object_type, field, ..., oh) {
   # 1. Let coercedValues be an empty unordered Map.
   coerced_values <- list()
@@ -99,14 +99,12 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
   if (length(argument_values) == 0) return(coerced_values)
 
   # 3. Let fieldName be the name of field.
-  # field_name <- field$name
+  # field_name <- field$name # nolint
 
   # 4. Let argumentDefinitions be the arguments defined by objectType for the field named fieldName.
   field_parent_obj <- oh$schema_obj$get_object(object_type)
   matching_field_obj <- field_parent_obj$.get_field(field)
   argument_definitions <- matching_field_obj$arguments
-
-
 
 
   # 5. For each argumentDefinition in argumentDefinitions:
@@ -146,7 +144,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     # e. If value is a Variable:
     if (inherits(value, "Variable")) {
       # i. Let variableName be the name of Variable value.
-      # variable_name <- format(value$name)
+      # variable_name <- format(value$name) # nolint
       variable_to_name <- format(matching_arg$name)
 
       # ii. Let variableValue be the value provided in variableValues for the name variableName.
@@ -199,13 +197,16 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 
   }
 
+  # # nolint start
   # str(coerced_values)
   # browser()
+  # # nolint end
   coerced_values
 }
 
 
 
+# nolint start
 # 6.4.2 - Value Resolution
 #
 # While nearly all of GraphQL execution can be described generically, ultimately the internal system exposing the GraphQL interface must provide values. This is exposed via ResolveFieldValue, which produces a value for a given field on a type for a real value.
@@ -216,6 +217,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 #   1. Let resolver be the internal function provided by objectType for determining the resolved value of a field named fieldName.
 #   2. Return the result of calling resolver, providing objectValue and argumentValues.
 # Note: It is common for resolver to be asynchronous due to relying on reading an underlying database or networked service to produce a value. This necessitates the rest of a GraphQL executor to handle an asynchronous execution flow.
+# nolint end
 resolve_field_value <- function(object_type, object_value, field_obj, argument_values, ..., oh) {
 
   object_obj <- oh$schema_obj$get_type(object_type)
@@ -223,6 +225,7 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
   resolver_fn <- object_obj$.get_field(field_obj)$.resolve
   resolver_fn <- NULL
 
+  # # nolint start
   # cat("\n\n")
   # print(list(
   #   obj = object_obj,
@@ -231,6 +234,7 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
   #   resolver = resolver_fn
   # ))
   # browser()
+  # # nolint end
 
   field_name_txt <- format(field_obj$name)
   if (is.null(resolver_fn)) {
@@ -259,6 +263,7 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
 
 
 
+# nolint start
 # 6.4.3 - Value Completion
 #
 # After resolving the value for a field, it is completed by ensuring it adheres to the expected return type. If the return type is another Object type, then the field execution process continues recursively.
@@ -283,6 +288,7 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
 #       i. Let objectType be ResolveAbstractType(fieldType, result).
 #     c. Let subSelectionSet be the result of calling MergeSelectionSets(fields).
 #     d. Return the result of evaluating ExecuteSelectionSet(subSelectionSet, objectType, result, variableValues) normally (allowing for parallelization).
+# nolint end
 complete_value <- function(field_type, fields, result, ..., oh) {
   # 1. If the fieldType is a Non‐Null type:
   if (inherits(field_type, "NonNullType")) {
@@ -375,6 +381,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     # ex: all friends are stored as id values.  should return full object
     object_obj <- oh$schema_obj$get_object(object_type)
     if (is.function(object_obj$.resolve)) {
+      # # nolint start
       # pre_result <- result
       # cat('\n\n\n')
       # str(result)
@@ -382,6 +389,8 @@ complete_value <- function(field_type, fields, result, ..., oh) {
       # cat("\n\n")
       # str(result)
       # browser()
+      # # nolint end
+
       # if a nullish result is returned, return null
       if (is_nullish(result)) {
         return(NULL)
@@ -401,9 +410,11 @@ complete_value <- function(field_type, fields, result, ..., oh) {
 }
 
 
+# nolint start
 # ResolveAbstractType(abstractType, objectValue)
 #   1. Return the result of calling the internal method provided by the type system for determining
 #      the Object type of abstractType given the value objectValue.
+# nolint end
 resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ..., oh) {
 
   if (inherits(abstract_obj, "InterfaceTypeDefinition")) {
@@ -422,6 +433,7 @@ resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ...
 
 
 
+# nolint start
 # MergeSelectionSets(fields)
 #   1. Let selectionSet be an empty list.
 #   2. For each field in fields:
@@ -429,6 +441,7 @@ resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ...
 #     b. If fieldSelectionSet is null or empty, continue to the next field.
 #     c. Append all selections in fieldSelectionSet to selectionSet.
 #   3. Return selectionSet.
+# nolint end
 merge_selection_sets <- function(fields, ..., oh) {
   # 1. Let selectionSet be an empty list.
   selections <- list()
@@ -467,9 +480,12 @@ merge_selection_sets <- function(fields, ..., oh) {
 is_nullish <- function(x) {
   type_of_value <- typeof(x)
 
+  # # nolint start
   # typeof(NULL) # "NULL"
   # typeof(NA) # "logical"
   # typeof(NaN) # "double"
+  # # nolint end
+
   switch(type_of_value,
     "NULL" = TRUE,
     "logical" = , # nolint

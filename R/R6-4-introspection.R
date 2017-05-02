@@ -1,19 +1,13 @@
-#' @include R6-3.2-directives.R
 #' @include graphql_json.R
 #' @include R6--definition.R
 
-# setup_instrospection <- function() {
-
 get_definition <- function(x, name) {
-  x$.get_definition(name)
+  x$get_type(name)
 }
 
 "
-# __Schema desc here
 type __Schema {
-  # types desc here
   types: [__Type!]!
-  # queryType desc here
   queryType: __Type!
   mutationType: __Type
   directives: [__Directive!]!
@@ -452,19 +446,19 @@ enum __DirectiveLocation {
         FIELD = "Location adjacent to a field",
         FRAGMENT_DEFINITION = "Location adjacent to a fragment definition",
         FRAGMENT_SPREAD = "Location adjacent to a fragment spread",
-        INLINE_FRAGMENT = "Location adjacent to a inline fragment",
-        # Schema Definitions
-        SCHEMA = "Location adjacent to a schema definition",
-        SCALAR = "Location adjacent to a scalar definition",
-        OBJECT = "Location adjacent to a object definition",
-        FIELD_DEFINITION = "Location adjacent to a field definition",
-        ARGUMENT_DEFINITION = "Location adjacent to a argument definition",
-        INTERFACE = "Location adjacent to a interface definition",
-        UNION = "Location adjacent to a union definition",
-        ENUM = "Location adjacent to a enum definition",
-        ENUM_VALUE = "Location adjacent to a enum value definition",
-        INPUT_OBJECT = "Location adjacent to a input object definition",
-        INPUT_FIELD_DEFINITION = "Location adjacent to a input field definition"
+        INLINE_FRAGMENT = "Location adjacent to a inline fragment"#,
+        # # Schema Definitions
+        # SCHEMA = "Location adjacent to a schema definition",
+        # SCALAR = "Location adjacent to a scalar definition",
+        # OBJECT = "Location adjacent to a object definition",
+        # FIELD_DEFINITION = "Location adjacent to a field definition",
+        # ARGUMENT_DEFINITION = "Location adjacent to a argument definition",
+        # INTERFACE = "Location adjacent to a interface definition",
+        # UNION = "Location adjacent to a union definition",
+        # ENUM = "Location adjacent to a enum definition",
+        # ENUM_VALUE = "Location adjacent to a enum value definition",
+        # INPUT_OBJECT = "Location adjacent to a input object definition",
+        # INPUT_FIELD_DEFINITION = "Location adjacent to a input field definition"
       )
     )
   ) %>%
