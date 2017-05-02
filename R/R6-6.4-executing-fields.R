@@ -220,8 +220,6 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 # nolint end
 resolve_field_value <- function(object_type, object_value, field_obj, argument_values, ..., oh) {
 
-  object_obj <- oh$schema$get_type(object_type)
-
   # # nolint start
   # cat("\n\n")
   # print(list(

@@ -8,7 +8,7 @@ completed_introspection <- FALSE
 
 
 
-as_type = function(name_val) {
+as_type <- function(name_val) {
   if (inherits(name_val, "Type")) {
     return(name_val)
   }
@@ -25,7 +25,7 @@ as_type = function(name_val) {
 }
 
 # returns a NamedType
-get_inner_type = function(type_obj) {
+get_inner_type <- function(type_obj) {
   type_obj <- as_type(type_obj)
 
   while (
@@ -37,7 +37,7 @@ get_inner_type = function(type_obj) {
   type_obj
 }
 
-name_value = function(name_obj) {
+name_value <- function(name_obj) {
   if (is.character(name_obj)) {
     name_obj
   } else if (inherits(name_obj, "Name")) {
@@ -52,7 +52,7 @@ name_value = function(name_obj) {
   }
 }
 
-get_object_interface_or_union = function(name_obj, schema) {
+get_object_interface_or_union <- function(name_obj, schema) {
   if (is.null(name_obj)) return(NULL)
   name_val <- name_value(name_obj)
   ifnull(
