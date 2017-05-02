@@ -1,3 +1,50 @@
+#' ErrorList
+#'
+#' Handles all errors that occur during query validation. This object is returned from execute request function (\code{ans <- \link{execute_request}(query, schema)}) under the field 'error_list' (\code{ans$error_list}).
+#'
+#' @section Usage:
+#' \preformatted{answer <- execute_request(my_request, my_schema)
+#' answer$error_list
+#' }
+#'
+#' @section Initialize:
+#' \describe{
+#'   \item{verbose}{boolean that determines if errors will be printed on occurance.  Defaults to \code{TRUE}}
+#' }
+#'
+#' @section Details:
+#' \code{$n} count of errors received
+#'
+#' \code{$errors} list of error information
+#'
+#' \code{$verbose} boolean that determines of errors are printed when received
+#'
+#' \code{$has_no_errors()} helper method to determine if there are no errors
+#'
+#' \code{$has_any_errors()} helper method to determine if there are any errors
+#'
+#' \code{$add(rule_code, ...)} add a new error according to the \code{rule_code} provided. Remaining arguments are passed directly to \code{paste(..., sep = "")} with extra error rule information
+#'
+#' \code{$.format(...)} formats the error list into user friendly text. Remaining arguments are ignored
+#'
+#' \code{$print(...)} prints the error list by calling \code{self$format(...)}
+#'
+#' @name ErrorList
+#' @examples
+#' error_list <- ErrorList$new()
+#' error_list
+#' error_list$has_any_errors() # FALSE
+#' error_list$has_no_errors() # TRUE
+#'
+#' error_list$add("3.1.1", "Multiple part", " error about Scalars")
+#' error_list
+#' error_list$has_any_errors() # TRUE
+#' error_list$has_no_errors() # FALSE
+#'
+NULL
+
+
+
 #' @export
 ErrorList <- R6Class("ErrorList",
   private = list(
