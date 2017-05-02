@@ -13,6 +13,7 @@ as_R6(x)
 Debug method that strips all gqlr classes and assigns the class as \code{'R6'}
 }
 \examples{
+Int <- getFromNamespace("Int", "gqlr")$clone()
 print(Int)
 print(as_R6(Int))
 }

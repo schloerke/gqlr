@@ -28,6 +28,7 @@ print.AST <- function(
 #' @param x any object. If it inherits \code{'R6'}, then the class of \code{x} is set to \code{'R6'}
 #' @export
 #' @examples
+#' Int <- getFromNamespace("Int", "gqlr")$clone()
 #' print(Int)
 #' print(as_R6(Int))
 as_R6 <- function(x) {
