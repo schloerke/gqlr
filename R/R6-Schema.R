@@ -52,6 +52,19 @@ name_value = function(name_obj) {
   }
 }
 
+get_object_interface_or_union = function(name_obj, schema) {
+  if (is.null(name_obj)) return(NULL)
+  name_val <- name_value(name_obj)
+  ifnull(
+    schema$get_object(name_val),
+    ifnull(
+      schema$get_interface(name_val),
+      schema$get_union(name_val)
+    )
+  )
+}
+
+
 
 
 #' @export
@@ -146,15 +159,6 @@ Schema <- R6Class(
       return(invisible(self))
     },
 
-    is_scalar       = function(name) private$exists_by_name(name, "scalars"),
-    is_enum         = function(name) private$exists_by_name(name, "enums"),
-    is_object       = function(name) private$exists_by_name(name, "objects"),
-    is_interface    = function(name) private$exists_by_name(name, "interfaces"),
-    is_union        = function(name) private$exists_by_name(name, "unions"),
-    is_input_object = function(name) private$exists_by_name(name, "input_objects"),
-    is_directive    = function(name) private$exists_by_name(name, "directives"),
-    is_value        = function(name) private$exists_by_name(name, "values"),
-
     is_object_interface_or_union = function(name) {
       return(
         self$is_object(name) ||
@@ -165,17 +169,21 @@ Schema <- R6Class(
 
     get_mutation_object = function() {
       mutation_type <- private$get_schema_definition("mutation")
-      self$get_object_interface_or_union(mutation_type)
+      get_object_interface_or_union(mutation_type, self)
     },
     get_query_object = function() {
       query_type <- private$get_schema_definition("query")
-      self$get_object_interface_or_union(query_type)
+      get_object_interface_or_union(query_type, self)
     },
-    is_query_root_name = function(name_obj) {
-      query_type <- private$get_schema_definition("query")
-      query_name <- query_type$name
-      identical(format(name_obj), format(query_name))
-    },
+
+    is_scalar       = function(name) private$exists_by_name(name, "scalars"),
+    is_enum         = function(name) private$exists_by_name(name, "enums"),
+    is_object       = function(name) private$exists_by_name(name, "objects"),
+    is_interface    = function(name) private$exists_by_name(name, "interfaces"),
+    is_union        = function(name) private$exists_by_name(name, "unions"),
+    is_input_object = function(name) private$exists_by_name(name, "input_objects"),
+    is_directive    = function(name) private$exists_by_name(name, "directives"),
+    is_value        = function(name) private$exists_by_name(name, "values"),
 
     get_scalar       = function(name) private$get_by_name(name, "scalars"),
     get_enum         = function(name) private$get_by_name(name, "enums"),
@@ -213,42 +221,6 @@ Schema <- R6Class(
     implements_interface = function(name) {
       name_val <- name_value(name)
       names(private$implements_interface_list[[name_val]])
-    },
-
-    get_possible_types = function(name_obj) {
-      name_val <- name_value(name_obj)
-      if (self$is_object(name_val)) {
-        return(name_val)
-      }
-      if (self$is_interface(name_val)) {
-        return(self$implements_interface(name_val))
-      }
-      union_obj <- self$get_union(name_val)
-      if (!is.null(union_obj)) {
-        union_names <- unlist(lapply(union_obj$types, name_value))
-        return(union_names)
-      }
-      stop("type: ", name_val, " is not an object, interface, or union")
-
-    },
-
-    get_scalar_or_enum = function(name_obj) {
-      name_val <- name_value(name_obj)
-      ifnull(
-        self$get_scalar(name_val),
-        self$get_enum(name_val)
-      )
-    },
-    get_object_interface_or_union = function(name_obj) {
-      if (is.null(name_obj)) return(NULL)
-      name_val <- name_value(name_obj)
-      ifnull(
-        self$get_object(name_val),
-        ifnull(
-          self$get_interface(name_val),
-          self$get_union(name_val)
-        )
-      )
     },
 
     get_schema = function(full = FALSE) {
@@ -406,7 +378,5 @@ Schema <- R6Class(
       return(invisible(self))
     }
 
-  ),
-  active = list(
   )
 )

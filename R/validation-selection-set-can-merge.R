@@ -43,7 +43,7 @@ validate_fields_can_merge <- function(
           # inline fragment with no type. get parent type
           item_matching_obj <- matching_obj_
         } else {
-          item_matching_obj <- oh$schema$get_object_interface_or_union(field$typeCondition)
+          item_matching_obj <- get_object_interface_or_union(field$typeCondition, oh$schema)
         }
         add_all_fields(field$selectionSet$selections, item_matching_obj)
       }
@@ -215,8 +215,12 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
 
   # If typeA or typeB is Scalar or Enum.
   if (
-    (!is.null(oh$schema$get_scalar_or_enum(type_i))) ||
-    (!is.null(oh$schema$get_scalar_or_enum(type_j)))
+    (!is.null(
+      ifnull(oh$schema$get_scalar(type_i), oh$schema$get_enum(type_i))
+    )) ||
+    (!is.null(
+      ifnull(oh$schema$get_scalar(type_i), oh$schema$get_enum(type_i))
+    ))
   ) {
     # typeA and typeB must be the same type.
     if (!identical(type_i_str, type_j_str)) {
@@ -233,8 +237,8 @@ validate_fields_have_same_response_shape <- function(field_i_info, field_j_info,
   }
 
   # Assert: typeA and typeB are both composite types.
-  composite_i <- oh$schema$get_object_interface_or_union(type_i)
-  composite_j <- oh$schema$get_object_interface_or_union(type_j)
+  composite_i <- get_object_interface_or_union(type_i, oh$schema)
+  composite_j <- get_object_interface_or_union(type_j, oh$schema)
   if (
     is.null(composite_i) ||
     is.null(composite_j)

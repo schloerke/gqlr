@@ -85,7 +85,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             next
           }
 
-          matching_field_obj <- oh$schema$get_object_interface_or_union(matching_field$type)
+          matching_field_obj <- get_object_interface_or_union(matching_field$type, oh$schema)
           field <- upgrade_fragments_in_field(field, matching_field_obj, seen_fragments)
         }
         new_selections <- append(new_selections, field)
@@ -155,9 +155,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           matching_frag_obj <- matching_obj
           matching_type_condition <- matching_obj$name
         } else {
-          matching_frag_obj <- oh$schema$get_object_interface_or_union(
-            fragment_obj$typeCondition
-          )
+          matching_frag_obj <- get_object_interface_or_union(fragment_obj$typeCondition, oh$schema)
           matching_type_condition <- fragment_obj$typeCondition
         }
 
@@ -172,8 +170,24 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           return(NULL)
         }
 
-        fragment_possible_types <- oh$schema$get_possible_types(matching_type_condition)
-        parent_possible_types <- oh$schema$get_possible_types(matching_obj$name)
+        get_possible_types <- function(name_obj) {
+          name_val <- name_value(name_obj)
+          if (oh$schema$is_object(name_val)) {
+            return(name_val)
+          }
+          if (oh$schema$is_interface(name_val)) {
+            return(oh$schema$implements_interface(name_val))
+          }
+          union_obj <- oh$schema$get_union(name_val)
+          if (!is.null(union_obj)) {
+            union_names <- unlist(lapply(union_obj$types, name_value))
+            return(union_names)
+          }
+          stop("type: ", name_val, " is not an object, interface, or union")
+        }
+
+        fragment_possible_types <- get_possible_types(matching_type_condition)
+        parent_possible_types <- get_possible_types(matching_obj$name)
 
         applicable_types <- intersect(fragment_possible_types, parent_possible_types)
 

@@ -148,7 +148,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
 
       type_condition <- ifnull(selection_obj$typeCondition, object$name)
 
-      matching_obj <- oh$schema$get_object_interface_or_union(type_condition)
+      matching_obj <- get_object_interface_or_union(type_condition, oh$schema)
 
       # get the object that it's looking at, then validate those fields
       validate_fields_in_selection_set(
@@ -201,7 +201,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
 
     if (!is.null(selection_obj$selectionSet)) {
       matching_type <- get_inner_type(matching_obj_field$type)
-      matching_obj <- oh$schema$get_object_interface_or_union(matching_type$name)
+      matching_obj <- get_object_interface_or_union(matching_type$name, oh$schema)
       if (is.null(matching_obj)) {
         # 5.2.3 - if is leaf, can not dig deeper
         oh$error_list$add(
@@ -219,7 +219,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
     } else {
       # no sub selection set, make sure this is ok
       if (inherits(selection_obj, "Field")) {
-        matching_obj <- oh$schema$get_object_interface_or_union(matching_obj_field$type)
+        matching_obj <- get_object_interface_or_union(matching_obj_field$type, oh$schema)
         if (!is.null(matching_obj)) {
           oh$error_list$add(
             "5.2.3",
