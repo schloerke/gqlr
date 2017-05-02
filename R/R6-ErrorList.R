@@ -144,8 +144,9 @@ ErrorList <- R6Class("ErrorList",
         "<ErrorList> No errors"
       }
     },
+
     print = function(...) {
-      cat(self$.format(...))
+      cat(self$.format(...), "\n")
     }
   )
 )
