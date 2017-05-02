@@ -7,4 +7,5 @@ man-roxygen
 ^_ignore
 ^TODO.txt$
 ^\.travis\.yml$
+^\.lintr$
 ^codecov\.yml$
