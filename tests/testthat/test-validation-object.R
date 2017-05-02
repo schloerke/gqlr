@@ -12,7 +12,7 @@ expect_validate_err <- function(txt, ...) {
 
   validate_schema(oh = oh)
 
-  expect_true(oh$error_list$has_any_errors())
+  testthat::expect_true(oh$error_list$has_any_errors())
 
   expect_error({
       stop(format(oh$error_list))

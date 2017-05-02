@@ -71,11 +71,11 @@ is_droid <- function(id) {
   if (is.null(id)) {
     stop("NULL id supplied")
   }
-  id %in% names(droid_data)
+  id %in% names(droid_data) # nolint
 }
 
 get_human_by_id <- function(id) {
-  human <- human_data[[id]]
+  human <- human_data[[id]] # nolint
   if (is.null(human)) return(NULL)
   human$totalCredits <- function(obj, args, schema_obj) {
     length(human$appearsIn)
@@ -83,7 +83,7 @@ get_human_by_id <- function(id) {
   human
 }
 get_droid_by_id <- function(id) {
-  droid <- droid_data[[id]]
+  droid <- droid_data[[id]] # nolint
   if (is.null(droid)) return(NULL)
   droid
 }

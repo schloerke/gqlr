@@ -6,20 +6,20 @@ context("star wars")
 
 source("validate_helper.R")
 
-source(file.path("starwars", "starwars_schema.R"))
 source(file.path("starwars", "starwars_data.R"))
+source(file.path("starwars", "starwars_schema.R"))
 
 expect_sw_err <- function(...) {
-  expect_err(..., schema_obj = star_wars_schema)
+  expect_err(..., schema_obj = star_wars_schema) # nolint
 }
 expect_sw_r6 <- function(...) {
-  expect_r6(..., schema_obj = star_wars_schema)
+  expect_r6(..., schema_obj = star_wars_schema) # nolint
 }
 expect_sw_request <- function(...) {
-  expect_request(..., schema_obj = star_wars_schema)
+  expect_request(..., schema_obj = star_wars_schema) # nolint
 }
 expect_sw_request_err <- function(...) {
-  expect_request_err(..., schema_obj = star_wars_schema)
+  expect_request_err(..., schema_obj = star_wars_schema) # nolint
 }
 
 

@@ -14,9 +14,9 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
   oh <- gqlr:::ObjectHelpers$new(schema_obj)
   ans <- gqlr:::validate_document(query, oh = oh)
 
-  expect_equal(format(oh$error_list), "<ErrorList> No errors")
+  testthat::expect_equal(format(oh$error_list), "<ErrorList> No errors")
 
-  expect_true(R6::is.R6(ans), ...)
+  testthat::expect_true(R6::is.R6(ans), ...)
 }
 
 expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
@@ -24,9 +24,9 @@ expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
   oh <- gqlr:::ObjectHelpers$new(schema_obj)
   ans <- gqlr:::validate_document(query, oh = oh) # nolint
 
-  expect_true(oh$error_list$has_any_errors())
+  testthat::expect_true(oh$error_list$has_any_errors())
 
-  expect_error({
+  testthat::expect_error({
       stop(format(oh$error_list))
     },
     ...
@@ -50,7 +50,7 @@ expect_request <- function(
     variable_values = variable_values
   )
 
-  expect_true(ans$error_list$has_no_errors())
+  testthat::expect_true(ans$error_list$has_no_errors())
 
   ans_json <- result2json(ans)
 
@@ -65,7 +65,7 @@ expect_request <- function(
     #  browser() # nolint
   }
 
-  expect_equal(ans_txt, expected_txt)
+  testthat::expect_equal(ans_txt, expected_txt)
 }
 
 
@@ -86,7 +86,7 @@ expect_request_err <- function(
     variable_values = variable_values
   )
 
-  expect_true(ans$error_list$has_any_errors())
+  testthat::expect_true(ans$error_list$has_any_errors())
 
   ans_json <- result2json(ans)
 
@@ -101,7 +101,7 @@ expect_request_err <- function(
     #  browser() # nolint
   }
 
-  expect_equal(ans_txt, expected_txt)
+  testthat::expect_equal(ans_txt, expected_txt)
 }
 
 
@@ -121,8 +121,8 @@ expect_request_err <- function(
 
 
 expect_subset <- function(bigger, smaller, verbose = TRUE) {
-  ans <- sub_rec(bigger, smaller, verbose = verbose)
-  expect_true(ans)
+  ans <- sub_rec(bigger, smaller, verbose = verbose) # nolint
+  testthat::expect_true(ans)
 }
 
 sub_rec <- function(bigger, smaller, key = NULL, verbose = FALSE) {

@@ -21,7 +21,7 @@ expect_format <- function(txt, clean_txt) {
   clean_lines <- strsplit(clean_txt, "\n")[[1]]
   final_lines <- strsplit(final_txt, "\n")[[1]]
 
-  expect_equal(clean_lines, final_lines)
+  testthat::expect_equal(clean_lines, final_lines)
 }
 
 read_kitchen <- function(file_name) {
