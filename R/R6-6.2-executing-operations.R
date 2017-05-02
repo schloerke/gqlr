@@ -19,7 +19,7 @@ get_initial_value <- function(initial_value, root_type_object, ..., oh) {
   if (is.null(initial_value)) {
     resolve_fn <- root_type_object$.resolve
     if (is.function(resolve_fn)) {
-      initial_value <- root_type_object$.resolve(NULL, oh$schema_obj)
+      initial_value <- root_type_object$.resolve(NULL, oh$schema)
     }
   }
   if (is.null(initial_value) || is.logical(initial_value)) {
@@ -40,8 +40,8 @@ get_initial_value <- function(initial_value, root_type_object, ..., oh) {
 
 execute_query <- function(operation_obj, initial_value, ..., oh) {
 
-  root_type <- oh$schema_obj$get_schema_definition("query")
-  root_type_object <- oh$schema_obj$get_type(root_type)
+  root_type <- oh$schema$get_schema_definition("query")
+  root_type_object <- oh$schema$get_type(root_type)
   if (is.null(root_type_object)) {
     oh$error_list$add(
       "6.2",
@@ -78,8 +78,8 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
 # nolint end
 execute_mutation <- function(operation_obj, initial_value, ..., oh) {
 
-  root_type <- oh$schema_obj$get_schema_definition("mutation")
-  root_type_object <- oh$schema_obj$get_type(root_type)
+  root_type <- oh$schema$get_schema_definition("mutation")
+  root_type_object <- oh$schema$get_type(root_type)
   if (is.null(root_type_object)) {
     oh$error_list$add(
       "6.2",

@@ -114,7 +114,7 @@ validate_field_selections <- function(document_obj, ..., oh) {
       )
 
       validate_fields_in_selection_set(
-        operation$selectionSet, oh$schema_obj$get_query_object(),
+        operation$selectionSet, oh$schema$get_query_object(),
         oh = oh
       )
 
@@ -148,7 +148,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
 
       type_condition <- ifnull(selection_obj$typeCondition, object$name)
 
-      matching_obj <- oh$schema_obj$get_object_interface_or_union(type_condition)
+      matching_obj <- oh$schema$get_object_interface_or_union(type_condition)
 
       # get the object that it's looking at, then validate those fields
       validate_fields_in_selection_set(
@@ -200,8 +200,8 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
     )
 
     if (!is.null(selection_obj$selectionSet)) {
-      matching_type <- oh$schema_obj$get_inner_type(matching_obj_field$type)
-      matching_obj <- oh$schema_obj$get_object_interface_or_union(matching_type$name)
+      matching_type <- oh$schema$get_inner_type(matching_obj_field$type)
+      matching_obj <- oh$schema$get_object_interface_or_union(matching_type$name)
       if (is.null(matching_obj)) {
         # 5.2.3 - if is leaf, can not dig deeper
         oh$error_list$add(
@@ -219,7 +219,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
     } else {
       # no sub selection set, make sure this is ok
       if (inherits(selection_obj, "Field")) {
-        matching_obj <- oh$schema_obj$get_object_interface_or_union(matching_obj_field$type)
+        matching_obj <- oh$schema$get_object_interface_or_union(matching_obj_field$type)
         if (!is.null(matching_obj)) {
           oh$error_list$add(
             "5.2.3",
@@ -292,7 +292,7 @@ validate_directive <- function(directive_obj, parent_obj, ..., oh, skip_variable
     return(directive_obj)
   }
 
-  directive_definition <- oh$schema_obj$get_directive(directive_obj$name)
+  directive_definition <- oh$schema$get_directive(directive_obj$name)
 
   # 5.6.1 - must be difined
   if (is.null(directive_definition)) {

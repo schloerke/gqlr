@@ -61,7 +61,7 @@ graphql2obj <- function(txt) {
 
 #' @export
 gqlr_schema <- function(txt, ...) {
-  schema_obj <- Schema$new(txt)
+  schema <- Schema$new(txt)
 
   info_list <- list(...)
 
@@ -71,7 +71,7 @@ gqlr_schema <- function(txt, ...) {
     for (item_name in names(info_list)) {
       item <- info_list[[item_name]]
 
-      obj <- schema_obj$get_type(item_name)
+      obj <- schema$get_type(item_name)
       if (is.null(obj)) {
         stop("gqlr_schema() could not find object to match argument name: ", item_name)
       }
@@ -175,7 +175,7 @@ gqlr_schema <- function(txt, ...) {
 
         if (store_name == "fields") {
           for (field_name in names(item$fields)) {
-            field_name_obj <- schema_obj$as_type(field_name)
+            field_name_obj <- schema$as_type(field_name)
             obj_field <- obj$.get_field(field_name_obj)
             if (is.null(obj_field)) {
               stop("Could not find field for Object: ", item_name)
@@ -205,5 +205,5 @@ gqlr_schema <- function(txt, ...) {
     } # for each item
   } # if items
 
-  schema_obj
+  schema
 }

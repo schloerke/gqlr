@@ -68,7 +68,7 @@ validate_union_type_definition <- function(x, ..., oh) {
   }
 
   lapply(types, function(type) {
-    type_object <- oh$schema_obj$get_object(type)
+    type_object <- oh$schema$get_object(type)
 
     if (is.null(type_object)) {
       oh$error_list$add(
@@ -99,7 +99,7 @@ validate_input_object_type_definition <- function(x, ..., oh) {
   validate_field_names(x, "input object", "3.1.6.1", oh = oh)
 
   lapply(x$fields, function(field) {
-    type_obj <- oh$schema_obj$get_type(field$type)
+    type_obj <- oh$schema$get_type(field$type)
 
     if (is.null(type_obj)) {
       oh$error_list$add(
@@ -177,7 +177,7 @@ validate_object_type_definition <- function(x, ..., oh) {
   # check for interfaces
   #  4. An object type must be a super‐set of all interfaces it implements:
   lapply(interfaces, function(interface_named_type) {
-    interface_obj <- oh$schema_obj$get_interface(interface_named_type)
+    interface_obj <- oh$schema$get_interface(interface_named_type)
 
     interface_fields <- interface_obj$fields
 
@@ -302,23 +302,23 @@ validate_object_type_definition <- function(x, ..., oh) {
 
 
 validate_schema <- function(..., oh) {
-  if (isTRUE(oh$schema_obj$is_valid)) {
+  if (isTRUE(oh$schema$is_valid)) {
     return(TRUE)
   }
 
-  interfaces <- oh$schema_obj$get_interfaces()
+  interfaces <- oh$schema$get_interfaces()
   lapply(interfaces, validate_interface_type_definition, oh = oh)
 
-  unions <- oh$schema_obj$get_unions()
+  unions <- oh$schema$get_unions()
   lapply(unions, validate_union_type_definition, oh = oh)
 
-  input_objects <- oh$schema_obj$get_input_objects()
+  input_objects <- oh$schema$get_input_objects()
   lapply(input_objects, validate_input_object_type_definition, oh = oh)
 
-  objects <- oh$schema_obj$get_objects()
+  objects <- oh$schema$get_objects()
   lapply(objects, validate_object_type_definition, oh = oh)
 
-  oh$schema_obj$is_valid <- TRUE
+  oh$schema$is_valid <- TRUE
 
   oh$error_list$has_no_errors()
 }

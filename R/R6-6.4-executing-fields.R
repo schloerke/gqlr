@@ -37,13 +37,13 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
 }
 
 resolve__typename <- function(object_type, object_value, ..., oh) {
-  if (oh$schema_obj$is_object(object_type)) {
+  if (oh$schema$is_object(object_type)) {
     ret <- format(object_type)
     return(ret)
   }
 
-  obj <- ifnull(oh$schema_obj$get_interface(object_type), oh$schema_obj$get_union(object_type))
-  ret <- obj$.resolve_type(object_value, oh$schema_obj)
+  obj <- ifnull(oh$schema$get_interface(object_type), oh$schema$get_union(object_type))
+  ret <- obj$.resolve_type(object_value, oh$schema)
   ret
 }
 
@@ -102,7 +102,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
   # field_name <- field$name # nolint
 
   # 4. Let argumentDefinitions be the arguments defined by objectType for the field named fieldName.
-  field_parent_obj <- oh$schema_obj$get_object(object_type)
+  field_parent_obj <- oh$schema$get_object(object_type)
   matching_field_obj <- field_parent_obj$.get_field(field)
   argument_definitions <- matching_field_obj$arguments
 
@@ -177,13 +177,13 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     }
 
 
-    type_obj <- oh$schema_obj$get_type(argument_type)
+    type_obj <- oh$schema$get_type(argument_type)
 
     # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType,
     #    throw a field error.
     # h. Let coercedValue be the result of coercing value according to the input coercion rules of
     #    argType.
-    coerced_value <- type_obj$.parse_literal(value, oh$schema_obj)
+    coerced_value <- type_obj$.parse_literal(value, oh$schema)
     if (!is.null(value) && is.null(coerced_value)) {
       oh$error_list$add(
         "6.4.1",
@@ -220,7 +220,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 # nolint end
 resolve_field_value <- function(object_type, object_value, field_obj, argument_values, ..., oh) {
 
-  object_obj <- oh$schema_obj$get_type(object_type)
+  object_obj <- oh$schema$get_type(object_type)
 
   resolver_fn <- object_obj$.get_field(field_obj)$.resolve
   resolver_fn <- NULL
@@ -251,13 +251,13 @@ resolve_field_value <- function(object_type, object_value, field_obj, argument_v
     val <- object_value[[field_name_txt]]
     if (is.function(val)) {
       val_fn <- val
-      ans <- val_fn(object_value, argument_values, oh$schema_obj)
+      ans <- val_fn(object_value, argument_values, oh$schema)
       return(ans)
     }
     return(val)
   }
 
-  ret_val <- resolver_fn(object_value, argument_values, oh$schema_obj)
+  ret_val <- resolver_fn(object_value, argument_values, oh$schema)
   return(ret_val)
 }
 
@@ -342,16 +342,16 @@ complete_value <- function(field_type, fields, result, ..., oh) {
 
   # 4. If fieldType is a Scalar or Enum type:
   if (
-    oh$schema_obj$is_scalar(field_type) ||
-    oh$schema_obj$is_enum(field_type)
+    oh$schema$is_scalar(field_type) ||
+    oh$schema$is_enum(field_type)
   ) {
     # a. Return the result of “coercing” result, ensuring it is a legal value of fieldType,
     #    otherwise null.
     type_obj <- ifnull(
-      oh$schema_obj$get_scalar(field_type),
-      oh$schema_obj$get_enum(field_type)
+      oh$schema$get_scalar(field_type),
+      oh$schema$get_enum(field_type)
     )
-    resolved_result <- type_obj$.parse_value(result, oh$schema_obj)
+    resolved_result <- type_obj$.parse_value(result, oh$schema)
     if (length(resolved_result) == 0) {
       return(NULL)
     }
@@ -360,10 +360,10 @@ complete_value <- function(field_type, fields, result, ..., oh) {
 
   # 5. If fieldType is an Object, Interface, or Union type:
   if (
-    oh$schema_obj$is_object_interface_or_union(field_type)
+    oh$schema$is_object_interface_or_union(field_type)
   ) {
     # a. If fieldType is an Object type.
-    if (oh$schema_obj$is_object(field_type)) {
+    if (oh$schema$is_object(field_type)) {
       # i. Let objectType be fieldType.
       object_type <- field_type
 
@@ -371,21 +371,21 @@ complete_value <- function(field_type, fields, result, ..., oh) {
       # b. Otherwise if fieldType is an Interface or Union type.
         # i. Let objectType be ResolveAbstractType(fieldType, result).
       field_obj <- ifnull(
-        oh$schema_obj$get_interface(field_type),
-        oh$schema_obj$get_union(field_type)
+        oh$schema$get_interface(field_type),
+        oh$schema$get_union(field_type)
       )
       object_type <- resolve_abstract_type(field_type, result, field_obj, oh = oh)
     }
 
     # if the object has it's own resolver function, call it.
     # ex: all friends are stored as id values.  should return full object
-    object_obj <- oh$schema_obj$get_object(object_type)
+    object_obj <- oh$schema$get_object(object_type)
     if (is.function(object_obj$.resolve)) {
       # # nolint start
       # pre_result <- result
       # cat('\n\n\n')
       # str(result)
-      result <- object_obj$.resolve(result, schema_obj = oh$schema_obj)
+      result <- object_obj$.resolve(result, schema_obj = oh$schema)
       # cat("\n\n")
       # str(result)
       # browser()
@@ -418,13 +418,13 @@ complete_value <- function(field_type, fields, result, ..., oh) {
 resolve_abstract_type <- function(abstract_type, object_value, abstract_obj, ..., oh) {
 
   if (inherits(abstract_obj, "InterfaceTypeDefinition")) {
-    type <- abstract_obj$.resolve_type(object_value, oh$schema_obj)
-    type <- oh$schema_obj$as_type(type)
+    type <- abstract_obj$.resolve_type(object_value, oh$schema)
+    type <- oh$schema$as_type(type)
     return(type)
 
   } else if (inherits(abstract_obj, "UnionTypeDefinition")) {
-    type <- abstract_obj$.resolve_type(object_value, oh$schema_obj)
-    type <- oh$schema_obj$as_type(type)
+    type <- abstract_obj$.resolve_type(object_value, oh$schema)
+    type <- oh$schema$as_type(type)
     return(type)
   }
 

@@ -775,7 +775,7 @@ ScalarTypeDefinition <- R6_from_args(
       # takes in a raw value, such as: "5", 5, 5.0
       .serialize = as.character,
       # takes in a raw value, such as: "5", 5, 5.0
-      .parse_value = function(x, schema_obj) {
+      .parse_value = function(x, schema) {
         stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
       },
       # takes in AST value object: <BooleanValue>
@@ -983,7 +983,7 @@ InterfaceTypeDefinition <- R6_from_args(
       name,
       directives = NULL,
       fields,
-      .resolve_type = function(obj, schema_obj) {
+      .resolve_type = function(obj, schema) {
         stop(".resolve_type not initialized for interface of type: ", format(self$name))
       }
     ) {
@@ -1031,7 +1031,7 @@ UnionTypeDefinition <- R6_from_args(
       name,
       directives = NULL,
       types,
-      .resolve_type = function(obj, schema_obj) {
+      .resolve_type = function(obj, schema) {
         stop(".resolve_type not initialized for object of type: ", format(self$name))
       }
     ) {
@@ -1104,15 +1104,15 @@ EnumTypeDefinition <- R6_from_args(
 
       invisible(self)
     },
-    .default_serialize = function(x, schema_obj) {
+    .default_serialize = function(x, schema) {
       if (is_nullish(x)) return(NULL)
       as.character(toupper(x))
     },
-    .default_parse_value = function(x, schema_obj) {
+    .default_parse_value = function(x, schema) {
       if (is_nullish(x)) return(NULL)
       as.character(toupper(x))
     },
-    .default_parse_literal = function(value_obj, schema_obj) {
+    .default_parse_literal = function(value_obj, schema) {
 
       if (!inherits(value_obj, "EnumValue")) {
         return(NULL)

@@ -29,9 +29,9 @@
 
 #' @export
 parse_literal <- function(kind_val, parse_value_fn) {
-  fn <- function(obj, schema_obj) {
+  fn <- function(obj, schema) {
     if (inherits(obj, kind_val)) {
-      parse_value_fn(obj$value, schema_obj)
+      parse_value_fn(obj$value, schema)
     } else {
       NULL
     }
@@ -86,12 +86,12 @@ Float <- ScalarTypeDefinition$new(
   ),
   .serialize = coerce_float,
   .parse_value = coerce_float,
-  .parse_literal = pryr_unenclose(function(obj, schema_obj) {
+  .parse_literal = pryr_unenclose(function(obj, schema) {
     if (
       inherits(obj, "IntValue") ||
       inherits(obj, "FloatValue")
     ) {
-      coerce_float(obj$value, schema_obj)
+      coerce_float(obj$value, schema)
     } else {
       NULL
     }

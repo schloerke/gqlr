@@ -61,17 +61,17 @@
 
 #' @export
 execute_request <- function(
-  document_obj,
-  schema_obj,
+  request,
+  schema,
   operation_name = NULL,
   variable_values = list(),
   initial_value = NULL,
   ...
 ) {
-  oh <- ObjectHelpers$new(schema_obj)
+  oh <- ObjectHelpers$new(schema)
   validate_schema(oh = oh)
 
-  document_obj <- validate_document(document_obj, oh = oh)
+  document_obj <- validate_document(request, oh = oh)
 
   ret <- Result$new(oh$error_list)
 
@@ -197,8 +197,8 @@ coerce_variable_values <- function(operation, variable_values, ..., oh) {
       if (inherits(value, "NullValue")) {
         coerced_value <- NULL
       } else {
-        variable_obj <- oh$schema_obj$get_type(variable_type)
-        coerced_value <- variable_obj$.parse_value(value, oh$schema_obj)
+        variable_obj <- oh$schema$get_type(variable_type)
+        coerced_value <- variable_obj$.parse_value(value, oh$schema)
         if (is.null(coerced_value)) {
           oh$error_list$add(
             "6.1.2",

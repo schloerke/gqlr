@@ -28,7 +28,7 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
   # 2. Initialize resultMap to an empty ordered map.
   result_map <- list()
 
-  object_obj <- oh$schema_obj$get_type(object_type)
+  object_obj <- oh$schema$get_type(object_type)
 
   #  3. For each groupedFieldSet as responseKey and fields:
   for (response_key in names(grouped_field_set)) {
@@ -136,9 +136,9 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
       for (selection_directive in selection$directives) {
         directive_name <- format(selection_directive$name)
         if (directive_name == "skip" || directive_name == "include") {
-          directive_def <- oh$schema_obj$get_directive(selection_directive$name)
+          directive_def <- oh$schema$get_directive(selection_directive$name)
           if_arg <- selection_directive$arguments[[1]]
-          if_val <- Boolean$.parse_literal(if_arg$value, oh$schema_obj)
+          if_val <- Boolean$.parse_literal(if_arg$value, oh$schema)
           directive_response <- directive_def$.resolve(if_val)
           if (!isTRUE(directive_response)) {
             should_skip <- TRUE
@@ -257,13 +257,13 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
 # nolint end
 does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
 
-  fragment_type <- oh$schema_obj$get_inner_type(fragment_type)
-  object_type <- oh$schema_obj$get_inner_type(object_type)
+  fragment_type <- oh$schema$get_inner_type(fragment_type)
+  object_type <- oh$schema$get_inner_type(object_type)
 
   #   1. If fragmentType is an Object Type:
   #     a. if objectType and fragmentType are the same type, return true, otherwise return false.
   if (
-    oh$schema_obj$is_object(fragment_type)
+    oh$schema$is_object(fragment_type)
   ) {
     ret <- fragment_type$.matches(object_type)
     return(ret)
@@ -272,9 +272,9 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
   #   2. If fragmentType is an Interface Type:
   #     a. if objectType is an implementation of fragmentType, return true otherwise return false.
   if (
-    oh$schema_obj$is_interface(fragment_type)
+    oh$schema$is_interface(fragment_type)
   ) {
-    obj <- oh$schema_obj$get_object(object_type)
+    obj <- oh$schema$get_object(object_type)
     ret <- obj$.has_interface(fragment_type)
     return(ret)
   }
@@ -282,9 +282,9 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
   #   3. If fragmentType is a Union:
   #     a. if objectType is a possible type of fragmentType, return true otherwise return false.
   if (
-    oh$schema_obj$is_union(fragment_type)
+    oh$schema$is_union(fragment_type)
   ) {
-    union_obj <- oh$schema_obj$get_union(fragment_type)
+    union_obj <- oh$schema$get_union(fragment_type)
     ret <- union_obj$.has_type(object_type)
     return(ret)
   }

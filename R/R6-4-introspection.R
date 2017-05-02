@@ -27,39 +27,39 @@ type __Schema {
         "mutationType" = "The type that mutation operations will be rooted at.",
         "directives" = "A list of all directives supported by this server."
       ),
-      resolve = function(null, schema_obj) {
+      resolve = function(null, schema) {
         list(
           # types: [__Type!]!
           types = function(z1, z2, z3) {
             all_types <- list() %>%
-              append(names(schema_obj$get_scalars())) %>%
-              append(names(schema_obj$get_objects())) %>%
-              append(names(schema_obj$get_interfaces())) %>%
-              append(names(schema_obj$get_unions())) %>%
-              append(names(schema_obj$get_enums())) %>%
-              append(names(schema_obj$get_input_objects())) %>%
-              # append(names(schema_obj$get_directives())) %>%
-              append(names(schema_obj$get_values()))
+              append(names(schema$get_scalars())) %>%
+              append(names(schema$get_objects())) %>%
+              append(names(schema$get_interfaces())) %>%
+              append(names(schema$get_unions())) %>%
+              append(names(schema$get_enums())) %>%
+              append(names(schema$get_input_objects())) %>%
+              # append(names(schema$get_directives())) %>%
+              append(names(schema$get_values()))
 
             all_types
           },
 
           # queryType: __Type!
           queryType = function(z1, z2, z3) {
-            query_type <- schema_obj$get_schema_definition("query")
+            query_type <- schema$get_schema_definition("query")
             query_type
           },
 
           # mutationType: __Type
           mutationType = function(z1, z2, z3) {
-            mutation_type <- schema_obj$get_schema_definition("mutation")
+            mutation_type <- schema$get_schema_definition("mutation")
             if (is.null(mutation_type)) return(NULL)
             mutation_type
           },
 
           # directives: [__Directive!]!
           directives = function(z1, z2, z3) {
-            directives <- schema_obj$get_directives()
+            directives <- schema$get_directives()
             directives
           }
         )
@@ -99,8 +99,8 @@ type __Type {
 " %>%
   gqlr_schema(
     "__Type" = list(
-      resolve = function(type_obj, schema_obj) {
-        type_obj <- schema_obj$as_type(type_obj)
+      resolve = function(type_obj, schema) {
+        type_obj <- schema$as_type(type_obj)
         # kind: __TypeKind!
         # name: String
         # description: String
@@ -109,12 +109,12 @@ type __Type {
           name = function(z1, z2, z3) {
             if (inherits(type_obj, "ListType")) return(NULL)
             if (inherits(type_obj, "NonNullType")) return(NULL)
-            schema_obj$name_helper(type_obj)
+            schema$name_helper(type_obj)
           },
           description = function(z1, z2, z3) {
             if (inherits(type_obj, "ListType")) return(NULL)
             if (inherits(type_obj, "NonNullType")) return(NULL)
-            obj <- schema_obj$get_type(type_obj)
+            obj <- schema$get_type(type_obj)
             obj$description
           }
         )
@@ -135,8 +135,8 @@ type __Type {
         # # OBJECT and INTERFACE only
         # fields(includeDeprecated: Boolean = false): [__Field!]
         if (
-          schema_obj$is_object(type_obj) ||
-          schema_obj$is_interface(type_obj)
+          schema$is_object(type_obj) ||
+          schema$is_interface(type_obj)
         ) {
           ret$fields <- function(z1, args, z2) {
             include_deprecated <- args$includeDeprecated
@@ -145,8 +145,8 @@ type __Type {
             }
 
             obj <- ifnull(
-              schema_obj$get_object(type_obj),
-              schema_obj$get_interface(type_obj)
+              schema$get_object(type_obj),
+              schema$get_interface(type_obj)
             )
             fields <- obj$fields
             if (is.null(fields)) return(NULL)
@@ -156,9 +156,9 @@ type __Type {
 
         # # OBJECT only
         # interfaces: [__Type!]
-        if (schema_obj$is_object(type_obj)) {
+        if (schema$is_object(type_obj)) {
           ret$interfaces <- function(z1, z2, z3) {
-            obj <- schema_obj$get_object(type_obj)
+            obj <- schema$get_object(type_obj)
             obj_interfaces <- obj$interfaces
             if (is.null(obj_interfaces)) return(NULL)
             obj_interfaces
@@ -167,15 +167,15 @@ type __Type {
 
         # # INTERFACE and UNION only
         # possibleTypes: [__Type!]
-        if (schema_obj$is_interface(type_obj)) {
+        if (schema$is_interface(type_obj)) {
           ret$possibleTypes <- function(z1, z2, z3) {
-            possible_types <- schema_obj$implements_interface(type_obj)
+            possible_types <- schema$implements_interface(type_obj)
             if (is.null(possible_types)) return(NULL)
             possible_types
           }
-        } else if (schema_obj$is_union(type_obj)) {
+        } else if (schema$is_union(type_obj)) {
           ret$possibleTypes <- function(z1, z2, z3) {
-            union_obj <- schema_obj$get_union(type_obj)
+            union_obj <- schema$get_union(type_obj)
             union_type_names <- union_obj$types
             if (is.null(union_type_names)) return(NULL)
             union_type_names
@@ -184,14 +184,14 @@ type __Type {
 
         # # ENUM only
         # enumValues(includeDeprecated: Boolean = false): [__EnumValue!]
-        if (schema_obj$is_enum(type_obj)) {
+        if (schema$is_enum(type_obj)) {
           ret$enumValues <- function(z1, args, z3) {
             include_deprecated <- args$includeDeprecated
             if (!is.null(include_deprecated)) {
               # warning("not listening to includeDeprecated enumValues") # nolint
             }
 
-            enum_obj <- schema_obj$get_enum(type_obj)
+            enum_obj <- schema$get_enum(type_obj)
             enum_values <- enum_obj$values
             if (is.null(enum_values)) return(NULL)
             enum_values
@@ -200,9 +200,9 @@ type __Type {
 
         # # INPUT_OBJECT only
         # inputFields: [__InputValue!]
-        if (schema_obj$is_input_object(type_obj)) {
+        if (schema$is_input_object(type_obj)) {
           ret$inputFields <- function(z1, z2, z3) {
-            input_obj <- schema_obj$get_input_object(type_obj)
+            input_obj <- schema$get_input_object(type_obj)
             input_obj_fields <- input_obj$fields
             if (is.null(input_obj_fields)) return(NULL)
             input_obj_fields
@@ -240,7 +240,7 @@ type __Field {
         isDeprecated = "returns true if this field should no longer be used, otherwise false",
         deprecationReason = "optionally provides a reason why this field is deprecated"
       ),
-      resolve = function(field_obj, schema_obj) {
+      resolve = function(field_obj, schema) {
         list(
           name = format(field_obj$name),
           description = field_obj$description,
@@ -280,7 +280,7 @@ type __InputValue {
           "value has no default value, returns null."
         )
       ),
-      resolve = function(input_value, schema_obj) {
+      resolve = function(input_value, schema) {
         list(
           name = format(input_value$name),
           description = input_value$description,
@@ -311,7 +311,7 @@ type __EnumValue {
         "a placeholder for a string or numeric value. However an Enum value is ",
         "returned in a JSON response as a string."
       ),
-      resolve = function(enum_value, schema_obj) {
+      resolve = function(enum_value, schema) {
         list(
           name = format(enum_value$name),
           description = enum_value$description,
@@ -351,15 +351,15 @@ enum __TypeKind {
   LIST = "Indicates this type is a list. `ofType` is a valid field.",
   NON_NULL = "Indicates this type is a non-null. `ofType` is a valid field."
       ),
-      parse_value = function(type_obj, schema_obj) {
+      parse_value = function(type_obj, schema) {
         if (inherits(type_obj, "NonNullType")) return("NON_NULL")
         if (inherits(type_obj, "ListType")) return("LIST")
-        if (schema_obj$is_scalar(type_obj)) return("SCALAR")
-        if (schema_obj$is_object(type_obj)) return("OBJECT")
-        if (schema_obj$is_interface(type_obj)) return("INTERFACE")
-        if (schema_obj$is_union(type_obj)) return("UNION")
-        if (schema_obj$is_enum(type_obj)) return("ENUM")
-        if (schema_obj$is_input_object(type_obj)) return("INPUT_OBJECT")
+        if (schema$is_scalar(type_obj)) return("SCALAR")
+        if (schema$is_object(type_obj)) return("OBJECT")
+        if (schema$is_interface(type_obj)) return("INTERFACE")
+        if (schema$is_union(type_obj)) return("UNION")
+        if (schema$is_enum(type_obj)) return("ENUM")
+        if (schema$is_input_object(type_obj)) return("INPUT_OBJECT")
         str(type_obj)
         stop("this should not be reached")
       }
@@ -394,7 +394,7 @@ type __Directive {
         ),
         args = "returns a List of __InputValue representing the arguments this directive accepts"
       ),
-      resolve = function(directive_obj, schema_obj) {
+      resolve = function(directive_obj, schema) {
         list(
           name = format(directive_obj$name),
           description = directive_obj$description,

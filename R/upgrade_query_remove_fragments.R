@@ -85,7 +85,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             next
           }
 
-          matching_field_obj <- oh$schema_obj$get_object_interface_or_union(matching_field$type)
+          matching_field_obj <- oh$schema$get_object_interface_or_union(matching_field$type)
           field <- upgrade_fragments_in_field(field, matching_field_obj, seen_fragments)
         }
         new_selections <- append(new_selections, field)
@@ -155,7 +155,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           matching_frag_obj <- matching_obj
           matching_type_condition <- matching_obj$name
         } else {
-          matching_frag_obj <- oh$schema_obj$get_object_interface_or_union(
+          matching_frag_obj <- oh$schema$get_object_interface_or_union(
             fragment_obj$typeCondition
           )
           matching_type_condition <- fragment_obj$typeCondition
@@ -172,8 +172,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           return(NULL)
         }
 
-        fragment_possible_types <- oh$schema_obj$get_possible_types(matching_type_condition)
-        parent_possible_types <- oh$schema_obj$get_possible_types(matching_obj$name)
+        fragment_possible_types <- oh$schema$get_possible_types(matching_type_condition)
+        parent_possible_types <- oh$schema$get_possible_types(matching_obj$name)
 
         applicable_types <- intersect(fragment_possible_types, parent_possible_types)
 
@@ -211,7 +211,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
   upgraded_operations <- list()
 
   if (length(query_mutation_list$mutation) > 0) {
-    mutation_root <- oh$schema_obj$get_mutation_object()
+    mutation_root <- oh$schema$get_mutation_object()
     if (is.null(mutation_root)) {
       oh$error_list$add(
         "3.3",
@@ -226,7 +226,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
   }
 
   if (length(query_mutation_list$query) > 0) {
-    query_root <- oh$schema_obj$get_query_object()
+    query_root <- oh$schema$get_query_object()
     if (is.null(query_root)) {
       oh$error_list$add(
         "3.3",
