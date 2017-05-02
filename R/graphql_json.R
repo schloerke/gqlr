@@ -34,17 +34,6 @@ clean_json.default <- function(obj, ...) {
   obj
 }
 
-#' @import graphql
-graphql2list <- function(txt) {
-  graphql::graphql2json(txt) %>%
-    from_json() %>%
-    clean_json()
-}
-
-graphql2obj <- function(txt) {
-  graphql2list(txt) %>%
-    r6_from_list()
-}
 
 
 is_named_list <- function(obj, err) {
@@ -60,6 +49,16 @@ is_named_list <- function(obj, err) {
   }
 }
 
+#' @import graphql
+graphql2obj <- function(txt) {
+  graphql::graphql2json(txt) %>%
+    from_json() %>%
+    clean_json() %>%
+    r6_from_list()
+}
+
+
+
 #' @export
 gqlr_schema <- function(txt, ...) {
   schema_obj <- Schema$new(txt)
@@ -67,12 +66,15 @@ gqlr_schema <- function(txt, ...) {
   info_list <- list(...)
 
   if (length(info_list) > 0) {
-    is_named_list(info_list, "graphql2schema() extra arguments must be uniquely named arguments")
+    is_named_list(info_list, "gqlr_schema() extra arguments must be uniquely named arguments")
 
     for (item_name in names(info_list)) {
       item <- info_list[[item_name]]
 
       obj <- schema_obj$get_type(item_name)
+      if (is.null(obj)) {
+        stop("gqlr_schema() could not find object to match argument name: ", item_name)
+      }
       item_type <- class(obj)[1]
 
       info_names <- names(item)
@@ -83,7 +85,7 @@ gqlr_schema <- function(txt, ...) {
         )
         if (!is_ok) {
           stop(
-            "graphql2schema() argument: ", item_name,
+            "gqlr_schema() argument: ", item_name,
             " of type: ScalarTypeDefinition,",
             " should be a list possibly containing these elements:\n",
             "\tdescription: String\n",
@@ -100,7 +102,7 @@ gqlr_schema <- function(txt, ...) {
           is_ok <- all(info_names %in% c("description", "fields", "resolve"))
           if (!is_ok) {
             stop(
-              "graphql2schema() argument: ", item_name,
+              "gqlr_schema() argument: ", item_name,
               " of type: ObjectTypeDefinition,",
               " should be a 'resolve' function or a list possibly containing these elements:\n",
               "\tdescription: String\n",
@@ -119,7 +121,7 @@ gqlr_schema <- function(txt, ...) {
           )
           if (!is_ok) {
             stop(
-              "graphql2schema() argument: ", item_name,
+              "gqlr_schema() argument: ", item_name,
               " of type: EnumTypeDefinition,",
               " should be a list possibly containing these elements:\n",
               "\tdescription: String\n",
@@ -138,7 +140,7 @@ gqlr_schema <- function(txt, ...) {
           is_ok <- all(info_names %in% c("description", "resolve_type"))
           if (!is_ok) {
             stop(
-              "graphql2schema() argument: ", item_name,
+              "gqlr_schema() argument: ", item_name,
               " of type: ,", item_type,
               " should be a 'resolve_type' function or",
               " a list possibly containing these elements:\n",
@@ -150,12 +152,12 @@ gqlr_schema <- function(txt, ...) {
 
       } else {
         str(obj)
-        stop("unknown object provided to graphql2schema()")
+        stop("unknown object provided to gqlr_schema()")
       }
 
       is_named_list(
         item,
-        str_c("graphql2schema() argument: '", item_name, "' must be uniquely named arguments")
+        str_c("gqlr_schema() argument: '", item_name, "' must be uniquely named arguments")
       )
 
       for (info_name in names(item)) {
