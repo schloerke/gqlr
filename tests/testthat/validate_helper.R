@@ -14,7 +14,7 @@ expect_r6 <- function(query, ..., schema_obj = dog_cat_schema) {
   oh <- gqlr:::ObjectHelpers$new(schema_obj)
   ans <- gqlr:::validate_document(query, oh = oh)
 
-  testthat::expect_equal(format(oh$error_list), "<ErrorList> No errors")
+  testthat::expect_equal(gqlr:::format.ErrorList(oh$error_list), "<ErrorList> No errors")
 
   testthat::expect_true(R6::is.R6(ans), ...)
 }
@@ -27,7 +27,7 @@ expect_err <- function(query, ..., schema_obj = dog_cat_schema) {
   testthat::expect_true(oh$error_list$has_any_errors())
 
   testthat::expect_error({
-      stop(format(oh$error_list))
+      stop(gqlr:::format.ErrorList(oh$error_list))
     },
     ...
   )
@@ -52,7 +52,7 @@ expect_request <- function(
 
   testthat::expect_true(ans$error_list$has_no_errors())
 
-  ans_json <- result2json(ans)
+  ans_json <- ans$as_json()
 
   ans_txt <- strsplit(ans_json, "\n")[[1]]
   expected_txt <- strsplit(expected_result, "\n")[[1]]
@@ -88,7 +88,7 @@ expect_request_err <- function(
 
   testthat::expect_true(ans$error_list$has_any_errors())
 
-  ans_json <- result2json(ans)
+  ans_json <- ans$as_json()
 
   ans_txt <- strsplit(ans_json, "\n")[[1]]
   expected_txt <- strsplit(expected_result, "\n")[[1]]
