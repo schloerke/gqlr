@@ -74,7 +74,7 @@ schema {
   query: SearchRoot
 }
 " %>%
-  graphql2obj() ->
-dog_cat_doc
+  graphql2schema() ->
+dog_cat_schema
 
-dog_cat_schema <- Schema$new(dog_cat_doc)
+dog_cat_dog <- dog_cat_schema$get_schema()

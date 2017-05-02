@@ -7,7 +7,18 @@ star_wars_schema <- Schema$new()
 "
 enum Episode { NEWHOPE, EMPIRE, JEDI }
 " %>%
-  graphql2obj() %>%
+  graphql2schema(
+    Episode = list(
+      parse_value = function(episode_id, schema_obj) {
+        switch(as.character(episode_id),
+          "4" = "NEWHOPE",
+          "5" = "EMPIRE",
+          "6" = "JEDI",
+          "UNKNOWN_EPISODE"
+        )
+      }
+    )
+  ) %>%
   star_wars_schema$add()
 
 
@@ -19,9 +30,9 @@ interface Character {
   appearsIn: [Episode]
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     Character = list(
-      .resolve_type = function(id, schema_obj) {
+      resolve_type = function(id, schema_obj) {
         if (is_droid(id)) {
           "Droid"
         } else {
@@ -49,15 +60,15 @@ type Human implements Character {
   homePlanet: String
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     Human = list(
-      .resolve = function(id, args, schema_obj) {
+      resolve = function(id, args, schema_obj) {
         get_human_by_id(id)
       }
     ),
     Droid = list(
       description = "A mechanical creature in the Star Wars universe.",
-      .resolve = function(id, schema_obj) {
+      resolve = function(id, schema_obj) {
         get_droid_by_id(id)
       }
     )
@@ -78,7 +89,7 @@ schema {
   # mutation: Mutation
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     Query = function(null, schema_obj) {
       list(
         hero = function(obj, args, schema_obj) {
@@ -116,9 +127,9 @@ directive @notskip on FIELD
  | FRAGMENT_SPREAD
  | INLINE_FRAGMENT
 " %>%
-  graphql2obj(
+  graphql2schema(
     HumanOrDroid = list(
-      .resolve_type = function(id, schema_obj) {
+      resolve_type = function(id, schema_obj) {
         if (is_droid(id)) {
           "Droid"
         } else {

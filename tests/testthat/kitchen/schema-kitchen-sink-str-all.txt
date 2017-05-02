@@ -1,0 +1,1084 @@
+<Document>
+. loc: <Location>
+. . start: 1
+. . end: 21
+. definitions:
+. . 1 - <SchemaDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . operationTypes:
+. . . . 1 - <OperationTypeDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 19
+. . . . . operation: 'query'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 10
+. . . . . . . end: 19
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 10
+. . . . . . . . end: 19
+. . . . . . . value: 'QueryType'
+. . . . 2 - <OperationTypeDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 25
+. . . . . operation: 'mutation'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 13
+. . . . . . . end: 25
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 13
+. . . . . . . . end: 25
+. . . . . . . value: 'MutationType'
+. . 2 - <ObjectTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 6
+. . . . . end: 9
+. . . . value: 'Foo'
+. . . interfaces:
+. . . . 1 - <NamedType>
+. . . . . loc: <Location>
+. . . . . . start: 21
+. . . . . . end: 24
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 21
+. . . . . . . end: 24
+. . . . . . value: 'Bar'
+. . . fields:
+. . . . 1 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 12
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 6
+. . . . . . value: 'one'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 8
+. . . . . . . end: 12
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 8
+. . . . . . . . end: 12
+. . . . . . . value: 'Type'
+. . . . 2 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 34
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 6
+. . . . . . value: 'two'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 7
+. . . . . . . . end: 27
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 7
+. . . . . . . . . end: 15
+. . . . . . . . value: 'argument'
+. . . . . . . type: <NonNullType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 17
+. . . . . . . . . end: 27
+. . . . . . . . type: <NamedType>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 17
+. . . . . . . . . . end: 26
+. . . . . . . . . name: <Name>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 17
+. . . . . . . . . . . end: 26
+. . . . . . . . . . value: 'InputType'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 30
+. . . . . . . end: 34
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 30
+. . . . . . . . end: 34
+. . . . . . . value: 'Type'
+. . . . 3 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 49
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 8
+. . . . . . value: 'three'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 9
+. . . . . . . . end: 28
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 9
+. . . . . . . . . end: 17
+. . . . . . . . value: 'argument'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 19
+. . . . . . . . . end: 28
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 19
+. . . . . . . . . . end: 28
+. . . . . . . . . value: 'InputType'
+. . . . . . 2 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 30
+. . . . . . . . end: 43
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 30
+. . . . . . . . . end: 35
+. . . . . . . . value: 'other'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 37
+. . . . . . . . . end: 43
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 37
+. . . . . . . . . . end: 43
+. . . . . . . . . value: 'String'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 46
+. . . . . . . end: 49
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 46
+. . . . . . . . end: 49
+. . . . . . . value: 'Int'
+. . . . 4 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 50
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 7
+. . . . . . value: 'four'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 8
+. . . . . . . . end: 26
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 8
+. . . . . . . . . end: 16
+. . . . . . . . value: 'argument'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 18
+. . . . . . . . . end: 24
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 18
+. . . . . . . . . . end: 24
+. . . . . . . . . value: 'String'
+. . . . . . . defaultValue: <StringValue>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 25
+. . . . . . . . . end: 26
+. . . . . . . . value: 'string'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 44
+. . . . . . . end: 50
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 44
+. . . . . . . . end: 50
+. . . . . . . value: 'String'
+. . . . 5 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 70
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 7
+. . . . . . value: 'five'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 8
+. . . . . . . . end: 61
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 8
+. . . . . . . . . end: 16
+. . . . . . . . value: 'argument'
+. . . . . . . type: <ListType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 18
+. . . . . . . . . end: 26
+. . . . . . . . type: <NamedType>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 19
+. . . . . . . . . . end: 25
+. . . . . . . . . name: <Name>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 19
+. . . . . . . . . . . end: 25
+. . . . . . . . . . value: 'String'
+. . . . . . . defaultValue: <ListValue>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 29
+. . . . . . . . . end: 61
+. . . . . . . . values:
+. . . . . . . . . 1 - <StringValue>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 29
+. . . . . . . . . . . end: 30
+. . . . . . . . . . value: 'string'
+. . . . . . . . . 2 - <StringValue>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 29
+. . . . . . . . . . . end: 30
+. . . . . . . . . . value: 'string'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 64
+. . . . . . . end: 70
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 64
+. . . . . . . . end: 70
+. . . . . . . value: 'String'
+. . . . 6 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 55
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 6
+. . . . . . value: 'six'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 7
+. . . . . . . . end: 48
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 7
+. . . . . . . . . end: 15
+. . . . . . . . value: 'argument'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 17
+. . . . . . . . . end: 26
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 17
+. . . . . . . . . . end: 26
+. . . . . . . . . value: 'InputType'
+. . . . . . . defaultValue: <ObjectValue>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 29
+. . . . . . . . . end: 48
+. . . . . . . . fields:
+. . . . . . . . . 1 - <ObjectField>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 30
+. . . . . . . . . . . end: 34
+. . . . . . . . . . name: <Name>
+. . . . . . . . . . . loc: <Location>
+. . . . . . . . . . . . start: 30
+. . . . . . . . . . . . end: 33
+. . . . . . . . . . . value: 'key'
+. . . . . . . . . . value: <StringValue>
+. . . . . . . . . . . loc: <Location>
+. . . . . . . . . . . . start: 33
+. . . . . . . . . . . . end: 34
+. . . . . . . . . . . value: 'value'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 51
+. . . . . . . end: 55
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 51
+. . . . . . . . end: 55
+. . . . . . . value: 'Type'
+. . . . 7 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 36
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 8
+. . . . . . value: 'seven'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 9
+. . . . . . . . end: 29
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 9
+. . . . . . . . . end: 17
+. . . . . . . . value: 'argument'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 19
+. . . . . . . . . end: 22
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 19
+. . . . . . . . . . end: 22
+. . . . . . . . . value: 'Int'
+. . . . . . . defaultValue: <NullValue>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 25
+. . . . . . . . . end: 29
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 32
+. . . . . . . end: 36
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 32
+. . . . . . . . end: 36
+. . . . . . . value: 'Type'
+. . . . 8 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
+. . 3 - <ObjectTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 6
+. . . . . end: 21
+. . . . value: 'AnnotatedObject'
+. . . directives:
+. . . . 1 - <Directive>
+. . . . . loc: <Location>
+. . . . . . start: 22
+. . . . . . end: 50
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 23
+. . . . . . . end: 31
+. . . . . . value: 'onObject'
+. . . . . arguments:
+. . . . . . 1 - <Argument>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 32
+. . . . . . . . end: 36
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 32
+. . . . . . . . . end: 35
+. . . . . . . . value: 'arg'
+. . . . . . . value: <StringValue>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 35
+. . . . . . . . . end: 36
+. . . . . . . . value: 'value'
+. . . fields:
+. . . . 1 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 69
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 17
+. . . . . . value: 'annotatedField'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 18
+. . . . . . . . end: 53
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 18
+. . . . . . . . . end: 21
+. . . . . . . . value: 'arg'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 23
+. . . . . . . . . end: 27
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 23
+. . . . . . . . . . end: 27
+. . . . . . . . . value: 'Type'
+. . . . . . . defaultValue: <StringValue>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 28
+. . . . . . . . . end: 29
+. . . . . . . . value: 'default'
+. . . . . . . directives:
+. . . . . . . . 1 - <Directive>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 47
+. . . . . . . . . . end: 53
+. . . . . . . . . name: <Name>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 48
+. . . . . . . . . . . end: 53
+. . . . . . . . . . value: 'onArg'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 56
+. . . . . . . end: 60
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 56
+. . . . . . . . end: 60
+. . . . . . . value: 'Type'
+. . . . . directives:
+. . . . . . 1 - <Directive>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 61
+. . . . . . . . end: 69
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 62
+. . . . . . . . . end: 69
+. . . . . . . . value: 'onField'
+. . . . 2 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
+. . 4 - <InterfaceTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 11
+. . . . . end: 14
+. . . . value: 'Bar'
+. . . fields:
+. . . . 1 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 12
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 6
+. . . . . . value: 'one'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 8
+. . . . . . . end: 12
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 8
+. . . . . . . . end: 12
+. . . . . . . value: 'Type'
+. . . . 2 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 50
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 7
+. . . . . . value: 'four'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 8
+. . . . . . . . end: 26
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 8
+. . . . . . . . . end: 16
+. . . . . . . . value: 'argument'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 18
+. . . . . . . . . end: 24
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 18
+. . . . . . . . . . end: 24
+. . . . . . . . . value: 'String'
+. . . . . . . defaultValue: <StringValue>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 25
+. . . . . . . . . end: 26
+. . . . . . . . value: 'string'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 44
+. . . . . . . end: 50
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 44
+. . . . . . . . end: 50
+. . . . . . . value: 'String'
+. . . . 3 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
+. . . .resolve_type: function
+. . 5 - <InterfaceTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 11
+. . . . . end: 29
+. . . . value: 'AnnotatedInterface'
+. . . directives:
+. . . . 1 - <Directive>
+. . . . . loc: <Location>
+. . . . . . start: 30
+. . . . . . end: 42
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 31
+. . . . . . . end: 42
+. . . . . . value: 'onInterface'
+. . . fields:
+. . . . 1 - <FieldDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 50
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 17
+. . . . . . value: 'annotatedField'
+. . . . . arguments:
+. . . . . . 1 - <InputValueDefinition>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 18
+. . . . . . . . end: 34
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 18
+. . . . . . . . . end: 21
+. . . . . . . . value: 'arg'
+. . . . . . . type: <NamedType>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 23
+. . . . . . . . . end: 27
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 23
+. . . . . . . . . . end: 27
+. . . . . . . . . value: 'Type'
+. . . . . . . directives:
+. . . . . . . . 1 - <Directive>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 28
+. . . . . . . . . . end: 34
+. . . . . . . . . name: <Name>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 29
+. . . . . . . . . . . end: 34
+. . . . . . . . . . value: 'onArg'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 37
+. . . . . . . end: 41
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 37
+. . . . . . . . end: 41
+. . . . . . . value: 'Type'
+. . . . . directives:
+. . . . . . 1 - <Directive>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 42
+. . . . . . . . end: 50
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 43
+. . . . . . . . . end: 50
+. . . . . . . . value: 'onField'
+. . . . 2 - <FieldDefinition>
+. . . . . name: <Name>
+. . . . . . value: '__typename'
+. . . . . type: <NamedType>
+. . . . . . name: <Name>
+. . . . . . . value: 'String'
+. . . .resolve_type: function
+. . 6 - <UnionTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 38
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 7
+. . . . . end: 11
+. . . . value: 'Feed'
+. . . types:
+. . . . 1 - <NamedType>
+. . . . . loc: <Location>
+. . . . . . start: 14
+. . . . . . end: 19
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 14
+. . . . . . . end: 19
+. . . . . . value: 'Story'
+. . . . 2 - <NamedType>
+. . . . . loc: <Location>
+. . . . . . start: 22
+. . . . . . end: 29
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 22
+. . . . . . . end: 29
+. . . . . . value: 'Article'
+. . . . 3 - <NamedType>
+. . . . . loc: <Location>
+. . . . . . start: 32
+. . . . . . end: 38
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 32
+. . . . . . . end: 38
+. . . . . . value: 'Advert'
+. . . .resolve_type: function
+. . 7 - <UnionTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 38
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 7
+. . . . . end: 21
+. . . . value: 'AnnotatedUnion'
+. . . directives:
+. . . . 1 - <Directive>
+. . . . . loc: <Location>
+. . . . . . start: 22
+. . . . . . end: 30
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 23
+. . . . . . . end: 30
+. . . . . . value: 'onUnion'
+. . . types:
+. . . . 1 - <NamedType>
+. . . . . loc: <Location>
+. . . . . . start: 33
+. . . . . . end: 34
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 33
+. . . . . . . end: 34
+. . . . . . value: 'A'
+. . . . 2 - <NamedType>
+. . . . . loc: <Location>
+. . . . . . start: 37
+. . . . . . end: 38
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 37
+. . . . . . . end: 38
+. . . . . . value: 'B'
+. . . .resolve_type: function
+. . 8 - <ScalarTypeDefinition>
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 8
+. . . . . end: 20
+. . . . value: 'CustomScalar'
+. . . .serialize: function
+. . . .parse_value: function
+. . . .parse_literal: function
+. . 9 - <ScalarTypeDefinition>
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 8
+. . . . . end: 23
+. . . . value: 'AnnotatedScalar'
+. . . directives:
+. . . . 1 - <Directive>
+. . . . . loc: <Location>
+. . . . . . start: 24
+. . . . . . end: 33
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 25
+. . . . . . . end: 33
+. . . . . . value: 'onScalar'
+. . . .serialize: function
+. . . .parse_value: function
+. . . .parse_literal: function
+. . 10 - <EnumTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 6
+. . . . . end: 10
+. . . . value: 'Site'
+. . . values:
+. . . . 1 - <EnumValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 10
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 10
+. . . . . . value: 'DESKTOP'
+. . . . 2 - <EnumValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 9
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 9
+. . . . . . value: 'MOBILE'
+. . . .serialize: function
+. . . .parse_value: function
+. . . .parse_literal: function
+. . 11 - <EnumTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 6
+. . . . . end: 19
+. . . . value: 'AnnotatedEnum'
+. . . directives:
+. . . . 1 - <Directive>
+. . . . . loc: <Location>
+. . . . . . start: 20
+. . . . . . end: 27
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 21
+. . . . . . . end: 27
+. . . . . . value: 'onEnum'
+. . . values:
+. . . . 1 - <EnumValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 31
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 18
+. . . . . . value: 'ANNOTATED_VALUE'
+. . . . . directives:
+. . . . . . 1 - <Directive>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 19
+. . . . . . . . end: 31
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 20
+. . . . . . . . . end: 31
+. . . . . . . . value: 'onEnumValue'
+. . . . 2 - <EnumValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 14
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 14
+. . . . . . value: 'OTHER_VALUE'
+. . . .serialize: function
+. . . .parse_value: function
+. . . .parse_literal: function
+. . 12 - <InputObjectTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 7
+. . . . . end: 16
+. . . . value: 'InputType'
+. . . fields:
+. . . . 1 - <InputValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 15
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 6
+. . . . . . value: 'key'
+. . . . . type: <NonNullType>
+. . . . . . loc: <Location>
+. . . . . . . start: 8
+. . . . . . . end: 15
+. . . . . . type: <NamedType>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 8
+. . . . . . . . end: 14
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 8
+. . . . . . . . . end: 14
+. . . . . . . . value: 'String'
+. . . . 2 - <InputValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 19
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 9
+. . . . . . value: 'answer'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 11
+. . . . . . . end: 14
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 11
+. . . . . . . . end: 14
+. . . . . . . value: 'Int'
+. . . . . defaultValue: <IntValue>
+. . . . . . loc: <Location>
+. . . . . . . start: 17
+. . . . . . . end: 19
+. . . . . . value: '42'
+. . 13 - <InputObjectTypeDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 7
+. . . . . end: 21
+. . . . value: 'AnnotatedInput'
+. . . directives:
+. . . . 1 - <Directive>
+. . . . . loc: <Location>
+. . . . . . start: 22
+. . . . . . end: 40
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 23
+. . . . . . . end: 40
+. . . . . . value: 'onInputObjectType'
+. . . fields:
+. . . . 1 - <InputValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 3
+. . . . . . end: 32
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 17
+. . . . . . value: 'annotatedField'
+. . . . . type: <NamedType>
+. . . . . . loc: <Location>
+. . . . . . . start: 19
+. . . . . . . end: 23
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 19
+. . . . . . . . end: 23
+. . . . . . . value: 'Type'
+. . . . . directives:
+. . . . . . 1 - <Directive>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 24
+. . . . . . . . end: 32
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 25
+. . . . . . . . . end: 32
+. . . . . . . . value: 'onField'
+. . 14 - <TypeExtensionDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 2
+. . . definition: <ObjectTypeDefinition>
+. . . . loc: <Location>
+. . . . . start: 8
+. . . . . end: 2
+. . . . name: <Name>
+. . . . . loc: <Location>
+. . . . . . start: 13
+. . . . . . end: 16
+. . . . . value: 'Foo'
+. . . . fields:
+. . . . . 1 - <FieldDefinition>
+. . . . . . loc: <Location>
+. . . . . . . start: 3
+. . . . . . . end: 34
+. . . . . . name: <Name>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 3
+. . . . . . . . end: 8
+. . . . . . . value: 'seven'
+. . . . . . arguments:
+. . . . . . . 1 - <InputValueDefinition>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 9
+. . . . . . . . . end: 27
+. . . . . . . . name: <Name>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 9
+. . . . . . . . . . end: 17
+. . . . . . . . . value: 'argument'
+. . . . . . . . type: <ListType>
+. . . . . . . . . loc: <Location>
+. . . . . . . . . . start: 19
+. . . . . . . . . . end: 27
+. . . . . . . . . type: <NamedType>
+. . . . . . . . . . loc: <Location>
+. . . . . . . . . . . start: 20
+. . . . . . . . . . . end: 26
+. . . . . . . . . . name: <Name>
+. . . . . . . . . . . loc: <Location>
+. . . . . . . . . . . . start: 20
+. . . . . . . . . . . . end: 26
+. . . . . . . . . . . value: 'String'
+. . . . . . type: <NamedType>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 30
+. . . . . . . . end: 34
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 30
+. . . . . . . . . end: 34
+. . . . . . . . value: 'Type'
+. . . . . 2 - <FieldDefinition>
+. . . . . . name: <Name>
+. . . . . . . value: '__typename'
+. . . . . . type: <NamedType>
+. . . . . . . name: <Name>
+. . . . . . . . value: 'String'
+. . 15 - <DirectiveDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 75
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 12
+. . . . . end: 16
+. . . . value: 'skip'
+. . . arguments:
+. . . . 1 - <InputValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 17
+. . . . . . end: 29
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 17
+. . . . . . . end: 19
+. . . . . . value: 'if'
+. . . . . type: <NonNullType>
+. . . . . . loc: <Location>
+. . . . . . . start: 21
+. . . . . . . end: 29
+. . . . . . type: <NamedType>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 21
+. . . . . . . . end: 28
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 21
+. . . . . . . . . end: 28
+. . . . . . . . value: 'Boolean'
+. . . locations:
+. . . . 1 - <Name>
+. . . . . loc: <Location>
+. . . . . . start: 34
+. . . . . . end: 39
+. . . . . value: 'FIELD'
+. . . . 2 - <Name>
+. . . . . loc: <Location>
+. . . . . . start: 42
+. . . . . . end: 57
+. . . . . value: 'FRAGMENT_SPREAD'
+. . . . 3 - <Name>
+. . . . . loc: <Location>
+. . . . . . start: 60
+. . . . . . end: 75
+. . . . . value: 'INLINE_FRAGMENT'
+. . 16 - <DirectiveDefinition>
+. . . loc: <Location>
+. . . . start: 1
+. . . . end: 21
+. . . name: <Name>
+. . . . loc: <Location>
+. . . . . start: 12
+. . . . . end: 19
+. . . . value: 'include'
+. . . arguments:
+. . . . 1 - <InputValueDefinition>
+. . . . . loc: <Location>
+. . . . . . start: 20
+. . . . . . end: 32
+. . . . . name: <Name>
+. . . . . . loc: <Location>
+. . . . . . . start: 20
+. . . . . . . end: 22
+. . . . . . value: 'if'
+. . . . . type: <NonNullType>
+. . . . . . loc: <Location>
+. . . . . . . start: 24
+. . . . . . . end: 32
+. . . . . . type: <NamedType>
+. . . . . . . loc: <Location>
+. . . . . . . . start: 24
+. . . . . . . . end: 31
+. . . . . . . name: <Name>
+. . . . . . . . loc: <Location>
+. . . . . . . . . start: 24
+. . . . . . . . . end: 31
+. . . . . . . . value: 'Boolean'
+. . . locations:
+. . . . 1 - <Name>
+. . . . . loc: <Location>
+. . . . . . start: 6
+. . . . . . end: 11
+. . . . . value: 'FIELD'
+. . . . 2 - <Name>
+. . . . . loc: <Location>
+. . . . . . start: 6
+. . . . . . end: 21
+. . . . . value: 'FRAGMENT_SPREAD'
+. . . . 3 - <Name>
+. . . . . loc: <Location>
+. . . . . . start: 6
+. . . . . . end: 21
+. . . . . value: 'INLINE_FRAGMENT'

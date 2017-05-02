@@ -20,14 +20,14 @@ test_that("small counter", {
     mutation: AddCounter
   }
   " %>%
-    graphql2obj(
+    graphql2schema(
       Counter = list(
-        .resolve = function(...) {
+        resolve = function(...) {
           list(value = count_total)
         }
       ),
       AddCounter = list(
-        .resolve = function(...) {
+        resolve = function(...) {
           list(
             value = function(z1, z2, schema_obj) {
               count_total <<- count_total + 1

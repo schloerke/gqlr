@@ -132,12 +132,12 @@ test_that("arbitrary code", {
     query: Data
   }
   " %>%
-    graphql2obj() ->
-  schema_doc
+    graphql2schema() ->
+  schema_obj
 
   ans <- execute_request(
     simple_query,
-    schema_doc,
+    schema_obj,
     operation_name = "Example",
     variable_values = list(size = 100),
     initial_value = data
@@ -153,7 +153,7 @@ test_that("arbitrary code", {
 
   ans_exact <- execute_request(
     query_doc_exact,
-    schema_doc,
+    schema_obj,
     operation_name = "Example",
     variable_values = list(size = 100),
     initial_value = data

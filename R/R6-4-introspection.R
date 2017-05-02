@@ -13,7 +13,7 @@ type __Schema {
   directives: [__Directive!]!
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__Schema" = list(
       description = collapse(
         "A GraphQL Schema defines the capabilities of a GraphQL server. It ",
@@ -27,7 +27,7 @@ type __Schema {
         "mutationType" = "The type that mutation operations will be rooted at.",
         "directives" = "A list of all directives supported by this server."
       ),
-      .resolve = function(null, schema_obj) {
+      resolve = function(null, schema_obj) {
         list(
           # types: [__Type!]!
           types = function(z1, z2, z3) {
@@ -97,9 +97,9 @@ type __Type {
   ofType: __Type
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__Type" = list(
-      .resolve = function(type_obj, schema_obj) {
+      resolve = function(type_obj, schema_obj) {
         type_obj <- schema_obj$as_type(type_obj)
         # kind: __TypeKind!
         # name: String
@@ -141,7 +141,7 @@ type __Type {
           ret$fields <- function(z1, args, z2) {
             include_deprecated <- args$includeDeprecated
             if (!is.null(include_deprecated)) {
-              # warning("not listening to includeDeprecated enumValues")
+              # warning("not listening to includeDeprecated enumValues") # nolint
             }
 
             obj <- ifnull(
@@ -188,7 +188,7 @@ type __Type {
           ret$enumValues <- function(z1, args, z3) {
             include_deprecated <- args$includeDeprecated
             if (!is.null(include_deprecated)) {
-              # warning("not listening to includeDeprecated enumValues")
+              # warning("not listening to includeDeprecated enumValues") # nolint
             }
 
             enum_obj <- schema_obj$get_enum(type_obj)
@@ -228,7 +228,7 @@ type __Field {
   deprecationReason: String
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__Field" = list(
       description = collapse(
         "Object and Interface types are described by a list of Fields, each of ",
@@ -240,7 +240,7 @@ type __Field {
         isDeprecated = "returns true if this field should no longer be used, otherwise false",
         deprecationReason = "optionally provides a reason why this field is deprecated"
       ),
-      .resolve = function(field_obj, schema_obj) {
+      resolve = function(field_obj, schema_obj) {
         list(
           name = format(field_obj$name),
           description = field_obj$description,
@@ -265,7 +265,7 @@ type __InputValue {
   defaultValue: String
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__InputValue" = list(
       description = collapse(
         "Arguments provided to Fields or Directives and the input fields of an ",
@@ -280,7 +280,7 @@ type __InputValue {
           "value has no default value, returns null."
         )
       ),
-      .resolve = function(input_value, schema_obj) {
+      resolve = function(input_value, schema_obj) {
         list(
           name = format(input_value$name),
           description = input_value$description,
@@ -304,14 +304,14 @@ type __EnumValue {
   deprecationReason: String
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__EnumValue" = list(
       description = collapse(
         "One possible value for a given Enum. Enum values are unique values, not ",
         "a placeholder for a string or numeric value. However an Enum value is ",
         "returned in a JSON response as a string."
       ),
-      .resolve = function(enum_value, schema_obj) {
+      resolve = function(enum_value, schema_obj) {
         list(
           name = format(enum_value$name),
           description = enum_value$description,
@@ -338,10 +338,10 @@ enum __TypeKind {
   NON_NULL
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__TypeKind" = list(
       description = "An enum describing what kind of type a given `__Type` is.",
-      fields = list(
+      values = list(
   SCALAR = "Indicates this type is a scalar.",
   OBJECT = "Indicates this type is an object. `fields` and `interfaces` are valid fields.",
   INTERFACE = "Indicates this type is an interface. `fields` and `possibleTypes` are valid fields.",
@@ -351,7 +351,7 @@ enum __TypeKind {
   LIST = "Indicates this type is a list. `ofType` is a valid field.",
   NON_NULL = "Indicates this type is a non-null. `ofType` is a valid field."
       ),
-      .parse_value = function(type_obj, schema_obj) {
+      parse_value = function(type_obj, schema_obj) {
         if (inherits(type_obj, "NonNullType")) return("NON_NULL")
         if (inherits(type_obj, "ListType")) return("LIST")
         if (schema_obj$is_scalar(type_obj)) return("SCALAR")
@@ -377,7 +377,7 @@ type __Directive {
   args: [__InputValue!]!
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__Directive" = list(
       description = collapse(
         "A Directive provides a way to describe alternate runtime execution and ",
@@ -394,7 +394,7 @@ type __Directive {
         ),
         args = "returns a List of __InputValue representing the arguments this directive accepts"
       ),
-      .resolve = function(directive_obj, schema_obj) {
+      resolve = function(directive_obj, schema_obj) {
         list(
           name = format(directive_obj$name),
           description = directive_obj$description,
@@ -433,13 +433,13 @@ enum __DirectiveLocation {
   # INPUT_FIELD_DEFINITION
 }
 " %>%
-  graphql2obj(
+  graphql2schema(
     "__DirectiveLocation" = list(
       description = collapse(
         "A Directive can be adjacent to many parts of the GraphQL language, a ",
         "__DirectiveLocation describes one such possible adjacencies."
       ),
-      fields = list(
+      values = list(
         # Operations
         QUERY = "Location adjacent to a query",
         MUTATION = "Location adjacent to a mutation",
@@ -473,7 +473,7 @@ type QueryRootFields {
   __type(name: String!): __Type
 }
 " %>%
-  graphql2obj() %>%
+  graphql2schema() %>%
   get_definition("QueryRootFields") ->
 Introspection__QueryRootFields
 Introspection__QueryRootFields$fields[[1]]$.show_in_format <- FALSE
@@ -498,3 +498,5 @@ Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$name$loc <- NULL
 Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$loc <- NULL
 Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$loc <- NULL
 Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$name$loc <- NULL
+
+completed_introspection <- TRUE

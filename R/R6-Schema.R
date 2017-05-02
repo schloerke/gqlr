@@ -4,6 +4,7 @@
 #' @include R6-3.1.1-types-scalars.R
 #' @include R6-6.1-executing-requests.R
 
+completed_introspection <- FALSE
 
 #' @export
 Schema <- R6Class(
@@ -61,19 +62,21 @@ Schema <- R6Class(
       self$add(Float)
       self$add(String)
       self$add(Boolean)
-      # self$add(ID)
+      # self$add(ID) # nolint
 
       self$add(SkipDirective)
       self$add(IncludeDirective)
 
-      self$add(Introspection__Schema)
-      self$add(Introspection__Type)
-      self$add(Introspection__Field)
-      self$add(Introspection__InputValue)
-      self$add(Introspection__EnumValue)
-      self$add(Introspection__TypeKind)
-      self$add(Introspection__Directive)
-      self$add(Introspection__DirectiveLocation)
+      if (completed_introspection) {
+        self$add(Introspection__Schema)
+        self$add(Introspection__Type)
+        self$add(Introspection__Field)
+        self$add(Introspection__InputValue)
+        self$add(Introspection__EnumValue)
+        self$add(Introspection__TypeKind)
+        self$add(Introspection__Directive)
+        self$add(Introspection__DirectiveLocation)
+      }
 
       if (!missing(document_obj)) {
         if (inherits(document_obj, "character")) {
@@ -238,21 +241,40 @@ Schema <- R6Class(
           self$get_union(name_val)
         )
       )
-
-      # recursively go until the named type is found
-      # self$get_object_interface_or_union(type_obj$type)
     },
 
-    get_schema = function() {
+    get_schema = function(full = FALSE) {
+
+      scalars <- self$get_scalars()
+      enums <- self$get_enums()
+      objects <- self$get_objects()
+      interfaces <- self$get_interfaces()
+      unions <- self$get_unions()
+      input_objects <- self$get_input_objects()
+      directives <- self$get_directives()
+      values <- self$get_values()
+      schema_def <- private$schema_definition
+
+
+      if (!isTRUE(full)) {
+        scalars[c("Int", "Float", "String", "Boolean")] <- NULL
+        directives[c("include", "skip")] <- NULL
+        objects[c(
+          "__Schema", "__Type", "__Field", "__InputValue", "__EnumValue","__Directive"
+        )] <- NULL
+        enums[c("__TypeKind", "__DirectiveLocation")] <- NULL
+      }
+
       definitions <- list() %>%
-        append(self$get_scalars()) %>%
-        append(self$get_enums()) %>%
-        append(self$get_objects()) %>%
-        append(self$get_interfaces()) %>%
-        append(self$get_unions()) %>%
-        append(self$get_input_objects()) %>%
-        append(self$get_directives()) %>%
-        append(self$get_values())
+        append(scalars) %>%
+        append(enums) %>%
+        append(objects) %>%
+        append(interfaces) %>%
+        append(unions) %>%
+        append(input_objects) %>%
+        append(directives) %>%
+        append(values) %>%
+        append(schema_def)
 
       document_obj <- Document$new(definitions = definitions)
       document_obj
@@ -261,8 +283,13 @@ Schema <- R6Class(
     is_valid = FALSE,
     add = function(obj) {
       self$is_valid <- FALSE
+
+      if (inherits(obj, "Schema")) {
+        self$add(obj$get_schema(full = FALSE))
+        return(invisible(self))
+      }
       if (!inherits(obj, "AST")) {
-        stop0(
+        stop(
           "Object must be of class AST to add to a Schema. Received: ",
           paste(class(obj), collapse = ", ")
         )
@@ -328,12 +355,12 @@ Schema <- R6Class(
 
       if (is.null(obj_group)) {
         print(obj)
-        stop0("Unknown object type requested to be added to schema. Type: ", obj_kind)
+        stop("Unknown object type requested to be added to schema. Type: ", obj_kind)
       }
 
       if (!is.null(private[[obj_group]][[obj_name]])) {
         print(private[[obj_group]][[obj_name]])
-        stop0(obj_name, " already defined in ", obj_kind)
+        stop(obj_name, " already defined in ", obj_kind)
       }
 
       private[[obj_group]][[obj_name]] <- obj

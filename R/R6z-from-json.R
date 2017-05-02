@@ -16,7 +16,6 @@ r6_from_list <- function(
   if (typeof(obj) != "list") {
     return(obj)
   }
-  # browser()
   objClass <- obj$kind
   if (is.null(objPos)) {
     keys <- append(keys, objClass)
@@ -30,7 +29,6 @@ r6_from_list <- function(
 
   retList <- list()
 
-  # fieldNames <- ret$"_argNames"
   fieldNames <- names(r6Obj$public_fields$.args)
 
   for (activeKey in fieldNames) {
@@ -45,22 +43,26 @@ r6_from_list <- function(
           # going through a list, such as 'Document$defintions' or 'ObjectTypeDefinition$fields'
 
 
+          # # nolint start
           # str(objVal, max = 2)
           # print(activeKey)
           # browser()
-          # lapply(objVal, r6_from_list, keys = keys, level = level)
+          # # nolint end
+
           retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
 
             fn_values_i <- list()
             fn_list_i <- list()
 
             if (!is.null(fn_list) && length(fn_list) > 0) {
+              # # nolint start
               # cat("\n\n")
               # print(fn_list)
               # print(objClass)
               # print(activeKey)
               # str(objVal[[i]])
               # browser()
+              # # nolint end
 
               if (objClass == "Document" && activeKey == "definitions") {
 
@@ -73,7 +75,7 @@ r6_from_list <- function(
                   info_i <- fn_list[[obj_name]]
                   info_i <- get_resolve_and_description(info_i)
 
-                  # if (length(info_i$fields) == 0) browser()
+                  # if (length(info_i$fields) == 0) browser() # nolint
                   fn_list_i <- lapply(info_i$fields, get_resolve_and_description)
                   fn_values_i <- info_i
                   fn_values_i$fields <- NULL
@@ -88,14 +90,17 @@ r6_from_list <- function(
                   # get the description or fields of an object or enum value
                   # pass them into the recursive definition so that they are added to the objects
                   obj_name <- objVal[[i]]$name$value
-                  # if (obj_name == "__schema") browser()
+                  # if (obj_name == "__schema") browser() # nolint
                   fn_values_i <- fn_list[[obj_name]]
                   fn_values_i <- get_resolve_and_description(fn_values_i)
                   fn_list_i <- list()
 
                 } else {
+                  # # nolint start
                   # print(list(class = objClass, activeKey = activeKey))
                   # fn_list <- get_resolve_and_description(fn_list)
+                  # # nolint end
+
                 }
               }
 
@@ -112,9 +117,6 @@ r6_from_list <- function(
           })
         } else {
           # going into another object, such as "Name" or "Location"
-          # print(list(objClass, activeKey, 1))
-          # if (objClass == "DirectiveDefinition") browser()
-
           retList[[activeKey]] <- r6_from_list(
             objVal,
             fn_list = fn_list,

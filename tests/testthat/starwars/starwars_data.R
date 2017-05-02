@@ -2,8 +2,7 @@ luke <- list(
   id = "1000",
   name = "Luke Skywalker",
   friends = c("1002", "1003", "2000", "2001"),
-  # appearsIn = c(4, 5, 6),
-  appearsIn = c("NEWHOPE", "EMPIRE", "JEDI"),
+  appearsIn = c(4, 5, 6),
   homePlanet = "Tatooine"
 )
 
@@ -11,8 +10,7 @@ vader <- list(
   id = "1001",
   name = "Darth Vader",
   friends = c("1004"),
-  # appearsIn = c(4, 5, 6),
-  appearsIn = c("NEWHOPE", "EMPIRE", "JEDI"),
+  appearsIn = c(4, 5, 6),
   homePlanet = "Tatooine"
 )
 
@@ -20,16 +18,14 @@ han <- list(
   id = "1002",
   name = "Han Solo",
   friends = c("1000", "1003", "2001"),
-  # appearsIn = c(4, 5, 6)
-  appearsIn = c("NEWHOPE", "EMPIRE", "JEDI")
+  appearsIn = c(4, 5, 6)
 )
 
 leia <- list(
   id = "1003",
   name = "Leia Organa",
   friends = c("1000", "1002", "2000", "2001"),
-  # appearsIn = c(4, 5, 6),
-  appearsIn = c("NEWHOPE", "EMPIRE", "JEDI"),
+  appearsIn = c(4, 5, 6),
   homePlanet = "Alderaan"
 )
 
@@ -37,8 +33,7 @@ tarkin <- list(
   id = "1004",
   name = "Wilhuff Tarkin",
   friends = c("1001"),
-  # appearsIn = c(4)
-  appearsIn = c("NEWHOPE")
+  appearsIn = c(4)
 )
 
 human_data <- list(
@@ -53,8 +48,7 @@ threepio <- list(
   id = "2000",
   name = "C-3PO",
   friends = c("1000", "1002", "1003", "2001"),
-  # appearsIn = c(4, 5, 6),
-  appearsIn = c("NEWHOPE", "EMPIRE", "JEDI"),
+  appearsIn = c(4, 5, 6),
   primaryFunction = "Protocol"
 )
 
@@ -62,8 +56,7 @@ artoo <- list(
   id = "2001",
   name = "R2-D2",
   friends = c("1000", "1002", "1003"),
-  # appearsIn = c(4, 5, 6),
-  appearsIn = c("NEWHOPE", "EMPIRE", "JEDI"),
+  appearsIn = c(4, 5, 6),
   primaryFunction = "Astromech"
 )
 

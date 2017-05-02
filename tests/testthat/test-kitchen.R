@@ -2,8 +2,8 @@
 
 context("kitchen")
 
-expect_str <- function(x, structure_txt) {
-  txt <- format_str(x)
+expect_str <- function(x, structure_txt, all_fields = FALSE) {
+  txt <- format_str(x, all_fields = all_fields)
   lines <- strsplit(txt, "\n")[[1]]
   testthat::expect_equal(
     lines,
@@ -53,18 +53,16 @@ test_that("formatting", {
 
 test_that("structure", {
 
-  schema_txt <- read_kitchen("schema-kitchen-sink.graphql")
-  schema_structure <- read_kitchen("schema-kitchen-sink-str.txt")
+  schema_obj <- read_kitchen("schema-kitchen-sink.graphql") %>% txt_to_obj()
 
   # expect structure output to match
-  schema_obj <- txt_to_obj(schema_txt)
-  expect_str(schema_obj, schema_structure)
+  expect_str(schema_obj, read_kitchen("schema-kitchen-sink-str.txt"))
+  expect_str(schema_obj, read_kitchen("schema-kitchen-sink-str-all.txt"), all_fields = TRUE)
 
 
-  request_txt <- read_kitchen("request-kitchen-sink.graphql")
-  request_structure <- read_kitchen("request-kitchen-sink-str.txt")
+  request_obj <- read_kitchen("request-kitchen-sink.graphql") %>% txt_to_obj()
 
   # expect structure output to match
-  request_obj <- txt_to_obj(request_txt)
-  expect_str(request_obj, request_structure)
+  expect_str(request_obj, read_kitchen("request-kitchen-sink-str.txt"))
+  expect_str(request_obj, read_kitchen("request-kitchen-sink-str-all.txt"), all_fields = TRUE)
 })

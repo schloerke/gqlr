@@ -128,12 +128,6 @@
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'Type'
-. . . . 8 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'String'
 . . 3 - <ObjectTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedObject'
@@ -171,12 +165,6 @@
 . . . . . . 1 - <Directive>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'onField'
-. . . . 2 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'String'
 . . 4 - <InterfaceTypeDefinition>
 . . . name: <Name>
 . . . . value: 'Bar'
@@ -199,12 +187,6 @@
 . . . . . . . . . value: 'String'
 . . . . . . . defaultValue: <StringValue>
 . . . . . . . . value: 'string'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'String'
-. . . . 3 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
 . . . . . type: <NamedType>
 . . . . . . name: <Name>
 . . . . . . . value: 'String'
@@ -238,12 +220,6 @@
 . . . . . . 1 - <Directive>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'onField'
-. . . . 2 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'String'
 . . . .resolve_type: function
 . . 6 - <UnionTypeDefinition>
 . . . name: <Name>
@@ -380,12 +356,6 @@
 . . . . . . type: <NamedType>
 . . . . . . . name: <Name>
 . . . . . . . . value: 'Type'
-. . . . . 2 - <FieldDefinition>
-. . . . . . name: <Name>
-. . . . . . . value: '__typename'
-. . . . . . type: <NamedType>
-. . . . . . . name: <Name>
-. . . . . . . . value: 'String'
 . . 15 - <DirectiveDefinition>
 . . . name: <Name>
 . . . . value: 'skip'
