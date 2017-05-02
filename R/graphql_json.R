@@ -61,7 +61,7 @@ is_named_list <- function(obj, err) {
 }
 
 #' @export
-graphql2schema <- function(txt, ...) {
+gqlr_schema <- function(txt, ...) {
   schema_obj <- Schema$new(txt)
 
   info_list <- list(...)

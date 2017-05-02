@@ -13,7 +13,7 @@ type __Schema {
   directives: [__Directive!]!
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__Schema" = list(
       description = collapse(
         "A GraphQL Schema defines the capabilities of a GraphQL server. It ",
@@ -97,7 +97,7 @@ type __Type {
   ofType: __Type
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__Type" = list(
       resolve = function(type_obj, schema_obj) {
         type_obj <- schema_obj$as_type(type_obj)
@@ -228,7 +228,7 @@ type __Field {
   deprecationReason: String
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__Field" = list(
       description = collapse(
         "Object and Interface types are described by a list of Fields, each of ",
@@ -265,7 +265,7 @@ type __InputValue {
   defaultValue: String
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__InputValue" = list(
       description = collapse(
         "Arguments provided to Fields or Directives and the input fields of an ",
@@ -304,7 +304,7 @@ type __EnumValue {
   deprecationReason: String
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__EnumValue" = list(
       description = collapse(
         "One possible value for a given Enum. Enum values are unique values, not ",
@@ -338,7 +338,7 @@ enum __TypeKind {
   NON_NULL
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__TypeKind" = list(
       description = "An enum describing what kind of type a given `__Type` is.",
       values = list(
@@ -377,7 +377,7 @@ type __Directive {
   args: [__InputValue!]!
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__Directive" = list(
       description = collapse(
         "A Directive provides a way to describe alternate runtime execution and ",
@@ -433,7 +433,7 @@ enum __DirectiveLocation {
   # INPUT_FIELD_DEFINITION
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     "__DirectiveLocation" = list(
       description = collapse(
         "A Directive can be adjacent to many parts of the GraphQL language, a ",
@@ -475,7 +475,7 @@ type QueryRootFields {
   __type(name: String!): __Type
 }
 " %>%
-  graphql2schema() %>%
+  gqlr_schema() %>%
   get_definition("QueryRootFields") ->
 Introspection__QueryRootFields
 Introspection__QueryRootFields$fields[[1]]$.show_in_format <- FALSE

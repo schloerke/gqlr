@@ -6,7 +6,7 @@ Result <- R6Class(
     error_list = NULL,
     data = NULL,
     as_json = function(...) {
-      result2json(self, ...)
+      result_as_json(self, ...)
     },
     initialize = function(error_list = ErrorList$new()) {
       self$error_list <- error_list

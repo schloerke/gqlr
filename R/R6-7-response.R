@@ -1,6 +1,5 @@
 
-#' @export
-result2json <- function(result, ...) {
+result_as_json <- function(result, ...) {
 
   ret <- list(data = result$data)
 

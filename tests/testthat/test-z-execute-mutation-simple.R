@@ -20,7 +20,7 @@ test_that("small counter", {
     mutation: AddCounter
   }
   " %>%
-    graphql2schema(
+    gqlr_schema(
       Counter = list(
         resolve = function(...) {
           list(value = count_total)

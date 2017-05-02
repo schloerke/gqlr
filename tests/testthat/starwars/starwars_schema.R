@@ -7,7 +7,7 @@ star_wars_schema <- Schema$new()
 "
 enum Episode { NEWHOPE, EMPIRE, JEDI }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     Episode = list(
       parse_value = function(episode_id, schema_obj) {
         switch(as.character(episode_id),
@@ -30,7 +30,7 @@ interface Character {
   appearsIn: [Episode]
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     Character = list(
       resolve_type = function(id, schema_obj) {
         if (is_droid(id)) {
@@ -60,7 +60,7 @@ type Human implements Character {
   homePlanet: String
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     Human = list(
       resolve = function(id, args, schema_obj) {
         get_human_by_id(id)
@@ -89,7 +89,7 @@ schema {
   # mutation: Mutation
 }
 " %>%
-  graphql2schema(
+  gqlr_schema(
     Query = function(null, schema_obj) {
       list(
         hero = function(obj, args, schema_obj) {
@@ -127,7 +127,7 @@ directive @notskip on FIELD
  | FRAGMENT_SPREAD
  | INLINE_FRAGMENT
 " %>%
-  graphql2schema(
+  gqlr_schema(
     HumanOrDroid = list(
       resolve_type = function(id, schema_obj) {
         if (is_droid(id)) {

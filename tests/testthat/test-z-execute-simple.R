@@ -134,7 +134,7 @@ test_that("arbitrary code", {
     query: Data
   }
   " %>%
-    graphql2schema() ->
+    gqlr_schema() ->
   schema_obj
 
   ans <- execute_request(
