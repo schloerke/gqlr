@@ -28,21 +28,6 @@
 
 
 
-#
-# GraphQL generates a response from a request via execution.
-#
-# A request for execution consists of a few pieces of information:
-#
-# The schema to use, typically solely provided by the GraphQL service.
-# A Document containing GraphQL Operations and Fragments to execute.
-# Optionally: The name of the Operation in the Document to execute.
-# Optionally: Values for any Variables defined by the Operation.
-# An initial value corresponding to the root type being executed. Conceptually, an initial value represents the “universe” of data available via a GraphQL Service. It is common for a GraphQL Service to always use the same initial value for every request.
-# Given this information, the result of ExecuteRequest() produces the response, to be formatted according to the Response section below.
-
-
-
-
 
 # 6.1 - Executing Requests
 
@@ -59,14 +44,115 @@
 #     a. Return ExecuteMutation(operation, schema, coercedVariableValues, initialValue).
 # nolint end
 
+
+#' Execute graphql server response
+#'
+#' Executes a graphql server request with the provided request.
+#'
+#' @param request a valid GraphQL string
+#' @param schema a character string (to be used along side \code{initial_value}) or a schema object created from \code{\link{gqlr_schema}}
+#' @param operation_name name of request operation to execute. If not value is provided it will use the operation in the request string. If more than one operations exist, an error will be produced.  See \url{http://facebook.github.io/graphql/#GetOperation()}
+#' @param variable_values a named list containing variable values. \url{http://facebook.github.io/graphql/#sec-Language.Variables}
+#' @param initial_value default value for executing requests.  This value can either be provided and/or combined with the resolve method of the query root type or mutation root type.  The value provided should be a named list of the field name (key) and a value matching that field name type.  The value may be a function that returns a value of the field name type.
+#' @references \url{http://facebook.github.io/graphql/#sec-Execution}
 #' @export
+#' @examples
+#'
+#' # bare bones
+#' schema <- gqlr_schema("
+#'   type Person {
+#'     name: String
+#'     friends: [Person]
+#'   }
+#'   schema {
+#'     query: Person
+#'   }
+#' ")
+#'
+#' data <- list(
+#'   name = "Barret",
+#'   friends = list(
+#'     list(name = "Ryan", friends = list(list(name = "Bill"), list(name = "Barret"))),
+#'     list(name = "Bill", friends = list(list(name = "Ryan")))
+#'   )
+#' )
+#'
+#' ans <- execute_request("{ name }", schema, initial_value = data)
+#' ans$as_json()
+#'
+#' execute_request("
+#'   {
+#'     name
+#'     friends {
+#'       name
+#'       friends {
+#'         name
+#'         friends {
+#'           name
+#'         }
+#'       }
+#'     }
+#'   }",
+#'   schema,
+#'   initial_value = data
+#' )$as_json()
+#'
+#'
+#'
+#'
+#'
+#'
+#' # Using resolve method to help with recursion
+#' people <- list(
+#'   "id_Barret" = list(name = "Barret", friends = list("id_Ryan", "id_Bill")),
+#'   "id_Ryan" = list(name = "Ryan", friends = list("id_Barret", "id_Bill")),
+#'   "id_Bill" = list(name = "Bill", friends = list("id_Ryan"))
+#' )
+#' schema <- gqlr_schema("
+#'     type Person {
+#'       name: String
+#'       friends: [Person]
+#'     }
+#'     schema {
+#'       query: Person
+#'     }
+#'   ",
+#'   Person = list(
+#'     resolve = function(name, schema, ...) {
+#'       if (name %in% names(people)) {
+#'         people[[name]]
+#'       } else {
+#'         NULL
+#'       }
+#'     }
+#'   )
+#' )
+#'
+#' ans <- execute_request("{ name }", schema, initial_value = "id_Barret")
+#' ans$as_json()
+#'
+#' execute_request("
+#'   {
+#'     name
+#'     friends {
+#'       name
+#'       friends {
+#'         name
+#'         friends {
+#'           name
+#'         }
+#'       }
+#'     }
+#'   }",
+#'   schema,
+#'   initial_value = "id_Barret"
+#' )$as_json()
 execute_request <- function(
   request,
   schema,
   operation_name = NULL,
   variable_values = list(),
-  initial_value = NULL,
-  ...
+  initial_value = NULL
 ) {
   oh <- ObjectHelpers$new(schema)
   validate_schema(oh = oh)
