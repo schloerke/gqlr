@@ -178,7 +178,7 @@ graphql2schema <- function(txt, ...) {
             if (is.null(obj_field)) {
               stop("Could not find field for Object: ", item_name)
             }
-            obj_field$description = item$fields[[field_name]]
+            obj_field$description <- item$fields[[field_name]]
           }
 
         } else if (store_name == "values") {

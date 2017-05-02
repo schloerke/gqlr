@@ -1,6 +1,6 @@
 
 
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-zzzz-starwars.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-zzzz-starwars.R")); # nolint
 
 context("star wars")
 

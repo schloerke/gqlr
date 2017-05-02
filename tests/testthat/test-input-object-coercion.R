@@ -1,4 +1,4 @@
-# testthat::test_file(file.path("tests", "testthat", "test-input-object-coercion.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-input-object-coercion.R")); # nolint
 
 
 context("input-object-coercion")
@@ -33,7 +33,6 @@ test_that("small input objects", {
   "{ field(arg: {b: 123 }) }" %>% expect_r6(schema_obj = ts)
   "{ field(arg: {a: \"abc\" }) }" %>% expect_err("found missing value", schema_obj = ts)
   "{ field(arg: {a: \"abc\", b: null }) }" %>% expect_err("found null value", schema_obj = ts)
-  # "query($var: Int){ field({b: $var }) }" %>% expect_r6()
 
   "{ list_field(arg: { a: [5], b: [5], c: [5], d: [5] }) }" %>% expect_r6(schema_obj = ts)
   "{ list_field(arg: { a: 5, b: 5, c: 5, d: 5 }) }" %>% expect_r6(schema_obj = ts)

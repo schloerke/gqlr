@@ -188,9 +188,9 @@ validate_object_type_definition <- function(x, ..., oh) {
 
       # 1. An object field type is a valid sub‐type if it is equal to (the same type as)
       #    the interface field type.
-      # 2. An object field type is a valid sub‐type if it is an Object type and the interface field
-      #    type is either an Interface type or a Union type and the object field type is a possible
-      #    type of the interface field type.
+      # 2. An object field type is a valid sub‐type if it is an Object type and the interface
+      #    field type is either an Interface type or a Union type and the object field type is a
+      #    possible type of the interface field type.
       # 3. An object field type is a valid sub‐type if it is a List type and the interface field
       #    type is also a List type and the list‐item type of the object field type is a valid
       #    sub‐type of the list‐item type of the interface field type.

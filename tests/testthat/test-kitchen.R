@@ -1,4 +1,4 @@
-# testthat::test_file(file.path("tests", "testthat", "test-kitchen.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-kitchen.R")); # nolint
 
 context("kitchen")
 

@@ -1,4 +1,4 @@
-# testthat::test_file(file.path("tests", "testthat", "test-r6_from_args.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-r6_from_args.R")); # nolint
 
 context("r6_from_args")
 
@@ -70,8 +70,5 @@ expect_equal(txt,
 . char: '5'
 . func: function"
 )
-
-# browser()
-
 
 })

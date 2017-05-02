@@ -1,4 +1,4 @@
-# testthat::test_file(file.path("tests", "testthat", "test-validation-5.2-fields.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.2-fields.R")); # nolint
 
 context("validation-5.2-fields")
 

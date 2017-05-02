@@ -260,7 +260,7 @@ Schema <- R6Class(
         scalars[c("Int", "Float", "String", "Boolean")] <- NULL
         directives[c("include", "skip")] <- NULL
         objects[c(
-          "__Schema", "__Type", "__Field", "__InputValue", "__EnumValue","__Directive"
+          "__Schema", "__Type", "__Field", "__InputValue", "__EnumValue", "__Directive"
         )] <- NULL
         enums[c("__TypeKind", "__DirectiveLocation")] <- NULL
       }

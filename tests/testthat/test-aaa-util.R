@@ -1,4 +1,4 @@
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-aaa-util.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-aaa-util.R")) # nolint
 
 context("Test helper functions")
 
@@ -10,8 +10,6 @@ test_that("chai tests", {
     c = "d"
   )
 
-  # expect_subset(tested_object, list(a = "b"))
-  # expect_subset(tested_object, list(a = "b", c = "d"))
   expect_false(sub_rec(tested_object, list(a = "notB")))
 
 

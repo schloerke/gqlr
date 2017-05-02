@@ -447,6 +447,7 @@ enum __DirectiveLocation {
         FRAGMENT_DEFINITION = "Location adjacent to a fragment definition",
         FRAGMENT_SPREAD = "Location adjacent to a fragment spread",
         INLINE_FRAGMENT = "Location adjacent to a inline fragment"#,
+        # # nolint start
         # # Schema Definitions
         # SCHEMA = "Location adjacent to a schema definition",
         # SCALAR = "Location adjacent to a scalar definition",
@@ -459,6 +460,7 @@ enum __DirectiveLocation {
         # ENUM_VALUE = "Location adjacent to a enum value definition",
         # INPUT_OBJECT = "Location adjacent to a input object definition",
         # INPUT_FIELD_DEFINITION = "Location adjacent to a input field definition"
+        # # nolint end
       )
     )
   ) %>%

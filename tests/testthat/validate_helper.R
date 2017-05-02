@@ -62,7 +62,7 @@ expect_request <- function(
     cat(ans_txt, sep = "\n")
     cat("\n\nexpected: \n")
     cat(expected_txt, sep = "\n")
-    #  browser()
+    #  browser() # nolint
   }
 
   expect_equal(ans_txt, expected_txt)
@@ -98,7 +98,7 @@ expect_request_err <- function(
     cat(ans_txt, sep = "\n")
     cat("\n\nexpected: \n")
     cat(expected_txt, sep = "\n")
-    #  browser()
+    #  browser() # nolint
   }
 
   expect_equal(ans_txt, expected_txt)
@@ -183,10 +183,6 @@ sub_rec <- function(bigger, smaller, key = NULL, verbose = FALSE) {
         return(show_error("subset list has names where names are not provided"))
       }
       for (name in names(smaller)) {
-        # cat("\n\n")
-        # print(name)
-        # str(bigger, max = 2)
-        # str(smaller, max = 2)
         item_ans <- sub_rec(bigger[[name]], smaller[[name]], str_c(key, "$", name), verbose)
         if (!item_ans) {
           return(FALSE)
@@ -210,7 +206,6 @@ sub_rec <- function(bigger, smaller, key = NULL, verbose = FALSE) {
         smaller_item <- smaller[[pos]]
         new_key <- str_c(key, str_c("[[", pos, "]]"))
 
-        # browser()
         item_ans <- sub_rec(
           bigger_item,
           smaller_item,

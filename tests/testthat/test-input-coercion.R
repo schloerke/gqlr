@@ -1,20 +1,10 @@
-# testthat::test_file(file.path("tests", "testthat", "test-input-coercion.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-input-coercion.R")) # nolint
 
 
 context("input-coercion")
 
 source("validate_helper.R")
 
-# type Arguments {
-#   multipleReqs(x: Int!, y: Int!): Int!
-#   booleanArgField(booleanArg: Boolean): Boolean
-#   floatArgField(floatArg: Float): Float
-#   intArgField(intArg: Int): Int
-#   stringArgField(stringArg: String): String
-#   nonNullBooleanArgField(nonNullBooleanArg: Boolean!): Boolean!
-#   booleanListArgField(booleanListArg: [Boolean]): [Boolean]
-# }
-#
 
 test_that("input-coercion - Int", {
   "{ arguments { intArgField(intArg: 5) } }" %>% expect_r6()

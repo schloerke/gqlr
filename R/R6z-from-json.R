@@ -150,7 +150,6 @@ r6_from_list <- function(
     }
   }
 
-  # browser()
   do.call(r6Obj$new, retList)
 }
 

@@ -1,4 +1,4 @@
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-introspection.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-introspection.R")); # nolint
 
 
 context("execute-introspection")

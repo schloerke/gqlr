@@ -1,4 +1,4 @@
-# # load_all(); testthat::test_file(file.path("tests", "testthat", "test-execute-simple.R"))
+# # load_all(); testthat::test_file(file.path("tests", "testthat", "test-execute-simple.R")); # nolint
 
 context("execute-simple")
 
@@ -28,7 +28,7 @@ test_that("arbitrary code", {
     deep = function(...) {
       return(deepData)
     },
-    # promise(...) { return(promiseData()) }
+    # promise(...) { return(promiseData()) } # nolint
     promise = function(...) {
       return(data)
     }
@@ -49,6 +49,7 @@ test_that("arbitrary code", {
     }
   )
 
+# # nolint start
 # function promiseData() {
 #   return new Promise(resolve => {
 #     process.nextTick(() => {
@@ -56,6 +57,7 @@ test_that("arbitrary code", {
 #     });
 #   });
 # }
+# # nolint end
 
   simple_query <- "
   query Example($size: Int) {

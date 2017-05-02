@@ -1,4 +1,4 @@
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-mutation-simple.R"))
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-mutation-simple.R")); # nolint
 
 
 context("execute-simple")
