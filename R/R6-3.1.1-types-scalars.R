@@ -27,11 +27,41 @@
 
 
 
+#' Parse Literal
+#'
+#' This is a helper function for Scalars.  Given a particular kind and a parse_value function, it produces a function that will only parse values of a particular kind.
+#'
+#' Typically, \code{kind} is the same as the class of the Scalar.  When making a new Scalar, parse_literal defaults to use the name of the scalar and the scalar's parse value function.
+#'
+#' This function should only need to be used when defining a schema in \code{\link{gqlr_schema}()}
+#'
+#' @param kind single character name of a class to parse
+#' @param parse_value function to parse the value if the kind is correct
+#' @return functino that takes \code{obj} and \code{schema} that will only parse the value if the \code{kind} is inherited in the \code{obj}
 #' @export
-parse_literal <- function(kind_val, parse_value_fn) {
+#' @examples
+#' parse_date_value <- function(obj, schema) {
+#'   as.Date(obj)
+#' }
+#' parse_literal("Date", parse_date_value)
+#'
+#' # Example from Int scalar
+#' parse_int <- function (value, ...) {
+#'   MAX_INT <-  2147483647
+#'   MIN_INT <- -2147483648
+#'   num <- suppressWarnings(as.integer(value))
+#'   if (!is.na(num)) {
+#'     if (num <= MAX_INT && num >= MIN_INT) {
+#'       return(num)
+#'     }
+#'   }
+#'   return(NULL)
+#' }
+#' parse_literal("IntValue", parse_int)
+parse_literal <- function(kind, parse_value) {
   fn <- function(obj, schema) {
-    if (inherits(obj, kind_val)) {
-      parse_value_fn(obj$value, schema)
+    if (inherits(obj, kind)) {
+      parse_value(obj$value, schema)
     } else {
       NULL
     }

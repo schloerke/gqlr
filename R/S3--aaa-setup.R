@@ -21,7 +21,15 @@ print.AST <- function(
   cat(format(x, ..., prompt = prompt, header = header, all_fields = all_fields), "\n", sep = "")
 }
 
+#' As R6
+#'
+#' Debug method that strips all gqlr classes and assigns the class as \code{'R6'}
+#'
+#' @param x any object. If it inherits \code{'R6'}, then the class of \code{x} is set to \code{'R6'}
 #' @export
+#' @examples
+#' print(Int)
+#' print(as_R6(Int))
 as_R6 <- function(x) {
   if (inherits(x, "R6")) {
     class(x) <- "R6"
