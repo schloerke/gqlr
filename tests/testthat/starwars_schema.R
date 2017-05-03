@@ -1,6 +1,45 @@
+
+
+
+add_human <- function(human_data, id, name, appear, friend, home) {
+  human <- list(id = id, name = name, appearsIn = appear, friends = friend, homePlanet = home)
+  # set up a function to be calculated if the field totalCredits is required
+  human$totalCredits <- function(obj, args, schema) {
+    length(human$appearsIn)
+  }
+  human_data[[id]] <- human
+  human_data
+}
+add_droid <- function(droid_data, id, name, appear, friend, pf) {
+  droid <- list(id = id, name = name, appearsIn = appear, friends = friend, primaryFunction = pf)
+  # set extra fields manually
+  droid$totalCredits <- length(droid$appearsIn)
+  droid_data[[id]] <- droid
+  droid_data
+}
+
+human_data <- list() %>%
+  add_human("1000", "Luke Skywalker", c(4, 5, 6), "Tatooine",  c("1002", "1003", "2000", "2001")) %>%
+  add_human("1002", "Han Solo",       c(4, 5, 6), "Corellia",  c("1000", "1003", "2001")) %>%
+  add_human("1003", "Leia Organa",    c(4, 5, 6), "Alderaan",   c("1000", "1002", "2000", "2001")) %>%
+  print()
+
+droid_data <- list() %>%
+  add_droid("2000", "C-3PO", c(4, 5, 6), "Protocol", c("1000", "1002", "1003", "2001")) %>%
+  add_droid("2001", "R2-D2", c(4, 5, 6), "Astromech", c("1000", "1002", "1003")) %>%
+  print()
+
+all_characters <- list() %>% append(human_data) %>% append(droid_data)
+
+is_droid <- function(id) {
+  if (is.null(id)) {
+    stop("NULL id supplied")
+  }
+  id %in% names(droid_data) # nolint
+}
+
 # Using our shorthand to describe type systems, the type system for our
 # Star Wars example is:
-
 
 star_wars_schema <- Schema$new()
 
@@ -63,13 +102,13 @@ type Human implements Character {
   gqlr_schema(
     Human = list(
       resolve = function(id, args, schema) {
-        get_human_by_id(id)
+        human_data[[id]]
       }
     ),
     Droid = list(
       description = "A mechanical creature in the Star Wars universe.",
       resolve = function(id, schema) {
-        get_droid_by_id(id)
+        droid_data[[id]]
       }
     )
   ) %>%
