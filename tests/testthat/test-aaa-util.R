@@ -71,17 +71,17 @@ test_that("chai tests", {
 
 
 
-test_that("parse_literal()", {
+test_that("parse_ast()", {
 
   int_val <- IntValue$new(value = 5)
   bool_val <- BooleanValue$new(value = TRUE)
   float_val <- FloatValue$new(value = 5.0)
   string_val <- StringValue$new(value = "Barret")
 
-  int_lit <- gqlr:::parse_literal("IntValue", gqlr:::coerce_int)
-  bool_lit <- gqlr:::parse_literal("BooleanValue", gqlr:::coerce_boolean)
-  float_lit <- gqlr:::parse_literal("FloatValue", gqlr:::coerce_float)
-  string_lit <- gqlr:::parse_literal("StringValue", gqlr:::coerce_string)
+  int_lit <- gqlr:::parse_ast("IntValue", gqlr:::coerce_int)
+  bool_lit <- gqlr:::parse_ast("BooleanValue", gqlr:::coerce_boolean)
+  float_lit <- gqlr:::parse_ast("FloatValue", gqlr:::coerce_float)
+  string_lit <- gqlr:::parse_ast("StringValue", gqlr:::coerce_string)
 
   expect_equal(int_lit(int_val), 5)
   expect_equal(float_lit(float_val), 5.0)

@@ -253,9 +253,8 @@
 . . 8 - <ScalarTypeDefinition>
 . . . name: <Name>
 . . . . value: 'CustomScalar'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
+. . . .parse_ast: function
 . . 9 - <ScalarTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedScalar'
@@ -263,9 +262,8 @@
 . . . . 1 - <Directive>
 . . . . . name: <Name>
 . . . . . . value: 'onScalar'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
+. . . .parse_ast: function
 . . 10 - <EnumTypeDefinition>
 . . . name: <Name>
 . . . . value: 'Site'
@@ -276,9 +274,7 @@
 . . . . 2 - <EnumValueDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'MOBILE'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
 . . 11 - <EnumTypeDefinition>
 . . . name: <Name>
 . . . . value: 'AnnotatedEnum'
@@ -297,9 +293,7 @@
 . . . . 2 - <EnumValueDefinition>
 . . . . . name: <Name>
 . . . . . . value: 'OTHER_VALUE'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
 . . 12 - <InputObjectTypeDefinition>
 . . . name: <Name>
 . . . . value: 'InputType'

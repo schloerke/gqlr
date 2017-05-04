@@ -6,8 +6,7 @@ context("star wars")
 
 source("validate_helper.R")
 
-source(file.path("starwars", "starwars_data.R"))
-source(file.path("starwars", "starwars_schema.R"))
+source(file.path("starwars_schema.R"))
 
 expect_sw_err <- function(...) {
   expect_err(..., schema = star_wars_schema) # nolint

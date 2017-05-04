@@ -138,7 +138,7 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
         if (directive_name == "skip" || directive_name == "include") {
           directive_def <- oh$schema$get_directive(selection_directive$name)
           if_arg <- selection_directive$arguments[[1]]
-          if_val <- Boolean$.parse_literal(if_arg$value, oh$schema)
+          if_val <- Boolean$.parse_ast(if_arg$value, oh$schema)
           directive_response <- directive_def$.resolve(if_val)
           if (!isTRUE(directive_response)) {
             should_skip <- TRUE

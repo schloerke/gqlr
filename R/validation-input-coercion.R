@@ -106,7 +106,7 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
   }
 
   # make sure the resulting type can be coerced.  if it produces a NULL value, it can not be coerced
-  result <- to_obj$.parse_literal(from_input, oh$schema)
+  result <- to_obj$.parse_ast(from_input, oh$schema)
   if (is.null(result)) {
     oh$error_list$add(
       rule_code,

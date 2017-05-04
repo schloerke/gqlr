@@ -1,5 +1,4 @@
-#' @include graphql_json.R
-#' @include R6--definition.R
+#' @include gqlr_schema.R
 
 get_definition <- function(x, name) {
   x$get_type(name)
@@ -351,7 +350,7 @@ enum __TypeKind {
   LIST = "Indicates this type is a list. `ofType` is a valid field.",
   NON_NULL = "Indicates this type is a non-null. `ofType` is a valid field."
       ),
-      parse_value = function(type_obj, schema) {
+      resolve = function(type_obj, schema) {
         if (inherits(type_obj, "NonNullType")) return("NON_NULL")
         if (inherits(type_obj, "ListType")) return("LIST")
         if (schema$is_scalar(type_obj)) return("SCALAR")

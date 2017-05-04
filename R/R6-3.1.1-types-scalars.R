@@ -27,23 +27,23 @@
 
 
 
-#' Parse Literal
+#' Parse AST
 #'
-#' This is a helper function for Scalars.  Given a particular kind and a parse_value function, it produces a function that will only parse values of a particular kind.
+#' This is a helper function for Scalars.  Given a particular kind and a resolve function, it produces a function that will only parse values of a particular kind.
 #'
-#' Typically, \code{kind} is the same as the class of the Scalar.  When making a new Scalar, parse_literal defaults to use the name of the scalar and the scalar's parse value function.
+#' Typically, \code{kind} is the same as the class of the Scalar.  When making a new Scalar, parse_ast defaults to use the name of the scalar and the scalar's parse value function.
 #'
 #' This function should only need to be used when defining a schema in \code{\link{gqlr_schema}()}
 #'
 #' @param kind single character name of a class to parse
-#' @param parse_value function to parse the value if the kind is correct
+#' @param resolve function to parse the value if the kind is correct
 #' @return functino that takes \code{obj} and \code{schema} that will only parse the value if the \code{kind} is inherited in the \code{obj}
 #' @export
 #' @examples
 #' parse_date_value <- function(obj, schema) {
 #'   as.Date(obj)
 #' }
-#' parse_literal("Date", parse_date_value)
+#' parse_ast("Date", parse_date_value)
 #'
 #' # Example from Int scalar
 #' parse_int <- function (value, ...) {
@@ -57,11 +57,11 @@
 #'   }
 #'   return(NULL)
 #' }
-#' parse_literal("IntValue", parse_int)
-parse_literal <- function(kind, parse_value) {
+#' parse_ast("IntValue", parse_int)
+parse_ast <- function(kind, resolve) {
   fn <- function(obj, schema) {
     if (inherits(obj, kind)) {
-      parse_value(obj$value, schema)
+      resolve(obj$value, schema)
     } else {
       NULL
     }
@@ -91,9 +91,8 @@ Int <- ScalarTypeDefinition$new(
     "Response formats that support a 32-bit integer or a number type should use that ",
     "type to represent this scalar."
   ),
-  .serialize = coerce_int,
-  .parse_value = coerce_int,
-  .parse_literal = parse_literal("IntValue", coerce_int)
+  .resolve = coerce_int,
+  .parse_ast = parse_ast("IntValue", coerce_int)
 
 )
 
@@ -114,9 +113,8 @@ Float <- ScalarTypeDefinition$new(
     "values as specified by ",
     "[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point)."
   ),
-  .serialize = coerce_float,
-  .parse_value = coerce_float,
-  .parse_literal = pryr_unenclose(function(obj, schema) {
+  .resolve = coerce_float,
+  .parse_ast = pryr_unenclose(function(obj, schema) {
     if (
       inherits(obj, "IntValue") ||
       inherits(obj, "FloatValue")
@@ -144,9 +142,8 @@ String <- ScalarTypeDefinition$new(
     "character sequences. The String type is most often used by GraphQL to ",
     "represent free-form human-readable text."
   ),
-  .serialize = coerce_string,
-  .parse_value = coerce_string,
-  .parse_literal = parse_literal("StringValue", coerce_string)
+  .resolve = coerce_string,
+  .parse_ast = parse_ast("StringValue", coerce_string)
 )
 
 
@@ -161,9 +158,8 @@ coerce_boolean <- function (value, ...) {
 Boolean <- ScalarTypeDefinition$new(
   name = Name$new(value = "Boolean"),
   description = "The `Boolean` scalar type represents `TRUE` or `FALSE`.",
-  .serialize = coerce_boolean,
-  .parse_value = coerce_boolean,
-  .parse_literal = parse_literal("BooleanValue", coerce_boolean)
+  .resolve = coerce_boolean,
+  .parse_ast = parse_ast("BooleanValue", coerce_boolean)
 )
 
 
@@ -180,9 +176,8 @@ Boolean <- ScalarTypeDefinition$new(
 #     "When expected as an input type, any string (such as `"4"`) or integer ",
 #     "(such as `4`) input value will be accepted as an ID."
 #   ),
-#   .serialize = as.character,
-#   .parse_value = as.character,
-#   .parse_literal = function(astObj) {
+#   .resolve = as.character,
+#   .parse_ast = function(astObj) {
 #     if (
 #       inherits(astObj, "String") ||
 #       inherits(astObj, "Int")

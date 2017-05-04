@@ -37,7 +37,7 @@ test_that("small counter", {
         }
       )
     ) ->
-  schema_doc
+  mutation_schema_doc
 
 
   do_query <- function(i) {
@@ -45,7 +45,7 @@ test_that("small counter", {
       "{
         value
       }",
-      schema_doc
+      mutation_schema_doc
     )
     expect_true(ans$error_list$has_no_errors())
     expect_equal(ans$data$value, i)
@@ -56,7 +56,7 @@ test_that("small counter", {
       "mutation add_value{
         value
       }",
-      schema_doc
+      mutation_schema_doc
     )
     expect_true(ans$error_list$has_no_errors())
     expect_equal(ans$data$value, i)

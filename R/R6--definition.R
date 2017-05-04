@@ -755,9 +755,8 @@ ScalarTypeDefinition <- R6_from_args(
     description?: ?string;
     name: Name;
     directives?: ?Array<Directive>;
-    .serialize?: ?fn;
-    .parse_value: fn;
-    .parse_literal?: ?fn;",
+    .resolve: fn;
+    .parse_ast?: ?fn;",
   public = list(
     .format = function(...) {
       collapse(
@@ -773,23 +772,20 @@ ScalarTypeDefinition <- R6_from_args(
       name,
       directives = NULL,
       # takes in a raw value, such as: "5", 5, 5.0
-      .serialize = as.character,
-      # takes in a raw value, such as: "5", 5, 5.0
-      .parse_value = function(x, schema) {
-        stop(".parse_value() not implemented for Scalar of type: ", format(self$name))
+      .resolve = function(x, schema) {
+        stop(".resolve() not implemented for Scalar of type: ", format(self$name))
       },
       # takes in AST value object: <BooleanValue>
-      .parse_literal = NULL
+      .parse_ast = NULL
     ) {
       self$name <- name
-      self$.serialize <- .serialize
       self$description <- description
       self$directives <- directives
-      self$.parse_value <- .parse_value
-      if (missing(.parse_literal)) {
-        self$.parse_literal <- parse_literal(format(self$name), .parse_value)
+      self$.resolve <- .resolve
+      if (missing(.parse_ast)) {
+        self$.parse_ast <- parse_ast(format(self$name), .resolve)
       } else {
-        self$.parse_literal <- .parse_literal
+        self$.parse_ast <- .parse_ast
       }
 
       invisible(self)
@@ -1064,9 +1060,7 @@ EnumTypeDefinition <- R6_from_args(
     name: Name;
     directives?: ?Array<Directive>;
     values: Array<EnumValueDefinition>;
-    .serialize?: ?fn;
-    .parse_value?: ?fn;
-    .parse_literal?: ?fn;",
+    .resolve?: ?fn;",
   public = list(
     .format = function(...) {
       collapse(
@@ -1085,34 +1079,24 @@ EnumTypeDefinition <- R6_from_args(
       name,
       directives = NULL,
       values,
-      .serialize = NULL,
-      .parse_value = NULL,
-      .parse_literal = NULL
+      .resolve = NULL
     ) {
-      if (missing(.serialize)) .serialize <- self$.default_serialize
-      if (missing(.parse_value)) .parse_value <- self$.default_parse_value
-      if (missing(.parse_literal)) .parse_literal <- self$.default_parse_literal
+      if (missing(.resolve)) .resolve <- self$.default_resolve
 
       self$loc <- loc
       self$description <- description
       self$name <- name
       self$directives <- directives
       self$values <- values
-      self$.serialize <- .serialize
-      self$.parse_value <- .parse_value
-      self$.parse_literal <- .parse_literal
+      self$.resolve <- .resolve
 
       invisible(self)
     },
-    .default_serialize = function(x, schema) {
+    .default_resolve = function(x, schema) {
       if (is_nullish(x)) return(NULL)
       as.character(toupper(x))
     },
-    .default_parse_value = function(x, schema) {
-      if (is_nullish(x)) return(NULL)
-      as.character(toupper(x))
-    },
-    .default_parse_literal = function(value_obj, schema) {
+    .parse_ast = function(value_obj, schema) {
 
       if (!inherits(value_obj, "EnumValue")) {
         return(NULL)

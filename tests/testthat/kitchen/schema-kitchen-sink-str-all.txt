@@ -718,9 +718,8 @@
 . . . . . start: 8
 . . . . . end: 20
 . . . . value: 'CustomScalar'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
+. . . .parse_ast: function
 . . 9 - <ScalarTypeDefinition>
 . . . name: <Name>
 . . . . loc: <Location>
@@ -737,9 +736,8 @@
 . . . . . . . start: 25
 . . . . . . . end: 33
 . . . . . . value: 'onScalar'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
+. . . .parse_ast: function
 . . 10 - <EnumTypeDefinition>
 . . . loc: <Location>
 . . . . start: 1
@@ -768,9 +766,7 @@
 . . . . . . . start: 3
 . . . . . . . end: 9
 . . . . . . value: 'MOBILE'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
 . . 11 - <EnumTypeDefinition>
 . . . loc: <Location>
 . . . . start: 1
@@ -819,9 +815,7 @@
 . . . . . . . start: 3
 . . . . . . . end: 14
 . . . . . . value: 'OTHER_VALUE'
-. . . .serialize: function
-. . . .parse_value: function
-. . . .parse_literal: function
+. . . .resolve: function
 . . 12 - <InputObjectTypeDefinition>
 . . . loc: <Location>
 . . . . start: 1
