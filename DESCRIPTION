@@ -11,6 +11,8 @@ Description: Implementation of GraphQL, a query language created by Facebook for
 Depends:
     R (>= 3.2.2)
 License: MIT + file LICENSE
+URL: https://github.com/schloerke/gqlr
+BugReports: https://github.com/schloerke/gqlr/issues
 LazyData: true
 Imports:
     stringr,
