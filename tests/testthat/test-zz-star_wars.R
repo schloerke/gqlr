@@ -1,12 +1,12 @@
 
 
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-zzzz-starwars.R")); # nolint
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-zzzz-star_wars.R")); # nolint
 
 context("star wars")
 
 source("validate_helper.R")
 
-source(file.path("starwars_schema.R"))
+source(file.path("star_wars_schema.R"))
 
 expect_sw_err <- function(...) {
   expect_err(..., schema = star_wars_schema) # nolint
