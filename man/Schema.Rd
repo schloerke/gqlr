@@ -2,11 +2,12 @@
 % Please edit documentation in R/R6-Schema.R
 \name{Schema}
 \alias{Schema}
-\title{GraphQL Schema object
-
+\title{GraphQL Schema object}
+\description{
 Manages a GraphQL schema definition.  A Schema can add more GraphQL type definitions, assist in determining definition types, retrieve particular definitions, and can combine with other schema definitions.
 
-Typically, Schema class objects are created using \code{\link{gqlr_schema}}.  Creating a \code{Schema$new()} object should be reserved for when multiple Schema objects are combined.}
+Typically, Schema class objects are created using \code{\link{gqlr_schema}}.  Creating a \code{Schema$new()} object should be reserved for when multiple Schema objects are combined.
+}
 \section{Usage}{
 
 \preformatted{

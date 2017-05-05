@@ -11,6 +11,9 @@ gqlr_schema(schema, ...)
 
 \item{...}{named lists of information to help produce the schema definition.  See Details}
 }
+\description{
+Creates a Schema object from the defined GraphQL string and inserts the provided descriptions, resolve methods, resolve_type methods into the appriate place.
+}
 \section{Details}{
 
 The ... should be named arguments whose values are lists of information.  What information is needed for each type is described below.
@@ -67,9 +70,9 @@ add_droid <- function(droid_data, id, name, appear, friend, pf) {
 }
 
 human_data <- list() \%>\%
-  add_human("1000", "Luke Skywalker", c(4, 5, 6), "Tatooine",  c("1002", "1003", "2000", "2001")) \%>\%
-  add_human("1002", "Han Solo",       c(4, 5, 6), "Corellia",  c("1000", "1003", "2001")) \%>\%
-  add_human("1003", "Leia Organa",    c(4, 5, 6), "Alderaan",   c("1000", "1002", "2000", "2001"))
+  add_human("1000", "Luke Skywalker", c(4, 5, 6), "Tatooine", c("1002", "1003", "2000", "2001")) \%>\%
+  add_human("1002", "Han Solo",       c(4, 5, 6), "Corellia", c("1000", "1003", "2001")) \%>\%
+  add_human("1003", "Leia Organa",    c(4, 5, 6), "Alderaan", c("1000", "1002", "2000", "2001"))
 
 droid_data <- list() \%>\%
   add_droid("2000", "C-3PO", c(4, 5, 6), "Protocol", c("1000", "1002", "1003", "2001")) \%>\%

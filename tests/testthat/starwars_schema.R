@@ -19,9 +19,9 @@ add_droid <- function(droid_data, id, name, appear, pf, friend) {
 }
 
 human_data <- list() %>%
-  add_human("1000", "Luke Skywalker", c(4, 5, 6), "Tatooine",  c("1002", "1003", "2000", "2001")) %>%
-  add_human("1002", "Han Solo",       c(4, 5, 6), "Corellia",  c("1000", "1003", "2001")) %>%
-  add_human("1003", "Leia Organa",    c(4, 5, 6), "Alderaan",   c("1000", "1002", "2000", "2001"))
+  add_human("1000", "Luke Skywalker", c(4, 5, 6), "Tatooine", c("1002", "1003", "2000", "2001")) %>%
+  add_human("1002", "Han Solo",       c(4, 5, 6), "Corellia", c("1000", "1003", "2001")) %>%
+  add_human("1003", "Leia Organa",    c(4, 5, 6), "Alderaan", c("1000", "1002", "2000", "2001"))
 
 droid_data <- list() %>%
   add_droid("2000", "C-3PO", c(4, 5, 6), "Protocol", c("1000", "1002", "1003", "2001")) %>%

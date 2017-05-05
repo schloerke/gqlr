@@ -17,10 +17,10 @@
 
 
 
-
+# nolint start
 #' @title GraphQL Schema object
 #'
-#' Manages a GraphQL schema definition.  A Schema can add more GraphQL type definitions, assist in determining definition types, retrieve particular definitions, and can combine with other schema definitions.
+#' @description Manages a GraphQL schema definition.  A Schema can add more GraphQL type definitions, assist in determining definition types, retrieve particular definitions, and can combine with other schema definitions.
 #'
 #' Typically, Schema class objects are created using \code{\link{gqlr_schema}}.  Creating a \code{Schema$new()} object should be reserved for when multiple Schema objects are combined.
 #'
@@ -71,7 +71,7 @@
 #' example(gqlr_schema)
 #'
 NULL
-
+# nolint end
 
 
 

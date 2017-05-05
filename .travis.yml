@@ -5,8 +5,6 @@ dist: trusty # so that graphql can install.  need C++11
 sudo: false
 cache: packages
 
-warnings_are_errors: false
-
 notifications:
   email:
     on_success: change
@@ -19,6 +17,8 @@ branches:
     - travis
 
 r_github_packages:
-  - jimhester/covr
+  - jimhester/lintr # test with lints
+  - jimhester/covr # after success
+
 after_success:
   - Rscript -e 'covr::codecov()'
