@@ -24,13 +24,14 @@ Imports:
     R6,
     jsonlite
 Suggests:
+    jug,
     roxygen2 (>= 5.0.0),
     testthat
 RemotesOLD: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Encoding: UTF-8
-Collate:
+Collate: 
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'S3--aaa-setup.R'
@@ -40,8 +41,8 @@ Collate:
     'R6-Schema.R'
     'R6z-from-json.R'
     'graphql_json.R'
-    'gqlr_schema.R'
     'R6-3.2-directives.R'
+    'gqlr_schema.R'
     'R6-4-introspection.R'
     'R6-6.2-executing-operations.R'
     'R6-6.3-executing-selection-sets.R'
@@ -54,6 +55,7 @@ Collate:
     'S3-3.1.2.3-validation-object-type.R'
     'S3-str.R'
     'gqlr-package.R'
+    'server_jug.R'
     'upgrade_query_remove_fragments.R'
     'validation-arguments.R'
     'validation-input-coercion.R'
