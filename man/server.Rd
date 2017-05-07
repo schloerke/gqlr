@@ -31,4 +31,25 @@ If 'application/json' is provided, a named JSON list containing 'query', 'operat
 If 'application/graphql' is provided, the POST body will be interpreted as the query string.  All other possible parameters will take on their default value.
 }
 }
+
+Using bash's curl, we can ask the server questions:
+\preformatted{ #R
+  # load Star Wars schema from 'execute_request' example
+  example(execute_request)
+  # run server
+  server(star_wars_schema, port = 8000)
+}
+
+\preformatted{ #bash
+  # GET Schema definition
+  curl '127.0.0.1:8000/'
+
+# GET R2-D2 and his friends' names
+  curl '127.0.0.1:8000/graphql?query={hero{name,friends{name}}}'
+
+# POST for R2-D2 and his friends' names
+  curl --data '{"query":"{hero{name}}"}' '127.0.0.1:8000/graphql' # defaults to parse as JSON
+  curl --data '{"query":"{hero{name}}"}' '127.0.0.1:8000/graphql' --header "Content-Type:application/json"
+  curl --data '{hero{name}}' '127.0.0.1:8000/graphql' --header "Content-Type:application/graphql"
+}
 }
