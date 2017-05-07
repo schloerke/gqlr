@@ -81,7 +81,7 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_v
 
 
     if (inherits(arg_value, "ObjectValue")) {
-      validate_input_object_field_uniqueness(arg_value, oh = oh)
+      validate_input_object_fields(arg_value, oh = oh)
     }
 
   }

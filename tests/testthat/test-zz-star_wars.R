@@ -1,6 +1,6 @@
 
 
-# load_all(); testthat::test_file(file.path("tests", "testthat", "test-zzzz-star_wars.R")); # nolint
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-zz-star_wars.R")); # nolint
 
 context("star wars")
 
@@ -178,7 +178,7 @@ test_that("star wars test suite", {
           "name": "Luke Skywalker"
         }
       }}',
-      variable_values = list(
+      variables = list(
         someId = "1000"
       )
     )
@@ -357,7 +357,7 @@ test_that("star wars test suite", {
       '{ "data": {
         "human": null
       }}',
-      variable_values = list(id = "not valid id")
+      variables = list(id = "not valid id")
     )
 
   "
@@ -798,7 +798,7 @@ test_that("variables", {
   }
   " %>%
     expect_sw_request_err(
-      variable_values = list(someId = NULL),
+      variables = list(someId = NULL),
       # nolint start
       '{
         "data": null,
@@ -819,7 +819,7 @@ test_that("variables", {
   }
   " %>%
     expect_sw_request_err(
-      variable_values = list(someInt = "Barret"),
+      variables = list(someInt = "Barret"),
       # nolint start
       '{
         "data": null,

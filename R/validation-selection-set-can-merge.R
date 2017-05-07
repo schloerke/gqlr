@@ -69,7 +69,7 @@ validate_fields_can_merge <- function(
           field_j_info <- field_list_sub[[j]]
 
           # SameResponseShape(fieldA, fieldB) must be true.
-          validate_fields_have_same_response_shape(field_i_info, field_j_info, oh = oh)
+          validate_same_response_shape(field_i_info, field_j_info, oh = oh)
 
           if (same_response_shape_only) {
             next
@@ -156,7 +156,7 @@ field_string <- function(field_info) {
   }
 }
 
-validate_fields_have_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
+validate_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
   # Let typeA be the return type of fieldA.
   type_i <- field_i_info$return_type
   # Let typeB be the return type of fieldB.

@@ -8,4 +8,5 @@ man-roxygen
 ^TODO.txt$
 ^\.travis\.yml$
 ^\.lintr$
+lintr_cache
 ^codecov\.yml$

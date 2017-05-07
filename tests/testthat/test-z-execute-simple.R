@@ -141,7 +141,7 @@ test_that("arbitrary code", {
     simple_query,
     schema,
     operation_name = "Example",
-    variable_values = list(size = 100),
+    variable = list(size = 100),
     initial_value = data
   )
 
@@ -157,7 +157,7 @@ test_that("arbitrary code", {
     query_doc_exact,
     schema,
     operation_name = "Example",
-    variable_values = list(size = 100),
+    variables = list(size = 100),
     initial_value = data
   )
 

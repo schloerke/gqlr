@@ -332,7 +332,7 @@ Schema <- R6Class(
         private$add_item(Introspection__EnumValue)
         private$add_item(Introspection__TypeKind)
         private$add_item(Introspection__Directive)
-        private$add_item(Introspection__DirectiveLocation)
+        private$add_item(Introspection__DirectiveLocation) # nolint
       }
 
       if (!missing(schema)) {

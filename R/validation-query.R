@@ -113,7 +113,7 @@ validate_field_selections <- function(document_obj, ..., oh) {
         oh = oh
       )
 
-      validate_fields_in_selection_set(
+      validate_selection_set(
         operation$selectionSet, oh$schema$get_query_object(),
         oh = oh
       )
@@ -130,7 +130,7 @@ validate_field_selections <- function(document_obj, ..., oh) {
 
 
 # selection_set_obj should only be comprised of fields and inline fragments
-validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh) {
+validate_selection_set <- function(selection_set_obj, object, ..., oh) {
   selection_obj_list <- selection_set_obj$selections
   selection_names <- get_name_values(selection_obj_list)
 
@@ -151,7 +151,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
       matching_obj <- get_object_interface_or_union(type_condition, oh$schema)
 
       # get the object that it's looking at, then validate those fields
-      validate_fields_in_selection_set(
+      validate_selection_set(
         selection_obj$selectionSet,
         matching_obj,
         oh = oh
@@ -211,7 +211,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
         )
         next
       }
-      validate_fields_in_selection_set(
+      validate_selection_set(
         selection_obj$selectionSet,
         matching_obj,
         oh = oh
@@ -247,7 +247,7 @@ validate_fields_in_selection_set <- function(selection_set_obj, object, ..., oh)
 
 
 # 5.5.1 - Input Object Field Uniqueness
-validate_input_object_field_uniqueness <- function(object_value, ..., oh) {
+validate_input_object_fields <- function(object_value, ..., oh) {
   validate_field_names(object_value, "input object value", "5.5.1", oh = oh)
 }
 

@@ -63,7 +63,7 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
     }
 
     # validate field names are unique
-    validate_input_object_field_uniqueness(from_input, oh = oh)
+    validate_input_object_fields(from_input, oh = oh)
 
     # for each field...
     for (from_field in from_input$fields) {

@@ -37,7 +37,7 @@ validate_field_names <- function(x, error_title, error_code, ..., oh) {
 #   * An Interface type must define one or more fields.
 #   * The fields of an Interface type must have unique names within that Interface type;
 #     no two fields may share the same name.
-validate_interface_type_definition <- function(x, ..., oh) {
+validate_interface_type <- function(x, ..., oh) {
 
   validate_field_names(x, "interface", "3.1.3.1", oh = oh)
 
@@ -56,7 +56,7 @@ validate_interface_type_definition <- function(x, ..., oh) {
 #   types of a Union.
 # * A Union type must define one or more member types.
 
-validate_union_type_definition <- function(x, ..., oh) {
+validate_union_type <- function(x, ..., oh) {
 
   types <- x$types
   if (length(types) == 0) {
@@ -95,7 +95,7 @@ validate_union_type_definition <- function(x, ..., oh) {
 #   no two fields may share the same name.
 # * The return types of each defined field must be an Input type.
 
-validate_input_object_type_definition <- function(x, ..., oh) {
+validate_input_object_type <- function(x, ..., oh) {
   validate_field_names(x, "input object", "3.1.6.1", oh = oh)
 
   lapply(x$fields, function(field) {
@@ -145,7 +145,7 @@ validate_input_object_type_definition <- function(x, ..., oh) {
 #           argument.
 #       3. The object field may include additional arguments not defined in the interface field,
 #         but any additional argument must not be required.
-validate_object_type_definition <- function(x, ..., oh) {
+validate_object_type <- function(x, ..., oh) {
 
   # 1. An Object type must define one or more fields.
   # 2. The fields of an Object type must have unique names within that Object type;
@@ -307,16 +307,16 @@ validate_schema <- function(..., oh) {
   }
 
   interfaces <- oh$schema$get_interfaces()
-  lapply(interfaces, validate_interface_type_definition, oh = oh)
+  lapply(interfaces, validate_interface_type, oh = oh)
 
   unions <- oh$schema$get_unions()
-  lapply(unions, validate_union_type_definition, oh = oh)
+  lapply(unions, validate_union_type, oh = oh)
 
   input_objects <- oh$schema$get_input_objects()
-  lapply(input_objects, validate_input_object_type_definition, oh = oh)
+  lapply(input_objects, validate_input_object_type, oh = oh)
 
   objects <- oh$schema$get_objects()
-  lapply(objects, validate_object_type_definition, oh = oh)
+  lapply(objects, validate_object_type, oh = oh)
 
   oh$schema$is_valid <- TRUE
 

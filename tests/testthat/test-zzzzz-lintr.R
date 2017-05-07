@@ -3,6 +3,15 @@
 if (requireNamespace("lintr", quietly = TRUE)) {
   context("lints")
   test_that("Package Style", {
-    suppressWarnings(lintr::expect_lint_free(cache = TRUE))
+
+    (function() {
+      Sys.setlocale(locale = "C")
+      on.exit({
+          Sys.setlocale(locale = "en_US.UTF-8")
+      })
+
+      lintr::expect_lint_free(cache = TRUE)
+    })()
+
   })
 }

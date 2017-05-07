@@ -464,7 +464,7 @@ enum __DirectiveLocation {
     )
   ) %>%
   get_definition("__DirectiveLocation") ->
-Introspection__DirectiveLocation
+Introspection__DirectiveLocation # nolint
 
 
 

@@ -37,7 +37,7 @@ expect_err <- function(query, ..., schema = dog_cat_schema) {
 expect_request <- function(
   query_txt,
   expected_json,
-  variable_values = list(),
+  variables = list(),
   operation_name = NULL,
   schema
 ) {
@@ -47,7 +47,7 @@ expect_request <- function(
     query_txt,
     schema,
     operation_name = operation_name,
-    variable_values = variable_values
+    variables = variables
   )
 
   testthat::expect_true(ans$error_list$has_no_errors())
@@ -73,7 +73,7 @@ expect_request <- function(
 expect_request_err <- function(
   query_txt,
   expected_json,
-  variable_values = list(),
+  variables = list(),
   operation_name = NULL,
   schema
 ) {
@@ -83,7 +83,7 @@ expect_request_err <- function(
     query_txt,
     schema,
     operation_name = operation_name,
-    variable_values = variable_values
+    variables = variables
   )
 
   testthat::expect_true(ans$error_list$has_any_errors())
