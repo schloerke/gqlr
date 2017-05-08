@@ -60,13 +60,15 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
           date(), " - ",
           "GET", " ",
           paste(
-            req$path,
-            if (!is.null(req$params$query))
-              paste0("query: '", req$params$query, "'"),
-            if (!is.null(req$params$variables))
-              paste0("variables: '", req$params$variables, "'"),
-            if (!is.null(req$params$operationName))
-              paste0("operationName: '", req$params$operationName, "'"),
+            c(
+              req$path,
+              if (!is.null(req$params$query))
+                paste0("query: '", req$params$query, "'"),
+              if (!is.null(req$params$variables))
+                paste0("variables: '", req$params$variables, "'"),
+              if (!is.null(req$params$operationName))
+                paste0("operationName: '", req$params$operationName, "'")
+            ),
             sep = " - "
           )
         ))
