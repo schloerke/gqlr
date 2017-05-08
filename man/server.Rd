@@ -35,7 +35,7 @@ If 'application/graphql' is provided, the POST body will be interpreted as the q
 Using bash's curl, we can ask the server questions:
 \preformatted{ #R
   # load Star Wars schema from 'execute_request' example
-  example(execute_request)
+  example(gqlr_schema)
   # run server
   server(star_wars_schema, port = 8000)
 }
@@ -45,7 +45,7 @@ Using bash's curl, we can ask the server questions:
   curl '127.0.0.1:8000/'
 
 # GET R2-D2 and his friends' names
-  curl '127.0.0.1:8000/graphql?query={hero{name,friends{name}}}'
+  curl '127.0.0.1:8000/graphql?query=%7Bhero%7Bname%2Cfriends%7Bname%7D%7D%7D&pretty=TRUE'
 
 # POST for R2-D2 and his friends' names
   curl --data '{"query":"{hero{name}}"}' '127.0.0.1:8000/graphql' # defaults to parse as JSON

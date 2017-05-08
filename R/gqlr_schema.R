@@ -46,7 +46,7 @@
 #' library(magrittr)
 #'
 #' ## Set up data
-#' add_human <- function(human_data, id, name, appear, friend, home) {
+#' add_human <- function(human_data, id, name, appear, home, friend) {
 #'   human <- list(id = id, name = name, appearsIn = appear, friends = friend, homePlanet = home)
 #'   # set up a function to be calculated if the field totalCredits is required
 #'   human$totalCredits <- function(obj, args, schema) {
@@ -55,7 +55,7 @@
 #'   human_data[[id]] <- human
 #'   human_data
 #' }
-#' add_droid <- function(droid_data, id, name, appear, friend, pf) {
+#' add_droid <- function(droid_data, id, name, appear, pf, friend) {
 #'   droid <- list(id = id, name = name, appearsIn = appear, friends = friend, primaryFunction = pf)
 #'   # set extra fields manually
 #'   droid$totalCredits <- length(droid$appearsIn)
