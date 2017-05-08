@@ -45,6 +45,7 @@
 #' @param port web port to serve the server from
 #' @param log boolean that determines if server logging is done.  Defaults to TRUE
 #' @param initial_value default value to use in \code{\link{execute_request}()}
+# nocov start
 server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
 
   if (!requireNamespace("jug")) {
@@ -196,3 +197,4 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
     }) %>%
     jug::serve_it(port = port)
 }
+# nocov end
