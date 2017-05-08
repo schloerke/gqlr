@@ -17,7 +17,6 @@ branches:
     - travis
 
 r_github_packages:
-  - jimhester/lintr # test with lints
   - jimhester/covr # after success
 
 after_success:
