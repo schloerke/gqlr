@@ -56,7 +56,6 @@ execute_request("{world}", schema, initial_value = list(world = "Hi!"))
 #### Star Wars Data
 
 ```r
-## Set up data
 add_human <- function(human_data, id, name, appear, home, friend) {
   human <- list(id = id, name = name, appearsIn = appear, friends = friend, homePlanet = home)
   # set up a function to be calculated if the field totalCredits is required
@@ -106,8 +105,6 @@ all_characters[[1]]
 #     length(human$appearsIn)
 # }
 # <environment: 0x7fadd8ca2038>
-
-## End data set up
 ```
 
 
@@ -209,7 +206,7 @@ star_wars_schema
 ```r
 # Use the resolve method to initialize the data
 "
-query HeroNameAndFriendsQuery {
+{
   hero {
     id
     name
@@ -380,12 +377,12 @@ curl '127.0.0.1:8000/'
 ```
 
 
-## Talks
+## Presentations
 
 [WOMBAT2016 in Melbourne, Australia; Feb 2016](https://github.com/schloerke/presentation-2016_02_18-graphql/blob/master/GraphQL-Wombat-2016-Barret.pdf).
 
 
-## Other Packages
+## Other R GraphQL Packages
 
 * [graphql](https://github.com/ropensci/graphql) - Bindings to libgraphqlparser for R
 * [ghql](https://github.com/ropensci/ghql) - General purpose GraphQL client
