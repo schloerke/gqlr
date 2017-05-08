@@ -108,7 +108,7 @@ all_characters[[1]]
 ```
 
 
-# Star Wars Schema
+#### Star Wars Schema
 ```r
 "
 enum Episode { NEWHOPE, EMPIRE, JEDI }
@@ -201,7 +201,7 @@ schema {
 star_wars_schema
 ```
 
-### Star Wars Execution
+#### Star Wars Execution
 
 ```r
 # Use the resolve method to initialize the data
@@ -304,7 +304,7 @@ query IntrospectionTypeQuery {
 ```
 
 
-### Star Wars Server
+#### Star Wars Server
 ```r
 # R
 server(star_wars_schema, log = TRUE)
