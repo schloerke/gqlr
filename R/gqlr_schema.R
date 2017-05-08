@@ -220,25 +220,39 @@ gqlr_schema <- function(schema, ...) {
 
       obj <- schema$get_type(item_name)
       if (is.null(obj)) {
-        stop("gqlr_schema() could not find object to match argument name: ", item_name)
+        stop("gqlr_schema() could not find schema definition to match argument name: ", item_name)
       }
       item_type <- class(obj)[1]
 
       info_names <- names(item)
+      if (!(
+        is.function(item) ||
+        is.list(item)
+      )) {
+        stop(
+          "gqlr_schema() named arguments should either be a named list of information or a ",
+          "function which will be set to the resolve function or resolve_type function accordingly"
+        )
+      }
 
       if (item_type == "ScalarTypeDefinition") {
-        is_ok <- all(
-          info_names %in% c("description", "resolve", "parse_ast")
-        )
-        if (!is_ok) {
-          stop(
-            "gqlr_schema() argument: ", item_name,
-            " of type: ScalarTypeDefinition,",
-            " should be a list possibly containing these elements:\n",
-            "\tdescription: String\n",
-            "\tresolve: function(obj, schema)\n",
-            "\tparse_ast: function(obj, schema)\n"
+        if (is.function(item)) {
+          item <- list(resolve = item)
+        } else {
+          is_ok <- all(
+            info_names %in% c("description", "resolve", "parse_ast")
           )
+          if (!is_ok) {
+            stop(
+              "gqlr_schema() argument: ", item_name,
+              " of type: ScalarTypeDefinition,",
+              " should be a 'resolve' function or",
+              " a list possibly containing these elements:\n",
+              "\tdescription: String\n",
+              "\tresolve: function(obj, schema)\n",
+              "\tparse_ast: function(obj, schema)\n"
+            )
+          }
         }
 
       } else if (item_type == "ObjectTypeDefinition") {
@@ -250,7 +264,8 @@ gqlr_schema <- function(schema, ...) {
             stop(
               "gqlr_schema() argument: ", item_name,
               " of type: ObjectTypeDefinition,",
-              " should be a 'resolve' function or a list possibly containing these elements:\n",
+              " should be a 'resolve' function or",
+              " a list possibly containing these elements:\n",
               "\tdescription: String\n",
               "\tfields: list(fieldA = descriptionA, fieldB = descriptionB...)\n",
               "\tresolve: function(obj, schema)\n"
@@ -269,7 +284,8 @@ gqlr_schema <- function(schema, ...) {
             stop(
               "gqlr_schema() argument: ", item_name,
               " of type: EnumTypeDefinition,",
-              " should be a list possibly containing these elements:\n",
+              " should be a 'resolve' function or",
+              " a list possibly containing these elements:\n",
               "\tdescription: String\n",
               "\tvalues: list(enumA = descriptionA, enumB = descriptionB...)\n",
               "\tresolve: function(obj, schema)\n"
@@ -294,9 +310,48 @@ gqlr_schema <- function(schema, ...) {
           }
         }
 
+      } else if (item_type == "InputObjectTypeDefinition") {
+        if (is.function(item)) {
+          stop(
+            "gqlr_schema() argument: ", item_name,
+            " of type: ,", item_type,
+            " should be a list possibly containing these elements:\n",
+            "\tdescription: String\n"
+          )
+        } else {
+          is_ok <- all(info_names %in% c("description"))
+          if (!is_ok) {
+            stop(
+              "gqlr_schema() argument: ", item_name,
+              " of type: ,", item_type,
+              " should be a list possibly containing these elements:\n",
+              "\tdescription: String\n"
+            )
+          }
+        }
+
+      } else if (item_type == "DirectiveDefinition") {
+        if (is.function(item)) {
+          item <- list(resolve = item)
+        } else {
+          is_ok <- all(
+            info_names %in% c("description", "resolve")
+          )
+          if (!is_ok) {
+            stop(
+              "gqlr_schema() argument: ", item_name,
+              " of type: DirectiveDefinition,",
+              " should be a 'resolve' function or",
+              " a list possibly containing these elements:\n",
+              "\tdescription: String\n",
+              "\tresolve: function(obj, schema)\n"
+            )
+          }
+        }
+
       } else {
         str(obj)
-        stop("unknown object provided to gqlr_schema()")
+        stop("unknown schema defintion provided to gqlr_schema()")
       }
 
       is_named_list(
@@ -319,7 +374,7 @@ gqlr_schema <- function(schema, ...) {
             field_name_obj <- as_type(field_name)
             obj_field <- obj$.get_field(field_name_obj)
             if (is.null(obj_field)) {
-              stop("Could not find field for Object: ", item_name)
+              stop("Could not find field: '", field_name, "' for Object: ", item_name)
             }
             obj_field$description <- item$fields[[field_name]]
           }
