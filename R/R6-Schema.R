@@ -213,7 +213,7 @@ Schema <- R6Class(
     add_item = function(obj) {
       if (!inherits(obj, "TypeSystemDefinition")) {
         str(obj)
-        stop("To add an object to a Schema, it must have a name.")
+        stop("To add an object to a Schema, it must inherit TypeSystemDefinition.")
       }
 
       self$is_valid <- FALSE
@@ -416,6 +416,7 @@ Schema <- R6Class(
 
       if (!isTRUE(full)) {
         scalars[c("Int", "Float", "String", "Boolean")] <- NULL
+        values <- list()
         directives[c("include", "skip")] <- NULL
         objects[c(
           "__Schema", "__Type", "__Field", "__InputValue", "__EnumValue", "__Directive"
