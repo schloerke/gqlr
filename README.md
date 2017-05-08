@@ -23,7 +23,6 @@ devtools::install_github("schloerke/gqlr")
 If you encounter a clear bug, please file a minimal reproducible example on [github](https://github.com/schloerke/gqlr/issues).
 
 
-
 ## Usage
 
 ### Hello World
