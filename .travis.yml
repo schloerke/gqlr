@@ -20,7 +20,7 @@ r_github_packages:
   - jimhester/covr # after success
 
 after_success:
-  - LINTR=SKIP Rscript -e 'print(Sys.getenv("LINTR")); covr::codecov()'
+  - Rscript -e 'covr::codecov()'
 
 env:
   - LINTR_COMMENT_BOT=false
