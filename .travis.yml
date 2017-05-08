@@ -21,7 +21,7 @@ r_github_packages:
   - jimhester/covr # after success
 
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - Rscript -e 'devtools::load_all(); covr::codecov()'
 
 env:
   - LINTR_COMMENT_BOT=false
