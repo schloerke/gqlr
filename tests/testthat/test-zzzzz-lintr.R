@@ -1,7 +1,8 @@
 
 # https://github.com/jimhester/lintr
 if (requireNamespace("lintr", quietly = TRUE)) {
-  if (Sys.getenv("COVR") != "") {
+  if (Sys.getenv("LINTR") != "") {
+
     context("lints")
     test_that("Package Style", {
 

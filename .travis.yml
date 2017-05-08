@@ -21,7 +21,7 @@ r_github_packages:
   - jimhester/covr # after success
 
 after_success:
-  - COVR=TRUE Rscript -e 'covr::codecov()'
+  - LINTR=SKIP Rscript -e 'print(Sys.getenv("LINTR")); covr::codecov()'
 
 env:
   - LINTR_COMMENT_BOT=false
