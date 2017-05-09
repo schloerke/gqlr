@@ -19,5 +19,8 @@ Result <- R6Class(
   )
 )
 format.Result <- function(x, ...) {
-  x$as_json(...)
+  as.character(x$as_json(...))
+}
+as.character.Result <- function(x, ...) {
+  as.character(x$as_json(...))
 }

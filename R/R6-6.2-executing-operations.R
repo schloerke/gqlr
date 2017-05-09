@@ -42,14 +42,6 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
   root_type_object <- oh$schema$get_query_object()
   root_type <- root_type_object$name
 
-  if (is.null(root_type_object)) {
-    oh$error_list$add(
-      "6.2",
-      "Can not find definition '", root_type, "' in schema definition"
-    )
-    return(NULL)
-  }
-
   # get default value and add introspection fields
   initial_value <- get_initial_value(initial_value, root_type_object, oh = oh)
 
@@ -80,14 +72,6 @@ execute_mutation <- function(operation_obj, initial_value, ..., oh) {
 
   root_type_object <- oh$schema$get_mutation_object()
   root_type <- root_type_object$name
-
-  if (is.null(root_type_object)) {
-    oh$error_list$add(
-      "6.2",
-      "Can not find definition mutation type in schema definition"
-    )
-    return(NULL)
-  }
 
   # get default value and add introspection fields
   initial_value <- get_initial_value(initial_value, root_type_object, oh = oh)

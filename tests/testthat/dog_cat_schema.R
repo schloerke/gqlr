@@ -27,7 +27,7 @@ type Alien implements Sentient {
 
 type Human implements Sentient {
   name: String!
-  pet: Pet
+  pet: [Pet]
 }
 
 enum CatCommand { JUMP }

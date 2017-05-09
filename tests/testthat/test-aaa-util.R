@@ -125,3 +125,70 @@ test_that("get_definition()", {
   expect_equal(format(dog_obj$name), "Dog")
 
 })
+
+
+test_that("PkgObjsGen()", {
+
+  MyPkgObjs <- PkgObjs$clone()
+  MyPkgObjs$add("Barret", "Value")
+  expect_true(MyPkgObjs$is_registered("Barret"))
+  expect_equal(MyPkgObjs$get_class_obj("Barret"), "Value")
+  expect_true(!is.null(MyPkgObjs$names))
+
+})
+
+
+test_that("default active wrappers", {
+
+  "
+  {
+    name
+  }
+  " %>%
+    gqlr:::graphql2obj() ->
+  query_doc
+
+  expect_error({
+      query_doc$definitions[[1]]$operation <- "Barret"
+    },
+    "not in accepted values"
+  )
+
+  "
+  type Barret {
+    fieldA: Int
+    fieldB: [Int]
+    fieldC: Barret
+    fieldD: NotBarret
+  }
+  schema {
+    query: MyObject
+  }
+  " %>%
+    gqlr:::graphql2obj() ->
+  doc
+
+  Barret <- doc$definitions[[1]]
+
+  expect_error({
+      Barret$fields <- 5
+    },
+    "Attempting to set ObjectTypeDefinition"
+  )
+  expect_error({
+      Barret$fields[[1]] <- 5
+    },
+    "Attempting to set ObjectTypeDefinition"
+  )
+  expect_error({
+      Barret$directives <- 5
+    },
+    "\\|Directive\\|"
+  )
+  expect_error({
+      Barret$directives <- list(5)
+    },
+    "\\|Directive\\|"
+  )
+
+})

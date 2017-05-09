@@ -14,6 +14,7 @@ coerce_helper <- function(as_fn, is_fn) {
 }
 
 
+# nocov start
 PkgObjsGen <- R6Class(
   "PkgObjs",
   public = list(
@@ -39,6 +40,7 @@ PkgObjsGen <- R6Class(
   )
 )
 PkgObjs <- PkgObjsGen$new()
+# nocov end
 
 
 
@@ -100,9 +102,11 @@ parse_args <- function(txt) {
   keys <- lapply(kvPairs, "[[", "key") %>% unlist()
   ret <- lapply(kvPairs, "[[", "value")
   if (keys[length(keys)] == "") {
-    removeBadPos <- -1 * length(keys)
-    keys <- keys[removeBadPos]
-    ret <- ret[removeBadPos]
+    # nocov start
+    remove_bad_pos <- -1 * length(keys)
+    keys <- keys[remove_bad_pos]
+    ret <- ret[remove_bad_pos]
+    # nocov end
   }
   names(ret) <- keys
   ret
@@ -171,23 +175,25 @@ R6_from_args <- function(
       }
 
       if (inherits(value, "R6")) {
-        str(value, 3)
+        obj_out <- capture.output(str(value, 3))
         stop(
           "Attempting to set ", class(self)[1], ".", key, ".\n",
           "Expected value should be an array of ", classVal, " objects.\n",
-          "Received ", paste(class(value), collapse = ", "),
-          "Received object above."
+          "Received ", paste(class(value), collapse = ", "), "\n",
+          "Received object below.\n",
+          paste(obj_out, sep = "\n")
         )
       }
 
       lapply(value, function(valItem) {
         if (!inherits(valItem, classVal)) {
-          str(value, 3)
+          obj_out <- capture.output(str(value, 3))
           stop(
             "Attempting to set ", class(self)[1], ".", key, ".\n",
             "Expected value with class of |", classVal, "|.\n",
-            "Received ", paste(class(valItem), collapse = ", "),
-            "Received object above.",
+            "Received ", paste(class(valItem), collapse = ", "), "\n",
+            "Received object below.\n",
+            paste(obj_out, sep = "\n")
           )
         }
       })
@@ -311,7 +317,7 @@ R6_from_args <- function(
               function(e) {
                 stop(
                   "Did not receive: '", .argName, "'. ",
-                  "'", .argName, "' must be supplied to object of class: ", class(self)[1]
+                  "'", .argName, "' must be supplied an object of class: ", class(self)[1]
                 )
               }
             }

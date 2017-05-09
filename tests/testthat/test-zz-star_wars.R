@@ -858,4 +858,24 @@ test_that("variables", {
       # nolint end
     )
 
+  "
+  {
+    hero {
+      __typename
+    }
+  }
+  " %>%
+    expect_sw_request(
+      operation_name = NULL,
+      # nolint start
+      '{
+        "data": {
+          "hero": {
+            "__typename": "Droid"
+          }
+        }
+      }'
+      # nolint end
+    )
+
 })

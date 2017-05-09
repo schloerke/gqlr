@@ -1,7 +1,7 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-mutation-simple.R")); # nolint
 
 
-context("execute-simple")
+context("execute-mutation-simple")
 
 source("validate_helper.R")
 
@@ -49,6 +49,7 @@ test_that("small counter", {
     )
     expect_true(ans$error_list$has_no_errors())
     expect_equal(ans$data$value, i)
+    expect_equal(format(ans, pretty = FALSE), str_c("{\"data\":{\"value\":", i, "}}"))
   }
 
   do_mutation <- function(i) {
@@ -60,6 +61,7 @@ test_that("small counter", {
     )
     expect_true(ans$error_list$has_no_errors())
     expect_equal(ans$data$value, i)
+    expect_output(print(ans, pretty = FALSE), as.character(i))
   }
 
   for (i in 0:10) {

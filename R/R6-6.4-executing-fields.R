@@ -13,7 +13,6 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
 
   # 1. Let field be the first entry in fields.
   field <- fields[[1]]
-
   if (identical(format(field$name), "__typename")) {
     completed_value <- resolve__typename(object_type, object_value, oh = oh)
     return(completed_value)
@@ -113,71 +112,77 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     argument_name <- argument_definition$.get_name()
     # b. Let argumentType be the expected type of argumentDefinition.
     argument_type <- argument_definition$type
+    type_obj <- oh$schema$get_type(argument_type)
     # c. Let defaultValue be the default value for argumentDefinition.
     default_value <- argument_definition$defaultValue
 
     # d. Let value be the value provided in argumentValues for the name argumentName.
     matching_arg <- field$.get_matching_argument(argument_definition)
+    value <- matching_arg$value
 
     # f. Otherwise, if value does not exist (was not provided in argumentValues:
-    if (is.null(matching_arg)) {
+    if (is.null(value) || inherits(value, "NullValue")) {
+
       # i. If defaultValue exists (including null):
       if (!is.null(default_value)) {
         # 1. Add an entry to coercedValues named argName with the value defaultValue.
-        coerced_values[[argument_name]] <- default_value
-        next
-      }
+        value <- default_value
+
       # ii. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
-      if (inherits(argument_type, "NonNullType")) {
+      } else if (inherits(argument_type, "NonNullType")) {
         oh$error_list$add(
           "6.4.1",
           "non nullable type argument did not argument definition"
         )
         next
+      } else {
+        # iii. Otherwise, continue to the next argument definition.
+        next
       }
 
-      # iii. Otherwise, continue to the next argument definition.
-      next
     }
 
-    value <- matching_arg$value
     # e. If value is a Variable:
     if (inherits(value, "Variable")) {
       # i. Let variableName be the name of Variable value.
       # variable_name <- format(value$name) # nolint
-      variable_to_name <- format(matching_arg$name)
 
       # ii. Let variableValue be the value provided in variableValues for the name variableName.
       # iii. If variableValue exists (including null):
       if (oh$has_variable_value(value)) {
         # 1. Add an entry to coercedValues named argName with the value variableValue.
         variable_value <- oh$get_variable_value(value)
-        coerced_values[[variable_to_name]] <- variable_value
+        value <- variable_value
+        coerced_value <- type_obj$.resolve(variable_value, oh$schema)
+
+        if (!is.null(variable_value) && is.null(coerced_value)) {
+          oh$error_list$add(
+            "6.4.1",
+            "Variable value cannot be coerced according to the input coercion rules"
+          )
+          next
+        }
+        coerced_values[[argument_name]] <- coerced_value
         next
-      }
 
       # iv. Otherwise, if defaultValue exists (including null):
-      if (!is.null(default_value)) {
+      } else if (!is.null(default_value)) {
         # 1. Add an entry to coercedValues named argName with the value defaultValue.
-        coerced_values[[variable_to_name]] <- argument_definition$defaultValue$value
-        next
-      }
+        value <- default_value
 
       # v. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
-      if (inherits(argument_type, "NonNullType")) {
+      } else if (inherits(argument_type, "NonNullType")) {
         oh$error_list$add(
           "6.4.1",
           "non nullable type argument did not find variable definition"
         )
         next
+      } else {
+        # vi. Otherwise, continue to the next argument definition.
+        next
       }
-      # vi. Otherwise, continue to the next argument definition.
-      next
 
     }
-
-
-    type_obj <- oh$schema$get_type(argument_type)
 
     # g. Otherwise, if value cannot be coerced according to the input coercion rules of argType,
     #    throw a field error.

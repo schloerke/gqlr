@@ -29,7 +29,7 @@ AST <- R6Class("AST",
   public = list(
     .format = function(...) {
       str(self)
-      stop("Not implemented")
+      stop(".format() not implemented")
     }
   ),
   active = list(
@@ -48,35 +48,36 @@ AST <- R6Class("AST",
 
 
 
-
-# /**
-#  * A representation of source input to GraphQL. The name is optional,
-#  * but is mostly useful for clients who store GraphQL documents in
-#  * source files; for example, if the GraphQL input is in a file Foo.graphql,
-#  * it might be useful for name to be "Foo.graphql".
-#  */
-Source <- R6_from_args(
-  inherit = AST,
-  "Source",
-  " name: string;
-    body: string;",
-  active = list(
-    name = function(value) {
-      if (missing(value)) {
-        return(self$.args$name$value)
-      }
-
-      if (is.null(value)) {
-        value <- "GraphQL"
-      }
-      self$.args$name$value <- value
-      value
-    },
-    .format = function(...) {
-      stop("implement!")
-    }
-  )
-)
+# # nolint start
+# # /**
+# #  * A representation of source input to GraphQL. The name is optional,
+# #  * but is mostly useful for clients who store GraphQL documents in
+# #  * source files; for example, if the GraphQL input is in a file Foo.graphql,
+# #  * it might be useful for name to be "Foo.graphql".
+# #  */
+# Source <- R6_from_args(
+#   inherit = AST,
+#   "Source",
+#   " name: string;
+#     body: string;",
+#   active = list(
+#     name = function(value) {
+#       if (missing(value)) {
+#         return(self$.args$name$value)
+#       }
+#
+#       if (is.null(value)) {
+#         value <- "GraphQL"
+#       }
+#       self$.args$name$value <- value
+#       value
+#     },
+#     .format = function(...) {
+#       stop("implement!")
+#     }
+#   )
+# )
+# # nolint end
 
 
 
@@ -88,7 +89,7 @@ Location <- R6_from_args(
     source?: ?Source;",
   public = list(
     .format = function(...) {
-      stop("implement!")
+      stop("Location objects should not be formatted")
     }
   )
 )
@@ -173,16 +174,6 @@ Document <- R6_from_args(
   public = list(
     .format = function(...) {
       format_list(self$definitions, .collapse = "\n\n", ...)
-    },
-    .get_definition = function(name) {
-      for (definition in self$definitions) {
-        if (inherits(definition, "TypeSystemDefinition")) {
-          if (identical(format(definition$name), name)) {
-            return(definition)
-          }
-        }
-      }
-      return(NULL)
     },
     .get_operations = function() {
       ret <- list()
@@ -619,7 +610,7 @@ Type <- R6_from_args(
     .matches = function(name_obj) {
       if (!inherits(name_obj, "Type")) {
         str(name_obj)
-        stop("supply a Type obj")
+        stop("Must supply a Type object")
         return(FALSE)
       }
 

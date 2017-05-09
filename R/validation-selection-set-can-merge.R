@@ -28,6 +28,7 @@ validate_fields_can_merge <- function(
         } else {
           return_field <- matching_obj_$.get_field(field)
           item <- list(
+            location = field$location,
             to_name = ifnull(field$alias$value, field$name$value),
             name = field$name$value,
             parent_type = matching_obj_$name$value,
@@ -100,8 +101,8 @@ validate_fields_can_merge <- function(
               !is.null(field_j_info$field$arguments)
             )) {
               if (!identical(
-                capture.output(str(field_i_info$field$arguments)),
-                capture.output(str(field_j_info$field$arguments))
+                lapply(field_i_info$field$arguments, format),
+                lapply(field_j_info$field$arguments, format)
               )) {
                 oh$error_list$add(
                   "5.2.2",
@@ -122,18 +123,11 @@ validate_fields_can_merge <- function(
               # Let mergedSet be the result of adding the selection set of fieldA
               #  and the selection set of fieldB.
               merged_set <- SelectionSet$new(
-                selections = append(
-                  InlineFragment$new(
-                    typeCondition = field_i_info$return_type,
-                    selectionSet = field_i_info$field$selectionSet$selections
-                  ),
-                  InlineFragment$new(
-                    typeCondition = field_j_info$return_type,
-                    selectionSet = field_j_info$field$selectionSet$selections
-                  )
-                )
+                selections = list() %>%
+                  append(field_i_info$field$selectionSet$selections) %>%
+                  append(field_j_info$field$selectionSet$selections)
               )
-              return_type_obj <- oh$schema$get_type(field_i_info$return_type_obj)
+              return_type_obj <- oh$schema$get_type(field_i_info$return_type)
               validate_fields_can_merge(merged_set, return_type_obj, oh = oh)
             }
           }
@@ -259,18 +253,11 @@ validate_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
   # Given each pair of members subfieldA and subfieldB in fieldsForName:
     # SameResponseShape(subfieldA, subfieldB) must be true.
   merged_set <- SelectionSet$new(
-    selections = append(
-      InlineFragment$new(
-        typeCondition = field_i_info$return_type,
-        selectionSet = field_i_info$field$selectionSet$selections
-      ),
-      InlineFragment$new(
-        typeCondition = field_j_info$return_type,
-        selectionSet = field_j_info$field$selectionSet$selections
-      )
-    )
+    selections = list() %>%
+      append(field_i_info$field$selectionSet$selections) %>%
+      append(field_j_info$field$selectionSet$selections)
   )
-  return_type_obj <- oh$schema$get_type(field_i_info$return_type_obj)
+  return_type_obj <- oh$schema$get_type(field_i_info$return_type)
   # TODO double check logic here.
   validate_fields_can_merge(
     merged_set, return_type_obj,

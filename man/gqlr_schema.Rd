@@ -27,7 +27,7 @@ ScalarTypeDefinition:
 
 EnumTypeDefinition:
 \describe{
-  \item{resolve}{function with two parameters: \code{x} and \code{schema} (the full Schema definition). Should return the value \code{x} represents, such as the Star Wars Episode enum value "4" could represent Episode "NEWHOPE".}
+  \item{resolve}{(optional) function with two parameters: \code{x} and \code{schema} (the full Schema definition). Should return the value \code{x} represents, such as the Star Wars Episode enum value "4" could represent Episode "NEWHOPE". By default, EnumTypeDefinitions will return the current value.}
   \item{description}{(optional) single character value that describes the Enum definition}
   \item{values}{(optional) named list of enum value descriptions. Such as \code{values = list(ENUMA = "description for ENUMA", ENUMZ = "description for ENUMZ")}}
 }

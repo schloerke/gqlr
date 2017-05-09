@@ -1,6 +1,6 @@
-# # load_all(); testthat::test_file(file.path("tests", "testthat", "test-execute-simple.R")); # nolint
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-simple.R")); # nolint
 
-context("execute-simple")
+context("execute-query-simple")
 
 source("validate_helper.R")
 
@@ -163,5 +163,76 @@ test_that("arbitrary code", {
 
   expect_true(ans$error_list$has_no_errors())
   expect_equal(ans_exact$data, expected)
+
+})
+
+
+test_that("args", {
+
+  "
+  type MyObject {
+    fieldA(argA: Int!): Int
+    fieldB(argB: Int! = 42): Int
+    fieldC(argC: Int = 42): Int
+  }
+  schema {
+    query: MyObject
+  }
+  " %>%
+    gqlr_schema() ->
+  schema
+
+  expected <- list(data = list(fieldC = 3))
+
+  expect_expected <- function(ret) {
+    ret$as_json() %>%
+      as.character() %>%
+      jsonlite::fromJSON() %>%
+      expect_equal(expected)
+  }
+
+  execute_request("
+      {
+        fieldC(argC: null)
+      }
+    ",
+    schema,
+    variables = list(),
+    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
+  ) %>%
+    expect_expected()
+
+  execute_request("
+      {
+        fieldC(argC: 5)
+      }
+    ",
+    schema,
+    variables = list(),
+    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
+  ) %>%
+    expect_expected()
+
+  execute_request("
+      query args($argVal: Int){
+        fieldC(argC: $argVal)
+      }
+    ",
+    schema,
+    variables = list(argVal = 6),
+    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
+  ) %>%
+    expect_expected()
+
+  execute_request("
+      query args($argVal: Int){
+        fieldC(argC: $argVal)
+      }
+    ",
+    schema,
+    variables = list(argVal = NULL),
+    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
+  ) %>%
+    expect_expected()
 
 })

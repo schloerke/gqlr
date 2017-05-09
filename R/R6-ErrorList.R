@@ -76,6 +76,8 @@ ErrorList <- R6Class("ErrorList",
       "3.1.7" = "Lists",
       "3.1.8" = "Non-Null",
 
+      "3.3" = "Initial types",
+
       "5.1" = "Operations",
       "5.1.1" = "Named Operation Definitions",
       "5.1.1.1" = "Operation Name Uniqueness",

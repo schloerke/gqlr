@@ -197,6 +197,55 @@ test_that("5.2.2 - Field Selection Merging", {
   " %>%
   expect_err("Two matching return fields must have identical arguments")
 
+  "
+  # validate fields can merge
+  query MyQuery {
+    dog {
+      name
+    }
+    dog {
+      name
+    }
+  }
+  " %>%
+  expect_r6()
+
+  "
+  # validate lists can merge
+  query MyQuery {
+    human {
+      pet {
+        name
+      }
+    }
+    human {
+      pet {
+        name
+      }
+    }
+  }
+  " %>%
+  expect_r6()
+
+  "
+  # validate lists can merge
+  query MyQuery {
+    human {
+      pet {
+        name
+      }
+    }
+    human {
+      pet {
+        ... on Dog {
+          nickname
+        }
+      }
+    }
+  }
+  " %>%
+  expect_r6()
+
 
   "
   {

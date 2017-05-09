@@ -155,11 +155,13 @@ execute_request <- function(
   initial_value = NULL
 ) {
   oh <- ObjectHelpers$new(schema)
+  ret <- Result$new(oh$error_list)
+
   validate_schema(oh = oh)
+  if (oh$error_list$has_any_errors()) return(ret)
 
   document_obj <- validate_document(request, oh = oh)
-
-  ret <- Result$new(oh$error_list)
+  if (oh$error_list$has_any_errors()) return(ret)
 
   operation <- get_operation(document_obj, operation_name, oh = oh)
   if (oh$error_list$has_any_errors()) return(ret)
