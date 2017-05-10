@@ -239,7 +239,15 @@ Schema <- R6Class(
           )
         }
         # since it is and R6 object, no need to re-store the cur_obj
-        cur_obj$fields <- append(cur_obj$fields, extend_def$fields)
+        new_fields <- append(cur_obj$fields, extend_def$fields)
+
+        field_names <- new_fields %>%
+          lapply(function(x) {
+            format(x$name)
+          }) %>%
+            unlist()
+        cur_obj$fields <- new_fields[!duplicated(field_names, fromLast = TRUE)]
+
 
         if (is.function(extend_def$.resolve)) {
           if (is.function(cur_obj$.resolve)) {
@@ -266,12 +274,12 @@ Schema <- R6Class(
       obj_group <- groups[[obj_kind]]
 
       if (is.null(obj_group)) {
-        print(obj)
+        str(obj)
         stop("Unknown object type requested to be added to schema. Type: ", obj_kind)
       }
 
       if (!is.null(private[[obj_group]][[obj_name]])) {
-        print(private[[obj_group]][[obj_name]])
+        str(private[[obj_group]][[obj_name]])
         stop(obj_name, " already defined in ", obj_kind)
       }
 

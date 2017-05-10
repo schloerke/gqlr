@@ -128,6 +128,8 @@ test_that("arbitrary code", {
     a: String
     b: String
     c: [String]
+  }
+  extend type DeepDataType {
     deeper: [Data]
   }
   schema {
@@ -184,11 +186,11 @@ test_that("args", {
 
   expected <- list(data = list(fieldC = 3))
 
-  expect_expected <- function(ret) {
+  expect_expected <- function(ret, expected_val = expected) {
     ret$as_json() %>%
       as.character() %>%
-      jsonlite::fromJSON() %>%
-      expect_equal(expected)
+      jsonlite::fromJSON(simplifyDataFrame = FALSE) %>%
+      expect_equal(expected_val)
   }
 
   execute_request("
@@ -234,5 +236,39 @@ test_that("args", {
     initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
   ) %>%
     expect_expected()
+
+  execute_request("
+      query arg($intVal: Int!){
+        fieldA(argA: $intVal)
+      }
+    ",
+    schema,
+    variables = list(intVal = "Barret"),
+    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
+  ) %>%
+    expect_expected(
+      list(data = NULL, errors = list(list(
+        message = "6.1.2: Coercing Variable Values
+Value cannot be coerced according to the input coercion rules"
+      )))
+    )
+
+
+})
+
+
+test_that("Scalars", {
+  expect_equal(coerce_boolean(TRUE), TRUE)
+  expect_equal(coerce_boolean(FALSE), FALSE)
+  expect_equal(coerce_boolean("Barret"), NULL)
+
+  expect_equal(coerce_int(5.4), 5)
+  expect_equal(coerce_int("5.4"), 5)
+
+  expect_equal(coerce_float(5.4), 5.4)
+  expect_equal(coerce_float("5.4"), 5.4)
+
+  expect_equal(coerce_string(5.4), "5.4")
+  expect_equal(coerce_string("5.4"), "5.4")
 
 })

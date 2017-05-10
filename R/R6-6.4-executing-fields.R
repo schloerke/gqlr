@@ -132,7 +132,7 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
       } else if (inherits(argument_type, "NonNullType")) {
         oh$error_list$add(
           "6.4.1",
-          "non nullable type argument did not argument definition"
+          "Received null value for non nullable type argument definition"
         )
         next
       } else {
@@ -482,8 +482,8 @@ is_nullish <- function(x) {
     "integer" = , # nolint
     "double" = , # nolint
     "numeric" = {
-      if (length(x) > 0) {
-        FALSE
+      if (length(x) == 0) {
+        TRUE
       } else {
         is.na(x) || is.nan(x)
       }

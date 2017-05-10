@@ -97,6 +97,22 @@ expect_error({
 )
 
 expect_error({
+    my_named_type <- NamedType$new(name = Name$new(value = "Value"))
+    my_named_type$loc <- NULL
+    my_named_type$name <- NULL
+  },
+  "Can not set value to NULL for Name\\$name"
+)
+expect_error({
+    my_type <- NonNullType$new(type = NamedType$new(name = Name$new(value = "Value")))
+    my_type$type <- NamedType$new(name = Name$new(value = "Valid Type"))
+    my_type$type <- Name$new(value = "Not a type")
+  },
+  "must be supplied an object of class: NamedType"
+)
+
+
+expect_error({
     Name$new(value = "5")
   },
   "Name value must match"

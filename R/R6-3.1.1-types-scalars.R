@@ -150,10 +150,11 @@ String <- ScalarTypeDefinition$new(
 coerce_boolean <- function (value, ...) {
   val <- suppressWarnings(as.logical(value))
   if (is.logical(val)) {
-    return(val)
-  } else {
-    return(NULL)
+    if (!is_nullish(val)) {
+      return(val)
+    }
   }
+  return(NULL)
 }
 Boolean <- ScalarTypeDefinition$new(
   name = Name$new(value = "Boolean"),
