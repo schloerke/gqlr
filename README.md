@@ -381,7 +381,11 @@ curl '127.0.0.1:8000/'
 [WOMBAT2016 in Melbourne, Australia; Feb 2016](https://github.com/schloerke/presentation-2016_02_18-graphql/blob/master/GraphQL-Wombat-2016-Barret.pdf).
 
 
-## Other R GraphQL Packages
+## Other R GraphQL related packages
 
-* [graphql](https://github.com/ropensci/graphql) - Bindings to libgraphqlparser for R
-* [ghql](https://github.com/ropensci/ghql) - General purpose GraphQL client
+* [graphql](https://github.com/ropensci/graphql)
+    * Bindings to libgraphqlparser for R.
+    * `gqlr` uses this package to parse all requests strings and schema strings into json
+* [ghql](https://github.com/ropensci/ghql)
+    * General purpose GraphQL client
+    * The `ghql` client could be used to submit requests to `gqlr` server to be executed
