@@ -27,7 +27,7 @@ Suggests:
     jug,
     roxygen2 (>= 5.0.0),
     testthat
-RemotesOLD: schloerke/graphql@latest
+Remotes: schloerke/graphql@latest
 Roxygen: list(wrap = FALSE)
 RoxygenNote: 6.0.1
 Encoding: UTF-8
