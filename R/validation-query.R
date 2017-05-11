@@ -62,7 +62,8 @@ validate_operation_names <- function(document_obj, ..., oh) {
           if (isTRUE(seen_names[[name_val]])) {
             oh$error_list$add(
               "5.1.1.1",
-              "document definition has duplicate return name: ", name_val
+              "document definition has duplicate request name: ", name_val,
+              loc = definition$name$loc
             )
           }
           seen_names[[name_val]] <- TRUE
@@ -82,6 +83,7 @@ validate_operation_names <- function(document_obj, ..., oh) {
       "document definition: ", document_obj$.title,
       " has an anonymous and defined definition.",
       " This is not allowed."
+      # no loc
     )
     return()
   }
@@ -171,7 +173,8 @@ validate_selection_set <- function(selection_set_obj, object, ..., oh) {
           oh$error_list$add(
             "5.2.1",
             "fields may not be queried directly on a union object, except for '__typename'.  ",
-            "Not allowed to ask for fields: ", str_c(bad_field_names, collapse = ", ")
+            "Not allowed to ask for fields: ", str_c(bad_field_names, collapse = ", "),
+            loc = selection_obj$loc
           )
           next
 
@@ -180,7 +183,8 @@ validate_selection_set <- function(selection_set_obj, object, ..., oh) {
             "5.2.1",
             "not all requested names are found.",
             " missing field: '", selection_obj$name$value, "'",
-            " for object: '", object$.title, "'"
+            " for object: '", object$.title, "'",
+            loc = selection_obj$loc
           )
           next
         }
@@ -196,6 +200,7 @@ validate_selection_set <- function(selection_set_obj, object, ..., oh) {
 
     validate_arguments(
       selection_obj$arguments, matching_obj_field,
+      parent_obj = selection_obj,
       oh = oh
     )
 
@@ -207,7 +212,8 @@ validate_selection_set <- function(selection_set_obj, object, ..., oh) {
         oh$error_list$add(
           "5.2.3",
           "unknown object definition for field: '", selection_obj$name$value, "'.",
-          " Not allowed to query deeper into leaf field selections."
+          " Not allowed to query deeper into leaf field selections.",
+          loc = selection_obj$loc
         )
         next
       }
@@ -224,7 +230,8 @@ validate_selection_set <- function(selection_set_obj, object, ..., oh) {
           oh$error_list$add(
             "5.2.3",
             "non leaf selection does not have any children.",
-            " Missing children fields for field: '", selection_obj$name$value, "'."
+            " Missing children fields for field: '", selection_obj$name$value, "'.",
+            loc = selection_obj$loc
           )
         }
       }
@@ -280,7 +287,8 @@ validate_directives <- function(directive_objs, parent_obj, ..., oh, skip_variab
         "5.6.3",
         "All directives must be unique when used in on the same object.",
         "  Currently found the following directives: '",
-        str_c(directive_names, collapse = "', '"), "'"
+        str_c(directive_names, collapse = "', '"), "'",
+        loc = parent_obj$loc
       )
     }
   }
@@ -299,13 +307,15 @@ validate_directive <- function(directive_obj, parent_obj, ..., oh, skip_variable
     oh$error_list$add(
       "5.6.1",
       "all directives must be defined. Missing defintion for directive: ",
-      "'", directive_obj$name$value, "'"
+      "'", directive_obj$name$value, "'",
+      loc = parent_obj$loc
     )
   }
 
   validate_arguments(
     directive_obj$arguments,
     directive_definition,
+    parent_obj = parent_obj,
     oh = oh,
     skip_variables = skip_variables
   )
@@ -324,8 +334,10 @@ validate_directive <- function(directive_obj, parent_obj, ..., oh, skip_variable
       "5.6.2",
       "directive: '", directive_obj$name$value,
       "' is being used in a '", parent_cur_location, "' situation.",
-      " Can only be used in: '", str_c(directive_possible_locations, collapse = "', '"), "'"
+      " Can only be used in: '", str_c(directive_possible_locations, collapse = "', '"), "'",
+      loc = parent_obj$loc
     )
+
   }
 
   directive_obj

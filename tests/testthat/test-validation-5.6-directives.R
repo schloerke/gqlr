@@ -1,3 +1,4 @@
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.6-directives.R")); # nolint
 
 context("validation-5.6-directives")
 

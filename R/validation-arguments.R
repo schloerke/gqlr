@@ -4,7 +4,13 @@
 # 5.3.2 - Argument Uniqueness           - DONE
 # 5.3.3.1 - Compatible Values           - DONE
 # 5.3.3.2 - Required Non-Null Arguments - DONE
-validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_variables = FALSE) {
+validate_arguments <- function(
+  argument_obj_list, field_def_obj,
+  ...,
+  parent_obj,
+  oh,
+  skip_variables = FALSE
+) {
 
   if (
     is.null(argument_obj_list) &&
@@ -17,7 +23,8 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_v
   if (is.null(field_def_obj$arguments)) {
     oh$error_list$add(
       "5.3.1",
-      "Arguments supplied, but there are no arguments for field: ", format(field_def_obj$name)
+      "Arguments supplied, but there are no arguments for field: ", format(field_def_obj$name),
+      loc = parent_obj$loc
     )
     return(FALSE)
   }
@@ -40,7 +47,8 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_v
     if (!is.null(values_seen[[arg_name_str]])) {
       oh$error_list$add(
         "5.3.2",
-        "duplicate arguments with same name: ", arg_name_str
+        "duplicate arguments with same name: ", arg_name_str,
+        loc = parent_obj$loc
       )
       return(FALSE)
     }
@@ -55,7 +63,8 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_v
       oh$error_list$add(
         "5.3.1",
         "could not find matching arg value with label: ", format(arg_name),
-        " for field: ", format(field_def_obj$name)
+        " for field: ", format(field_def_obj$name),
+        loc = parent_obj$loc
       )
       return(FALSE)
     }
@@ -109,7 +118,8 @@ validate_arguments <- function(argument_obj_list, field_def_obj, ..., oh, skip_v
         oh$error_list$add(
           "5.3.3.2",
           "null or missing argument not allowed for argument: ", format(field_arg$name),
-          " for field: ", format(field_def_obj$name)
+          " for field: ", format(field_def_obj$name),
+          loc = parent_obj$loc
         )
         next
       }

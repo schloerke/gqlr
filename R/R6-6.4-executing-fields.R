@@ -130,9 +130,11 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 
       # ii. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
       } else if (inherits(argument_type, "NonNullType")) {
+        # idk if this can be reached as the request must be validated
         oh$error_list$add(
           "6.4.1",
-          "Received null value for non nullable type argument definition"
+          "Received null value for non nullable type argument definition",
+          loc = value$loc
         )
         next
       } else {
@@ -152,13 +154,14 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
       if (oh$has_variable_value(value)) {
         # 1. Add an entry to coercedValues named argName with the value variableValue.
         variable_value <- oh$get_variable_value(value)
-        value <- variable_value
         coerced_value <- type_obj$.resolve(variable_value, oh$schema)
 
         if (!is.null(variable_value) && is.null(coerced_value)) {
+          # idk if this can be reached as the variables are coerced earlier
           oh$error_list$add(
             "6.4.1",
-            "Variable value cannot be coerced according to the input coercion rules"
+            "Variable value cannot be coerced according to the input coercion rules",
+            loc = value$loc
           )
           next
         }
@@ -172,9 +175,11 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
 
       # v. Otherwise, if argumentType is a Non‐Nullable type, throw a field error.
       } else if (inherits(argument_type, "NonNullType")) {
+        # idk if this can be reached as variables are coerced earlier
         oh$error_list$add(
           "6.4.1",
-          "non nullable type argument did not find variable definition"
+          "non nullable type argument did not find variable definition",
+          loc = value$loc
         )
         next
       } else {
@@ -190,9 +195,11 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
     #    argType.
     coerced_value <- type_obj$.parse_ast(value, oh$schema)
     if (!is.null(value) && is.null(coerced_value)) {
+      # idk if this can be reached as the request is validated earlier
       oh$error_list$add(
         "6.4.1",
-        "Value cannot be coerced according to the input coercion rules"
+        "Value cannot be coerced according to the input coercion rules",
+        loc = value$loc
       )
       next
     }
@@ -289,9 +296,11 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     completed_result <- complete_value(inner_type, fields, result, oh = oh)
     # c. If completedResult is null, throw a field error.
     if (is.null(completed_result)) {
+      browser()
       oh$error_list$add(
         "6.4.3",
-        "non null type: ", format(field_type), " returned a null value"
+        "non null type: ", format(field_type), " returned a null value",
+        loc = fields[[1]]$loc
       )
       return(NULL)
     }

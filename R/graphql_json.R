@@ -22,6 +22,15 @@ clean_json.list <- function(obj, ...) {
   if (!is.null(obj$loc)) {
     obj$loc$kind <- "Location"
     class(obj$loc) <- "Location"
+
+    obj$loc$start$kind <- "Position"
+    obj$loc$end$kind <- "Position"
+    class(obj$loc$start) <- "Position"
+    class(obj$loc$end) <- "Position"
+    obj$loc$start$line <- as.numeric(obj$loc$start$line)
+    obj$loc$start$column <- as.numeric(obj$loc$start$column)
+    obj$loc$end$line <- as.numeric(obj$loc$end$line)
+    obj$loc$end$column <- as.numeric(obj$loc$end$column)
   }
   kind <- obj$kind
   ret <- lapply(obj, function(x) clean_json(x))

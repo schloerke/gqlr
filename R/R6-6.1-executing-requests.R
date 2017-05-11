@@ -154,7 +154,7 @@ execute_request <- function(
   variables = list(),
   initial_value = NULL
 ) {
-  oh <- ObjectHelpers$new(schema)
+  oh <- ObjectHelpers$new(schema, source = request)
   ret <- Result$new(oh$error_list)
 
   validate_schema(oh = oh)
@@ -212,6 +212,7 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
       oh$error_list$add(
         "6.1",
         "If operation name is null, the document may only contain one operation"
+        # no loc
       )
       return(NULL)
     }
@@ -229,6 +230,7 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
   oh$error_list$add(
     "6.1",
     "Operation: ", operation_name, " can't be found in the document object"
+    # no loc
   )
   return(NULL)
 }
@@ -276,7 +278,8 @@ coerce_variable_values <- function(operation, variable_values, ..., oh) {
       if (inherits(variable_type, "NonNullType")) {
         oh$error_list$add(
           "6.1.2",
-          "Non nullible type variable did not have value or default value"
+          "Non nullible type variable did not have value or default value",
+          loc = variable_definition$loc
         )
         next
       }
@@ -290,7 +293,8 @@ coerce_variable_values <- function(operation, variable_values, ..., oh) {
         if (is.null(coerced_value)) {
           oh$error_list$add(
             "6.1.2",
-            "Value cannot be coerced according to the input coercion rules"
+            "Value cannot be coerced according to the input coercion rules",
+            loc = variable_definition$loc
           )
           next
         }

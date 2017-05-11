@@ -38,9 +38,10 @@ ObjectHelpers <- R6Class(
     #   }
     # },
 
-    initialize = function(schema, error_list = ErrorList$new()) {
+    initialize = function(schema, source = NULL, error_list = ErrorList$new()) {
       self$schema <- schema
       self$error_list <- error_list
+      self$error_list$source <- source
 
       invisible(self)
     }

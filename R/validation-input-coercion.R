@@ -7,7 +7,8 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
     if (is.null(from_input)) {
       oh$error_list$add(
         rule_code,
-        "Expected ", format(to_type), " found missing value."
+        "Expected ", format(to_type), " found missing value.",
+        loc = from_input$loc
       )
       return(FALSE)
     }
@@ -15,7 +16,8 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
     if (inherits(from_input, "NullValue")) {
       oh$error_list$add(
         rule_code,
-        "Expected ", format(to_type), " found null value."
+        "Expected ", format(to_type), " found null value.",
+        loc = from_input$loc
       )
     }
     return(
@@ -57,7 +59,8 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
     if (!inherits(from_input, "ObjectValue")) {
       oh$error_list$add(
         rule_code,
-        "Expected ", class(to_obj)[1], ", found not an object"
+        "Expected ", class(to_obj)[1], ", found not an object",
+        loc = from_input$loc
       )
       return(FALSE)
     }
@@ -73,7 +76,8 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
       if (is.null(to_field)) {
         oh$error_list$add(
           rule_code,
-          "In field: ", from_field$name$value, ": unknown field"
+          "In field: ", from_field$name$value, ": unknown field",
+          loc = from_field$loc
         )
       }
     }
@@ -101,7 +105,6 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
     )
   ) {
     str(to_obj)
-    browser()
     stop("Must be input type")
   }
 
@@ -110,7 +113,8 @@ validate_value_can_be_coerced <- function(from_input, to_type, ..., oh, rule_cod
   if (is.null(result)) {
     oh$error_list$add(
       rule_code,
-      "Expected type ", format(to_type), ", found ", class(from_input)[1]
+      "Expected type ", format(to_type), ", found ", class(from_input)[1],
+      loc = from_input$loc
     )
   }
 

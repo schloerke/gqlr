@@ -90,7 +90,8 @@ validate_fields_can_merge <- function(
               oh$error_list$add(
                 "5.2.2",
                 "Two matching return fields must have the same original field name\n",
-                "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info)
+                "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info),
+                loc = field_i_info$field$loc
               )
               next
             }
@@ -107,7 +108,8 @@ validate_fields_can_merge <- function(
                 oh$error_list$add(
                   "5.2.2",
                   "Two matching return fields must have identical arguments\n",
-                  "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info)
+                  "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info),
+                  loc = field_i_info$field$loc
                 )
                 next
               }
@@ -170,7 +172,8 @@ validate_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
           "5.2.2",
           "Two matching return fields must both be NonNullType if one value is NonNullType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
-          "Currently returning: ", format(type_i), " and ", format(type_j)
+          "Currently returning: ", format(type_i), " and ", format(type_j),
+          loc = field_i_info$field$loc
         )
         return(FALSE)
       }
@@ -191,7 +194,8 @@ validate_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
           "5.2.2",
           "Two matching return fields must both be ListType if one value is ListType. ",
           "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
-          "Currently returning: ", format(type_i), " and ", format(type_j)
+          "Currently returning: ", format(type_i), " and ", format(type_j),
+          loc = field_i_info$field$loc
         )
         return(FALSE)
       }
@@ -222,7 +226,8 @@ validate_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
         "5.2.2",
         "Two matching return names must return the same types. \n",
         "Current fields: ", field_string(field_i_info), ", ", field_string(field_j_info), "\n",
-        "Currently returning: ", type_i_str, " and ", type_j_str
+        "Currently returning: ", type_i_str, " and ", type_j_str,
+        loc = field_i_info$field$loc
       )
       return(FALSE)
     }
@@ -241,7 +246,8 @@ validate_same_response_shape <- function(field_i_info, field_j_info, ..., oh) {
       "5.2.2",
       "Two matching return names must return an Object, Interface, or Union ",
       "if they do not return a Scalar or Enum.  \n",
-      "Currently returning: ", type_i_str, " and ", type_j_str
+      "Currently returning: ", type_i_str, " and ", type_j_str,
+      loc = field_i_info$field$loc
     )
     return(FALSE)
   }

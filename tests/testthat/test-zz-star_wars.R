@@ -762,7 +762,7 @@ test_that("directives", {
 
   "
   {
-    luke: human(id: \"1000\") @notskip {
+    artoo: hero @notskip {
       name
     }
   }
@@ -771,13 +771,13 @@ test_that("directives", {
       # nolint start
       '{
         "data": {
-          "luke": {
-            "name": "Luke Skywalker"
+          "artoo": {
+            "name": "R2-D2"
           }
         },
         "errors": [
           {
-            "message": "6.3.2: Field Collection\\nNon skip or include directive found. Extra directives are not allowed."
+            "message": "6.3.2: Field Collection\\nNon skip or include directive found. Extra directives are not allowed.\\nLocation: 3:17 to 3:25\\nError String: \'@notskip\'"
           }
         ]
       }'
@@ -804,7 +804,7 @@ test_that("variables", {
         "data": null,
         "errors": [
           {
-            "message": "6.1.2: Coercing Variable Values\\nNon nullible type variable did not have value or default value"
+            "message": "6.1.2: Coercing Variable Values\\nNon nullible type variable did not have value or default value\\nLocation: 2:18 to 2:34\\nError String: \'$someId: String!\'"
           }
         ]
       }'
@@ -825,7 +825,7 @@ test_that("variables", {
         "data": null,
         "errors": [
           {
-            "message": "6.1.2: Coercing Variable Values\\nValue cannot be coerced according to the input coercion rules"
+            "message": "6.1.2: Coercing Variable Values\\nValue cannot be coerced according to the input coercion rules\\nLocation: 2:18 to 2:32\\nError String: \'$someInt: Int!\'"
           }
         ]
       }'

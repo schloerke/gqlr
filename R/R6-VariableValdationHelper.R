@@ -25,7 +25,8 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
       if (is.null(var_obj)) {
         self$oh$error_list$add(
           "5.7.4",
-          "Matching variable definition can not be found for variable: ", var_name
+          "Matching variable definition can not be found for variable: $", var_name
+          # no loc
         )
         return(invisible(FALSE))
       }
@@ -60,7 +61,8 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
           if (!inherits(cur_var_type, "NonNullType")) {
             self$oh$error_list$add(
               "5.7.6",
-              "Variable can not provide a nullible argument to a non-nullible definition"
+              "Variable can not provide a nullible argument to a non-nullible definition",
+              loc = cur_var_type$loc
             )
             return(invisible(FALSE))
           } else {
@@ -78,7 +80,8 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
             # if either is not a list
             self$oh$error_list$add(
               "5.7.6",
-              "Variable list dimensions do not match argument's list dimensions"
+              "Variable list dimensions do not match argument's list dimensions",
+              loc = cur_var_type$loc
             )
             return(invisible(FALSE))
           } else {
@@ -97,7 +100,8 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
         self$oh$error_list$add(
           "5.7.6",
           "Argument and variable inner types do not match. Found: ",
-          format(cur_arg_type), " and ", format(cur_var_type)
+          format(cur_arg_type), " and ", format(cur_var_type),
+          loc = cur_var_type$loc
         )
         return(invisible(FALSE))
       }
@@ -114,7 +118,7 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
         self$oh$error_list$add(
           "5.7.5",
           "Not all variable definitions have been seen.",
-          " Unused variables: ", names(has_been_seen)[!has_been_seen]
+          " Unused variables: ", str_c("$", names(has_been_seen)[!has_been_seen], collapse = ", ")
         )
         invisible(FALSE)
       } else {
@@ -158,7 +162,8 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
               self$oh$error_list$add(
                 "5.7.2",
                 "Non-Null Variables are not allowed to have default values. ",
-                " Found a default value for variable: ", name
+                " Found a default value for variable: $", name,
+                loc = var$loc
               )
               return(name)
             }
@@ -188,7 +193,8 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
               "5.7.3",
               "Can not find matching Scalar, Enum, or Input Object with type: ",
               format(var$type),
-              " for variable: ", name
+              " for variable: $", name,
+              loc = var$loc
             )
             return(name)
           }

@@ -81,15 +81,33 @@ AST <- R6Class("AST",
 
 
 
+Position <- R6_from_args(
+  inherit = AST,
+  "Position",
+  " line: numeric;
+    column: numeric;",
+  public = list(
+    .format = function(...) {
+      str_c(self$line, ":", self$column)
+    }
+  )
+)
+
 Location <- R6_from_args(
   inherit = AST,
   "Location",
-  " start: number;
-    end: number;
+  " start: Position;
+    end: Position;
     source?: ?Source;",
   public = list(
+    initialize = function(start, end, source = NULL) {
+      self$start <- Position$new(line = start$line, column = start$column)
+      self$end <- Position$new(line = end$line, column = end$column)
+      self$source <- source
+      invisible(self)
+    },
     .format = function(...) {
-      stop("Location objects should not be formatted")
+      str_c("location ", format(self$start), " to ", format(self$end))
     }
   )
 )

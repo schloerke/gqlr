@@ -147,7 +147,8 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
         } else {
           oh$error_list$add(
             "6.3.2",
-            "Non skip or include directive found. Extra directives are not allowed."
+            "Non skip or include directive found. Extra directives are not allowed.",
+            loc = selection_directive$loc
           )
           next
         }

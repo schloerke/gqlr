@@ -189,8 +189,7 @@ test_that("args", {
   expect_expected <- function(ret, expected_val = expected) {
     ret$as_json() %>%
       as.character() %>%
-      jsonlite::fromJSON(simplifyDataFrame = FALSE) %>%
-      expect_equal(expected_val)
+      expect_equal(as.character(to_json(expected_val)))
   }
 
   execute_request("
@@ -249,7 +248,9 @@ test_that("args", {
     expect_expected(
       list(data = NULL, errors = list(list(
         message = "6.1.2: Coercing Variable Values
-Value cannot be coerced according to the input coercion rules"
+Value cannot be coerced according to the input coercion rules
+Location: 2:17 to 2:30
+Error String: '$intVal: Int!'"
       )))
     )
 

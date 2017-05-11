@@ -44,7 +44,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       if (!is.null(fragment_list[[fragment_name]])) {
         oh$error_list$add(
           "5.4.1.1",
-          "fragments must have a unique name. Found duplicate fragment: ", fragment_name
+          "fragments must have a unique name. Found duplicate fragment: ", fragment_name,
+          loc = fragment$name$loc
         )
         next
       }
@@ -77,10 +78,12 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           # need to recurse in field objects
           matching_field <- matching_obj$.get_field(field)
           if (is.null(matching_field)) {
+            # shouldn't be able to be reached?
             oh$error_list$add(
               "5.2.1",
               "Field: ", format(field$name), " can't be found for object of type: ",
-              format(matching_obj$name)
+              format(matching_obj$name),
+              loc = field$name$loc
             )
             next
           }
@@ -111,7 +114,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           if (is.null(fragment_obj)) {
             oh$error_list$add(
               "5.4.2.1",
-              "fragment must be defined. Can not find fragment named: ", fragment_spread_name
+              "fragment must be defined. Can not find fragment named: ", fragment_spread_name,
+              loc = field$name$loc
             )
             return(NULL)
           }
@@ -122,7 +126,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             oh$error_list$add(
               "5.4.2.2",
               "fragments can not be circularly defined. ",
-              " Start of cycle: ", str_c(field_seen_fragments, collapse = ", ")
+              " Start of cycle: ", str_c(field_seen_fragments, collapse = ", "),
+              loc = field$name$loc
             )
             return(NULL)
           }
@@ -165,7 +170,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           oh$error_list$add(
             "5.4.1.3",
             "fragment must supply at object, interface, or union.",
-            " Can not find match for typeCondition: ", format(matching_type_condition)
+            " Can not find match for typeCondition: ", format(matching_type_condition),
+            loc = matching_type_condition$loc
           )
           return(NULL)
         }
@@ -198,7 +204,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             "there must be an intersection of \n",
             "\tfragment possible types: ", str_c(fragment_possible_types, collapse = ", "), "\n",
             " and \n",
-            "\tparent possible types: ", str_c(parent_possible_types, collapse = ", ")
+            "\tparent possible types: ", str_c(parent_possible_types, collapse = ", "),
+            loc = matching_type_condition$loc
           )
           return(NULL)
         }
@@ -230,6 +237,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       oh$error_list$add(
         "3.3",
         "mutation type can not be found in schema definition"
+        # no loc
       )
       return(NULL)
     }
@@ -245,6 +253,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       oh$error_list$add(
         "3.3",
         "query type can not be found in schema definition"
+        # no loc
       )
       return(NULL)
     }
@@ -260,6 +269,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       "5.4.1.4",
       "all fragments must be used.",
       " Fragments not used: ", names(fragment_used_once[!fragment_used_once])
+      # no loc
     )
     return(document_obj)
   }

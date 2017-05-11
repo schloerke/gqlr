@@ -13,6 +13,7 @@ validate_field_names <- function(x, error_title, error_code, ..., oh) {
     oh$error_list$add(
       error_code,
       error_title, " definiiton: ", x$.title, " must have at least one field"
+      # no loc
     )
     return(FALSE)
   }
@@ -24,9 +25,11 @@ validate_field_names <- function(x, error_title, error_code, ..., oh) {
     oh$error_list$add(
       error_code,
       error_title, " defintion: ", x$.title, " must have unique field names"
+      # no loc
     )
     return(FALSE)
   }
+  return(TRUE)
 }
 
 
@@ -63,6 +66,7 @@ validate_union_type <- function(x, ..., oh) {
     oh$error_list$add(
       "3.1.4.1",
       "union definition: ", x$.title, " must have at least one type."
+      # no loc
     )
     return(FALSE)
   }
@@ -76,6 +80,7 @@ validate_union_type <- function(x, ..., oh) {
         "union definition: ", x$.title,
         " types can only be objects.",
         " Scalar, Interface, and Union types may not be member types of a Union."
+        # no loc
       )
       return(FALSE)
     }
@@ -107,6 +112,7 @@ validate_input_object_type <- function(x, ..., oh) {
         "input object: ", x$.title,
         " must return a InputType",
         " for field: ", field$.title
+        # no loc
       )
       return(FALSE)
     }
@@ -150,8 +156,9 @@ validate_object_type <- function(x, ..., oh) {
   # 1. An Object type must define one or more fields.
   # 2. The fields of an Object type must have unique names within that Object type;
   #    no two fields may share the same name.
-  validate_field_names(x, "object", "3.1.2.3", oh = oh)
-
+  if (!validate_field_names(x, "object", "3.1.2.3", oh = oh)) {
+    return(FALSE)
+  }
   object_fields <- x$fields
   field_names <- get_name_values(object_fields)
 
@@ -166,6 +173,7 @@ validate_object_type <- function(x, ..., oh) {
     oh$error_list$add(
       "3.1.2.3",
       "object definition: ", format(x$name), " can not have any fields starting with '__'"
+      # no loc
     )
   }
 
@@ -204,6 +212,7 @@ validate_object_type <- function(x, ..., oh) {
           "3.1.2.3",
           "object definition: ", x$.title, " must implement all fields of interface: ",
           interface_obj$.title, ". Missing field: ", interface_field_name
+          # no loc
         )
         return(FALSE)
       }
@@ -234,6 +243,7 @@ validate_object_type <- function(x, ..., oh) {
           " must have at least the same argument names",
           " of interface: ", format(interface_obj$name),
           " for field: ", interface_field_name
+          # no loc
         )
         return(FALSE)
       }
@@ -252,6 +262,7 @@ validate_object_type <- function(x, ..., oh) {
               " when looking at interface: ", format(interface_obj$name),
               " for field: ", interface_field_name,
               " all additional arguments (", format(extra_field_arg$name), ") must not be required"
+              # no loc
             )
             return(FALSE)
           }
@@ -282,6 +293,7 @@ validate_object_type <- function(x, ..., oh) {
             " for field: ", interface_field_name,
             " must input the same type: ", matching_txt,
             " for argument: ", interface_field_arg_name
+            # no loc
           )
           return(FALSE)
         }
@@ -318,7 +330,7 @@ validate_schema <- function(..., oh) {
   objects <- oh$schema$get_objects()
   lapply(objects, validate_object_type, oh = oh)
 
-  oh$schema$is_valid <- TRUE
+  oh$schema$is_valid <- oh$error_list$has_no_errors()
 
   oh$error_list$has_no_errors()
 }

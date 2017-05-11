@@ -1,4 +1,4 @@
-
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.3-argument.R")); # nolint
 
 
 context("validation-5.3-argument")
@@ -22,6 +22,18 @@ test_that("5.3.1 - Argument Names", {
   }
   " %>%
   expect_r6()
+
+  "
+  {
+    dog {
+      ...invalidArgName
+    }
+  }
+  fragment invalidArgName on Dog {
+    name(command: CLEAN_UP_HOUSE)
+  }
+  " %>%
+  expect_err("no arguments for field")
 
   "
   {

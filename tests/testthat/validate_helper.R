@@ -11,7 +11,8 @@ collapse <- gqlr:::collapse
 
 expect_r6 <- function(query, ..., schema = dog_cat_schema) {
 
-  oh <- gqlr:::ObjectHelpers$new(schema)
+  oh <- gqlr:::ObjectHelpers$new(schema, source = query)
+  oh$error_list$source <- query
   ans <- gqlr:::validate_document(query, oh = oh)
 
   testthat::expect_equal(gqlr:::format.ErrorList(oh$error_list), "<ErrorList> No errors")
@@ -21,7 +22,7 @@ expect_r6 <- function(query, ..., schema = dog_cat_schema) {
 
 expect_err <- function(query, ..., schema = dog_cat_schema) {
 
-  oh <- gqlr:::ObjectHelpers$new(schema)
+  oh <- gqlr:::ObjectHelpers$new(schema, source = query)
   ans <- gqlr:::validate_document(query, oh = oh) # nolint
 
   testthat::expect_true(oh$error_list$has_any_errors())

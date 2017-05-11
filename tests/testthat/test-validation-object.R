@@ -2,12 +2,11 @@
 
 context("object validation")
 
+source("validate_helper.R")
 
-
-expect_validate_err <- function(txt, ...) {
-  txt %>%
-    graphql2obj() %>%
-    gqlr:::ObjectHelpers$new() ->
+expect_validate_err <- function(schema, ..., txt = schema) {
+  schema %>%
+    gqlr:::ObjectHelpers$new(source = txt) ->
   oh
 
   validate_schema(oh = oh)
@@ -30,8 +29,8 @@ test_that("validate schema", {
 
 
 
-  "
   # double field name
+  "
   interface BarretInterface {
     A: String
     A: String
@@ -47,9 +46,8 @@ test_that("validate schema", {
   " %>%
     expect_validate_err("'__'")
 
-  "
   # incomplete implementation
-  interface BarretInterface {
+  "interface BarretInterface {
     A: String
     B: String
   }
@@ -60,8 +58,8 @@ test_that("validate schema", {
   " %>%
     expect_validate_err("must implement all fields of interface")
 
-  "
   # different arg implementation
+  "
   interface BarretInterface {
     A(arg1: Int): String
   }
@@ -71,8 +69,8 @@ test_that("validate schema", {
   " %>%
     expect_validate_err("must have at least the same argument names")
 
-  "
   # extra arg implementation
+  "
   interface BarretInterface {
     A(arg1: Int): String
   }
@@ -82,8 +80,8 @@ test_that("validate schema", {
   " %>%
     expect_validate_err("all additional arguments")
 
-  "
   # extra arg implementation
+  "
   interface BarretInterface {
     A(arg1: Int): String
   }
@@ -94,6 +92,33 @@ test_that("validate schema", {
     expect_validate_err("must input the same type")
 
 
+  "
+  scalar MyScalar
+  type MyObject {
+    fieldA: Int
+  }
+  union MyUnion = MyObject | MyScalar
+  schema {
+    query: MyObject
+  }
+  " %>%
+    expect_validate_err("may not be member types of a Union")
+
+  "
+  type MyObject {
+    fieldA: Int
+  }
+  schema {
+    query: MyObject
+  }
+  " -> schema_txt
+
+  schema <- gqlr_schema(schema_txt)
+  my_obj <- schema$get_object("MyObject")
+  my_obj$fields <- list()
+
+  schema %>%
+    expect_validate_err(txt = schema_txt, "must have at least one field")
 
 
 })

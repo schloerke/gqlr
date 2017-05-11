@@ -1,3 +1,4 @@
+# load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.4-fragment.R")) # nolint
 
 context("validation-5.4-fragment")
 

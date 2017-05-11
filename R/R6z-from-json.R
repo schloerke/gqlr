@@ -22,7 +22,6 @@ r6_from_list <- function(
   }
   level <- level + 1
 
-
   r6Obj <- PkgObjs$get_class_obj(objClass)
 
   retList <- list()
