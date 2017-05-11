@@ -1,582 +1,1078 @@
 <Document>
 . loc: <Location>
-. . start: 1
-. . end: 2
+. . start: <Position>
+. . . line: 2
+. . . column: 1
+. . end: <Position>
+. . . line: 39
+. . . column: 2
 . definitions:
 . . 1 - <OperationDefinition>
 . . . loc: <Location>
-. . . . start: 1
-. . . . end: 2
+. . . . start: <Position>
+. . . . . line: 2
+. . . . . column: 1
+. . . . end: <Position>
+. . . . . line: 21
+. . . . . column: 2
 . . . operation: 'query'
 . . . name: <Name>
 . . . . loc: <Location>
-. . . . . start: 7
-. . . . . end: 16
+. . . . . start: <Position>
+. . . . . . line: 2
+. . . . . . column: 7
+. . . . . end: <Position>
+. . . . . . line: 2
+. . . . . . column: 16
 . . . . value: 'queryName'
 . . . variableDefinitions:
 . . . . 1 - <VariableDefinition>
 . . . . . loc: <Location>
-. . . . . . start: 17
-. . . . . . end: 34
+. . . . . . start: <Position>
+. . . . . . . line: 2
+. . . . . . . column: 17
+. . . . . . end: <Position>
+. . . . . . . line: 2
+. . . . . . . column: 34
 . . . . . variable: <Variable>
 . . . . . . loc: <Location>
-. . . . . . . start: 17
-. . . . . . . end: 21
+. . . . . . . start: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 17
+. . . . . . . end: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 21
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 17
-. . . . . . . . end: 21
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 17
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 21
 . . . . . . . value: 'foo'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
-. . . . . . . start: 23
-. . . . . . . end: 34
+. . . . . . . start: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 23
+. . . . . . . end: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 34
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 23
-. . . . . . . . end: 34
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 23
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 34
 . . . . . . . value: 'ComplexType'
 . . . . 2 - <VariableDefinition>
 . . . . . loc: <Location>
-. . . . . . start: 36
-. . . . . . end: 56
+. . . . . . start: <Position>
+. . . . . . . line: 2
+. . . . . . . column: 36
+. . . . . . end: <Position>
+. . . . . . . line: 2
+. . . . . . . column: 56
 . . . . . variable: <Variable>
 . . . . . . loc: <Location>
-. . . . . . . start: 36
-. . . . . . . end: 41
+. . . . . . . start: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 36
+. . . . . . . end: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 41
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 36
-. . . . . . . . end: 41
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 36
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 41
 . . . . . . . value: 'site'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
-. . . . . . . start: 43
-. . . . . . . end: 47
+. . . . . . . start: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 43
+. . . . . . . end: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 47
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 43
-. . . . . . . . end: 47
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 43
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 2
+. . . . . . . . . column: 47
 . . . . . . . value: 'Site'
 . . . . . defaultValue: <EnumValue>
 . . . . . . loc: <Location>
-. . . . . . . start: 50
-. . . . . . . end: 56
+. . . . . . . start: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 50
+. . . . . . . end: <Position>
+. . . . . . . . line: 2
+. . . . . . . . column: 56
 . . . . . . value: 'MOBILE'
 . . . selectionSet: <SelectionSet>
 . . . . loc: <Location>
-. . . . . start: 58
-. . . . . end: 2
+. . . . . start: <Position>
+. . . . . . line: 2
+. . . . . . column: 58
+. . . . . end: <Position>
+. . . . . . line: 21
+. . . . . . column: 2
 . . . . selections:
 . . . . . 1 - <Field>
 . . . . . . loc: <Location>
-. . . . . . . start: 3
-. . . . . . . end: 4
+. . . . . . . start: <Position>
+. . . . . . . . line: 3
+. . . . . . . . column: 3
+. . . . . . . end: <Position>
+. . . . . . . . line: 20
+. . . . . . . . column: 4
 . . . . . . alias: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 3
-. . . . . . . . end: 15
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 3
+. . . . . . . . . column: 3
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 3
+. . . . . . . . . column: 15
 . . . . . . . value: 'whoever123is'
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 17
-. . . . . . . . end: 21
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 3
+. . . . . . . . . column: 17
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 3
+. . . . . . . . . column: 21
 . . . . . . . value: 'node'
 . . . . . . arguments:
 . . . . . . . 1 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 22
-. . . . . . . . . end: 36
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 3
+. . . . . . . . . . column: 22
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 3
+. . . . . . . . . . column: 36
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 22
-. . . . . . . . . . end: 24
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 3
+. . . . . . . . . . . column: 22
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 3
+. . . . . . . . . . . column: 24
 . . . . . . . . . value: 'id'
 . . . . . . . . value: <ListValue>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 26
-. . . . . . . . . . end: 36
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 3
+. . . . . . . . . . . column: 26
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 3
+. . . . . . . . . . . column: 36
 . . . . . . . . . values:
 . . . . . . . . . . 1 - <IntValue>
 . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . start: 27
-. . . . . . . . . . . . end: 30
+. . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . line: 3
+. . . . . . . . . . . . . column: 27
+. . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . line: 3
+. . . . . . . . . . . . . column: 30
 . . . . . . . . . . . value: '123'
 . . . . . . . . . . 2 - <IntValue>
 . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . start: 32
-. . . . . . . . . . . . end: 35
+. . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . line: 3
+. . . . . . . . . . . . . column: 32
+. . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . line: 3
+. . . . . . . . . . . . . column: 35
 . . . . . . . . . . . value: '456'
 . . . . . . selectionSet: <SelectionSet>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 38
-. . . . . . . . end: 4
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 3
+. . . . . . . . . column: 38
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 20
+. . . . . . . . . column: 4
 . . . . . . . selections:
 . . . . . . . . 1 - <Field>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 5
-. . . . . . . . . . end: 7
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 4
+. . . . . . . . . . . column: 5
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 4
+. . . . . . . . . . . column: 7
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 5
-. . . . . . . . . . . end: 7
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 4
+. . . . . . . . . . . . column: 5
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 4
+. . . . . . . . . . . . column: 7
 . . . . . . . . . . value: 'id'
 . . . . . . . . 2 - <InlineFragment>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 5
-. . . . . . . . . . end: 6
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 5
+. . . . . . . . . . . column: 5
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 13
+. . . . . . . . . . . column: 6
 . . . . . . . . . typeCondition: <NamedType>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 12
-. . . . . . . . . . . end: 16
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 5
+. . . . . . . . . . . . column: 12
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 5
+. . . . . . . . . . . . column: 16
 . . . . . . . . . . name: <Name>
 . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . start: 12
-. . . . . . . . . . . . end: 16
+. . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . line: 5
+. . . . . . . . . . . . . column: 12
+. . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . line: 5
+. . . . . . . . . . . . . column: 16
 . . . . . . . . . . . value: 'User'
 . . . . . . . . . directives:
 . . . . . . . . . . 1 - <Directive>
 . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . start: 17
-. . . . . . . . . . . . end: 23
+. . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . line: 5
+. . . . . . . . . . . . . column: 17
+. . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . line: 5
+. . . . . . . . . . . . . column: 23
 . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 18
-. . . . . . . . . . . . . end: 23
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 5
+. . . . . . . . . . . . . . column: 18
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 5
+. . . . . . . . . . . . . . column: 23
 . . . . . . . . . . . . value: 'defer'
 . . . . . . . . . selectionSet: <SelectionSet>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 24
-. . . . . . . . . . . end: 6
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 5
+. . . . . . . . . . . . column: 24
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 13
+. . . . . . . . . . . . column: 6
 . . . . . . . . . . selections:
 . . . . . . . . . . . 1 - <Field>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . end: 8
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 6
+. . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 12
+. . . . . . . . . . . . . . column: 8
 . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . . end: 13
+. . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . line: 6
+. . . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . line: 6
+. . . . . . . . . . . . . . . column: 13
 . . . . . . . . . . . . . value: 'field2'
 . . . . . . . . . . . . selectionSet: <SelectionSet>
 . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . start: 14
-. . . . . . . . . . . . . . end: 8
+. . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . line: 6
+. . . . . . . . . . . . . . . column: 14
+. . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . line: 12
+. . . . . . . . . . . . . . . column: 8
 . . . . . . . . . . . . . selections:
 . . . . . . . . . . . . . . 1 - <Field>
 . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . start: 9
-. . . . . . . . . . . . . . . . end: 11
+. . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . line: 7
+. . . . . . . . . . . . . . . . . column: 9
+. . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . line: 7
+. . . . . . . . . . . . . . . . . column: 11
 . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . start: 9
-. . . . . . . . . . . . . . . . . end: 11
+. . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . line: 7
+. . . . . . . . . . . . . . . . . . column: 9
+. . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . line: 7
+. . . . . . . . . . . . . . . . . . column: 11
 . . . . . . . . . . . . . . . . value: 'id'
 . . . . . . . . . . . . . . 2 - <Field>
 . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . start: 9
-. . . . . . . . . . . . . . . . end: 10
+. . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . column: 9
+. . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . line: 11
+. . . . . . . . . . . . . . . . . column: 10
 . . . . . . . . . . . . . . . alias: <Name>
 . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . start: 9
-. . . . . . . . . . . . . . . . . end: 14
+. . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . column: 9
+. . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . column: 14
 . . . . . . . . . . . . . . . . value: 'alias'
 . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . start: 16
-. . . . . . . . . . . . . . . . . end: 22
+. . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . column: 16
+. . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . column: 22
 . . . . . . . . . . . . . . . . value: 'field1'
 . . . . . . . . . . . . . . . arguments:
 . . . . . . . . . . . . . . . . 1 - <Argument>
 . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . start: 23
-. . . . . . . . . . . . . . . . . . end: 31
+. . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . column: 23
+. . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . column: 31
 . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . start: 23
-. . . . . . . . . . . . . . . . . . . end: 28
+. . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 23
+. . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 28
 . . . . . . . . . . . . . . . . . . value: 'first'
 . . . . . . . . . . . . . . . . . value: <IntValue>
 . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . start: 29
-. . . . . . . . . . . . . . . . . . . end: 31
+. . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 29
+. . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 31
 . . . . . . . . . . . . . . . . . . value: '10'
 . . . . . . . . . . . . . . . . 2 - <Argument>
 . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . start: 33
-. . . . . . . . . . . . . . . . . . end: 43
+. . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . column: 33
+. . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . column: 43
 . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . start: 33
-. . . . . . . . . . . . . . . . . . . end: 38
+. . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 33
+. . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 38
 . . . . . . . . . . . . . . . . . . value: 'after'
 . . . . . . . . . . . . . . . . . value: <Variable>
 . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . start: 39
-. . . . . . . . . . . . . . . . . . . end: 43
+. . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 39
+. . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 43
 . . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . . start: 39
-. . . . . . . . . . . . . . . . . . . . end: 43
+. . . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . column: 39
+. . . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . column: 43
 . . . . . . . . . . . . . . . . . . . value: 'foo'
 . . . . . . . . . . . . . . . directives:
 . . . . . . . . . . . . . . . . 1 - <Directive>
 . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . start: 46
-. . . . . . . . . . . . . . . . . . end: 64
+. . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . column: 46
+. . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . column: 64
 . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . start: 47
-. . . . . . . . . . . . . . . . . . . end: 54
+. . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 47
+. . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . column: 54
 . . . . . . . . . . . . . . . . . . value: 'include'
 . . . . . . . . . . . . . . . . . arguments:
 . . . . . . . . . . . . . . . . . . 1 - <Argument>
 . . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . . start: 55
-. . . . . . . . . . . . . . . . . . . . end: 63
+. . . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . column: 55
+. . . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . column: 63
 . . . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . . . start: 55
-. . . . . . . . . . . . . . . . . . . . . end: 57
+. . . . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . . column: 55
+. . . . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . . column: 57
 . . . . . . . . . . . . . . . . . . . . value: 'if'
 . . . . . . . . . . . . . . . . . . . value: <Variable>
 . . . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . . . start: 59
-. . . . . . . . . . . . . . . . . . . . . end: 63
+. . . . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . . column: 59
+. . . . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . . column: 63
 . . . . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . . . . start: 59
-. . . . . . . . . . . . . . . . . . . . . . end: 63
+. . . . . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . . . column: 59
+. . . . . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . . . . . . column: 63
 . . . . . . . . . . . . . . . . . . . . . value: 'foo'
 . . . . . . . . . . . . . . . selectionSet: <SelectionSet>
 . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . start: 65
-. . . . . . . . . . . . . . . . . end: 10
+. . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . line: 8
+. . . . . . . . . . . . . . . . . . column: 65
+. . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . line: 11
+. . . . . . . . . . . . . . . . . . column: 10
 . . . . . . . . . . . . . . . . selections:
 . . . . . . . . . . . . . . . . . 1 - <Field>
 . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . start: 11
-. . . . . . . . . . . . . . . . . . . end: 13
+. . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 9
+. . . . . . . . . . . . . . . . . . . . column: 11
+. . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 9
+. . . . . . . . . . . . . . . . . . . . column: 13
 . . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . . start: 11
-. . . . . . . . . . . . . . . . . . . . end: 13
+. . . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 9
+. . . . . . . . . . . . . . . . . . . . . column: 11
+. . . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 9
+. . . . . . . . . . . . . . . . . . . . . column: 13
 . . . . . . . . . . . . . . . . . . . value: 'id'
 . . . . . . . . . . . . . . . . . 2 - <FragmentSpread>
 . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . start: 11
-. . . . . . . . . . . . . . . . . . . end: 18
+. . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 10
+. . . . . . . . . . . . . . . . . . . . column: 11
+. . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . line: 10
+. . . . . . . . . . . . . . . . . . . . column: 18
 . . . . . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . . . . . start: 14
-. . . . . . . . . . . . . . . . . . . . end: 18
+. . . . . . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 10
+. . . . . . . . . . . . . . . . . . . . . column: 14
+. . . . . . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . . . . . line: 10
+. . . . . . . . . . . . . . . . . . . . . column: 18
 . . . . . . . . . . . . . . . . . . . value: 'frag'
 . . . . . . . . 3 - <InlineFragment>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 5
-. . . . . . . . . . end: 6
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 14
+. . . . . . . . . . . column: 5
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 16
+. . . . . . . . . . . column: 6
 . . . . . . . . . directives:
 . . . . . . . . . . 1 - <Directive>
 . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . start: 9
-. . . . . . . . . . . . end: 28
+. . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . column: 9
+. . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . column: 28
 . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 10
-. . . . . . . . . . . . . end: 14
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . column: 10
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . column: 14
 . . . . . . . . . . . . value: 'skip'
 . . . . . . . . . . . arguments:
 . . . . . . . . . . . . 1 - <Argument>
 . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . start: 15
-. . . . . . . . . . . . . . end: 27
+. . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . column: 15
+. . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . column: 27
 . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . start: 15
-. . . . . . . . . . . . . . . end: 21
+. . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . . column: 15
+. . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . . column: 21
 . . . . . . . . . . . . . . value: 'unless'
 . . . . . . . . . . . . . value: <Variable>
 . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . start: 23
-. . . . . . . . . . . . . . . end: 27
+. . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . . column: 23
+. . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . . column: 27
 . . . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . . . start: 23
-. . . . . . . . . . . . . . . . end: 27
+. . . . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . . . column: 23
+. . . . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . . . line: 14
+. . . . . . . . . . . . . . . . . column: 27
 . . . . . . . . . . . . . . . value: 'foo'
 . . . . . . . . . selectionSet: <SelectionSet>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 29
-. . . . . . . . . . . end: 6
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 14
+. . . . . . . . . . . . column: 29
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 16
+. . . . . . . . . . . . column: 6
 . . . . . . . . . . selections:
 . . . . . . . . . . . 1 - <Field>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . end: 9
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 15
+. . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 15
+. . . . . . . . . . . . . . column: 9
 . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . . end: 9
+. . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . line: 15
+. . . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . line: 15
+. . . . . . . . . . . . . . . column: 9
 . . . . . . . . . . . . . value: 'id'
 . . . . . . . . 4 - <InlineFragment>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 5
-. . . . . . . . . . end: 6
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 17
+. . . . . . . . . . . column: 5
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 19
+. . . . . . . . . . . column: 6
 . . . . . . . . . selectionSet: <SelectionSet>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 9
-. . . . . . . . . . . end: 6
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 17
+. . . . . . . . . . . . column: 9
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 19
+. . . . . . . . . . . . column: 6
 . . . . . . . . . . selections:
 . . . . . . . . . . . 1 - <Field>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . end: 9
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 18
+. . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 18
+. . . . . . . . . . . . . . column: 9
 . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . . end: 9
+. . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . line: 18
+. . . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . line: 18
+. . . . . . . . . . . . . . . column: 9
 . . . . . . . . . . . . . value: 'id'
 . . 2 - <OperationDefinition>
 . . . loc: <Location>
-. . . . start: 1
-. . . . end: 2
+. . . . start: <Position>
+. . . . . line: 23
+. . . . . column: 1
+. . . . end: <Position>
+. . . . . line: 29
+. . . . . column: 2
 . . . operation: 'mutation'
 . . . name: <Name>
 . . . . loc: <Location>
-. . . . . start: 10
-. . . . . end: 19
+. . . . . start: <Position>
+. . . . . . line: 23
+. . . . . . column: 10
+. . . . . end: <Position>
+. . . . . . line: 23
+. . . . . . column: 19
 . . . . value: 'likeStory'
 . . . selectionSet: <SelectionSet>
 . . . . loc: <Location>
-. . . . . start: 20
-. . . . . end: 2
+. . . . . start: <Position>
+. . . . . . line: 23
+. . . . . . column: 20
+. . . . . end: <Position>
+. . . . . . line: 29
+. . . . . . column: 2
 . . . . selections:
 . . . . . 1 - <Field>
 . . . . . . loc: <Location>
-. . . . . . . start: 3
-. . . . . . . end: 4
+. . . . . . . start: <Position>
+. . . . . . . . line: 24
+. . . . . . . . column: 3
+. . . . . . . end: <Position>
+. . . . . . . . line: 28
+. . . . . . . . column: 4
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 3
-. . . . . . . . end: 7
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 24
+. . . . . . . . . column: 3
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 24
+. . . . . . . . . column: 7
 . . . . . . . value: 'like'
 . . . . . . arguments:
 . . . . . . . 1 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 8
-. . . . . . . . . end: 18
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 8
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 18
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 8
-. . . . . . . . . . end: 13
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 8
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 13
 . . . . . . . . . value: 'story'
 . . . . . . . . value: <IntValue>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 15
-. . . . . . . . . . end: 18
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 15
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 18
 . . . . . . . . . value: '123'
 . . . . . . directives:
 . . . . . . . 1 - <Directive>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 20
-. . . . . . . . . end: 26
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 20
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 26
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 21
-. . . . . . . . . . end: 26
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 21
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 26
 . . . . . . . . . value: 'defer'
 . . . . . . selectionSet: <SelectionSet>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 27
-. . . . . . . . end: 4
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 24
+. . . . . . . . . column: 27
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 28
+. . . . . . . . . column: 4
 . . . . . . . selections:
 . . . . . . . . 1 - <Field>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 5
-. . . . . . . . . . end: 6
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 25
+. . . . . . . . . . . column: 5
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 27
+. . . . . . . . . . . column: 6
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 5
-. . . . . . . . . . . end: 10
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 25
+. . . . . . . . . . . . column: 5
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 25
+. . . . . . . . . . . . column: 10
 . . . . . . . . . . value: 'story'
 . . . . . . . . . selectionSet: <SelectionSet>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 11
-. . . . . . . . . . . end: 6
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 25
+. . . . . . . . . . . . column: 11
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 27
+. . . . . . . . . . . . column: 6
 . . . . . . . . . . selections:
 . . . . . . . . . . . 1 - <Field>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . end: 9
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 26
+. . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 26
+. . . . . . . . . . . . . . column: 9
 . . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . . start: 7
-. . . . . . . . . . . . . . end: 9
+. . . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . . line: 26
+. . . . . . . . . . . . . . . column: 7
+. . . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . . line: 26
+. . . . . . . . . . . . . . . column: 9
 . . . . . . . . . . . . . value: 'id'
 . . 3 - <FragmentDefinition>
 . . . loc: <Location>
-. . . . start: 1
-. . . . end: 2
+. . . . start: <Position>
+. . . . . line: 32
+. . . . . column: 1
+. . . . end: <Position>
+. . . . . line: 34
+. . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
-. . . . . start: 10
-. . . . . end: 14
+. . . . . start: <Position>
+. . . . . . line: 32
+. . . . . . column: 10
+. . . . . end: <Position>
+. . . . . . line: 32
+. . . . . . column: 14
 . . . . value: 'frag'
 . . . typeCondition: <NamedType>
 . . . . loc: <Location>
-. . . . . start: 18
-. . . . . end: 24
+. . . . . start: <Position>
+. . . . . . line: 32
+. . . . . . column: 18
+. . . . . end: <Position>
+. . . . . . line: 32
+. . . . . . column: 24
 . . . . name: <Name>
 . . . . . loc: <Location>
-. . . . . . start: 18
-. . . . . . end: 24
+. . . . . . start: <Position>
+. . . . . . . line: 32
+. . . . . . . column: 18
+. . . . . . end: <Position>
+. . . . . . . line: 32
+. . . . . . . column: 24
 . . . . . value: 'Friend'
 . . . selectionSet: <SelectionSet>
 . . . . loc: <Location>
-. . . . . start: 25
-. . . . . end: 2
+. . . . . start: <Position>
+. . . . . . line: 32
+. . . . . . column: 25
+. . . . . end: <Position>
+. . . . . . line: 34
+. . . . . . column: 2
 . . . . selections:
 . . . . . 1 - <Field>
 . . . . . . loc: <Location>
-. . . . . . . start: 3
-. . . . . . . end: 54
+. . . . . . . start: <Position>
+. . . . . . . . line: 33
+. . . . . . . . column: 3
+. . . . . . . end: <Position>
+. . . . . . . . line: 33
+. . . . . . . . column: 54
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 3
-. . . . . . . . end: 6
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 33
+. . . . . . . . . column: 3
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 33
+. . . . . . . . . column: 6
 . . . . . . . value: 'foo'
 . . . . . . arguments:
 . . . . . . . 1 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 7
-. . . . . . . . . end: 18
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 33
+. . . . . . . . . . column: 7
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 33
+. . . . . . . . . . column: 18
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 7
-. . . . . . . . . . end: 11
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 7
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 11
 . . . . . . . . . value: 'size'
 . . . . . . . . value: <Variable>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 13
-. . . . . . . . . . end: 18
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 13
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 18
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 13
-. . . . . . . . . . . end: 18
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 33
+. . . . . . . . . . . . column: 13
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 33
+. . . . . . . . . . . . column: 18
 . . . . . . . . . . value: 'size'
 . . . . . . . 2 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 20
-. . . . . . . . . end: 27
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 33
+. . . . . . . . . . column: 20
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 33
+. . . . . . . . . . column: 27
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 20
-. . . . . . . . . . end: 23
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 20
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 23
 . . . . . . . . . value: 'bar'
 . . . . . . . . value: <Variable>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 25
-. . . . . . . . . . end: 27
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 25
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 27
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . start: 25
-. . . . . . . . . . . end: 27
+. . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . line: 33
+. . . . . . . . . . . . column: 25
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 33
+. . . . . . . . . . . . column: 27
 . . . . . . . . . . value: 'b'
 . . . . . . . 3 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 29
-. . . . . . . . . end: 53
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 33
+. . . . . . . . . . column: 29
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 33
+. . . . . . . . . . column: 53
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 29
-. . . . . . . . . . end: 32
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 29
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 32
 . . . . . . . . . value: 'obj'
 . . . . . . . . value: <ObjectValue>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 34
-. . . . . . . . . . end: 53
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 34
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 33
+. . . . . . . . . . . column: 53
 . . . . . . . . . fields:
 . . . . . . . . . . 1 - <ObjectField>
 . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . start: 35
-. . . . . . . . . . . . end: 39
+. . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . line: 33
+. . . . . . . . . . . . . column: 35
+. . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . line: 33
+. . . . . . . . . . . . . column: 39
 . . . . . . . . . . . name: <Name>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 35
-. . . . . . . . . . . . . end: 38
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 33
+. . . . . . . . . . . . . . column: 35
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 33
+. . . . . . . . . . . . . . column: 38
 . . . . . . . . . . . . value: 'key'
 . . . . . . . . . . . value: <StringValue>
 . . . . . . . . . . . . loc: <Location>
-. . . . . . . . . . . . . start: 38
-. . . . . . . . . . . . . end: 39
+. . . . . . . . . . . . . start: <Position>
+. . . . . . . . . . . . . . line: 33
+. . . . . . . . . . . . . . column: 38
+. . . . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . . . line: 33
+. . . . . . . . . . . . . . column: 39
 . . . . . . . . . . . . value: 'value'
 . . 4 - <OperationDefinition>
 . . . loc: <Location>
-. . . . start: 1
-. . . . end: 2
+. . . . start: <Position>
+. . . . . line: 36
+. . . . . column: 1
+. . . . end: <Position>
+. . . . . line: 39
+. . . . . column: 2
 . . . operation: 'query'
 . . . selectionSet: <SelectionSet>
 . . . . loc: <Location>
-. . . . . start: 1
-. . . . . end: 2
+. . . . . start: <Position>
+. . . . . . line: 36
+. . . . . . column: 1
+. . . . . end: <Position>
+. . . . . . line: 39
+. . . . . . column: 2
 . . . . selections:
 . . . . . 1 - <Field>
 . . . . . . loc: <Location>
-. . . . . . . start: 3
-. . . . . . . end: 54
+. . . . . . . start: <Position>
+. . . . . . . . line: 37
+. . . . . . . . column: 3
+. . . . . . . end: <Position>
+. . . . . . . . line: 37
+. . . . . . . . column: 54
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 3
-. . . . . . . . end: 10
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 37
+. . . . . . . . . column: 3
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 37
+. . . . . . . . . column: 10
 . . . . . . . value: 'unnamed'
 . . . . . . arguments:
 . . . . . . . 1 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 11
-. . . . . . . . . end: 23
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 37
+. . . . . . . . . . column: 11
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 37
+. . . . . . . . . . column: 23
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 11
-. . . . . . . . . . end: 17
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 11
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 17
 . . . . . . . . . value: 'truthy'
 . . . . . . . . value: <BooleanValue>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 19
-. . . . . . . . . . end: 23
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 19
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 23
 . . . . . . . . . value: TRUE
 . . . . . . . 2 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 25
-. . . . . . . . . end: 38
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 37
+. . . . . . . . . . column: 25
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 37
+. . . . . . . . . . column: 38
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 25
-. . . . . . . . . . end: 31
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 25
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 31
 . . . . . . . . . value: 'falsey'
 . . . . . . . . value: <BooleanValue>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 33
-. . . . . . . . . . end: 38
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 33
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 38
 . . . . . . . . . value: FALSE
 . . . . . . . 3 - <Argument>
 . . . . . . . . loc: <Location>
-. . . . . . . . . start: 40
-. . . . . . . . . end: 53
+. . . . . . . . . start: <Position>
+. . . . . . . . . . line: 37
+. . . . . . . . . . column: 40
+. . . . . . . . . end: <Position>
+. . . . . . . . . . line: 37
+. . . . . . . . . . column: 53
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 40
-. . . . . . . . . . end: 47
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 40
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 47
 . . . . . . . . . value: 'nullish'
 . . . . . . . . value: <NullValue>
 . . . . . . . . . loc: <Location>
-. . . . . . . . . . start: 49
-. . . . . . . . . . end: 53
+. . . . . . . . . . start: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 49
+. . . . . . . . . . end: <Position>
+. . . . . . . . . . . line: 37
+. . . . . . . . . . . column: 53
 . . . . . 2 - <Field>
 . . . . . . loc: <Location>
-. . . . . . . start: 3
-. . . . . . . end: 8
+. . . . . . . start: <Position>
+. . . . . . . . line: 38
+. . . . . . . . column: 3
+. . . . . . . end: <Position>
+. . . . . . . . line: 38
+. . . . . . . . column: 8
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
-. . . . . . . . start: 3
-. . . . . . . . end: 8
+. . . . . . . . start: <Position>
+. . . . . . . . . line: 38
+. . . . . . . . . column: 3
+. . . . . . . . end: <Position>
+. . . . . . . . . line: 38
+. . . . . . . . . column: 8
 . . . . . . . value: 'query'
