@@ -23,7 +23,7 @@
 #'
 #' \code{$has_any_errors()} helper method to determine if there are any errors
 #'
-#' \code{$get_sub_source()} helper method to display a subsection of source text given Location information
+#' \code{$get_sub_source(loc)} helper method to display a subsection of source text given Location information
 #'
 #' \code{$add(rule_code, ...)} add a new error according to the \code{rule_code} provided. Remaining arguments are passed directly to \code{paste(..., sep = "")} with extra error rule information
 #'
@@ -144,29 +144,7 @@ ErrorList <- R6Class("ErrorList",
       "6.4.2" = "Value Resolution",
       "6.4.3" = "Value Completion",
       "6.4.4" = "Errors and Non-Nullability"
-    )#,
-
-    # get_location = function(position) {
-    #
-    #   source_txt <- self$source
-    #   if (is.null(source_txt)) {
-    #     return(NULL)
-    #   }
-    #   line_regexp <- "\\r\\n|[\\n\\r]"
-    #   line_matches <- base::gregexpr(pattern = line_regexp, source_txt, perl = TRUE)[[1]]
-    #   line <- sum(line_matches < position)
-    #
-    #   column <- position + 1 - (
-    #     line_matches[line] +
-    #     attr(line_matches, "match.length")[line]
-    #   )
-    #
-    #   if (column < 0) {
-    #     stop("column can't be less than 0")
-    #   }
-    #   list(line = line + 1, column = column)
-    # }
-
+    )
   ),
   public = list(
     n = 0,
@@ -194,14 +172,13 @@ ErrorList <- R6Class("ErrorList",
         line <- lines[loc$start$line]
         sub_source <- substr(line, loc$start$column, loc$end$column - 1)
       } else if (loc$start$line < loc$end$line) {
-        # browser()
         start_line <- substr(
           lines[loc$start$line],
           loc$start$column,
           nchar(lines[loc$start$line])
         )
         middle_lines <- ""
-        if ((loc$start$line + 1) < loc$end$line) {
+        if ( (loc$start$line + 1) < loc$end$line) {
           middle_lines <- lines[(loc$start$line + 1):(loc$end$line - 1)]
           middle_lines <- str_c(str_c(middle_lines, collapse = "\n"), "\n")
         }
@@ -238,7 +215,8 @@ ErrorList <- R6Class("ErrorList",
         message("Error: ", err)
       }
 
-      # cat("\n'", self$source, "'\nError:", err, "\n\n", sep = "")
+      # display all errors
+      # cat("\n'", self$source, "'\nError:", err, "\n\n", sep = "") # nolint
 
       self$n <- self$n + 1
       self$errors[[length(self$errors) + 1]] <- err
