@@ -32,7 +32,7 @@ answer$error_list
 
 \code{$has_any_errors()} helper method to determine if there are any errors
 
-\code{$get_sub_source()} helper method to display a subsection of source text given Location information
+\code{$get_sub_source(loc)} helper method to display a subsection of source text given Location information
 
 \code{$add(rule_code, ...)} add a new error according to the \code{rule_code} provided. Remaining arguments are passed directly to \code{paste(..., sep = "")} with extra error rule information
 
