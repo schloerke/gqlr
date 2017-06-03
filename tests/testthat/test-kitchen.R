@@ -11,12 +11,12 @@ expect_str <- function(x, structure_txt, all_fields = FALSE) {
   )
 }
 
-txt_to_obj <- function(txt) {
-  suppressWarnings(graphql2obj(txt))
+txt_to_obj <- function(txt, ...) {
+  suppressWarnings(graphql2obj(txt, ...))
 }
 
-expect_format <- function(txt, clean_txt) {
-  final_txt <- txt %>% txt_to_obj() %>% format() # nolint
+expect_format <- function(txt, clean_txt, parse_schema = FALSE) {
+  final_txt <- txt %>% txt_to_obj(parse_schema = parse_schema) %>% format() # nolint
 
   clean_lines <- strsplit(clean_txt, "\n")[[1]]
   final_lines <- strsplit(final_txt, "\n")[[1]]
@@ -34,10 +34,10 @@ test_that("formatting", {
   schema_clean_txt <- read_kitchen("schema-kitchen-sink-clean.graphql")
 
   # can go from text to graphql objects to text
-  expect_format(schema_clean_txt, schema_clean_txt)
+  expect_format(schema_clean_txt, schema_clean_txt, parse_schema = TRUE)
 
   # even with comments and different commas sep'ing the fields
-  expect_format(schema_txt, schema_clean_txt)
+  expect_format(schema_txt, schema_clean_txt, parse_schema = TRUE)
 
 
   request_txt <- read_kitchen("request-kitchen-sink.graphql")
@@ -53,7 +53,7 @@ test_that("formatting", {
 
 test_that("structure", {
 
-  schema <- read_kitchen("schema-kitchen-sink.graphql") %>% txt_to_obj()
+  schema <- read_kitchen("schema-kitchen-sink.graphql") %>% txt_to_obj(parse_schema = TRUE)
 
   # expect structure output to match
   expect_str(schema, read_kitchen("schema-kitchen-sink-str.txt"))

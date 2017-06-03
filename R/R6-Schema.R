@@ -345,7 +345,7 @@ Schema <- R6Class(
 
       if (!missing(schema)) {
         if (inherits(schema, "character")) {
-          schema <- graphql2obj(schema)
+          schema <- graphql2obj(schema, TRUE)
         }
         self$add(schema)
       }

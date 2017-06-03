@@ -59,8 +59,8 @@ is_named_list <- function(obj, err) {
 }
 
 #' @import graphql
-graphql2obj <- function(txt) {
-  graphql::graphql2json(txt) %>%
+graphql2obj <- function(txt, ...) {
+  graphql::graphql2json(txt, ...) %>%
     from_json() %>%
     clean_json() %>%
     r6_from_list()

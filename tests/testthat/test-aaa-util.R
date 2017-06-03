@@ -165,7 +165,7 @@ test_that("default active wrappers", {
     query: MyObject
   }
   " %>%
-    gqlr:::graphql2obj() ->
+    gqlr:::graphql2obj(parse_schema = TRUE) ->
   doc
 
   Barret <- doc$definitions[[1]]

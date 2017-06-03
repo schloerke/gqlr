@@ -1,684 +1,684 @@
 <Document>
 . loc: <Location>
 . . start: <Position>
-. . . line: 2
+. . . line: 8
 . . . column: 1
 . . end: <Position>
-. . . line: 68
+. . . line: 78
 . . . column: 21
 . definitions:
 . . 1 - <SchemaDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 2
+. . . . . line: 8
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 5
+. . . . . line: 11
 . . . . . column: 2
 . . . operationTypes:
 . . . . 1 - <OperationTypeDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 3
+. . . . . . . line: 9
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 3
+. . . . . . . line: 9
 . . . . . . . column: 19
 . . . . . operation: 'query'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 3
+. . . . . . . . line: 9
 . . . . . . . . column: 10
 . . . . . . . end: <Position>
-. . . . . . . . line: 3
+. . . . . . . . line: 9
 . . . . . . . . column: 19
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 3
+. . . . . . . . . line: 9
 . . . . . . . . . column: 10
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 3
+. . . . . . . . . line: 9
 . . . . . . . . . column: 19
 . . . . . . . value: 'QueryType'
 . . . . 2 - <OperationTypeDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 4
+. . . . . . . line: 10
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 4
+. . . . . . . line: 10
 . . . . . . . column: 25
 . . . . . operation: 'mutation'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 4
+. . . . . . . . line: 10
 . . . . . . . . column: 13
 . . . . . . . end: <Position>
-. . . . . . . . line: 4
+. . . . . . . . line: 10
 . . . . . . . . column: 25
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 4
+. . . . . . . . . line: 10
 . . . . . . . . . column: 13
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 4
+. . . . . . . . . line: 10
 . . . . . . . . . column: 25
 . . . . . . . value: 'MutationType'
 . . 2 - <ObjectTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 7
+. . . . . line: 13
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 15
+. . . . . line: 21
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 7
+. . . . . . line: 13
 . . . . . . column: 6
 . . . . . end: <Position>
-. . . . . . line: 7
+. . . . . . line: 13
 . . . . . . column: 9
 . . . . value: 'Foo'
 . . . interfaces:
 . . . . 1 - <NamedType>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 7
+. . . . . . . line: 13
 . . . . . . . column: 21
 . . . . . . end: <Position>
-. . . . . . . line: 7
+. . . . . . . line: 13
 . . . . . . . column: 24
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 7
+. . . . . . . . line: 13
 . . . . . . . . column: 21
 . . . . . . . end: <Position>
-. . . . . . . . line: 7
+. . . . . . . . line: 13
 . . . . . . . . column: 24
 . . . . . . value: 'Bar'
 . . . fields:
 . . . . 1 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 8
+. . . . . . . line: 14
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 8
+. . . . . . . line: 14
 . . . . . . . column: 12
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 8
+. . . . . . . . line: 14
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 8
+. . . . . . . . line: 14
 . . . . . . . . column: 6
 . . . . . . value: 'one'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 8
+. . . . . . . . line: 14
 . . . . . . . . column: 8
 . . . . . . . end: <Position>
-. . . . . . . . line: 8
+. . . . . . . . line: 14
 . . . . . . . . column: 12
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 8
+. . . . . . . . . line: 14
 . . . . . . . . . column: 8
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 8
+. . . . . . . . . line: 14
 . . . . . . . . . column: 12
 . . . . . . . value: 'Type'
 . . . . 2 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 9
+. . . . . . . line: 15
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 9
+. . . . . . . line: 15
 . . . . . . . column: 34
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 9
+. . . . . . . . line: 15
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 9
+. . . . . . . . line: 15
 . . . . . . . . column: 6
 . . . . . . value: 'two'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 9
+. . . . . . . . . line: 15
 . . . . . . . . . column: 7
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 9
+. . . . . . . . . line: 15
 . . . . . . . . . column: 27
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 9
+. . . . . . . . . . line: 15
 . . . . . . . . . . column: 7
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 9
+. . . . . . . . . . line: 15
 . . . . . . . . . . column: 15
 . . . . . . . . value: 'argument'
 . . . . . . . type: <NonNullType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 9
+. . . . . . . . . . line: 15
 . . . . . . . . . . column: 17
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 9
+. . . . . . . . . . line: 15
 . . . . . . . . . . column: 27
 . . . . . . . . type: <NamedType>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 9
+. . . . . . . . . . . line: 15
 . . . . . . . . . . . column: 17
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 9
+. . . . . . . . . . . line: 15
 . . . . . . . . . . . column: 26
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 9
+. . . . . . . . . . . . line: 15
 . . . . . . . . . . . . column: 17
 . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 9
+. . . . . . . . . . . . line: 15
 . . . . . . . . . . . . column: 26
 . . . . . . . . . . value: 'InputType'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 9
+. . . . . . . . line: 15
 . . . . . . . . column: 30
 . . . . . . . end: <Position>
-. . . . . . . . line: 9
+. . . . . . . . line: 15
 . . . . . . . . column: 34
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 9
+. . . . . . . . . line: 15
 . . . . . . . . . column: 30
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 9
+. . . . . . . . . line: 15
 . . . . . . . . . column: 34
 . . . . . . . value: 'Type'
 . . . . 3 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 10
+. . . . . . . line: 16
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 10
+. . . . . . . line: 16
 . . . . . . . column: 49
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 10
+. . . . . . . . line: 16
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 10
+. . . . . . . . line: 16
 . . . . . . . . column: 8
 . . . . . . value: 'three'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 10
+. . . . . . . . . line: 16
 . . . . . . . . . column: 9
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 10
+. . . . . . . . . line: 16
 . . . . . . . . . column: 28
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 9
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 17
 . . . . . . . . value: 'argument'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 19
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 28
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 10
+. . . . . . . . . . . line: 16
 . . . . . . . . . . . column: 19
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 10
+. . . . . . . . . . . line: 16
 . . . . . . . . . . . column: 28
 . . . . . . . . . value: 'InputType'
 . . . . . . 2 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 10
+. . . . . . . . . line: 16
 . . . . . . . . . column: 30
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 10
+. . . . . . . . . line: 16
 . . . . . . . . . column: 43
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 30
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 35
 . . . . . . . . value: 'other'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 37
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 10
+. . . . . . . . . . line: 16
 . . . . . . . . . . column: 43
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 10
+. . . . . . . . . . . line: 16
 . . . . . . . . . . . column: 37
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 10
+. . . . . . . . . . . line: 16
 . . . . . . . . . . . column: 43
 . . . . . . . . . value: 'String'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 10
+. . . . . . . . line: 16
 . . . . . . . . column: 46
 . . . . . . . end: <Position>
-. . . . . . . . line: 10
+. . . . . . . . line: 16
 . . . . . . . . column: 49
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 10
+. . . . . . . . . line: 16
 . . . . . . . . . column: 46
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 10
+. . . . . . . . . line: 16
 . . . . . . . . . column: 49
 . . . . . . . value: 'Int'
 . . . . 4 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 11
+. . . . . . . line: 17
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 11
-. . . . . . . column: 50
+. . . . . . . line: 17
+. . . . . . . column: 44
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 11
+. . . . . . . . line: 17
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 11
+. . . . . . . . line: 17
 . . . . . . . . column: 7
 . . . . . . value: 'four'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 11
+. . . . . . . . . line: 17
 . . . . . . . . . column: 8
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 11
-. . . . . . . . . column: 26
+. . . . . . . . . line: 17
+. . . . . . . . . column: 35
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 11
+. . . . . . . . . . line: 17
 . . . . . . . . . . column: 8
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 11
+. . . . . . . . . . line: 17
 . . . . . . . . . . column: 16
 . . . . . . . . value: 'argument'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 11
+. . . . . . . . . . line: 17
 . . . . . . . . . . column: 18
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 11
+. . . . . . . . . . line: 17
 . . . . . . . . . . column: 24
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 11
+. . . . . . . . . . . line: 17
 . . . . . . . . . . . column: 18
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 11
+. . . . . . . . . . . line: 17
 . . . . . . . . . . . column: 24
 . . . . . . . . . value: 'String'
 . . . . . . . defaultValue: <StringValue>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 11
-. . . . . . . . . . column: 25
+. . . . . . . . . . line: 17
+. . . . . . . . . . column: 27
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 11
-. . . . . . . . . . column: 26
+. . . . . . . . . . line: 17
+. . . . . . . . . . column: 35
 . . . . . . . . value: 'string'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 11
-. . . . . . . . column: 44
+. . . . . . . . line: 17
+. . . . . . . . column: 38
 . . . . . . . end: <Position>
-. . . . . . . . line: 11
-. . . . . . . . column: 50
+. . . . . . . . line: 17
+. . . . . . . . column: 44
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 11
-. . . . . . . . . column: 44
+. . . . . . . . . line: 17
+. . . . . . . . . column: 38
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 11
-. . . . . . . . . column: 50
+. . . . . . . . . line: 17
+. . . . . . . . . column: 44
 . . . . . . . value: 'String'
 . . . . 5 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 12
+. . . . . . . line: 18
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 12
-. . . . . . . column: 70
+. . . . . . . line: 18
+. . . . . . . column: 58
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 12
+. . . . . . . . line: 18
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 12
+. . . . . . . . line: 18
 . . . . . . . . column: 7
 . . . . . . value: 'five'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 12
+. . . . . . . . . line: 18
 . . . . . . . . . column: 8
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 12
-. . . . . . . . . column: 61
+. . . . . . . . . line: 18
+. . . . . . . . . column: 49
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 12
+. . . . . . . . . . line: 18
 . . . . . . . . . . column: 8
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 12
+. . . . . . . . . . line: 18
 . . . . . . . . . . column: 16
 . . . . . . . . value: 'argument'
 . . . . . . . type: <ListType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 12
+. . . . . . . . . . line: 18
 . . . . . . . . . . column: 18
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 12
+. . . . . . . . . . line: 18
 . . . . . . . . . . column: 26
 . . . . . . . . type: <NamedType>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 12
+. . . . . . . . . . . line: 18
 . . . . . . . . . . . column: 19
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 12
+. . . . . . . . . . . line: 18
 . . . . . . . . . . . column: 25
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 12
+. . . . . . . . . . . . line: 18
 . . . . . . . . . . . . column: 19
 . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 12
+. . . . . . . . . . . . line: 18
 . . . . . . . . . . . . column: 25
 . . . . . . . . . . value: 'String'
 . . . . . . . defaultValue: <ListValue>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 12
+. . . . . . . . . . line: 18
 . . . . . . . . . . column: 29
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 12
-. . . . . . . . . . column: 61
+. . . . . . . . . . line: 18
+. . . . . . . . . . column: 49
 . . . . . . . . values:
 . . . . . . . . . 1 - <StringValue>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 12
-. . . . . . . . . . . . column: 29
-. . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 12
+. . . . . . . . . . . . line: 18
 . . . . . . . . . . . . column: 30
+. . . . . . . . . . . end: <Position>
+. . . . . . . . . . . . line: 18
+. . . . . . . . . . . . column: 38
 . . . . . . . . . . value: 'string'
 . . . . . . . . . 2 - <StringValue>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 12
-. . . . . . . . . . . . column: 29
+. . . . . . . . . . . . line: 18
+. . . . . . . . . . . . column: 40
 . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 12
-. . . . . . . . . . . . column: 30
+. . . . . . . . . . . . line: 18
+. . . . . . . . . . . . column: 48
 . . . . . . . . . . value: 'string'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 12
-. . . . . . . . column: 64
+. . . . . . . . line: 18
+. . . . . . . . column: 52
 . . . . . . . end: <Position>
-. . . . . . . . line: 12
-. . . . . . . . column: 70
+. . . . . . . . line: 18
+. . . . . . . . column: 58
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 12
-. . . . . . . . . column: 64
+. . . . . . . . . line: 18
+. . . . . . . . . column: 52
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 12
-. . . . . . . . . column: 70
+. . . . . . . . . line: 18
+. . . . . . . . . column: 58
 . . . . . . . value: 'String'
 . . . . 6 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 13
+. . . . . . . line: 19
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 13
-. . . . . . . column: 55
+. . . . . . . line: 19
+. . . . . . . column: 50
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 13
+. . . . . . . . line: 19
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 13
+. . . . . . . . line: 19
 . . . . . . . . column: 6
 . . . . . . value: 'six'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 13
+. . . . . . . . . line: 19
 . . . . . . . . . column: 7
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 13
-. . . . . . . . . column: 48
+. . . . . . . . . line: 19
+. . . . . . . . . column: 43
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 13
+. . . . . . . . . . line: 19
 . . . . . . . . . . column: 7
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 13
+. . . . . . . . . . line: 19
 . . . . . . . . . . column: 15
 . . . . . . . . value: 'argument'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 13
+. . . . . . . . . . line: 19
 . . . . . . . . . . column: 17
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 13
+. . . . . . . . . . line: 19
 . . . . . . . . . . column: 26
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 13
+. . . . . . . . . . . line: 19
 . . . . . . . . . . . column: 17
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 13
+. . . . . . . . . . . line: 19
 . . . . . . . . . . . column: 26
 . . . . . . . . . value: 'InputType'
 . . . . . . . defaultValue: <ObjectValue>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 13
+. . . . . . . . . . line: 19
 . . . . . . . . . . column: 29
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 13
-. . . . . . . . . . column: 48
+. . . . . . . . . . line: 19
+. . . . . . . . . . column: 43
 . . . . . . . . fields:
 . . . . . . . . . 1 - <ObjectField>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 13
+. . . . . . . . . . . . line: 19
 . . . . . . . . . . . . column: 30
 . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 13
-. . . . . . . . . . . . column: 34
+. . . . . . . . . . . . line: 19
+. . . . . . . . . . . . column: 42
 . . . . . . . . . . name: <Name>
 . . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . . line: 13
+. . . . . . . . . . . . . line: 19
 . . . . . . . . . . . . . column: 30
 . . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . . line: 13
+. . . . . . . . . . . . . line: 19
 . . . . . . . . . . . . . column: 33
 . . . . . . . . . . . value: 'key'
 . . . . . . . . . . value: <StringValue>
 . . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . . line: 13
-. . . . . . . . . . . . . column: 33
+. . . . . . . . . . . . . line: 19
+. . . . . . . . . . . . . column: 35
 . . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . . line: 13
-. . . . . . . . . . . . . column: 34
+. . . . . . . . . . . . . line: 19
+. . . . . . . . . . . . . column: 42
 . . . . . . . . . . . value: 'value'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 13
-. . . . . . . . column: 51
+. . . . . . . . line: 19
+. . . . . . . . column: 46
 . . . . . . . end: <Position>
-. . . . . . . . line: 13
-. . . . . . . . column: 55
+. . . . . . . . line: 19
+. . . . . . . . column: 50
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 13
-. . . . . . . . . column: 51
+. . . . . . . . . line: 19
+. . . . . . . . . column: 46
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 13
-. . . . . . . . . column: 55
+. . . . . . . . . line: 19
+. . . . . . . . . column: 50
 . . . . . . . value: 'Type'
 . . . . 7 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 14
+. . . . . . . line: 20
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 14
+. . . . . . . line: 20
 . . . . . . . column: 36
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 14
+. . . . . . . . line: 20
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 14
+. . . . . . . . line: 20
 . . . . . . . . column: 8
 . . . . . . value: 'seven'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 14
+. . . . . . . . . line: 20
 . . . . . . . . . column: 9
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 14
+. . . . . . . . . line: 20
 . . . . . . . . . column: 29
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 14
+. . . . . . . . . . line: 20
 . . . . . . . . . . column: 9
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 14
+. . . . . . . . . . line: 20
 . . . . . . . . . . column: 17
 . . . . . . . . value: 'argument'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 14
+. . . . . . . . . . line: 20
 . . . . . . . . . . column: 19
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 14
+. . . . . . . . . . line: 20
 . . . . . . . . . . column: 22
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 14
+. . . . . . . . . . . line: 20
 . . . . . . . . . . . column: 19
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 14
+. . . . . . . . . . . line: 20
 . . . . . . . . . . . column: 22
 . . . . . . . . . value: 'Int'
 . . . . . . . defaultValue: <NullValue>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 14
+. . . . . . . . . . line: 20
 . . . . . . . . . . column: 25
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 14
+. . . . . . . . . . line: 20
 . . . . . . . . . . column: 29
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 14
+. . . . . . . . line: 20
 . . . . . . . . column: 32
 . . . . . . . end: <Position>
-. . . . . . . . line: 14
+. . . . . . . . line: 20
 . . . . . . . . column: 36
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 14
+. . . . . . . . . line: 20
 . . . . . . . . . column: 32
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 14
+. . . . . . . . . line: 20
 . . . . . . . . . column: 36
 . . . . . . . value: 'Type'
 . . . . 8 - <FieldDefinition>
@@ -690,179 +690,179 @@
 . . 3 - <ObjectTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 17
+. . . . . line: 23
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 19
+. . . . . line: 25
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 17
+. . . . . . line: 23
 . . . . . . column: 6
 . . . . . end: <Position>
-. . . . . . line: 17
+. . . . . . line: 23
 . . . . . . column: 21
 . . . . value: 'AnnotatedObject'
 . . . directives:
 . . . . 1 - <Directive>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 17
+. . . . . . . line: 23
 . . . . . . . column: 22
 . . . . . . end: <Position>
-. . . . . . . line: 17
-. . . . . . . column: 50
+. . . . . . . line: 23
+. . . . . . . column: 45
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 17
+. . . . . . . . line: 23
 . . . . . . . . column: 23
 . . . . . . . end: <Position>
-. . . . . . . . line: 17
+. . . . . . . . line: 23
 . . . . . . . . column: 31
 . . . . . . value: 'onObject'
 . . . . . arguments:
 . . . . . . 1 - <Argument>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 17
+. . . . . . . . . line: 23
 . . . . . . . . . column: 32
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 17
-. . . . . . . . . column: 36
+. . . . . . . . . line: 23
+. . . . . . . . . column: 44
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 17
+. . . . . . . . . . line: 23
 . . . . . . . . . . column: 32
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 17
+. . . . . . . . . . line: 23
 . . . . . . . . . . column: 35
 . . . . . . . . value: 'arg'
 . . . . . . . value: <StringValue>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 17
-. . . . . . . . . . column: 35
+. . . . . . . . . . line: 23
+. . . . . . . . . . column: 37
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 17
-. . . . . . . . . . column: 36
+. . . . . . . . . . line: 23
+. . . . . . . . . . column: 44
 . . . . . . . . value: 'value'
 . . . fields:
 . . . . 1 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 18
+. . . . . . . line: 24
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 18
-. . . . . . . column: 69
+. . . . . . . line: 24
+. . . . . . . column: 62
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 18
+. . . . . . . . line: 24
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 18
+. . . . . . . . line: 24
 . . . . . . . . column: 17
 . . . . . . value: 'annotatedField'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 18
+. . . . . . . . . line: 24
 . . . . . . . . . column: 18
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 18
-. . . . . . . . . column: 53
+. . . . . . . . . line: 24
+. . . . . . . . . column: 46
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 18
+. . . . . . . . . . line: 24
 . . . . . . . . . . column: 18
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 18
+. . . . . . . . . . line: 24
 . . . . . . . . . . column: 21
 . . . . . . . . value: 'arg'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 18
+. . . . . . . . . . line: 24
 . . . . . . . . . . column: 23
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 18
+. . . . . . . . . . line: 24
 . . . . . . . . . . column: 27
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 18
+. . . . . . . . . . . line: 24
 . . . . . . . . . . . column: 23
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 18
+. . . . . . . . . . . line: 24
 . . . . . . . . . . . column: 27
 . . . . . . . . . value: 'Type'
 . . . . . . . defaultValue: <StringValue>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 18
-. . . . . . . . . . column: 28
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 30
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 18
-. . . . . . . . . . column: 29
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 39
 . . . . . . . . value: 'default'
 . . . . . . . directives:
 . . . . . . . . 1 - <Directive>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 18
-. . . . . . . . . . . column: 47
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 40
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 18
-. . . . . . . . . . . column: 53
+. . . . . . . . . . . line: 24
+. . . . . . . . . . . column: 46
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 18
-. . . . . . . . . . . . column: 48
+. . . . . . . . . . . . line: 24
+. . . . . . . . . . . . column: 41
 . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 18
-. . . . . . . . . . . . column: 53
+. . . . . . . . . . . . line: 24
+. . . . . . . . . . . . column: 46
 . . . . . . . . . . value: 'onArg'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 18
-. . . . . . . . column: 56
+. . . . . . . . line: 24
+. . . . . . . . column: 49
 . . . . . . . end: <Position>
-. . . . . . . . line: 18
-. . . . . . . . column: 60
+. . . . . . . . line: 24
+. . . . . . . . column: 53
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 18
-. . . . . . . . . column: 56
+. . . . . . . . . line: 24
+. . . . . . . . . column: 49
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 18
-. . . . . . . . . column: 60
+. . . . . . . . . line: 24
+. . . . . . . . . column: 53
 . . . . . . . value: 'Type'
 . . . . . directives:
 . . . . . . 1 - <Directive>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 18
-. . . . . . . . . column: 61
+. . . . . . . . . line: 24
+. . . . . . . . . column: 54
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 18
-. . . . . . . . . column: 69
+. . . . . . . . . line: 24
+. . . . . . . . . column: 62
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 18
-. . . . . . . . . . column: 62
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 55
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 18
-. . . . . . . . . . column: 69
+. . . . . . . . . . line: 24
+. . . . . . . . . . column: 62
 . . . . . . . . value: 'onField'
 . . . . 2 - <FieldDefinition>
 . . . . . name: <Name>
@@ -873,132 +873,132 @@
 . . 4 - <InterfaceTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 21
+. . . . . line: 27
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 24
+. . . . . line: 30
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 21
+. . . . . . line: 27
 . . . . . . column: 11
 . . . . . end: <Position>
-. . . . . . line: 21
+. . . . . . line: 27
 . . . . . . column: 14
 . . . . value: 'Bar'
 . . . fields:
 . . . . 1 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 22
+. . . . . . . line: 28
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 22
+. . . . . . . line: 28
 . . . . . . . column: 12
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 22
+. . . . . . . . line: 28
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 22
+. . . . . . . . line: 28
 . . . . . . . . column: 6
 . . . . . . value: 'one'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 22
+. . . . . . . . line: 28
 . . . . . . . . column: 8
 . . . . . . . end: <Position>
-. . . . . . . . line: 22
+. . . . . . . . line: 28
 . . . . . . . . column: 12
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 22
+. . . . . . . . . line: 28
 . . . . . . . . . column: 8
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 22
+. . . . . . . . . line: 28
 . . . . . . . . . column: 12
 . . . . . . . value: 'Type'
 . . . . 2 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 23
+. . . . . . . line: 29
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 23
-. . . . . . . column: 50
+. . . . . . . line: 29
+. . . . . . . column: 44
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 23
+. . . . . . . . line: 29
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 23
+. . . . . . . . line: 29
 . . . . . . . . column: 7
 . . . . . . value: 'four'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 23
+. . . . . . . . . line: 29
 . . . . . . . . . column: 8
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 23
-. . . . . . . . . column: 26
+. . . . . . . . . line: 29
+. . . . . . . . . column: 35
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 23
+. . . . . . . . . . line: 29
 . . . . . . . . . . column: 8
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 23
+. . . . . . . . . . line: 29
 . . . . . . . . . . column: 16
 . . . . . . . . value: 'argument'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 23
+. . . . . . . . . . line: 29
 . . . . . . . . . . column: 18
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 23
+. . . . . . . . . . line: 29
 . . . . . . . . . . column: 24
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 23
+. . . . . . . . . . . line: 29
 . . . . . . . . . . . column: 18
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 23
+. . . . . . . . . . . line: 29
 . . . . . . . . . . . column: 24
 . . . . . . . . . value: 'String'
 . . . . . . . defaultValue: <StringValue>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 23
-. . . . . . . . . . column: 25
+. . . . . . . . . . line: 29
+. . . . . . . . . . column: 27
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 23
-. . . . . . . . . . column: 26
+. . . . . . . . . . line: 29
+. . . . . . . . . . column: 35
 . . . . . . . . value: 'string'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 23
-. . . . . . . . column: 44
+. . . . . . . . line: 29
+. . . . . . . . column: 38
 . . . . . . . end: <Position>
-. . . . . . . . line: 23
-. . . . . . . . column: 50
+. . . . . . . . line: 29
+. . . . . . . . column: 44
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 23
-. . . . . . . . . column: 44
+. . . . . . . . . line: 29
+. . . . . . . . . column: 38
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 23
-. . . . . . . . . column: 50
+. . . . . . . . . line: 29
+. . . . . . . . . column: 44
 . . . . . . . value: 'String'
 . . . . 3 - <FieldDefinition>
 . . . . . name: <Name>
@@ -1010,142 +1010,142 @@
 . . 5 - <InterfaceTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 26
+. . . . . line: 32
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 28
+. . . . . line: 34
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 26
+. . . . . . line: 32
 . . . . . . column: 11
 . . . . . end: <Position>
-. . . . . . line: 26
+. . . . . . line: 32
 . . . . . . column: 29
 . . . . value: 'AnnotatedInterface'
 . . . directives:
 . . . . 1 - <Directive>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 26
+. . . . . . . line: 32
 . . . . . . . column: 30
 . . . . . . end: <Position>
-. . . . . . . line: 26
+. . . . . . . line: 32
 . . . . . . . column: 42
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 26
+. . . . . . . . line: 32
 . . . . . . . . column: 31
 . . . . . . . end: <Position>
-. . . . . . . . line: 26
+. . . . . . . . line: 32
 . . . . . . . . column: 42
 . . . . . . value: 'onInterface'
 . . . fields:
 . . . . 1 - <FieldDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 27
+. . . . . . . line: 33
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 27
+. . . . . . . line: 33
 . . . . . . . column: 50
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 27
+. . . . . . . . line: 33
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 27
+. . . . . . . . line: 33
 . . . . . . . . column: 17
 . . . . . . value: 'annotatedField'
 . . . . . arguments:
 . . . . . . 1 - <InputValueDefinition>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 27
+. . . . . . . . . line: 33
 . . . . . . . . . column: 18
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 27
+. . . . . . . . . line: 33
 . . . . . . . . . column: 34
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 27
+. . . . . . . . . . line: 33
 . . . . . . . . . . column: 18
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 27
+. . . . . . . . . . line: 33
 . . . . . . . . . . column: 21
 . . . . . . . . value: 'arg'
 . . . . . . . type: <NamedType>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 27
+. . . . . . . . . . line: 33
 . . . . . . . . . . column: 23
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 27
+. . . . . . . . . . line: 33
 . . . . . . . . . . column: 27
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 27
+. . . . . . . . . . . line: 33
 . . . . . . . . . . . column: 23
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 27
+. . . . . . . . . . . line: 33
 . . . . . . . . . . . column: 27
 . . . . . . . . . value: 'Type'
 . . . . . . . directives:
 . . . . . . . . 1 - <Directive>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 27
+. . . . . . . . . . . line: 33
 . . . . . . . . . . . column: 28
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 27
+. . . . . . . . . . . line: 33
 . . . . . . . . . . . column: 34
 . . . . . . . . . name: <Name>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 27
+. . . . . . . . . . . . line: 33
 . . . . . . . . . . . . column: 29
 . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 27
+. . . . . . . . . . . . line: 33
 . . . . . . . . . . . . column: 34
 . . . . . . . . . . value: 'onArg'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 27
+. . . . . . . . line: 33
 . . . . . . . . column: 37
 . . . . . . . end: <Position>
-. . . . . . . . line: 27
+. . . . . . . . line: 33
 . . . . . . . . column: 41
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 27
+. . . . . . . . . line: 33
 . . . . . . . . . column: 37
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 27
+. . . . . . . . . line: 33
 . . . . . . . . . column: 41
 . . . . . . . value: 'Type'
 . . . . . directives:
 . . . . . . 1 - <Directive>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 27
+. . . . . . . . . line: 33
 . . . . . . . . . column: 42
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 27
+. . . . . . . . . line: 33
 . . . . . . . . . column: 50
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 27
+. . . . . . . . . . line: 33
 . . . . . . . . . . column: 43
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 27
+. . . . . . . . . . line: 33
 . . . . . . . . . . column: 50
 . . . . . . . . value: 'onField'
 . . . . 2 - <FieldDefinition>
@@ -1158,141 +1158,141 @@
 . . 6 - <UnionTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 30
+. . . . . line: 36
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 30
+. . . . . line: 36
 . . . . . column: 38
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 30
+. . . . . . line: 36
 . . . . . . column: 7
 . . . . . end: <Position>
-. . . . . . line: 30
+. . . . . . line: 36
 . . . . . . column: 11
 . . . . value: 'Feed'
 . . . types:
 . . . . 1 - <NamedType>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 30
+. . . . . . . line: 36
 . . . . . . . column: 14
 . . . . . . end: <Position>
-. . . . . . . line: 30
+. . . . . . . line: 36
 . . . . . . . column: 19
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 30
+. . . . . . . . line: 36
 . . . . . . . . column: 14
 . . . . . . . end: <Position>
-. . . . . . . . line: 30
+. . . . . . . . line: 36
 . . . . . . . . column: 19
 . . . . . . value: 'Story'
 . . . . 2 - <NamedType>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 30
+. . . . . . . line: 36
 . . . . . . . column: 22
 . . . . . . end: <Position>
-. . . . . . . line: 30
+. . . . . . . line: 36
 . . . . . . . column: 29
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 30
+. . . . . . . . line: 36
 . . . . . . . . column: 22
 . . . . . . . end: <Position>
-. . . . . . . . line: 30
+. . . . . . . . line: 36
 . . . . . . . . column: 29
 . . . . . . value: 'Article'
 . . . . 3 - <NamedType>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 30
+. . . . . . . line: 36
 . . . . . . . column: 32
 . . . . . . end: <Position>
-. . . . . . . line: 30
+. . . . . . . line: 36
 . . . . . . . column: 38
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 30
+. . . . . . . . line: 36
 . . . . . . . . column: 32
 . . . . . . . end: <Position>
-. . . . . . . . line: 30
+. . . . . . . . line: 36
 . . . . . . . . column: 38
 . . . . . . value: 'Advert'
 . . . .resolve_type: function
 . . 7 - <UnionTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 32
+. . . . . line: 38
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 32
+. . . . . line: 38
 . . . . . column: 38
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 32
+. . . . . . line: 38
 . . . . . . column: 7
 . . . . . end: <Position>
-. . . . . . line: 32
+. . . . . . line: 38
 . . . . . . column: 21
 . . . . value: 'AnnotatedUnion'
 . . . directives:
 . . . . 1 - <Directive>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 32
+. . . . . . . line: 38
 . . . . . . . column: 22
 . . . . . . end: <Position>
-. . . . . . . line: 32
+. . . . . . . line: 38
 . . . . . . . column: 30
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 32
+. . . . . . . . line: 38
 . . . . . . . . column: 23
 . . . . . . . end: <Position>
-. . . . . . . . line: 32
+. . . . . . . . line: 38
 . . . . . . . . column: 30
 . . . . . . value: 'onUnion'
 . . . types:
 . . . . 1 - <NamedType>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 32
+. . . . . . . line: 38
 . . . . . . . column: 33
 . . . . . . end: <Position>
-. . . . . . . line: 32
+. . . . . . . line: 38
 . . . . . . . column: 34
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 32
+. . . . . . . . line: 38
 . . . . . . . . column: 33
 . . . . . . . end: <Position>
-. . . . . . . . line: 32
+. . . . . . . . line: 38
 . . . . . . . . column: 34
 . . . . . . value: 'A'
 . . . . 2 - <NamedType>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 32
+. . . . . . . line: 38
 . . . . . . . column: 37
 . . . . . . end: <Position>
-. . . . . . . line: 32
+. . . . . . . line: 38
 . . . . . . . column: 38
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 32
+. . . . . . . . line: 38
 . . . . . . . . column: 37
 . . . . . . . end: <Position>
-. . . . . . . . line: 32
+. . . . . . . . line: 38
 . . . . . . . . column: 38
 . . . . . . value: 'B'
 . . . .resolve_type: function
@@ -1300,10 +1300,10 @@
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 34
+. . . . . . line: 40
 . . . . . . column: 8
 . . . . . end: <Position>
-. . . . . . line: 34
+. . . . . . line: 40
 . . . . . . column: 20
 . . . . value: 'CustomScalar'
 . . . .resolve: function
@@ -1312,28 +1312,28 @@
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 36
+. . . . . . line: 42
 . . . . . . column: 8
 . . . . . end: <Position>
-. . . . . . line: 36
+. . . . . . line: 42
 . . . . . . column: 23
 . . . . value: 'AnnotatedScalar'
 . . . directives:
 . . . . 1 - <Directive>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 36
+. . . . . . . line: 42
 . . . . . . . column: 24
 . . . . . . end: <Position>
-. . . . . . . line: 36
+. . . . . . . line: 42
 . . . . . . . column: 33
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 36
+. . . . . . . . line: 42
 . . . . . . . . column: 25
 . . . . . . . end: <Position>
-. . . . . . . . line: 36
+. . . . . . . . line: 42
 . . . . . . . . column: 33
 . . . . . . value: 'onScalar'
 . . . .resolve: function
@@ -1341,437 +1341,437 @@
 . . 10 - <EnumTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 38
+. . . . . line: 44
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 41
+. . . . . line: 47
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 38
+. . . . . . line: 44
 . . . . . . column: 6
 . . . . . end: <Position>
-. . . . . . line: 38
+. . . . . . line: 44
 . . . . . . column: 10
 . . . . value: 'Site'
 . . . values:
 . . . . 1 - <EnumValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 39
+. . . . . . . line: 45
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 39
+. . . . . . . line: 45
 . . . . . . . column: 10
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 39
+. . . . . . . . line: 45
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 39
+. . . . . . . . line: 45
 . . . . . . . . column: 10
 . . . . . . value: 'DESKTOP'
 . . . . 2 - <EnumValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 40
+. . . . . . . line: 46
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 40
+. . . . . . . line: 46
 . . . . . . . column: 9
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 40
+. . . . . . . . line: 46
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 40
+. . . . . . . . line: 46
 . . . . . . . . column: 9
 . . . . . . value: 'MOBILE'
 . . . .resolve: function
 . . 11 - <EnumTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 43
+. . . . . line: 49
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 46
+. . . . . line: 52
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 43
+. . . . . . line: 49
 . . . . . . column: 6
 . . . . . end: <Position>
-. . . . . . line: 43
+. . . . . . line: 49
 . . . . . . column: 19
 . . . . value: 'AnnotatedEnum'
 . . . directives:
 . . . . 1 - <Directive>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 43
+. . . . . . . line: 49
 . . . . . . . column: 20
 . . . . . . end: <Position>
-. . . . . . . line: 43
+. . . . . . . line: 49
 . . . . . . . column: 27
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 43
+. . . . . . . . line: 49
 . . . . . . . . column: 21
 . . . . . . . end: <Position>
-. . . . . . . . line: 43
+. . . . . . . . line: 49
 . . . . . . . . column: 27
 . . . . . . value: 'onEnum'
 . . . values:
 . . . . 1 - <EnumValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 44
+. . . . . . . line: 50
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 44
+. . . . . . . line: 50
 . . . . . . . column: 31
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 44
+. . . . . . . . line: 50
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 44
+. . . . . . . . line: 50
 . . . . . . . . column: 18
 . . . . . . value: 'ANNOTATED_VALUE'
 . . . . . directives:
 . . . . . . 1 - <Directive>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 44
+. . . . . . . . . line: 50
 . . . . . . . . . column: 19
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 44
+. . . . . . . . . line: 50
 . . . . . . . . . column: 31
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 44
+. . . . . . . . . . line: 50
 . . . . . . . . . . column: 20
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 44
+. . . . . . . . . . line: 50
 . . . . . . . . . . column: 31
 . . . . . . . . value: 'onEnumValue'
 . . . . 2 - <EnumValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 45
+. . . . . . . line: 51
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 45
+. . . . . . . line: 51
 . . . . . . . column: 14
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 45
+. . . . . . . . line: 51
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 45
+. . . . . . . . line: 51
 . . . . . . . . column: 14
 . . . . . . value: 'OTHER_VALUE'
 . . . .resolve: function
 . . 12 - <InputObjectTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 48
+. . . . . line: 54
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 51
+. . . . . line: 57
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 48
+. . . . . . line: 54
 . . . . . . column: 7
 . . . . . end: <Position>
-. . . . . . line: 48
+. . . . . . line: 54
 . . . . . . column: 16
 . . . . value: 'InputType'
 . . . fields:
 . . . . 1 - <InputValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 49
+. . . . . . . line: 55
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 49
+. . . . . . . line: 55
 . . . . . . . column: 15
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 49
+. . . . . . . . line: 55
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 49
+. . . . . . . . line: 55
 . . . . . . . . column: 6
 . . . . . . value: 'key'
 . . . . . type: <NonNullType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 49
+. . . . . . . . line: 55
 . . . . . . . . column: 8
 . . . . . . . end: <Position>
-. . . . . . . . line: 49
+. . . . . . . . line: 55
 . . . . . . . . column: 15
 . . . . . . type: <NamedType>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 49
+. . . . . . . . . line: 55
 . . . . . . . . . column: 8
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 49
+. . . . . . . . . line: 55
 . . . . . . . . . column: 14
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 49
+. . . . . . . . . . line: 55
 . . . . . . . . . . column: 8
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 49
+. . . . . . . . . . line: 55
 . . . . . . . . . . column: 14
 . . . . . . . . value: 'String'
 . . . . 2 - <InputValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 50
+. . . . . . . line: 56
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 50
+. . . . . . . line: 56
 . . . . . . . column: 19
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 50
+. . . . . . . . line: 56
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 50
+. . . . . . . . line: 56
 . . . . . . . . column: 9
 . . . . . . value: 'answer'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 50
+. . . . . . . . line: 56
 . . . . . . . . column: 11
 . . . . . . . end: <Position>
-. . . . . . . . line: 50
+. . . . . . . . line: 56
 . . . . . . . . column: 14
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 50
+. . . . . . . . . line: 56
 . . . . . . . . . column: 11
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 50
+. . . . . . . . . line: 56
 . . . . . . . . . column: 14
 . . . . . . . value: 'Int'
 . . . . . defaultValue: <IntValue>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 50
+. . . . . . . . line: 56
 . . . . . . . . column: 17
 . . . . . . . end: <Position>
-. . . . . . . . line: 50
+. . . . . . . . line: 56
 . . . . . . . . column: 19
 . . . . . . value: '42'
 . . 13 - <InputObjectTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 53
+. . . . . line: 59
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 55
+. . . . . line: 61
 . . . . . column: 2
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 53
+. . . . . . line: 59
 . . . . . . column: 7
 . . . . . end: <Position>
-. . . . . . line: 53
+. . . . . . line: 59
 . . . . . . column: 21
 . . . . value: 'AnnotatedInput'
 . . . directives:
 . . . . 1 - <Directive>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 53
+. . . . . . . line: 59
 . . . . . . . column: 22
 . . . . . . end: <Position>
-. . . . . . . line: 53
+. . . . . . . line: 59
 . . . . . . . column: 40
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 53
+. . . . . . . . line: 59
 . . . . . . . . column: 23
 . . . . . . . end: <Position>
-. . . . . . . . line: 53
+. . . . . . . . line: 59
 . . . . . . . . column: 40
 . . . . . . value: 'onInputObjectType'
 . . . fields:
 . . . . 1 - <InputValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 54
+. . . . . . . line: 60
 . . . . . . . column: 3
 . . . . . . end: <Position>
-. . . . . . . line: 54
+. . . . . . . line: 60
 . . . . . . . column: 32
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 54
+. . . . . . . . line: 60
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 54
+. . . . . . . . line: 60
 . . . . . . . . column: 17
 . . . . . . value: 'annotatedField'
 . . . . . type: <NamedType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 54
+. . . . . . . . line: 60
 . . . . . . . . column: 19
 . . . . . . . end: <Position>
-. . . . . . . . line: 54
+. . . . . . . . line: 60
 . . . . . . . . column: 23
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 54
+. . . . . . . . . line: 60
 . . . . . . . . . column: 19
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 54
+. . . . . . . . . line: 60
 . . . . . . . . . column: 23
 . . . . . . . value: 'Type'
 . . . . . directives:
 . . . . . . 1 - <Directive>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 54
+. . . . . . . . . line: 60
 . . . . . . . . . column: 24
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 54
+. . . . . . . . . line: 60
 . . . . . . . . . column: 32
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 54
+. . . . . . . . . . line: 60
 . . . . . . . . . . column: 25
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 54
+. . . . . . . . . . line: 60
 . . . . . . . . . . column: 32
 . . . . . . . . value: 'onField'
 . . 14 - <TypeExtensionDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 57
+. . . . . line: 63
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 59
+. . . . . line: 65
 . . . . . column: 2
 . . . definition: <ObjectTypeDefinition>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 57
+. . . . . . line: 63
 . . . . . . column: 8
 . . . . . end: <Position>
-. . . . . . line: 59
+. . . . . . line: 65
 . . . . . . column: 2
 . . . . name: <Name>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 57
+. . . . . . . line: 63
 . . . . . . . column: 13
 . . . . . . end: <Position>
-. . . . . . . line: 57
+. . . . . . . line: 63
 . . . . . . . column: 16
 . . . . . value: 'Foo'
 . . . . fields:
 . . . . . 1 - <FieldDefinition>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 58
+. . . . . . . . line: 64
 . . . . . . . . column: 3
 . . . . . . . end: <Position>
-. . . . . . . . line: 58
+. . . . . . . . line: 64
 . . . . . . . . column: 34
 . . . . . . name: <Name>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 58
+. . . . . . . . . line: 64
 . . . . . . . . . column: 3
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 58
+. . . . . . . . . line: 64
 . . . . . . . . . column: 8
 . . . . . . . value: 'seven'
 . . . . . . arguments:
 . . . . . . . 1 - <InputValueDefinition>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 58
+. . . . . . . . . . line: 64
 . . . . . . . . . . column: 9
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 58
+. . . . . . . . . . line: 64
 . . . . . . . . . . column: 27
 . . . . . . . . name: <Name>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 58
+. . . . . . . . . . . line: 64
 . . . . . . . . . . . column: 9
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 58
+. . . . . . . . . . . line: 64
 . . . . . . . . . . . column: 17
 . . . . . . . . . value: 'argument'
 . . . . . . . . type: <ListType>
 . . . . . . . . . loc: <Location>
 . . . . . . . . . . start: <Position>
-. . . . . . . . . . . line: 58
+. . . . . . . . . . . line: 64
 . . . . . . . . . . . column: 19
 . . . . . . . . . . end: <Position>
-. . . . . . . . . . . line: 58
+. . . . . . . . . . . line: 64
 . . . . . . . . . . . column: 27
 . . . . . . . . . type: <NamedType>
 . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . line: 58
+. . . . . . . . . . . . line: 64
 . . . . . . . . . . . . column: 20
 . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . line: 58
+. . . . . . . . . . . . line: 64
 . . . . . . . . . . . . column: 26
 . . . . . . . . . . name: <Name>
 . . . . . . . . . . . loc: <Location>
 . . . . . . . . . . . . start: <Position>
-. . . . . . . . . . . . . line: 58
+. . . . . . . . . . . . . line: 64
 . . . . . . . . . . . . . column: 20
 . . . . . . . . . . . . end: <Position>
-. . . . . . . . . . . . . line: 58
+. . . . . . . . . . . . . line: 64
 . . . . . . . . . . . . . column: 26
 . . . . . . . . . . . value: 'String'
 . . . . . . type: <NamedType>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 58
+. . . . . . . . . line: 64
 . . . . . . . . . column: 30
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 58
+. . . . . . . . . line: 64
 . . . . . . . . . column: 34
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 58
+. . . . . . . . . . line: 64
 . . . . . . . . . . column: 30
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 58
+. . . . . . . . . . line: 64
 . . . . . . . . . . column: 34
 . . . . . . . . value: 'Type'
 . . . . . 2 - <FieldDefinition>
@@ -1783,176 +1783,176 @@
 . . 15 - <DirectiveDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 63
+. . . . . line: 73
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 63
+. . . . . line: 73
 . . . . . column: 75
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 63
+. . . . . . line: 73
 . . . . . . column: 12
 . . . . . end: <Position>
-. . . . . . line: 63
+. . . . . . line: 73
 . . . . . . column: 16
 . . . . value: 'skip'
 . . . arguments:
 . . . . 1 - <InputValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 17
 . . . . . . end: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 29
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 63
+. . . . . . . . line: 73
 . . . . . . . . column: 17
 . . . . . . . end: <Position>
-. . . . . . . . line: 63
+. . . . . . . . line: 73
 . . . . . . . . column: 19
 . . . . . . value: 'if'
 . . . . . type: <NonNullType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 63
+. . . . . . . . line: 73
 . . . . . . . . column: 21
 . . . . . . . end: <Position>
-. . . . . . . . line: 63
+. . . . . . . . line: 73
 . . . . . . . . column: 29
 . . . . . . type: <NamedType>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 63
+. . . . . . . . . line: 73
 . . . . . . . . . column: 21
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 63
+. . . . . . . . . line: 73
 . . . . . . . . . column: 28
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 63
+. . . . . . . . . . line: 73
 . . . . . . . . . . column: 21
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 63
+. . . . . . . . . . line: 73
 . . . . . . . . . . column: 28
 . . . . . . . . value: 'Boolean'
 . . . locations:
 . . . . 1 - <Name>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 34
 . . . . . . end: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 39
 . . . . . value: 'FIELD'
 . . . . 2 - <Name>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 42
 . . . . . . end: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 57
 . . . . . value: 'FRAGMENT_SPREAD'
 . . . . 3 - <Name>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 60
 . . . . . . end: <Position>
-. . . . . . . line: 63
+. . . . . . . line: 73
 . . . . . . . column: 75
 . . . . . value: 'INLINE_FRAGMENT'
 . . 16 - <DirectiveDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
-. . . . . line: 65
+. . . . . line: 75
 . . . . . column: 1
 . . . . end: <Position>
-. . . . . line: 68
+. . . . . line: 78
 . . . . . column: 21
 . . . name: <Name>
 . . . . loc: <Location>
 . . . . . start: <Position>
-. . . . . . line: 65
+. . . . . . line: 75
 . . . . . . column: 12
 . . . . . end: <Position>
-. . . . . . line: 65
+. . . . . . line: 75
 . . . . . . column: 19
 . . . . value: 'include'
 . . . arguments:
 . . . . 1 - <InputValueDefinition>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 65
+. . . . . . . line: 75
 . . . . . . . column: 20
 . . . . . . end: <Position>
-. . . . . . . line: 65
+. . . . . . . line: 75
 . . . . . . . column: 32
 . . . . . name: <Name>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 65
+. . . . . . . . line: 75
 . . . . . . . . column: 20
 . . . . . . . end: <Position>
-. . . . . . . . line: 65
+. . . . . . . . line: 75
 . . . . . . . . column: 22
 . . . . . . value: 'if'
 . . . . . type: <NonNullType>
 . . . . . . loc: <Location>
 . . . . . . . start: <Position>
-. . . . . . . . line: 65
+. . . . . . . . line: 75
 . . . . . . . . column: 24
 . . . . . . . end: <Position>
-. . . . . . . . line: 65
+. . . . . . . . line: 75
 . . . . . . . . column: 32
 . . . . . . type: <NamedType>
 . . . . . . . loc: <Location>
 . . . . . . . . start: <Position>
-. . . . . . . . . line: 65
+. . . . . . . . . line: 75
 . . . . . . . . . column: 24
 . . . . . . . . end: <Position>
-. . . . . . . . . line: 65
+. . . . . . . . . line: 75
 . . . . . . . . . column: 31
 . . . . . . . name: <Name>
 . . . . . . . . loc: <Location>
 . . . . . . . . . start: <Position>
-. . . . . . . . . . line: 65
+. . . . . . . . . . line: 75
 . . . . . . . . . . column: 24
 . . . . . . . . . end: <Position>
-. . . . . . . . . . line: 65
+. . . . . . . . . . line: 75
 . . . . . . . . . . column: 31
 . . . . . . . . value: 'Boolean'
 . . . locations:
 . . . . 1 - <Name>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 66
+. . . . . . . line: 76
 . . . . . . . column: 6
 . . . . . . end: <Position>
-. . . . . . . line: 66
+. . . . . . . line: 76
 . . . . . . . column: 11
 . . . . . value: 'FIELD'
 . . . . 2 - <Name>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 67
+. . . . . . . line: 77
 . . . . . . . column: 6
 . . . . . . end: <Position>
-. . . . . . . line: 67
+. . . . . . . line: 77
 . . . . . . . column: 21
 . . . . . value: 'FRAGMENT_SPREAD'
 . . . . 3 - <Name>
 . . . . . loc: <Location>
 . . . . . . start: <Position>
-. . . . . . . line: 68
+. . . . . . . line: 78
 . . . . . . . column: 6
 . . . . . . end: <Position>
-. . . . . . . line: 68
+. . . . . . . line: 78
 . . . . . . . column: 21
 . . . . . value: 'INLINE_FRAGMENT'
