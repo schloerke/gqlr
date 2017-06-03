@@ -5,7 +5,7 @@
 
 #' Run basic GraphQL server
 #'
-#' Run a basic GraphQL server with the jug package.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is cancelled.
+#' Run a basic GraphQL server with the jug package.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is canceled.
 #'
 #' \code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are three routes implemented:
 #'
@@ -86,7 +86,7 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
         data = NULL,
         errors = list(
           list(
-            message = "server(): 'query' parameter must be supplied as a graphql string"
+            message = "server(): 'query' parameter must be supplied as a GraphQL string"
           )
         )
       )
@@ -122,7 +122,7 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
       ans <- format(schema$get_schema())
       res$text(ans)
 
-      # makes it "true" graphql, but it can't be viewed in a browser
+      # makes it "true" GraphQL, but it can't be viewed in a browser
       # nolint start
       ## res$content_type("application/graphql")
       ## res$body <- ans

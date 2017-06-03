@@ -45,9 +45,9 @@
 # nolint end
 
 
-#' Execute graphql server response
+#' Execute GraphQL server response
 #'
-#' Executes a graphql server request with the provided request.
+#' Executes a GraphQL server request with the provided request.
 #'
 #' @param request a valid GraphQL string
 #' @param schema a character string (to be used along side \code{initial_value}) or a schema object created from \code{\link{gqlr_schema}}

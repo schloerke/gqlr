@@ -12,7 +12,7 @@ gqlr_schema(schema, ...)
 \item{...}{named lists of information to help produce the schema definition.  See Details}
 }
 \description{
-Creates a Schema object from the defined GraphQL string and inserts the provided descriptions, resolve methods, resolve_type methods into the appriate place.
+Creates a Schema object from the defined GraphQL string and inserts the provided descriptions, resolve methods, resolve_type methods into the appropriate place.
 }
 \section{Details}{
 
@@ -185,7 +185,7 @@ schema {
     Query = function(null, schema) {
       list(
         # return a function for key 'hero'
-        # the id will be resolved by the appriate resolve() method of Droid or Human
+        # the id will be resolved by the appropriate resolve() method of Droid or Human
         hero = function(obj, args, schema) {
           episode <- args$episode
           if (identical(episode, 5) || identical(episode, "EMPIRE")) {

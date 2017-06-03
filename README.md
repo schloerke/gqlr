@@ -179,7 +179,7 @@ schema {
     Query = function(null, schema) {
       list(
         # return a function for key 'hero'
-        # the id will be resolved by the appriate resolve() method of Droid or Human
+        # the id will be resolved by the appropriate resolve() method of Droid or Human
         hero = function(obj, args, schema) {
           episode <- args$episode
           if (identical(episode, 5) || identical(episode, "EMPIRE")) {

@@ -16,7 +16,7 @@ server(schema, port = 8000L, log = TRUE, initial_value = NULL)
 \item{initial_value}{default value to use in \code{\link{execute_request}()}}
 }
 \description{
-Run a basic GraphQL server with the jug package.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is cancelled.
+Run a basic GraphQL server with the jug package.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is canceled.
 }
 \details{
 \code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are three routes implemented:

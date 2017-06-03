@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6-6.1-executing-requests.R
 \name{execute_request}
 \alias{execute_request}
-\title{Execute graphql server response}
+\title{Execute GraphQL server response}
 \usage{
 execute_request(request, schema, operation_name = NULL, variables = list(),
   initial_value = NULL)
@@ -19,7 +19,7 @@ execute_request(request, schema, operation_name = NULL, variables = list(),
 \item{initial_value}{default value for executing requests.  This value can either be provided and/or combined with the resolve method of the query root type or mutation root type.  The value provided should be a named list of the field name (key) and a value matching that field name type.  The value may be a function that returns a value of the field name type.}
 }
 \description{
-Executes a graphql server request with the provided request.
+Executes a GraphQL server request with the provided request.
 }
 \examples{
 
