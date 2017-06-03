@@ -37,7 +37,7 @@ r6_from_list <- function(
         retList[[activeKey]] <- list()
       } else {
         if (identical(class(objVal), "list")) {
-          # going through a list, such as 'Document$defintions' or 'ObjectTypeDefinition$fields'
+          # going through a list, such as 'Document$definitions' or 'ObjectTypeDefinition$fields'
 
           retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
             r6_from_list(

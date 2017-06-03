@@ -156,7 +156,7 @@ schema {
 
 
 
-# extra testing defintions
+# extra testing definitions
 "
 union HumanOrDroid = Human | Droid
 

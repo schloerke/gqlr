@@ -37,7 +37,7 @@
 #'
 #' @param kind single character name of a class to parse
 #' @param resolve function to parse the value if the kind is correct
-#' @return functino that takes \code{obj} and \code{schema} that will only parse the value if the \code{kind} is inherited in the \code{obj}
+#' @return function that takes \code{obj} and \code{schema} that will only parse the value if the \code{kind} is inherited in the \code{obj}
 #' @export
 #' @examples
 #' parse_date_value <- function(obj, schema) {

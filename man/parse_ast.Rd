@@ -12,7 +12,7 @@ parse_ast(kind, resolve)
 \item{resolve}{function to parse the value if the kind is correct}
 }
 \value{
-functino that takes \code{obj} and \code{schema} that will only parse the value if the \code{kind} is inherited in the \code{obj}
+function that takes \code{obj} and \code{schema} that will only parse the value if the \code{kind} is inherited in the \code{obj}
 }
 \description{
 This is a helper function for Scalars.  Given a particular kind and a resolve function, it produces a function that will only parse values of a particular kind.

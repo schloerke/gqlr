@@ -16,7 +16,7 @@ answer$error_list
 \section{Initialize}{
 
 \describe{
-  \item{verbose}{boolean that determines if errors will be printed on occurance.  Defaults to \code{TRUE}}
+  \item{verbose}{boolean that determines if errors will be printed on occurrence.  Defaults to \code{TRUE}}
 }
 }
 

@@ -25,7 +25,7 @@ get_initial_value <- function(initial_value, root_type_object, ..., oh) {
     initial_value <- list()
   }
 
-  # add some default value so that the functinos will execute.  Otherwise they are 'NULL' values
+  # add some default value so that the functions will execute.  Otherwise they are 'NULL' values
   initial_value[["__schema"]] <- function(z1, z2, schema) {
     schema
   }

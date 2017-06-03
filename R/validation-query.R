@@ -47,7 +47,7 @@ validate_operation_names <- function(document_obj, ..., oh) {
 
   for (definition in document_obj$definitions) {
     if (inherits(definition, "TypeSystemDefinition")) {
-      stop("Query should not include schema defintions")
+      stop("Query should not include schema definitions")
     }
 
     # is query or mutation

@@ -46,11 +46,11 @@
 #'  }
 #'
 #' @section Details:
-#' \code{$add(obj)}: function to add either another Schema's definitions or Document of defintions.  \code{obj} must inherit class of either \code{'Schema'} or \code{'Document'}
+#' \code{$add(obj)}: function to add either another Schema's definitions or Document of definitions.  \code{obj} must inherit class of either \code{'Schema'} or \code{'Document'}
 #'
-#' \code{$is_scalar(name)}, \code{$is_enum(name)}, \code{$is_object(name)}, \code{$is_interface(name)}, \code{$is_union(name)}, \code{$is_input_object(name)}, \code{$is_directive(name)}, \code{$is_value(name)}: methods to determine if there is a definition of the corresponding definition type for the privided name.
+#' \code{$is_scalar(name)}, \code{$is_enum(name)}, \code{$is_object(name)}, \code{$is_interface(name)}, \code{$is_union(name)}, \code{$is_input_object(name)}, \code{$is_directive(name)}, \code{$is_value(name)}: methods to determine if there is a definition of the corresponding definition type for the provided name.
 #'
-#' \code{$get_scalar(name)}, \code{$get_enum(name)}, \code{$get_object(name)}, \code{$get_interface(name)}, \code{$get_union(name)}, \code{$get_input_object(name)}, \code{$get_directive(name)}, \code{$get_value(name)}: methods to retrieve a definition of the corresponding definition type for the privided name. If the object can't be found, \code{NULL} is returned. When printed, it quickly conveys all known information of the definition.  Due to the nature of R6 objects, definitions may be retrieved and altered after retrieval.  This is helpful for adding descriptions or resolve after the initialization.
+#' \code{$get_scalar(name)}, \code{$get_enum(name)}, \code{$get_object(name)}, \code{$get_interface(name)}, \code{$get_union(name)}, \code{$get_input_object(name)}, \code{$get_directive(name)}, \code{$get_value(name)}: methods to retrieve a definition of the corresponding definition type for the provided name. If the object can't be found, \code{NULL} is returned. When printed, it quickly conveys all known information of the definition.  Due to the nature of R6 objects, definitions may be retrieved and altered after retrieval.  This is helpful for adding descriptions or resolve after the initialization.
 #'
 #' \code{$get_scalars(name)}, \code{$get_enums(name)}, \code{$get_objects(name)}, \code{$get_interfaces(name)}, \code{$get_unions(name)}, \code{$get_input_objects(name)}, \code{$get_directives(name)}, \code{$get_values(name)}: methods to retrieve all definitions of the corresponding definition type.
 #'
