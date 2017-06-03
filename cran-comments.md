@@ -17,7 +17,11 @@ Barret
   * R version 3.4.0 (2017-04-21)
     Platform: x86_64-apple-darwin15.6.0 (64-bit)
     Running under: macOS Sierra 10.12.4
-    * 0 errors | 0 warnings | 1 note
+    * 0 errors | 0 warnings | 2 note
+      * checking CRAN incoming feasibility ... NOTE
+        Maintainer: ‘Barret Schloerke <schloerke@gmail.com>’
+
+        New submission
       * checking installed package size ... NOTE
         installed size is  5.5Mb
         sub-directories of 1Mb or more:
