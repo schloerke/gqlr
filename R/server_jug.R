@@ -42,9 +42,8 @@
 #' }
 #'
 #' @param schema Schema object to use execute requests
-#' @param port web port to serve the server from
+#' @param port web port to serve the server from.  Set port to \code{NULL} to not run the jug server and return it.
 #' @param log boolean that determines if server logging is done.  Defaults to TRUE
-#' @param initial_value default value to use in \code{\link{execute_request}()}
 # nocov start
 server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
 
@@ -116,7 +115,7 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
 
 
 
-  jug_router %>%
+  server <- jug_router %>%
 
     jug::get(path = "/", function(req, res, err) {
       ans <- format(schema$get_schema())
@@ -194,7 +193,12 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
         ))
       }
       NULL
-    }) %>%
-    jug::serve_it(port = port)
+    })
+
+  if (is.null(port)) {
+    server %>% jug::serve_it(port = port)
+  }
+
+  invisible(server)
 }
 # nocov end

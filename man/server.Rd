@@ -9,11 +9,9 @@ server(schema, port = 8000L, log = TRUE, initial_value = NULL)
 \arguments{
 \item{schema}{Schema object to use execute requests}
 
-\item{port}{web port to serve the server from}
+\item{port}{web port to serve the server from.  Set port to \code{NULL} to not run the jug server and return it.}
 
 \item{log}{boolean that determines if server logging is done.  Defaults to TRUE}
-
-\item{initial_value}{default value to use in \code{\link{execute_request}()}}
 }
 \description{
 Run a basic GraphQL server with the jug package.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is cancelled.
