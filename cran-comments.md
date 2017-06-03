@@ -39,7 +39,7 @@ Barret
 
 * win-builder (devel and release)
   * R version 3.4.0 (2017-04-21)
-  * R Under development (unstable) (2017-06-01 r72753)
+  * R Under development (unstable) (2017-06-02 r72758)
 
     * 0 errors | 0 warnings | 2 notes
       * checking CRAN incoming feasibility ... NOTE
