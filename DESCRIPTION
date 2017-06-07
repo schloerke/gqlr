@@ -1,5 +1,5 @@
 Package: gqlr
-Title: GraphQL Server in R
+Title: 'GraphQL' Server in R
 Version: 0.0.1
 Authors@R: c(
     person("Barret", "Schloerke", email = "schloerke@gmail.com", role = c("aut", "cre")),
