@@ -4,14 +4,15 @@ Version: 0.0.1
 Authors@R: c(
     person("Barret", "Schloerke", email = "schloerke@gmail.com", role = c("aut", "cre")),
     person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("ths")),
-    person("Facebook", role = "cph")
+    person("Facebook", role = "cph", comment = "http://facebook.github.io/graphql/")
   )
-Description: Implementation of GraphQL, a query language created by Facebook for
-    describing data requirements on complex application data models.
+Description: Server implementation of 'GraphQL' <http://facebook.github.io/graphql/>,
+    a query language created by Facebook for describing data requirements on complex application
+    data models.  Visit <http://graphql.org> to learn more about 'GraphQL'.
 Depends:
     R (>= 3.2.2)
 License: MIT + file LICENSE
-URL: https://github.com/schloerke/gqlr
+URL: https://github.com/schloerke/gqlr, http://facebook.github.io/graphql/, http://graphql.org
 BugReports: https://github.com/schloerke/gqlr/issues
 LazyData: true
 Imports:
