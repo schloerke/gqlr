@@ -1,6 +1,30 @@
 
 ## Comments
 
+### 2017-6-7 Reply
+
+As of 6/3/17, there is no DOI for 'GraphQL'. https://github.com/facebook/graphql/issues/299 . Maybe by the time for the next release.
+
+Added url references to 'GraphQL' in
+  * comment arg of Facebook Author
+  * Description:
+  * URL:
+
+Thank you,
+Barret
+
+
+### 2017-6-3
+
+Pleaes single quote the software name 'GraphQL' and add a reference in
+the form <http.....>.
+Or is there some reference about the method you can add in the
+Description field in the form Authors (year) <doi:.....>?
+
+  Best,
+Uwe Ligges
+
+
 ### 2017-6-3
 
 New package: gqlr.
@@ -39,23 +63,19 @@ Barret
 
 * win-builder (devel and release)
   * R version 3.4.0 (2017-04-21)
-  * R Under development (unstable) (2017-06-02 r72758)
+  * R Under development (unstable) (2017-06-06 r72770)
 
     * 0 errors | 0 warnings | 2 notes
       * checking CRAN incoming feasibility ... NOTE
         Maintainer: 'Barret Schloerke <schloerke@gmail.com>'
 
         New submission
-
-        Possibly mis-spelled words in DESCRIPTION:
-          GraphQL (2:8, 9:32)
       * checking installed package size ... NOTE
         installed size is  5.4Mb
         sub-directories of 1Mb or more:
           R   5.4Mb
 
     * Rebuttle to NOTEs
-      * GraphQL is spelled correctly
       * The code is small, but it is comprised of many R6 objects. This could easily be why the code is larger than what is in the raw code.
 
 
