@@ -308,7 +308,7 @@ query IntrospectionTypeQuery {
 #### Star Wars Server
 ```r
 # R
-server(star_wars_schema, log = TRUE)
+gqlr:::server(star_wars_schema, log = TRUE) # forgot to export
 ```
 
 Explore with `curl`
