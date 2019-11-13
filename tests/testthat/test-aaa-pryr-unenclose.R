@@ -3,33 +3,6 @@
 context("pryr unenclose")
 
 
-test_that("pryr fails", {
-  # plays bad memory tricks
-  run <- function() {
-    myList <- list()
-
-    for (item in c("A", "B", "C")) {
-      my_fn <- function() {
-        item
-      }
-      myList[[item]] <- pryr::unenclose(my_fn)
-    }
-
-    myList
-  }
-
-  ans <- run()
-
-  expect_equal(names(ans), c("A", "B", "C"))
-
-  expect_false(ans$A() == "A")
-  expect_false(ans$B() == "B")
-  expect_true(ans$C() == "C")
-
-})
-
-
-
 test_that("lapply works", {
   # works as expected
   run2 <- function() {
