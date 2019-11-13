@@ -93,7 +93,6 @@ Int <- ScalarTypeDefinition$new(
   ),
   .resolve = coerce_int,
   .parse_ast = parse_ast("IntValue", coerce_int)
-
 )
 
 
