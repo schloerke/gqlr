@@ -296,7 +296,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     completed_result <- complete_value(inner_type, fields, result, oh = oh)
     # c. If completedResult is null, throw a field error.
     if (is.null(completed_result)) {
-      browser()
+      # browser()
       oh$error_list$add(
         "6.4.3",
         "non null type: ", format(field_type), " returned a null value",
