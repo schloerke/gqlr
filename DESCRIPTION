@@ -53,7 +53,7 @@ Collate:
     'S3-3.1.2.3-validation-object-type.R'
     'S3-str.R'
     'gqlr-package.R'
-    'server_jug.R'
+    'server.R'
     'upgrade_query_remove_fragments.R'
     'validation-arguments.R'
     'validation-input-coercion.R'
