@@ -307,7 +307,7 @@ R6_from_args <- function(
 
         # all the active bindings will validate the object being set
         self[[.argName]] <- tryCatch(
-          get(.argName, inherit = FALSE),
+          get(.argName, inherits = FALSE),
           error = (
             if (self$.args[[.argName]]$can_be_null) {
               function(e) {
