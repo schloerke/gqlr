@@ -9,14 +9,14 @@ server(schema, port = 8000L, log = TRUE, initial_value = NULL)
 \arguments{
 \item{schema}{Schema object to use execute requests}
 
-\item{port}{web port to serve the server from.  Set port to \code{NULL} to not run the jug server and return it.}
+\item{port}{web port to serve the server from.  Set port to \code{NULL} to not run the plumber server and return it.}
 
 \item{log}{boolean that determines if server logging is done.  Defaults to TRUE}
 
 \item{initial_value}{default value to use in \code{\link{execute_request}()}}
 }
 \description{
-Run a basic GraphQL server with the jug package.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is canceled.
+Run a basic GraphQL server using plumber.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is canceled.
 }
 \details{
 \code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are three routes implemented:
@@ -44,12 +44,20 @@ Using bash's curl, we can ask the server questions:
   # GET Schema definition
   curl '127.0.0.1:8000/'
 
-# GET R2-D2 and his friends' names
-  curl '127.0.0.1:8000/graphql?query=%7Bhero%7Bname%2Cfriends%7Bname%7D%7D%7D&pretty=TRUE'
+  ## POST for R2-D2 and his friends' names
+  # defaults to parse as JSON
+  curl --data '{"query":"{hero{name, friends { name }}}", "pretty": true}' '127.0.0.1:8000/graphql'
+  # send json header
+  curl --data '{"query":"{hero{name, friends { name }}}"}' '127.0.0.1:8000/graphql' --header "Content-Type:application/json"
+  # send graphql header
+  curl --data '{hero{name, friends { name }}}' '127.0.0.1:8000/graphql' --header "Content-Type:application/graphql"
+  # use variables
+  curl --data '{"query":"query Droid($someId: String!) {droid(id: $someId){name, friends { name }}}", "variables": {"someId": "2001"}}' '127.0.0.1:8000/graphql'
 
-# POST for R2-D2 and his friends' names
-  curl --data '{"query":"{hero{name}}"}' '127.0.0.1:8000/graphql' # defaults to parse as JSON
-  curl --data '{"query":"{hero{name}}"}' '127.0.0.1:8000/graphql' --header "Content-Type:application/json"
-  curl --data '{hero{name}}' '127.0.0.1:8000/graphql' --header "Content-Type:application/graphql"
+  # GET R2-D2 and his friends' names
+  curl '127.0.0.1:8000/graphql?query=%7Bhero%7Bname%2Cfriends%7Bname%7D%7D%7D&pretty=TRUE'
+  # ... using a variable
+  curl '127.0.0.1:8000/graphql?query=query%20Droid(%24someId%3A%20String!)%20%7Bdroid(id%3A%20%24someId)%7Bname%2C%20friends%20%7B%20name%20%7D%7D%7D&variables=%7B%22someId%22%3A%222001%22%7D'
+
 }
 }
