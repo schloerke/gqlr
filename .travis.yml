@@ -16,7 +16,7 @@ r:
   - devel
 
 r_packages:
-  - jimhester/covr # after success
+  - covr # after success
 
 after_success:
   - Rscript -e 'covr::codecov()'
