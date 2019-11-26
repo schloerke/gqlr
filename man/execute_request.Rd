@@ -4,8 +4,13 @@
 \alias{execute_request}
 \title{Execute GraphQL server response}
 \usage{
-execute_request(request, schema, operation_name = NULL, variables = list(),
-  initial_value = NULL)
+execute_request(
+  request,
+  schema,
+  operation_name = NULL,
+  variables = list(),
+  initial_value = NULL
+)
 }
 \arguments{
 \item{request}{a valid GraphQL string}
