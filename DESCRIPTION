@@ -23,7 +23,7 @@ Imports:
     R6,
     jsonlite
 Suggests:
-    jug,
+    plumber,
     roxygen2 (>= 5.0.0),
     testthat
 Roxygen: list()
