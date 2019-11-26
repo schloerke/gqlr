@@ -3,7 +3,7 @@
 
 context("input-object-coercion")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 test_that("small input objects", {
 

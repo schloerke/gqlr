@@ -1,4 +1,4 @@
-source("dog_cat_schema.R")
+source(testthat::test_path("dog_cat_schema.R"))
 
 
 to_json <- gqlr:::to_json

@@ -4,7 +4,7 @@
 
 context("star wars")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 source(file.path("star_wars_schema.R"))
 
@@ -23,7 +23,7 @@ expect_sw_request_err <- function(...) {
 
 
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 
 test_that("star wars test suite", {

@@ -2,7 +2,7 @@
 
 context("r6_from_args")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 parse_args_txt <- " operation: 'query' | 'mutation' | 'subscription';
                     name: Name;

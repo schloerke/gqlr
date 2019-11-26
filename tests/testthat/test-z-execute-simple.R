@@ -2,7 +2,7 @@
 
 context("execute-query-simple")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 test_that("arbitrary code", {
 
@@ -143,7 +143,7 @@ test_that("arbitrary code", {
     simple_query,
     schema,
     operation_name = "Example",
-    variable = list(size = 100),
+    variables = list(size = 100),
     initial_value = data
   )
 
@@ -215,7 +215,7 @@ test_that("args", {
     expect_expected()
 
   execute_request("
-      query args($argVal: Int){
+      query args($argVal: Int) {
         fieldC(argC: $argVal)
       }
     ",
@@ -226,7 +226,7 @@ test_that("args", {
     expect_expected()
 
   execute_request("
-      query args($argVal: Int){
+      query args($argVal: Int) {
         fieldC(argC: $argVal)
       }
     ",
@@ -237,7 +237,7 @@ test_that("args", {
     expect_expected()
 
   execute_request("
-      query arg($intVal: Int!){
+      query arg($intVal: Int!) {
         fieldA(argA: $intVal)
       }
     ",

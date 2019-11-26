@@ -3,7 +3,7 @@
 
 context("execute-introspection")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 read_intro <- function(file_name) {
   collapse(readLines(file.path("introspection", file_name)), collapse = "\n")

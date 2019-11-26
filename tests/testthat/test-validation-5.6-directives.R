@@ -3,7 +3,7 @@
 context("validation-5.6-directives")
 
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 test_that("5.6.1 - Directives Are Defined", {
 

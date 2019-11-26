@@ -3,7 +3,7 @@
 context("validation-5.2-fields")
 
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 
 test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {

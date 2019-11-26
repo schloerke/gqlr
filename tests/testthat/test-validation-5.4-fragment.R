@@ -2,7 +2,7 @@
 
 context("validation-5.4-fragment")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 test_that("5.4.1.1 - Fragment Name Uniqueness", {
 

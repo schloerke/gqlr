@@ -2,7 +2,7 @@
 
 context("object validation")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 expect_validate_err <- function(schema, ..., txt = schema) {
   schema %>%

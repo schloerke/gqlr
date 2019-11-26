@@ -3,7 +3,7 @@
 context("validation-5.5-values")
 
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 test_that("5.5.1 - Input Object Field Uniqueness", {
 

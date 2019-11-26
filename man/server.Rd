@@ -52,7 +52,7 @@ Using bash's curl, we can ask the server questions:
   # send graphql header
   curl --data '{hero{name, friends { name }}}' '127.0.0.1:8000/graphql' --header "Content-Type:application/graphql"
   # use variables
-  curl --data '{"query":"query Droid($someId: String!) {droid(id: $someId){name, friends { name }}}", "variables": {"someId": "2001"}}' '127.0.0.1:8000/graphql'
+  curl --data '{"query":"query Droid($someId: String!) {droid(id: $someId) {name, friends { name }}}", "variables": {"someId": "2001"}}' '127.0.0.1:8000/graphql'
 
   # GET R2-D2 and his friends' names
   curl '127.0.0.1:8000/graphql?query=%7Bhero%7Bname%2Cfriends%7Bname%7D%7D%7D&pretty=TRUE'

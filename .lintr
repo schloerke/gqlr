@@ -1,6 +1,6 @@
 cache_directory: "_ignore/lintr_cache"
 linters: with_defaults(
-    line_length_linter(100),
-    camel_case_linter = NULL, # 269
-    NULL
+    line_length_linter = NULL,
+    object_name_linter = NULL,
+    cyclocomp_linter = NULL
   )

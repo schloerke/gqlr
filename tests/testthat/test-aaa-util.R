@@ -2,7 +2,7 @@
 
 context("Test helper functions")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 test_that("chai tests", {
   tested_object <- list(

@@ -12,15 +12,21 @@ parse_ast(kind, resolve)
 \item{resolve}{function to parse the value if the kind is correct}
 }
 \value{
-function that takes \code{obj} and \code{schema} that will only parse the value if the \code{kind} is inherited in the \code{obj}
+function that takes \code{obj} and \code{schema} that will only parse
+  the value if the \code{kind} is inherited in the \code{obj}
 }
 \description{
-This is a helper function for Scalars.  Given a particular kind and a resolve function, it produces a function that will only parse values of a particular kind.
+This is a helper function for Scalars.  Given a particular kind and a resolve
+function, it produces a function that will only parse values of a particular
+kind.
 }
 \details{
-Typically, \code{kind} is the same as the class of the Scalar.  When making a new Scalar, parse_ast defaults to use the name of the scalar and the scalar's parse value function.
+Typically, \code{kind} is the same as the class of the Scalar.  When making a
+new Scalar, parse_ast defaults to use the name of the scalar and the scalar's
+parse value function.
 
-This function should only need to be used when defining a schema in \code{\link{gqlr_schema}()}
+This function should only need to be used when defining a schema in
+\code{\link{gqlr_schema}()}
 }
 \examples{
 parse_date_value <- function(obj, schema) {
@@ -29,7 +35,7 @@ parse_date_value <- function(obj, schema) {
 parse_ast("Date", parse_date_value)
 
 # Example from Int scalar
-parse_int <- function (value, ...) {
+parse_int <- function(value, ...) {
   MAX_INT <-  2147483647
   MIN_INT <- -2147483648
   num <- suppressWarnings(as.integer(value))

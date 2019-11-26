@@ -3,7 +3,7 @@
 
 context("input-coercion")
 
-source("validate_helper.R")
+source(testthat::test_path("validate_helper.R"))
 
 
 test_that("input-coercion - Int", {

@@ -178,7 +178,7 @@ ErrorList <- R6Class("ErrorList",
           nchar(lines[loc$start$line])
         )
         middle_lines <- ""
-        if ( (loc$start$line + 1) < loc$end$line) {
+        if ((loc$start$line + 1) < loc$end$line) {
           middle_lines <- lines[(loc$start$line + 1):(loc$end$line - 1)]
           middle_lines <- str_c(str_c(middle_lines, collapse = "\n"), "\n")
         }

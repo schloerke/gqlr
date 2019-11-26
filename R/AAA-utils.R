@@ -6,7 +6,7 @@ str_trim <- function(x) {
   x
 }
 
-str_c <- function (..., sep = "", collapse = NULL) {
+str_c <- function(..., sep = "", collapse = NULL) {
   paste(..., sep = sep, collapse = collapse)
 }
 

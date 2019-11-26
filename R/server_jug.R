@@ -40,7 +40,7 @@
 #'   # send graphql header
 #'   curl --data '{hero{name, friends { name }}}' '127.0.0.1:8000/graphql' --header "Content-Type:application/graphql"
 #'   # use variables
-#'   curl --data '{"query":"query Droid($someId: String!) {droid(id: $someId){name, friends { name }}}", "variables": {"someId": "2001"}}' '127.0.0.1:8000/graphql'
+#'   curl --data '{"query":"query Droid($someId: String!) {droid(id: $someId) {name, friends { name }}}", "variables": {"someId": "2001"}}' '127.0.0.1:8000/graphql'
 #'
 #'   # GET R2-D2 and his friends' names
 #'   curl '127.0.0.1:8000/graphql?query=%7Bhero%7Bname%2Cfriends%7Bname%7D%7D%7D&pretty=TRUE'
@@ -188,7 +188,7 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
 
       body <- paste0(req$rook.input$read_lines(), collapse = "\n")
 
-      if (identical(req$HEADERS[['content-type']], "application/graphql")) {
+      if (identical(req$HEADERS[["content-type"]], "application/graphql")) {
         query <- body
         variables <- list()
         operation_name <- NULL
