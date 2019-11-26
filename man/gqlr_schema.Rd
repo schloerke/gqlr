@@ -189,9 +189,9 @@ schema {
         hero = function(obj, args, schema) {
           episode <- args$episode
           if (identical(episode, 5) || identical(episode, "EMPIRE")) {
-            luke$id
+            "1000" # Luke Skywalker
           } else {
-            artoo$id
+            "2001" # R2-D2
           }
         },
         # the id will be resolved by the Human resolve() method
