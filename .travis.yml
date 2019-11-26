@@ -1,6 +1,6 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+language: r
 dist: trusty # so that graphql can install.  need C++11
 sudo: false
 cache: packages
@@ -10,13 +10,12 @@ notifications:
     on_success: change
     on_failure: change
 
-branches:
-  only:
-    - master
-    - dev
-    - travis
+r:
+  - oldrel
+  - release
+  - devel
 
-r_github_packages:
+r_packages:
   - jimhester/covr # after success
 
 after_success:
