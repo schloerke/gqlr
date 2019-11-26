@@ -96,6 +96,7 @@ test_that("5.1.2.1 - Lone Anonymous Operation", {
     expect_error({
         graphql2obj(query)
       },
+      class = "error",
       ...
     )
   }
