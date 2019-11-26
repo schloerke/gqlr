@@ -22,7 +22,7 @@ Run a basic GraphQL server using plumber.  This server is provided to show basic
 \code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are three routes implemented:
 
 \describe{
-  \item{\code{'/'}}{GET. Returns a GraphQL formated schema definition}
+  \item{\code{'/'}}{GET. Returns a GraphQL formatted schema definition}
   \item{\code{'/graphql'}}{GET. Executes a query.  The parameter \code{'query'} (which contains a GraphQL formatted query string) must be included.  Optional parameters include: \code{'variables'} a JSON string containing a dictionary of variables (defaults to an empty named list), \code{'operationName'} name of the particular query operation to execute (defaults to NULL), and \code{'pretty'} boolean to determine if the response should be compact (FALSE, default) or expanded (TRUE)}
   \item{\code{'/graphql'}}{POST. Executes a query.  Must provide Content-Type of either 'application/json' or 'application/graphql'.
 
