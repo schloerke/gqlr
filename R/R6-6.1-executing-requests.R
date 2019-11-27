@@ -71,7 +71,7 @@
 #' @references \url{https://graphql.github.io/graphql-spec/October2016/#sec-Execution}
 #' @export
 #' @examples
-#'
+#' \donttest{
 #' # bare bones
 #' schema <- gqlr_schema("
 #'   type Person {
@@ -161,6 +161,7 @@
 #'   schema,
 #'   initial_value = "id_Barret"
 #' )$as_json()
+#' }
 execute_request <- function(
   request,
   schema,

@@ -36,7 +36,7 @@ value may be a function that returns a value of the field name type.}
 Executes a GraphQL server request with the provided request.
 }
 \examples{
-
+\donttest{
 # bare bones
 schema <- gqlr_schema("
   type Person {
@@ -126,6 +126,7 @@ execute_request("
   schema,
   initial_value = "id_Barret"
 )$as_json()
+}
 }
 \references{
 \url{https://graphql.github.io/graphql-spec/October2016/#sec-Execution}
