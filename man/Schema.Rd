@@ -56,7 +56,6 @@ execute_request("{ hero { name } }", star_wars_schema)
 \code{$is_valid}: boolean that determines if a Schema object has been validated.  All Schema objects are validated at the time of request execution.  The Schema will remain valid until new definitions are added.
 }
 
-\examples{
-example(gqlr_schema)
-
+\seealso{
+\code{\link{gqlr_schema}}
 }

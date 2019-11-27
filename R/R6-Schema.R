@@ -67,8 +67,7 @@
 #' \code{$is_valid}: boolean that determines if a Schema object has been validated.  All Schema objects are validated at the time of request execution.  The Schema will remain valid until new definitions are added.
 #' @importFrom R6 R6Class
 #' @name Schema
-#' @examples
-#' example(gqlr_schema)
+#' @seealso \code{\link{gqlr_schema}}
 #'
 NULL
 # nolint end
