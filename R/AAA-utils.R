@@ -52,3 +52,18 @@ unenclose_a_to_b <- function(env, ls_env = ls(envir = env)) {
     x
   }
 }
+
+
+# onload_queue <- list()
+# gqlr_env <- environment()
+# onload_queue_add <- function(fn) {
+#   onload_queue <<- c(onload_queue, fn)
+# }
+
+# onload_queue_add(function() {
+#   barret <- Sys.time()
+# })
+
+# lapply(onload_queue, function(fn) {
+#   eval(body(fn), envir = gqlr_env)
+# })
