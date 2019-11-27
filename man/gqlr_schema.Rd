@@ -68,6 +68,7 @@ Creates a Schema object from the defined GraphQL string and
 }
 
 \examples{
+\donttest{
 library(magrittr)
 
 ## Set up data
@@ -232,4 +233,5 @@ star_wars_schema$add(schema_def)
 
 # view the final schema definitiion
 star_wars_schema$get_schema()
+}
 }

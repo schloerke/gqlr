@@ -62,6 +62,7 @@
 #'   character value that describes the object} }
 #' @export
 #' @examples
+#' \donttest{
 #' library(magrittr)
 #'
 #' ## Set up data
@@ -226,6 +227,7 @@
 #'
 #' # view the final schema definitiion
 #' star_wars_schema$get_schema()
+#' }
 gqlr_schema <- function(schema, ...) {
   schema <- Schema$new(schema)
 
