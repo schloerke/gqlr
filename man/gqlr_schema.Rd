@@ -148,7 +148,7 @@ interface Character {
   ) ->
 character_schema
 # print the Character schema with no extra formatting
-character_schema$get_schema() \%>\% format() \%>\% cat("\\n")
+character_schema$get_schema() \%>\% format() \%>\% cat("\n")
 star_wars_schema$add(character_schema)
 
 
@@ -226,7 +226,7 @@ schema {
   ) ->
 schema_def
 # print Schema with no extra formatting
-schema_def$get_schema() \%>\% format() \%>\% cat("\\n")
+schema_def$get_schema() \%>\% format() \%>\% cat("\n")
 star_wars_schema$add(schema_def)
 
 
