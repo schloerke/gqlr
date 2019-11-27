@@ -1,6 +1,6 @@
 Package: gqlr
 Title: 'GraphQL' Server in R
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person("Barret", "Schloerke", email = "schloerke@gmail.com", role = c("aut", "cre")),
     person("Ryan", "Hafen", email = "rhafen@gmail.com", role = c("ths")),
@@ -24,10 +24,10 @@ Imports:
     jsonlite
 Suggests:
     plumber,
-    roxygen2 (>= 5.0.0),
+    roxygen2 (>= 7.0.0),
     testthat
 Roxygen: list()
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.1
 Encoding: UTF-8
 Collate:
     'AAA-utils.R'
