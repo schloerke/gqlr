@@ -51,7 +51,7 @@ NULL
 ErrorList <- R6Class("ErrorList",
   private = list(
     # nolint start
-    # http://facebook.github.io/graphql/
+    # https://graphql.github.io/graphql-spec/October2016/
     # document.querySelectorAll( "#sec-Validation section" ).forEach(
     #  function(x,i){console.log(x.firstChild.innerText)}
     # )

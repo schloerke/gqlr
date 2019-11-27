@@ -21,10 +21,10 @@ or a schema object created from \code{\link{gqlr_schema}}}
 \item{operation_name}{name of request operation to execute. If not value is
 provided it will use the operation in the request string. If more than one
 operations exist, an error will be produced.  See
-\url{http://facebook.github.io/graphql/#GetOperation()}}
+\url{https://graphql.github.io/graphql-spec/October2016/#GetOperation()}}
 
 \item{variables}{a named list containing variable values.
-\url{http://facebook.github.io/graphql/#sec-Language.Variables}}
+\url{https://graphql.github.io/graphql-spec/October2016/#sec-Language.Variables}}
 
 \item{initial_value}{default value for executing requests.  This value can
 either be provided and/or combined with the resolve method of the query
@@ -128,5 +128,5 @@ execute_request("
 )$as_json()
 }
 \references{
-\url{http://facebook.github.io/graphql/#sec-Execution}
+\url{https://graphql.github.io/graphql-spec/October2016/#sec-Execution}
 }
