@@ -11,3 +11,4 @@ man-roxygen
 lintr_cache
 ^codecov\.yml$
 ^cran-comments\.md$
+^CRAN-RELEASE$
