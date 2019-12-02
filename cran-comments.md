@@ -1,86 +1,68 @@
 
 ## Comments
 
-### 2017-6-7 Reply
+### 2019-12-02
 
-As of 6/3/17, there is no DOI for 'GraphQL'. https://github.com/facebook/graphql/issues/299 . Maybe by the time for the next release.
+This submission is to reinstate `gqlr` on CRAN by addressing:
+* the removal of `jug`
+* removal of a test for an R bug that has beed addressed by R-core
 
-Added url references to 'GraphQL' in
-  * comment arg of Facebook Author
-  * Description:
-  * URL:
+This submission also removes the large compiled file and longer build checks on some systems.
+
+(As of 2019-11-27, there is no DOI for 'GraphQL': https://github.com/graphql/graphql-spec/issues/299 .)
+
+Please let me know if there is anything else I can do!
 
 Thank you,
 Barret
 
 
-### 2017-6-3
+### 2017-06-03
 
-Pleaes single quote the software name 'GraphQL' and add a reference in
-the form <http.....>.
 Or is there some reference about the method you can add in the
 Description field in the form Authors (year) <doi:.....>?
 
-  Best,
-Uwe Ligges
-
-
-### 2017-6-3
-
-New package: gqlr.
-
-Please let me know if there is anything I can do.  Thank you for your time.
-
 Best,
-Barret
+Uwe Ligges
 
 
 ## R CMD check results
 
-* local OS X install
-  * R version 3.4.0 (2017-04-21)
-    Platform: x86_64-apple-darwin15.6.0 (64-bit)
-    Running under: macOS Sierra 10.12.4
-    * 0 errors | 0 warnings | 2 note
-      * checking CRAN incoming feasibility ... NOTE
-        Maintainer: ‘Barret Schloerke <schloerke@gmail.com>’
+Most all system checks contained the NOTE below (which is expected given `gqlr` was archived):
 
-        New submission
-      * checking installed package size ... NOTE
-        installed size is  5.5Mb
-        sub-directories of 1Mb or more:
-          R   5.4Mb
+* checking CRAN incoming feasibility
+  Maintainer: 'Barret Schloerke <schloerke@gmail.com>'
+
+  New submission
+
+  Package was archived on CRAN
+
+  CRAN repository db overrides:
+     X-CRAN-Comment: Archived on 2019-11-29 as check errors were not
+       corrected in time.
+
+
+* local OS X install - 3.6.1
+  - 1 NOTE (see above)
+
+* r-hub
+  * windows-x86_64-devel
+    - 1 NOTE (see above)
+  * ubuntu-gcc-release
+    - 1 NOTE (see above)
+  * fedora-clang-devel
+    - OK (did not have internet access for `CRAN incoming checks`)
 
 * travis-ci
-  * R version 3.4.0 (2017-04-21)
-    Platform: x86_64-pc-linux-gnu (64-bit)
-    Running under: Ubuntu precise (12.04.5 LTS)
-    * 0 errors | 0 warnings | 1 notes
-      * checking installed package size ... NOTE
-        installed size is  8.1Mb
-        sub-directories of 1Mb or more:
-          R   8.0Mb
+  * oldrel, release, devel
+    - OK
 
-* win-builder (devel and release)
-  * R version 3.4.0 (2017-04-21)
-  * R Under development (unstable) (2017-06-06 r72770)
-
-    * 0 errors | 0 warnings | 2 notes
-      * checking CRAN incoming feasibility ... NOTE
-        Maintainer: 'Barret Schloerke <schloerke@gmail.com>'
-
-        New submission
-      * checking installed package size ... NOTE
-        installed size is  5.4Mb
-        sub-directories of 1Mb or more:
-          R   5.4Mb
-
-    * Rebuttle to NOTEs
-      * The code is small, but it is comprised of many R6 objects. This could easily be why the code is larger than what is in the raw code.
-
+* win-builder
+  * oldrel, release, devel
+    - OK
 
 
 
 ## Reverse dependencies
 
-This is a new release, so there are no reverse dependencies.
+There are no reverse dependencies.
