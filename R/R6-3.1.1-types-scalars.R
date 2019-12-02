@@ -113,6 +113,7 @@ parse_ast <- function(kind, resolve) {
   pryr_unenclose(fn)
 }
 
+for_onload(function() {
 
 coerce_int <- function(value, ...) {
   MAX_INT <-  2147483647
@@ -234,3 +235,5 @@ Boolean <- ScalarTypeDefinition$new(
 # )
 
 # nolint end
+
+}) # end for_onload

@@ -59,3 +59,4 @@ Collate:
     'validation-input-coercion.R'
     'validation-selection-set-can-merge.R'
     'validation-query.R'
+    'zzz.R'

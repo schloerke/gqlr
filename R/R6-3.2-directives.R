@@ -1,6 +1,7 @@
 #' @include R6--definition.R
 #' @include graphql_json.R
 
+for_onload(function() {
 
 SkipDirective <- DirectiveDefinition$new(
   name = Name$new(value = "skip"),
@@ -38,3 +39,6 @@ IncludeDirective <- DirectiveDefinition$new(
     isTRUE(if_val)
   }
 )
+
+
+}) # end for_onload

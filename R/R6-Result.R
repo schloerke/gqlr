@@ -1,5 +1,7 @@
 
 
+for_onload(function() {
+
 Result <- R6Class(
   "Result",
   public = list(
@@ -18,6 +20,9 @@ Result <- R6Class(
     }
   )
 )
+
+}) # end for_onload
+
 format.Result <- function(x, ...) {
   as.character(x$as_json(...))
 }

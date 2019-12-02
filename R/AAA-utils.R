@@ -53,17 +53,11 @@ unenclose_a_to_b <- function(env, ls_env = ls(envir = env)) {
   }
 }
 
-
-# onload_queue <- list()
-# gqlr_env <- environment()
-# onload_queue_add <- function(fn) {
-#   onload_queue <<- c(onload_queue, fn)
-# }
-
-# onload_queue_add(function() {
-#   barret <- Sys.time()
-# })
-
-# lapply(onload_queue, function(fn) {
-#   eval(body(fn), envir = gqlr_env)
-# })
+# lazy eval all definitions to avoid storing all R6 objs in pkg at build time
+# message("init queue")
+gqlr_env <- environment()
+gqlr_env$onload_queue <- list()
+for_onload <- function(fn) {
+  # message("adding fn to queue")
+  gqlr_env$onload_queue <<- c(onload_queue, fn)
+}

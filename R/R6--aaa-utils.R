@@ -15,6 +15,8 @@ coerce_helper <- function(as_fn, is_fn) {
 
 
 # nocov start
+for_onload(function() {
+
 PkgObjsGen <- R6Class(
   "PkgObjs",
   public = list(
@@ -40,6 +42,8 @@ PkgObjsGen <- R6Class(
   )
 )
 PkgObjs <- PkgObjsGen$new()
+
+}) # end for_onload
 # nocov end
 
 

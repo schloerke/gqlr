@@ -1,4 +1,5 @@
 
+for_onload(function() {
 
 ObjectHelpers <- R6Class(
   "ObjectHelpers",
@@ -84,3 +85,6 @@ ObjectHelpers <- R6Class(
   )
 
 )
+
+
+}) # end for_onload

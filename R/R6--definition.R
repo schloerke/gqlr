@@ -21,6 +21,7 @@ format_list <- function(list_vals, .before = "", .after = "", .collapse = "", ..
 }
 
 
+for_onload(function() {
 
 
 
@@ -1205,3 +1206,6 @@ DirectiveDefinition <- R6_from_args(
     }
   )
 )
+
+
+}) # end for_onload

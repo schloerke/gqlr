@@ -4,6 +4,9 @@ get_definition <- function(x, name) {
   x$get_type(name)
 }
 
+for_onload(function() {
+
+
 "
 type __Schema {
   types: [__Type!]!
@@ -500,4 +503,6 @@ Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$loc <- NULL
 Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$loc <- NULL
 Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$name$loc <- NULL
 
-completed_introspection <- TRUE
+gqlr_env$completed_introspection <- TRUE
+
+}) # end for_onload

@@ -4,6 +4,9 @@
 # √5.7.4 - All Variable Uses Defined
 # √5.7.5 - All Variables Used
 # 5.7.6 - All Variable Usages are Allowed - TODO need type coercion
+
+for_onload(function() {
+
 VariableValdationHelper <- R6Class("VariableValdationHelper",
   public = list(
     names = character(0),
@@ -225,3 +228,6 @@ VariableValdationHelper <- R6Class("VariableValdationHelper",
     }
   )
 )
+
+
+}) # end for_onload

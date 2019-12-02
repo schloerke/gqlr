@@ -47,7 +47,9 @@ NULL
 
 
 
-#' @export
+#' @export ErrorList
+for_onload(function() {
+
 ErrorList <- R6Class("ErrorList",
   private = list(
     # nolint start
@@ -240,6 +242,9 @@ ErrorList <- R6Class("ErrorList",
     }
   )
 )
+
+}) # end for_onload
+
 format.ErrorList <- function(x, ...) {
   x$.format(...)
 }
