@@ -59,5 +59,14 @@ gqlr_env <- environment()
 gqlr_env$onload_queue <- list()
 for_onload <- function(fn) {
   # message("adding fn to queue")
-  gqlr_env$onload_queue <<- c(onload_queue, fn)
+  gqlr_env$onload_queue <<- c(gqlr_env$onload_queue, fn)
+}
+
+
+for_onload_eval <- function() {
+  # message("running onload")
+  # lazy eval all definitions to avoid storing all R6 objs in pkg at build time
+  lapply(gqlr_env$onload_queue, function(fn) {
+    eval(body(fn), envir = gqlr_env)
+  })
 }
