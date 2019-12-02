@@ -58,7 +58,7 @@ Most all system checks contained the NOTE below (which is expected given `gqlr` 
     - OK
 
 * win-builder
-  * oldrel, release, devel
+  * oldrel, release
     - OK
 
 
