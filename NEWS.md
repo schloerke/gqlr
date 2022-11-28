@@ -1,3 +1,8 @@
+# gqlr (development version)
+
+* Fix bug in mutation execution where the query operation was being used for validation (#9)
+
+
 # gqlr 0.0.2
 
 * Export `server` function

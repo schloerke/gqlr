@@ -405,7 +405,7 @@ complete_value <- function(field_type, fields, result, ..., oh) {
     return(ret)
   }
 
-  stop("this should not be reached")
+  stop("Unknown field type: ", format(field_type))
 }
 
 

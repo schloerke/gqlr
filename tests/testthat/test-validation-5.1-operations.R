@@ -56,7 +56,7 @@ test_that("5.1.1.1 - Operation Name Uniqueness", {
   expect_err("has duplicate request name: dogOperation")
 
 
-});
+})
 
 
 
@@ -112,4 +112,4 @@ test_that("5.1.2.1 - Lone Anonymous Operation", {
   " %>%
   expect_graphql_error("syntax error")
 
-});
+})

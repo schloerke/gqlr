@@ -36,10 +36,10 @@ test_that("arbitrary code", {
 
   deepData <- list(
     a = function(...) {
-      return("Already Been Done");
+      return("Already Been Done")
     },
     b = function(...) {
-      return("Boring");
+      return("Boring")
     },
     c = function(...) {
       return(list("Contrived", NULL, "Confusing"))
