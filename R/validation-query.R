@@ -77,7 +77,7 @@ validate_operation_names <- function(document_obj, ..., oh) {
 
   # 5.1.2.1 - Lone Anonymous Operation
     # if there is a missing name and a provided name, throw error
-  if (missing_count > 0 & query_mutation_count > 1) {
+  if (missing_count > 0 && query_mutation_count > 1) {
     oh$error_list$add(
       "5.1.2.1",
       "document definition: ", document_obj$.title,
