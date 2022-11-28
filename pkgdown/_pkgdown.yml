@@ -1,0 +1,9 @@
+url: http://schloerke.com/gqlr/
+template:
+  package: tidytemplate
+  bootstrap: 5
+  bslib:
+    primary: "#EC2BA1"
+    # https://mdigi.tools/lighten-color/#161c22 @ 92
+    navbar-background: "#e9edf1"
+  trailing_slash_redirect: true
