@@ -26,7 +26,7 @@ Suggests:
     roxygen2 (>= 7.0.0),
     testthat
 Roxygen: list()
-RoxygenNote: 7.0.1
+RoxygenNote: 7.2.2
 Encoding: UTF-8
 Collate:
     'AAA-utils.R'
