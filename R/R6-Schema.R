@@ -110,7 +110,7 @@ as_type <- function(name_val) {
     )
   }
   str(name_val)
-  stop("as_type only understands a single character name or Type object")
+  stop("`as_type()` only understands a single character name or Type object. Received object above.")
 }
 
 # returns a NamedType
