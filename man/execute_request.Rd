@@ -7,10 +7,10 @@
 execute_request(
   request,
   schema,
+  ...,
   operation_name = NULL,
   variables = list(),
   initial_value = NULL,
-  ...,
   verbose_errors = is_interactive()
 )
 }
@@ -19,6 +19,8 @@ execute_request(
 
 \item{schema}{a character string (to be used along side \code{initial_value})
 or a schema object created from \code{\link{gqlr_schema}}}
+
+\item{...}{ignored for paramter expansion}
 
 \item{operation_name}{name of request operation to execute. If not value is
 provided it will use the operation in the request string. If more than one
@@ -33,8 +35,6 @@ either be provided and/or combined with the resolve method of the query
 root type or mutation root type.  The value provided should be a named list
 of the field name (key) and a value matching that field name type.  The
 value may be a function that returns a value of the field name type.}
-
-\item{...}{ignored for paramter expansion}
 
 \item{verbose_errors}{logical to determine if error-like messages should be displayed when processing a request that finds unknown structures. Be default, this is only enabled when \code{verbose_errors = rlang::is_interactive()} is \code{TRUE}.}
 }

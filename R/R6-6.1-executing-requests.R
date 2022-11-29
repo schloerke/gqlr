@@ -167,10 +167,10 @@
 execute_request <- function(
   request,
   schema,
+  ...,
   operation_name = NULL,
   variables = list(),
   initial_value = NULL,
-  ...,
   verbose_errors = is_interactive()
 ) {
   oh <- ObjectHelpers$new(schema, source = request, error_list = ErrorList$new(verbose = verbose_errors))
