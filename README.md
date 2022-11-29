@@ -1,7 +1,10 @@
 #  gqlr: A GraphQL Implementation in R
-[![Travis-CI Build Status](https://travis-ci.org/schloerke/gqlr.svg?branch=master)](https://travis-ci.org/schloerke/gqlr)
-<!-- [![Coverage Status](https://codecov.io/github/schloerke/gqlr/coverage.svg?branch=master)](https://codecov.io/github/schloerke/gqlr?branch=master) -->
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/gqlr)](https://cran.r-project.org/package=gqlr)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/schloerke/gqlr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/schloerke/gqlr/actions/workflows/R-CMD-check.yaml)
+[![Coverage Status](https://codecov.io/github/schloerke/gqlr/coverage.svg?branch=master)](https://codecov.io/github/schloerke/gqlr?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/gqlr)](https://CRAN.R-project.org/package=gqlr)
+[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/gqlr)](https://cran.r-project.org/package=gqlr)
+<!-- badges: end -->
 
 
 
