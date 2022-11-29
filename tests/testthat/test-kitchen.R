@@ -1,7 +1,5 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-kitchen.R")); # nolint
 
-context("kitchen")
-
 txt_to_obj <- function(txt, ...) {
   suppressWarnings(graphql2obj(txt, ...))
 }

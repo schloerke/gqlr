@@ -1,8 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-simple.R")); # nolint
 
-context("execute-query-simple")
 
-source(testthat::test_path("validate_helper.R"))
 
 test_that("arbitrary code", {
 

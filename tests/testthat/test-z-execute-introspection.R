@@ -1,10 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-introspection.R")); # nolint
 
 
-context("execute-introspection")
-
-source(testthat::test_path("validate_helper.R"))
-
 compare_ans_and_expected <- function(ans, name) {
 
   testthat::expect_true(ans$error_list$has_no_errors())

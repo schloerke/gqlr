@@ -1,8 +1,6 @@
 
-context("validation-5.7-variables")
 
 
-source(testthat::test_path("validate_helper.R"))
 
 test_that("5.7.1 - Variable Uniqueness", {
 

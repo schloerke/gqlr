@@ -1,8 +1,5 @@
 
 
-context("pryr unenclose")
-
-
 test_that("lapply works", {
   # works as expected
   run2 <- function() {

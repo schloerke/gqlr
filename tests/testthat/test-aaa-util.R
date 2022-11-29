@@ -1,8 +1,5 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-aaa-util.R")) # nolint
 
-context("Test helper functions")
-
-source(testthat::test_path("validate_helper.R"))
 
 test_that("chai tests", {
   tested_object <- list(

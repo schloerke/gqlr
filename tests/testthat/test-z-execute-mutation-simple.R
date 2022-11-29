@@ -1,9 +1,7 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-mutation-simple.R")); # nolint
 
 
-context("execute-mutation-simple")
 
-source(testthat::test_path("validate_helper.R"))
 
 test_that("small counter", {
 
