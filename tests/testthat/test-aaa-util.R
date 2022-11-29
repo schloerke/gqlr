@@ -111,7 +111,7 @@ test_that("format()", {
   capture.output(print(dog_cat_doc, all_fields = TRUE)) %>%
     str_detect("__typename") %>%
     sum() %>%
-    expect_equal(8)
+    expect_equal(0)
 
 })
 
