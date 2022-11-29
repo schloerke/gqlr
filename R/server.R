@@ -66,7 +66,7 @@ server <- function(schema, port = 8000L, ..., graphiql = interactive(), log = TR
   if (!requireNamespace("plumber")) {
     stop("plumber must be installed.  `install.packages('plumber')`")
   }
-  if (packageVersion("plumber") < "1.2.0") {
+  if (utils::packageVersion("plumber") < "1.2.0") {
     stop("plumber must be version 1.2.0 or greater.  `install.packages('plumber')`")
   }
 
@@ -96,10 +96,10 @@ server <- function(schema, port = 8000L, ..., graphiql = interactive(), log = TR
 
 # rlang::is_bool
 is_bool <- function(x) {
-  is.logical(x, n = 1) && !is.na(x)
+  is.logical(x) && length(x) == 1 && !is.na(x)
 }
 # rlang::is_interactive
-is_interactive <- function () {
+is_interactive <- function() {
     opt <- getOption("rlang_interactive", NULL)
     if (!is.null(opt)) {
         if (!is_bool(opt)) {
