@@ -5,71 +5,56 @@ context("execute-introspection")
 
 source(testthat::test_path("validate_helper.R"))
 
-read_intro <- function(file_name) {
-  collapse(readLines(file.path("introspection", file_name)), collapse = "\n")
-}
-
-compare_ans_and_expected <- function(ans, expected_file_name) {
+compare_ans_and_expected <- function(ans, name) {
 
   testthat::expect_true(ans$error_list$has_no_errors())
-  expected <- strsplit(read_intro(expected_file_name), "\n")[[1]] # nolint
+  tmpfile <- tempfile(fileext = ".json")
+  on.exit(
+    {
+      unlink(tmpfile)
+    },
+    add = TRUE
+  )
+  write(to_json(ans$data), tmpfile)
+  testthat::expect_snapshot_file(tmpfile, cran = TRUE, name = name, compare = testthat::compare_file_text)
+  # if (length(ans_txt) != length(expected)) {
+  #   e1 <- tempfile()
+  #   e2 <- tempfile()
+  #   cat(ans_txt, sep = "\n", file = e1)
+  #   cat(expected, sep = "\n", file = e2)
+  #   system(str_c("diff ", e1, " ", e2))
 
-  ans_txt <- strsplit(to_json(ans$data), "\n")[[1]]
-  testthat::expect_equal(ans_txt, expected)
-
-  if (is.null(ans)) {
-    cat("\n\n")
-    str(ans$error_list)
-  }
-
-  if (length(ans_txt) != length(expected)) {
-    e1 <- tempfile()
-    e2 <- tempfile()
-    cat(ans_txt, sep = "\n", file = e1)
-    cat(expected, sep = "\n", file = e2)
-    system(str_c("diff ", e1, " ", e2))
-
-    cat(e1, "\n")
-  }
+  #   cat(e1, "\n")
+  # }
 }
 
 
-
-
-
-
-test_that("empty introspection", {
-
-  "
+empty_schema <- "
   schema {
     query: QueryRoot
   }
   type QueryRoot {
     onlyField: String
   }
-  " ->
-    schema_doc
+  "
 
-  introspection_query <- read_intro("execution-introspection.graphql")
+for (info in list(
+  list(name = "empty", schema = empty_schema),
+  list(name = "dog_cat", schema = dog_cat_schema),
+  list(name = "star_wars", schema = star_wars_schema)
+)) {
+  test_that(paste0(info$name, " introspection"), {
 
-  ans <- execute_request(
-    introspection_query,
-    schema_doc
-  )
+    introspection_query <- paste0(
+      readLines(testthat::test_path(file.path("introspection", "execution-introspection.graphql"))),
+      collapse = "\n"
+    )
 
-  compare_ans_and_expected(ans, "introspection-empty-output.json")
-})
+    ans <- execute_request(
+      introspection_query,
+      info$schema
+    )
 
-
-
-test_that("kitchen introspection", {
-
-  introspection_query <- read_intro("execution-introspection.graphql")
-
-  ans <- execute_request(
-    introspection_query,
-    dog_cat_schema
-  )
-
-  compare_ans_and_expected(ans, "introspection-dogcat.json")
-})
+    compare_ans_and_expected(ans, paste0("introspection-", info$name, ".json"))
+  })
+}
