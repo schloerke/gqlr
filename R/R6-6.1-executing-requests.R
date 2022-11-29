@@ -193,6 +193,8 @@ execute_request <- function(
 
   } else if (identical(operation_type, "mutation")) {
     data <- execute_mutation(operation, initial_value, oh = oh)
+  } else {
+    stop("Operation type not supported: ", operation_type)
   }
 
   ret$data <- data
