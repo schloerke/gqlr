@@ -123,6 +123,7 @@ validate_field_selections <- function(document_obj, ..., oh) {
         )
       validate_selection_set(
         operation$selectionSet, schema_object,
+        top_level = TRUE,
         oh = oh
       )
 
@@ -138,12 +139,10 @@ validate_field_selections <- function(document_obj, ..., oh) {
 
 
 # selection_set_obj should only be comprised of fields and inline fragments
-validate_selection_set <- function(selection_set_obj, object, ..., oh) {
+validate_selection_set <- function(selection_set_obj, object, ..., top_level = FALSE, oh) {
   selection_obj_list <- selection_set_obj$selections
-  selection_names <- get_name_values(selection_obj_list)
 
   object_field_list <- object$fields
-
   obj_field_names <- get_name_values(object_field_list)
 
   # recursively look into subfields
@@ -171,15 +170,16 @@ validate_selection_set <- function(selection_set_obj, object, ..., oh) {
       # make sure all request names exist in return obj
       if (! (selection_obj$name$value %in% obj_field_names)) {
         if (selection_obj$name$value == "__typename") {
-          next
-        }
-        if (inherits(object, "UnionTypeDefinition")) {
+          # Do nothing
+        } else if (top_level && (selection_obj$name$value == "__schema" || selection_obj$name$value == "__type")) {
+          # Allow for __schema and __type to exist on top level objects
+          # Do nothing
+        } else if (inherits(object, "UnionTypeDefinition")) {
           # 5.2.1 - can't query fields directly on a union object
-          bad_field_names <- selection_names[! (selection_names %in% c("__typename"))]
           oh$error_list$add(
             "5.2.1",
             "fields may not be queried directly on a union object, except for '__typename'.  ",
-            "Not allowed to ask for fields: ", str_c(bad_field_names, collapse = ", "),
+            "Not allowed to ask for fields: ", str_c(get_name_values(list(selection_obj)), collapse = ", "),
             loc = selection_obj$loc
           )
           next
@@ -202,10 +202,15 @@ validate_selection_set <- function(selection_set_obj, object, ..., oh) {
     }
 
     field_name <- selection_obj$name$value
-    matching_obj_field <- object_field_list[[which(field_name == obj_field_names)]]
+    matching_obj_field <-
+      if (field_name == "__typename") Introspection__typename_field
+      else if (top_level && field_name == "__schema") Introspection__schema_field
+      else if (top_level && field_name == "__type") Introspection__type_field
+      else object_field_list[[which(obj_field_names == field_name)]]
 
     validate_arguments(
-      selection_obj$arguments, matching_obj_field,
+      selection_obj$arguments,
+      matching_obj_field,
       parent_obj = selection_obj,
       oh = oh
     )

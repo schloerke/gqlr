@@ -192,13 +192,6 @@ Schema <- R6Class(
       query_obj <- self$get_query_object()
       if (is.null(query_obj)) return()
 
-      for (intro_field in Introspection__QueryRootFields$fields) {
-        matching_query_field <- query_obj$.get_field(intro_field)
-        if (is.null(matching_query_field)) {
-          query_obj$fields <- append(query_obj$fields, intro_field)
-        }
-      }
-
       return()
     },
 

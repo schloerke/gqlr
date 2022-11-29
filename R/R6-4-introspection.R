@@ -469,6 +469,17 @@ enum __DirectiveLocation {
   get_definition("__DirectiveLocation") ->
 Introspection__DirectiveLocation # nolint
 
+"type Typename {
+  __typename: String!
+}" %>%
+  gqlr_schema() %>%
+  get_definition("Typename") ->
+Introspection__Typename
+
+Introspection__Typename$fields[[1]]$.allow_double_underscore <- TRUE
+
+Introspection__typename_field <- Introspection__Typename$fields[[1]]
+
 
 
 "
@@ -479,29 +490,32 @@ type QueryRootFields {
 " %>%
   gqlr_schema() %>%
   get_definition("QueryRootFields") ->
-Introspection__QueryRootFields
-Introspection__QueryRootFields$fields[[1]]$.show_in_format <- FALSE
-Introspection__QueryRootFields$fields[[1]]$.allow_double_underscore <- TRUE
-Introspection__QueryRootFields$fields[[2]]$.show_in_format <- FALSE
-Introspection__QueryRootFields$fields[[2]]$.allow_double_underscore <- TRUE
+Introspection__QueryRoot
+Introspection__QueryRoot$fields[[1]]$.allow_double_underscore <- TRUE
+Introspection__QueryRoot$fields[[2]]$.allow_double_underscore <- TRUE
 
-Introspection__QueryRootFields$loc <- NULL
-Introspection__QueryRootFields$name$loc <- NULL
+Introspection__QueryRoot$loc <- NULL
+Introspection__QueryRoot$name$loc <- NULL
 
-Introspection__QueryRootFields$fields[[1]]$loc <- NULL
-Introspection__QueryRootFields$fields[[1]]$name$loc <- NULL
-Introspection__QueryRootFields$fields[[1]]$type$loc <- NULL
-Introspection__QueryRootFields$fields[[1]]$type$type$name$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$name$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$type$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$type$type$name$loc <- NULL
 
-Introspection__QueryRootFields$fields[[2]]$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$name$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$type$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$type$name$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$name$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$type$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$type$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$type$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$type$type$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$type$type$name$loc <- NULL
+
+Introspection__schema_field <- Introspection__QueryRoot$fields[[1]]
+Introspection__type_field <- Introspection__QueryRoot$fields[[2]]
+
+
 
 gqlr_env$completed_introspection <- TRUE
 

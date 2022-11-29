@@ -867,14 +867,7 @@ ObjectTypeDefinition <- R6_from_args(
       self$name <- name
       self$interfaces <- interfaces
       self$directives <- directives
-
-      typename_field <- FieldDefinition$new(
-        name = Name$new(value = "__typename"),
-        type = NamedType$new(name = Name$new(value = "String"))
-      )
-      typename_field$.allow_double_underscore <- TRUE
-      typename_field$.show_in_format <- FALSE
-      self$fields <- append(fields, typename_field)
+      self$fields <- fields
 
       self$.resolve <- .resolve
 
@@ -996,13 +989,7 @@ InterfaceTypeDefinition <- R6_from_args(
       self$loc <- loc
       self$name <- name
       self$directives <- directives
-      typename_field <- FieldDefinition$new(
-        name = Name$new(value = "__typename"),
-        type = NamedType$new(name = Name$new(value = "String"))
-      )
-      typename_field$.allow_double_underscore <- TRUE
-      typename_field$.show_in_format <- FALSE
-      self$fields <- append(fields, typename_field)
+      self$fields <- fields
       self$.resolve_type <- .resolve_type
 
       invisible(self)

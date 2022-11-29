@@ -65,7 +65,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
   upgrade_fragments_in_field <- function(
     field_obj,
     matching_obj,
-    seen_fragments = NULL
+    seen_fragments = NULL,
+    top_level = FALSE
   ) {
 
     new_selections <- list()
@@ -75,8 +76,17 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
         # regular field object
         if (!is.null(field$selectionSet)) {
 
+
           # need to recurse in field objects
           matching_field <- matching_obj$.get_field(field)
+          if (top_level && is.null(matching_field)) {
+            matching_field <-
+              switch(field$name$value,
+                "__schema" = Introspection__schema_field,
+                "__type" = Introspection__type_field,
+                NULL
+              )
+          }
           if (is.null(matching_field)) {
             # shouldn't be able to be reached?
             oh$error_list$add(
@@ -242,7 +252,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       return(NULL)
     }
     for (mutation_obj in query_mutation_list$mutation) {
-      mutation_obj <- upgrade_fragments_in_field(mutation_obj, mutation_root, NULL)
+      mutation_obj <- upgrade_fragments_in_field(mutation_obj, mutation_root, NULL, top_level = TRUE)
       upgraded_operations <- append(upgraded_operations, mutation_obj)
     }
   }
@@ -258,7 +268,7 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       return(NULL)
     }
     for (query_obj in query_mutation_list$query) {
-      query_obj <- upgrade_fragments_in_field(query_obj, query_root, NULL)
+      query_obj <- upgrade_fragments_in_field(query_obj, query_root, NULL, top_level = TRUE)
       upgraded_operations <- append(upgraded_operations, query_obj)
     }
   }

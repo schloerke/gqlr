@@ -20,7 +20,7 @@
 
   # NOTE: responseMap is ordered by which fields appear first in the query. This is explained in greater detail in the Field Collection section below.
 
-execute_selection_set <- function(selection_set, object_type, object_value, ..., oh) {
+execute_selection_set <- function(selection_set, object_type, object_value, ..., top_level = FALSE, oh) {
 
   # 1. Let groupedFieldSet be the result of CollectFields(objectType, selectionSet, variableValues).
   grouped_field_set <- collect_fields(object_type, selection_set, oh = oh)
@@ -37,8 +37,12 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
     # a. Let fieldName be the name of the first entry in fields.
     # Note: This value is unaffected if an alias is used.
     first_field <- fields[[1]]
-    # field_name <- first_field$name # nolint
-    matching_field <- object_obj$.get_field(first_field)
+    field_name <- first_field$name$value # nolint
+    matching_field <-
+      if (field_name == "__typename") Introspection__typename_field
+      else if (top_level && field_name == "__schema") Introspection__schema_field
+      else if (top_level && field_name == "__type") Introspection__type_field
+      else object_obj$.get_field(first_field)
     # b. Let fieldType be the return type defined for the field fieldName of objectType.
     matching_field_type <- matching_field$type
 

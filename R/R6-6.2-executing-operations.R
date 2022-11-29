@@ -48,7 +48,7 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
   selection_set <- operation_obj$selectionSet
 
   # could parallelize here if wanted
-  data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
+  data <- execute_selection_set(selection_set, root_type, initial_value, top_level = TRUE, oh = oh)
 
   return(data)
 }
@@ -79,7 +79,7 @@ execute_mutation <- function(operation_obj, initial_value, ..., oh) {
   selection_set <- operation_obj$selectionSet
 
   # could parallelize here if wanted
-  data <- execute_selection_set(selection_set, root_type, initial_value, oh = oh)
+  data <- execute_selection_set(selection_set, root_type, initial_value, top_level = TRUE, oh = oh)
 
   return(data)
 }
