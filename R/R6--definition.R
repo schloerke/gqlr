@@ -330,7 +330,6 @@ Field <- R6_from_args(
           str_c(" ", self$selectionSet$.format(space_count = space_count, ...))
       )
     },
-    .show_in_format = TRUE,
     .get_matching_argument = function(argument) {
       self_args <- self$arguments
       if (is.null(self_args)) return(NULL)
@@ -817,10 +816,6 @@ ObjectTypeDefinition <- R6_from_args(
   public = list(
     .format = function(..., all_fields = FALSE) {
       fields <- self$fields
-      if (!isTRUE(all_fields)) {
-        show_fields <- lapply(fields, "[[", ".show_in_format") %>% unlist()
-        fields <- fields[show_fields]
-      }
 
       collapse(
         "type ",
@@ -900,7 +895,6 @@ FieldDefinition <- R6_from_args(
       )
     },
     .allow_double_underscore = FALSE,
-    .show_in_format = TRUE,
     initialize = function(
       loc = NULL,
       description = NULL,
@@ -962,10 +956,6 @@ InterfaceTypeDefinition <- R6_from_args(
   public = list(
     .format = function(..., all_fields = FALSE) {
       fields <- self$fields
-      if (!isTRUE(all_fields)) {
-        show_fields <- lapply(fields, "[[", ".show_in_format") %>% unlist()
-        fields <- fields[show_fields]
-      }
 
       collapse(
         "interface ",
