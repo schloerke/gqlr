@@ -6,7 +6,7 @@ source(testthat::test_path("validate_helper.R"))
 
 expect_validate_err <- function(schema, ..., txt = schema) {
   schema %>%
-    gqlr:::ObjectHelpers$new(source = txt) ->
+    gqlr:::ObjectHelpers$new(source = txt, error_list = ErrorList$new(verbose = FALSE)) ->
   oh
 
   validate_schema(oh = oh)

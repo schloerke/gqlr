@@ -243,7 +243,8 @@ test_that("args", {
     ",
     schema,
     variables = list(intVal = "Barret"),
-    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
+    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3),
+    verbose_errors = FALSE
   ) %>%
     expect_expected(
       list(data = NULL, errors = list(list(

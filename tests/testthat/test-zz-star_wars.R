@@ -590,8 +590,7 @@ test_that("introspection", {
             {"name": "name","type": {"name": "String","kind": "SCALAR"}},
             {"name": "friends","type": {"name": null,"kind": "LIST"}},
             {"name": "appearsIn","type": {"name": null,"kind": "LIST"}},
-            {"name": "primaryFunction","type": {"name": "String","kind": "SCALAR"}},
-            {"name": "__typename","type": {"name": "String","kind": "SCALAR"}}
+            {"name": "primaryFunction","type": {"name": "String","kind": "SCALAR"}}
           ]
         }
       }}'
@@ -638,10 +637,6 @@ test_that("introspection", {
       },
       {
         "name": "primaryFunction",
-        "type": {"name": "String","kind": "SCALAR","ofType": null}
-      },
-      {
-        "name": "__typename",
         "type": {"name": "String","kind": "SCALAR","ofType": null}
       }
           ]
