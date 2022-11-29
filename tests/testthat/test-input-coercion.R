@@ -1,9 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-input-coercion.R")) # nolint
 
 
-context("input-coercion")
-
-source(testthat::test_path("validate_helper.R"))
 
 
 test_that("input-coercion - Int", {

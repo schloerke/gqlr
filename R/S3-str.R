@@ -83,15 +83,6 @@ format_str <- function(
           for (item_pos in seq_along(field_val)) {
             field_item <- field_val[[item_pos]]
 
-            if (inherits(field_item, "FieldDefinition")) {
-              if (!isTRUE(field_item$.show_in_format)) {
-                if (!isTRUE(all_fields)) {
-                  next
-                }
-              }
-            }
-
-
             ret <- ret %>% str_c_ret_spaces(space_count + 4, item_pos, " - ")
 
             check_if_registered(field_item)

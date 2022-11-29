@@ -110,7 +110,7 @@ as_type <- function(name_val) {
     )
   }
   str(name_val)
-  stop("as_type only understands a single character name or Type object")
+  stop("`as_type()` only understands a single character name or Type object. Received object above.")
 }
 
 # returns a NamedType
@@ -191,13 +191,6 @@ Schema <- R6Class(
 
       query_obj <- self$get_query_object()
       if (is.null(query_obj)) return()
-
-      for (intro_field in Introspection__QueryRootFields$fields) {
-        matching_query_field <- query_obj$.get_field(intro_field)
-        if (is.null(matching_query_field)) {
-          query_obj$fields <- append(query_obj$fields, intro_field)
-        }
-      }
 
       return()
     },

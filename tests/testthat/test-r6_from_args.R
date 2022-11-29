@@ -1,8 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-r6_from_args.R")); # nolint
 
-context("r6_from_args")
 
-source(testthat::test_path("validate_helper.R"))
 
 parse_args_txt <- " operation: 'query' | 'mutation' | 'subscription';
                     name: Name;

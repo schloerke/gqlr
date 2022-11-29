@@ -2,11 +2,7 @@
 
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-zz-star_wars.R")); # nolint
 
-context("star wars")
 
-source(testthat::test_path("validate_helper.R"))
-
-source(file.path("star_wars_schema.R"))
 
 expect_sw_err <- function(...) {
   expect_err(..., schema = star_wars_schema) # nolint
@@ -23,7 +19,6 @@ expect_sw_request_err <- function(...) {
 
 
 
-source(testthat::test_path("validate_helper.R"))
 
 
 test_that("star wars test suite", {
@@ -590,8 +585,7 @@ test_that("introspection", {
             {"name": "name","type": {"name": "String","kind": "SCALAR"}},
             {"name": "friends","type": {"name": null,"kind": "LIST"}},
             {"name": "appearsIn","type": {"name": null,"kind": "LIST"}},
-            {"name": "primaryFunction","type": {"name": "String","kind": "SCALAR"}},
-            {"name": "__typename","type": {"name": "String","kind": "SCALAR"}}
+            {"name": "primaryFunction","type": {"name": "String","kind": "SCALAR"}}
           ]
         }
       }}'
@@ -638,10 +632,6 @@ test_that("introspection", {
       },
       {
         "name": "primaryFunction",
-        "type": {"name": "String","kind": "SCALAR","ofType": null}
-      },
-      {
-        "name": "__typename",
         "type": {"name": "String","kind": "SCALAR","ofType": null}
       }
           ]

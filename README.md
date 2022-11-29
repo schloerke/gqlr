@@ -29,7 +29,7 @@ If you encounter a clear bug, please file a minimal reproducible example on [Git
 
 ### Hello World
 
-```{r, message = FALSE}
+```r
 
 library(magrittr)
 library(gqlr)

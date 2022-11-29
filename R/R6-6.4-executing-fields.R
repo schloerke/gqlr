@@ -13,7 +13,8 @@ execute_field <- function(object_type, object_value, field_type, fields, ..., oh
 
   # 1. Let field be the first entry in fields.
   field <- fields[[1]]
-  if (identical(format(field$name), "__typename")) {
+  field_name <- format(field$name)
+  if (identical(field_name, "__typename")) {
     completed_value <- resolve__typename(object_type, object_value, oh = oh)
     return(completed_value)
   }
@@ -98,13 +99,15 @@ coerce_argument_values <- function(object_type, field, ..., oh) {
   if (length(argument_values) == 0) return(coerced_values)
 
   # 3. Let fieldName be the name of field.
-  # field_name <- field$name # nolint
+  field_name <- field$name$value
 
   # 4. Let argumentDefinitions be the arguments defined by objectType for the field named fieldName.
   field_parent_obj <- oh$schema$get_object(object_type)
-  matching_field_obj <- field_parent_obj$.get_field(field)
+  matching_field_obj <-
+    if (field_name == "__schema") Introspection__schema_field
+    else if (field_name == "__type") Introspection__type_field
+    else field_parent_obj$.get_field(field)
   argument_definitions <- matching_field_obj$arguments
-
 
   # 5. For each argumentDefinition in argumentDefinitions:
   for (argument_definition in argument_definitions) {

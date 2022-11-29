@@ -1,8 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-simple.R")); # nolint
 
-context("execute-query-simple")
 
-source(testthat::test_path("validate_helper.R"))
 
 test_that("arbitrary code", {
 
@@ -243,7 +241,8 @@ test_that("args", {
     ",
     schema,
     variables = list(intVal = "Barret"),
-    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3)
+    initial_value = list(fieldA = 1, fieldB = 2, fieldC = 3),
+    verbose_errors = FALSE
   ) %>%
     expect_expected(
       list(data = NULL, errors = list(list(

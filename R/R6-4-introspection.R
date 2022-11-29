@@ -12,6 +12,7 @@ type __Schema {
   types: [__Type!]!
   queryType: __Type!
   mutationType: __Type
+  subscriptionType: __Type
   directives: [__Directive!]!
 }
 " %>%
@@ -27,6 +28,7 @@ type __Schema {
         "types" = "A list of all types supported by this server.",
         "queryType" = "The type that query operations will be rooted at.",
         "mutationType" = "The type that mutation operations will be rooted at.",
+        "subscriptionType" = "Not implemented",
         "directives" = "A list of all directives supported by this server."
       ),
       resolve = function(null, schema) {
@@ -162,7 +164,7 @@ type __Type {
           ret$interfaces <- function(z1, z2, z3) {
             obj <- schema$get_object(type_obj)
             obj_interfaces <- obj$interfaces
-            if (is.null(obj_interfaces)) return(NULL)
+            if (is.null(obj_interfaces)) return(list())
             obj_interfaces
           }
         }
@@ -172,14 +174,16 @@ type __Type {
         if (schema$is_interface(type_obj)) {
           ret$possibleTypes <- function(z1, z2, z3) {
             possible_types <- schema$implements_interface(type_obj)
-            if (is.null(possible_types)) return(NULL)
+            if (is.null(possible_types)) return(list())
             possible_types
           }
         } else if (schema$is_union(type_obj)) {
           ret$possibleTypes <- function(z1, z2, z3) {
             union_obj <- schema$get_union(type_obj)
             union_type_names <- union_obj$types
-            if (is.null(union_type_names)) return(NULL)
+            if (is.null(union_type_names)) {
+              return(list())
+            }
             union_type_names
           }
         }
@@ -195,7 +199,9 @@ type __Type {
 
             enum_obj <- schema$get_enum(type_obj)
             enum_values <- enum_obj$values
-            if (is.null(enum_values)) return(NULL)
+            if (is.null(enum_values)) {
+              return(list())
+            }
             enum_values
           }
         }
@@ -206,7 +212,9 @@ type __Type {
           ret$inputFields <- function(z1, z2, z3) {
             input_obj <- schema$get_input_object(type_obj)
             input_obj_fields <- input_obj$fields
-            if (is.null(input_obj_fields)) return(NULL)
+            if (is.null(input_obj_fields)) {
+              return(list())
+            }
             input_obj_fields
           }
         }
@@ -469,6 +477,17 @@ enum __DirectiveLocation {
   get_definition("__DirectiveLocation") ->
 Introspection__DirectiveLocation # nolint
 
+"type Typename {
+  __typename: String!
+}" %>%
+  gqlr_schema() %>%
+  get_definition("Typename") ->
+Introspection__Typename
+
+Introspection__Typename$fields[[1]]$.allow_double_underscore <- TRUE
+
+Introspection__typename_field <- Introspection__Typename$fields[[1]]
+
 
 
 "
@@ -479,29 +498,32 @@ type QueryRootFields {
 " %>%
   gqlr_schema() %>%
   get_definition("QueryRootFields") ->
-Introspection__QueryRootFields
-Introspection__QueryRootFields$fields[[1]]$.show_in_format <- FALSE
-Introspection__QueryRootFields$fields[[1]]$.allow_double_underscore <- TRUE
-Introspection__QueryRootFields$fields[[2]]$.show_in_format <- FALSE
-Introspection__QueryRootFields$fields[[2]]$.allow_double_underscore <- TRUE
+Introspection__QueryRoot
+Introspection__QueryRoot$fields[[1]]$.allow_double_underscore <- TRUE
+Introspection__QueryRoot$fields[[2]]$.allow_double_underscore <- TRUE
 
-Introspection__QueryRootFields$loc <- NULL
-Introspection__QueryRootFields$name$loc <- NULL
+Introspection__QueryRoot$loc <- NULL
+Introspection__QueryRoot$name$loc <- NULL
 
-Introspection__QueryRootFields$fields[[1]]$loc <- NULL
-Introspection__QueryRootFields$fields[[1]]$name$loc <- NULL
-Introspection__QueryRootFields$fields[[1]]$type$loc <- NULL
-Introspection__QueryRootFields$fields[[1]]$type$type$name$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$name$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$type$loc <- NULL
+Introspection__QueryRoot$fields[[1]]$type$type$name$loc <- NULL
 
-Introspection__QueryRootFields$fields[[2]]$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$name$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$type$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$type$name$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$name$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$loc <- NULL
-Introspection__QueryRootFields$fields[[2]]$arguments[[1]]$type$type$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$type$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$type$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$name$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$type$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$type$type$loc <- NULL
+Introspection__QueryRoot$fields[[2]]$arguments[[1]]$type$type$name$loc <- NULL
+
+Introspection__schema_field <- Introspection__QueryRoot$fields[[1]]
+Introspection__type_field <- Introspection__QueryRoot$fields[[2]]
+
+
 
 gqlr_env$completed_introspection <- TRUE
 

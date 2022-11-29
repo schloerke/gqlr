@@ -68,6 +68,8 @@
 #'   root type or mutation root type.  The value provided should be a named list
 #'   of the field name (key) and a value matching that field name type.  The
 #'   value may be a function that returns a value of the field name type.
+#' @param ... ignored for paramter expansion
+#' @param verbose_errors logical to determine if error-like messages should be displayed when processing a request that finds unknown structures. Be default, this is only enabled when \code{verbose_errors = rlang::is_interactive()} is \code{TRUE}.
 #' @references \url{https://graphql.github.io/graphql-spec/October2016/#sec-Execution}
 #' @export
 #' @examples
@@ -165,11 +167,13 @@
 execute_request <- function(
   request,
   schema,
+  ...,
   operation_name = NULL,
   variables = list(),
-  initial_value = NULL
+  initial_value = NULL,
+  verbose_errors = is_interactive()
 ) {
-  oh <- ObjectHelpers$new(schema, source = request)
+  oh <- ObjectHelpers$new(schema, source = request, error_list = ErrorList$new(verbose = verbose_errors))
   ret <- Result$new(oh$error_list)
 
   validate_schema(oh = oh)
@@ -191,6 +195,8 @@ execute_request <- function(
 
   } else if (identical(operation_type, "mutation")) {
     data <- execute_mutation(operation, initial_value, oh = oh)
+  } else {
+    stop("Operation type not supported: ", operation_type)
   }
 
   ret$data <- data

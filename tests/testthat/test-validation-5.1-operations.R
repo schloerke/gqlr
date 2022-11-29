@@ -1,10 +1,8 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.1-operations.R")) # nolint
 
 
-context("validation-5.1-operations")
 
 
-source(testthat::test_path("validate_helper.R"))
 
 
 test_that("5.1.1.1 - Operation Name Uniqueness", {

@@ -1,9 +1,7 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.2-fields.R")); # nolint
 
-context("validation-5.2-fields")
 
 
-source(testthat::test_path("validate_helper.R"))
 
 
 test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {

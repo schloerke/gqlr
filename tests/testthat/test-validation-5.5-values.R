@@ -1,9 +1,7 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.5-values.R")); # nolint
 
-context("validation-5.5-values")
 
 
-source(testthat::test_path("validate_helper.R"))
 
 test_that("5.5.1 - Input Object Field Uniqueness", {
 

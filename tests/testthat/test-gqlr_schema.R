@@ -2,8 +2,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-gqlr_schema.R")); # nolint
 
 
-context("gqlr_schema()")
-
 
 test_that("gqlr_schema information", {
 

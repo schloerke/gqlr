@@ -1,9 +1,7 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.6-directives.R")); # nolint
 
-context("validation-5.6-directives")
 
 
-source(testthat::test_path("validate_helper.R"))
 
 test_that("5.6.1 - Directives Are Defined", {
 

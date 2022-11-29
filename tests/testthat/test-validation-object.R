@@ -1,12 +1,10 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-object.R")); # nolint
 
-context("object validation")
 
-source(testthat::test_path("validate_helper.R"))
 
 expect_validate_err <- function(schema, ..., txt = schema) {
   schema %>%
-    gqlr:::ObjectHelpers$new(source = txt) ->
+    gqlr:::ObjectHelpers$new(source = txt, error_list = ErrorList$new(verbose = FALSE)) ->
   oh
 
   validate_schema(oh = oh)

@@ -330,7 +330,6 @@ Field <- R6_from_args(
           str_c(" ", self$selectionSet$.format(space_count = space_count, ...))
       )
     },
-    .show_in_format = TRUE,
     .get_matching_argument = function(argument) {
       self_args <- self$arguments
       if (is.null(self_args)) return(NULL)
@@ -817,10 +816,6 @@ ObjectTypeDefinition <- R6_from_args(
   public = list(
     .format = function(..., all_fields = FALSE) {
       fields <- self$fields
-      if (!isTRUE(all_fields)) {
-        show_fields <- lapply(fields, "[[", ".show_in_format") %>% unlist()
-        fields <- fields[show_fields]
-      }
 
       collapse(
         "type ",
@@ -867,14 +862,7 @@ ObjectTypeDefinition <- R6_from_args(
       self$name <- name
       self$interfaces <- interfaces
       self$directives <- directives
-
-      typename_field <- FieldDefinition$new(
-        name = Name$new(value = "__typename"),
-        type = NamedType$new(name = Name$new(value = "String"))
-      )
-      typename_field$.allow_double_underscore <- TRUE
-      typename_field$.show_in_format <- FALSE
-      self$fields <- append(fields, typename_field)
+      self$fields <- fields
 
       self$.resolve <- .resolve
 
@@ -907,7 +895,6 @@ FieldDefinition <- R6_from_args(
       )
     },
     .allow_double_underscore = FALSE,
-    .show_in_format = TRUE,
     initialize = function(
       loc = NULL,
       description = NULL,
@@ -969,10 +956,6 @@ InterfaceTypeDefinition <- R6_from_args(
   public = list(
     .format = function(..., all_fields = FALSE) {
       fields <- self$fields
-      if (!isTRUE(all_fields)) {
-        show_fields <- lapply(fields, "[[", ".show_in_format") %>% unlist()
-        fields <- fields[show_fields]
-      }
 
       collapse(
         "interface ",
@@ -996,13 +979,7 @@ InterfaceTypeDefinition <- R6_from_args(
       self$loc <- loc
       self$name <- name
       self$directives <- directives
-      typename_field <- FieldDefinition$new(
-        name = Name$new(value = "__typename"),
-        type = NamedType$new(name = Name$new(value = "String"))
-      )
-      typename_field$.allow_double_underscore <- TRUE
-      typename_field$.show_in_format <- FALSE
-      self$fields <- append(fields, typename_field)
+      self$fields <- fields
       self$.resolve_type <- .resolve_type
 
       invisible(self)
