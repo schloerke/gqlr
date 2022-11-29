@@ -1,34 +1,23 @@
-source(testthat::test_path("dog_cat_schema.R"))
-
-
-to_json <- gqlr:::to_json
-from_json <- gqlr:::from_json
-str_trim <- gqlr:::str_trim
-str_c <- gqlr:::str_c
-collapse <- gqlr:::collapse
-
-
-
 expect_r6 <- function(query, ..., schema = dog_cat_schema) {
 
-  oh <- gqlr:::ObjectHelpers$new(schema, source = query)
+  oh <- ObjectHelpers$new(schema, source = query)
   oh$error_list$source <- query
-  ans <- gqlr:::validate_document(query, oh = oh)
+  ans <- validate_document(query, oh = oh)
 
-  testthat::expect_equal(gqlr:::format.ErrorList(oh$error_list), "<ErrorList> No errors")
+  testthat::expect_equal(format.ErrorList(oh$error_list), "<ErrorList> No errors")
 
   testthat::expect_true(R6::is.R6(ans), ...)
 }
 
 expect_err <- function(query, ..., schema = dog_cat_schema) {
 
-  oh <- gqlr:::ObjectHelpers$new(schema, source = query)
-  ans <- gqlr:::validate_document(query, oh = oh) # nolint
+  oh <- ObjectHelpers$new(schema, source = query, error_list = ErrorList$new(verbose = FALSE))
+  ans <- validate_document(query, oh = oh) # nolint
 
   testthat::expect_true(oh$error_list$has_any_errors())
 
   testthat::expect_error({
-      stop(gqlr:::format.ErrorList(oh$error_list))
+      stop(format.ErrorList(oh$error_list))
     },
     ...
   )
@@ -84,7 +73,8 @@ expect_request_err <- function(
     query_txt,
     schema,
     operation_name = operation_name,
-    variables = variables
+    variables = variables,
+    verbose_errors = FALSE
   )
 
   testthat::expect_true(ans$error_list$has_any_errors())

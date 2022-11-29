@@ -681,12 +681,6 @@
 . . . . . . . . . line: 20
 . . . . . . . . . column: 36
 . . . . . . . value: 'Type'
-. . . . 8 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'String'
 . . 3 - <ObjectTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
@@ -864,12 +858,6 @@
 . . . . . . . . . . line: 24
 . . . . . . . . . . column: 62
 . . . . . . . . value: 'onField'
-. . . . 2 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'String'
 . . 4 - <InterfaceTypeDefinition>
 . . . loc: <Location>
 . . . . start: <Position>
@@ -999,12 +987,6 @@
 . . . . . . . . end: <Position>
 . . . . . . . . . line: 29
 . . . . . . . . . column: 44
-. . . . . . . value: 'String'
-. . . . 3 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
 . . . . . . . value: 'String'
 . . . .resolve_type: function
 . . 5 - <InterfaceTypeDefinition>
@@ -1148,12 +1130,6 @@
 . . . . . . . . . . line: 33
 . . . . . . . . . . column: 50
 . . . . . . . . value: 'onField'
-. . . . 2 - <FieldDefinition>
-. . . . . name: <Name>
-. . . . . . value: '__typename'
-. . . . . type: <NamedType>
-. . . . . . name: <Name>
-. . . . . . . value: 'String'
 . . . .resolve_type: function
 . . 6 - <UnionTypeDefinition>
 . . . loc: <Location>
@@ -1774,12 +1750,6 @@
 . . . . . . . . . . line: 64
 . . . . . . . . . . column: 34
 . . . . . . . . value: 'Type'
-. . . . . 2 - <FieldDefinition>
-. . . . . . name: <Name>
-. . . . . . . value: '__typename'
-. . . . . . type: <NamedType>
-. . . . . . . name: <Name>
-. . . . . . . . value: 'String'
 . . 15 - <DirectiveDefinition>
 . . . loc: <Location>
 . . . . start: <Position>

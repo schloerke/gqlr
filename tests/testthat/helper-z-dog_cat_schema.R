@@ -3,6 +3,10 @@
 "
 enum DogCommand { SIT, DOWN, HEEL }
 
+interface Pet {
+  name: String!
+}
+
 type Dog implements Pet {
   name: String!
   nickname: String
@@ -16,9 +20,6 @@ interface Sentient {
   name: String!
 }
 
-interface Pet {
-  name: String!
-}
 
 type Alien implements Sentient {
   name: String!
@@ -65,7 +66,7 @@ type SearchRoot {
   human: Human
   pet: Pet
   catOrDog: CatOrDog
-  arguments: Arguments
+  arguments:Arguments
   findDog(complex: ComplexInput): Dog
   booleanList(booleanListArg: [Boolean!]): Boolean
 }
