@@ -96,69 +96,89 @@
 <div class="section level3">
 <h3 id="hello-world">Hello World<a class="anchor" aria-label="anchor" href="#hello-world"></a>
 </h3>
-<p>```{r, message = FALSE}</p>
-<p>library(magrittr) library(gqlr)</p>
-<p>schema &lt;- " type Hello { world: String } schema { query: Hello } " %&gt;% gqlr_schema()</p>
-<p>execute_request(“{world}”, schema, initial_value = list(world = “Hi!”)) # { # “data”: { # “world”: “Hi!” # } # }</p>
-<pre><code>
-### Star Wars
-
-#### Star Wars Data
-
-```r
-add_human &lt;- function(human_data, id, name, appear, home, friend) {
-  human &lt;- list(id = id, name = name, appearsIn = appear, friends = friend, homePlanet = home)
-  # set up a function to be calculated if the field totalCredits is required
-  human$totalCredits &lt;- function(obj, args, schema) {
-    length(human$appearsIn)
-  }
-  human_data[[id]] &lt;- human
-  human_data
-}
-add_droid &lt;- function(droid_data, id, name, appear, pf, friend) {
-  droid &lt;- list(id = id, name = name, appearsIn = appear, friends = friend, primaryFunction = pf)
-  # set extra fields manually
-  droid$totalCredits &lt;- length(droid$appearsIn)
-  droid_data[[id]] &lt;- droid
-  droid_data
-}
-
-human_data &lt;- list() %&gt;%
-  add_human("1000", "Luke Skywalker", c(4, 5, 6), "Tatooine", c("1002", "1003", "2000", "2001")) %&gt;%
-  add_human("1002", "Han Solo",       c(4, 5, 6), "Corellia", c("1000", "1003", "2001")) %&gt;%
-  add_human("1003", "Leia Organa",    c(4, 5, 6), "Alderaan", c("1000", "1002", "2000", "2001"))
-
-droid_data &lt;- list() %&gt;%
-  add_droid("2000", "C-3PO", c(4, 5, 6), "Protocol", c("1000", "1002", "1003", "2001")) %&gt;%
-  add_droid("2001", "R2-D2", c(4, 5, 6), "Astromech", c("1000", "1002", "1003"))
-
-all_characters &lt;- list() %&gt;% append(human_data) %&gt;% append(droid_data)
-all_characters[[1]]
-# $id
-# [1] "1000"
-#
-# $name
-# [1] "Luke Skywalker"
-#
-# $appearsIn
-# [1] 4 5 6
-#
-# $friends
-# [1] "Tatooine"
-#
-# $homePlanet
-# [1] "1002" "1003" "2000" "2001"
-#
-# $totalCredits
-# function (obj, args, schema)
-# {
-#     length(human$appearsIn)
-# }
-# &lt;environment: 0x7fadd8ca2038&gt;</code></pre>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://schloerke.com/gqlr/">gqlr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">schema</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">  type Hello {</span></span>
+<span><span class="st">    world: String</span></span>
+<span><span class="st">  }</span></span>
+<span><span class="st">  schema {</span></span>
+<span><span class="st">    query: Hello</span></span>
+<span><span class="st">  }</span></span>
+<span><span class="st">"</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/gqlr_schema.html">gqlr_schema</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/execute_request.html">execute_request</a></span><span class="op">(</span><span class="st">"{world}"</span>, <span class="va">schema</span>, initial_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>world <span class="op">=</span> <span class="st">"Hi!"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># {</span></span>
+<span><span class="co">#   "data": {</span></span>
+<span><span class="co">#     "world": "Hi!"</span></span>
+<span><span class="co">#   }</span></span>
+<span><span class="co"># }</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="star-wars">Star Wars<a class="anchor" aria-label="anchor" href="#star-wars"></a>
+</h3>
+<div class="section level4">
+<h4 id="star-wars-data">Star Wars Data<a class="anchor" aria-label="anchor" href="#star-wars-data"></a>
+</h4>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">add_human</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">human_data</span>, <span class="va">id</span>, <span class="va">name</span>, <span class="va">appear</span>, <span class="va">home</span>, <span class="va">friend</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">human</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span>, name <span class="op">=</span> <span class="va">name</span>, appearsIn <span class="op">=</span> <span class="va">appear</span>, friends <span class="op">=</span> <span class="va">friend</span>, homePlanet <span class="op">=</span> <span class="va">home</span><span class="op">)</span></span>
+<span>  <span class="co"># set up a function to be calculated if the field totalCredits is required</span></span>
+<span>  <span class="va">human</span><span class="op">$</span><span class="va">totalCredits</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">obj</span>, <span class="va">args</span>, <span class="va">schema</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">human</span><span class="op">$</span><span class="va">appearsIn</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">human_data</span><span class="op">[[</span><span class="va">id</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">human</span></span>
+<span>  <span class="va">human_data</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">add_droid</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">droid_data</span>, <span class="va">id</span>, <span class="va">name</span>, <span class="va">appear</span>, <span class="va">pf</span>, <span class="va">friend</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">droid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span>, name <span class="op">=</span> <span class="va">name</span>, appearsIn <span class="op">=</span> <span class="va">appear</span>, friends <span class="op">=</span> <span class="va">friend</span>, primaryFunction <span class="op">=</span> <span class="va">pf</span><span class="op">)</span></span>
+<span>  <span class="co"># set extra fields manually</span></span>
+<span>  <span class="va">droid</span><span class="op">$</span><span class="va">totalCredits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">droid</span><span class="op">$</span><span class="va">appearsIn</span><span class="op">)</span></span>
+<span>  <span class="va">droid_data</span><span class="op">[[</span><span class="va">id</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">droid</span></span>
+<span>  <span class="va">droid_data</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">human_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">add_human</span><span class="op">(</span><span class="st">"1000"</span>, <span class="st">"Luke Skywalker"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span>, <span class="st">"Tatooine"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1002"</span>, <span class="st">"1003"</span>, <span class="st">"2000"</span>, <span class="st">"2001"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">add_human</span><span class="op">(</span><span class="st">"1002"</span>, <span class="st">"Han Solo"</span>,       <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span>, <span class="st">"Corellia"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1000"</span>, <span class="st">"1003"</span>, <span class="st">"2001"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">add_human</span><span class="op">(</span><span class="st">"1003"</span>, <span class="st">"Leia Organa"</span>,    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span>, <span class="st">"Alderaan"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1000"</span>, <span class="st">"1002"</span>, <span class="st">"2000"</span>, <span class="st">"2001"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">droid_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">add_droid</span><span class="op">(</span><span class="st">"2000"</span>, <span class="st">"C-3PO"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span>, <span class="st">"Protocol"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1000"</span>, <span class="st">"1002"</span>, <span class="st">"1003"</span>, <span class="st">"2001"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">add_droid</span><span class="op">(</span><span class="st">"2001"</span>, <span class="st">"R2-D2"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span>, <span class="st">"Astromech"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1000"</span>, <span class="st">"1002"</span>, <span class="st">"1003"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">all_characters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/append.html" class="external-link">append</a></span><span class="op">(</span><span class="va">human_data</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/append.html" class="external-link">append</a></span><span class="op">(</span><span class="va">droid_data</span><span class="op">)</span></span>
+<span><span class="va">all_characters</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co"># $id</span></span>
+<span><span class="co"># [1] "1000"</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># $name</span></span>
+<span><span class="co"># [1] "Luke Skywalker"</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># $appearsIn</span></span>
+<span><span class="co"># [1] 4 5 6</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># $friends</span></span>
+<span><span class="co"># [1] "Tatooine"</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># $homePlanet</span></span>
+<span><span class="co"># [1] "1002" "1003" "2000" "2001"</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># $totalCredits</span></span>
+<span><span class="co"># function (obj, args, schema)</span></span>
+<span><span class="co"># {</span></span>
+<span><span class="co">#     length(human$appearsIn)</span></span>
+<span><span class="co"># }</span></span>
+<span><span class="co"># &lt;environment: 0x7fadd8ca2038&gt;</span></span></code></pre></div>
+</div>
 <div class="section level4">
 <h4 id="star-wars-schema">Star Wars Schema<a class="anchor" aria-label="anchor" href="#star-wars-schema"></a>
 </h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="st">"</span></span>
 <span><span class="st">enum Episode { NEWHOPE, EMPIRE, JEDI }</span></span>
 <span><span class="st"></span></span>
@@ -193,7 +213,7 @@ all_characters[[1]]
 <span><span class="st">schema {</span></span>
 <span><span class="st">  query: Query</span></span>
 <span><span class="st">}</span></span>
-<span><span class="st">"</span> <span class="op">%&gt;%</span></span>
+<span><span class="st">"</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/gqlr_schema.html">gqlr_schema</a></span><span class="op">(</span></span>
 <span>    Episode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      resolve <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">episode_id</span>, <span class="va">schema</span><span class="op">)</span> <span class="op">{</span></span>
@@ -252,7 +272,7 @@ all_characters[[1]]
 <div class="section level4">
 <h4 id="star-wars-execution">Star Wars Execution<a class="anchor" aria-label="anchor" href="#star-wars-execution"></a>
 </h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use the resolve method to initialize the data</span></span>
 <span><span class="st">"</span></span>
 <span><span class="st">{</span></span>
@@ -265,7 +285,7 @@ all_characters[[1]]
 <span><span class="st">    }</span></span>
 <span><span class="st">  }</span></span>
 <span><span class="st">}</span></span>
-<span><span class="st">"</span> <span class="op">%&gt;%</span></span>
+<span><span class="st">"</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/execute_request.html">execute_request</a></span><span class="op">(</span><span class="va">star_wars_schema</span><span class="op">)</span></span>
 <span><span class="co"># {</span></span>
 <span><span class="co">#   "data": {</span></span>
@@ -298,7 +318,7 @@ all_characters[[1]]
 <span><span class="st">    name</span></span>
 <span><span class="st">  }</span></span>
 <span><span class="st">}</span></span>
-<span><span class="st">"</span> <span class="op">%&gt;%</span></span>
+<span><span class="st">"</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/execute_request.html">execute_request</a></span><span class="op">(</span><span class="va">star_wars_schema</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>someId <span class="op">=</span> <span class="st">"1000"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># {</span></span>
 <span><span class="co">#   "data": {</span></span>
@@ -320,7 +340,7 @@ all_characters[[1]]
 <span><span class="st">    }</span></span>
 <span><span class="st">  }</span></span>
 <span><span class="st">}</span></span>
-<span><span class="st">"</span> <span class="op">%&gt;%</span></span>
+<span><span class="st">"</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/execute_request.html">execute_request</a></span><span class="op">(</span><span class="va">star_wars_schema</span><span class="op">)</span></span>
 <span><span class="co"># {</span></span>
 <span><span class="co">#   "data": {</span></span>
@@ -354,72 +374,72 @@ all_characters[[1]]
 <div class="section level4">
 <h4 id="star-wars-server">Star Wars Server<a class="anchor" aria-label="anchor" href="#star-wars-server"></a>
 </h4>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># R</span></span>
 <span><span class="fu">gqlr</span><span class="fu">:::</span><span class="fu"><a href="reference/server.html">server</a></span><span class="op">(</span><span class="va">star_wars_schema</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># forgot to export</span></span></code></pre></div>
 <p>Explore with <code>curl</code></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># GET R2-D2 and his friends' names</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="ex">curl</span> <span class="st">'127.0.0.1:8000/graphql?query=%7Bhero%7Bname%7D%7D&amp;pretty=TRUE'</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># {</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#   "data": {</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#     "hero": {</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#       "name": "R2-D2"</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#     }</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#   }</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="co"># }</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="co"># POST for R2-D2 and his friends' names (no need to url escape the query)</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="ex">curl</span> --data <span class="st">'{"query":"{hero{name}}"}'</span> <span class="st">'127.0.0.1:8000/graphql'</span> <span class="co"># defaults to parse as JSON</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a><span class="co"># {"data":{"hero":{"name":"R2-D2"</span><span class="re">}}}</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a></span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="ex">curl</span> --data <span class="st">'{"query":"{hero{name}}"}'</span> <span class="st">'127.0.0.1:8000/graphql'</span> --header <span class="st">"Content-Type:application/json"</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a><span class="co"># {"data":{"hero":{"name":"R2-D2"</span><span class="re">}}}</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a></span>
-<span id="cb6-19"><a href="#cb6-19"></a><span class="ex">curl</span> --data <span class="st">'{hero{name}}'</span> <span class="st">'127.0.0.1:8000/graphql'</span> --header <span class="st">"Content-Type:application/graphql"</span></span>
-<span id="cb6-20"><a href="#cb6-20"></a><span class="co"># {"data":{"hero":{"name":"R2-D2"</span><span class="re">}}}</span></span>
-<span id="cb6-21"><a href="#cb6-21"></a></span>
-<span id="cb6-22"><a href="#cb6-22"></a></span>
-<span id="cb6-23"><a href="#cb6-23"></a><span class="co"># GET Schema definition</span></span>
-<span id="cb6-24"><a href="#cb6-24"></a><span class="ex">curl</span> <span class="st">'127.0.0.1:8000/'</span></span>
-<span id="cb6-25"><a href="#cb6-25"></a><span class="co"># enum Episode {</span></span>
-<span id="cb6-26"><a href="#cb6-26"></a><span class="co">#   NEWHOPE</span></span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="co">#   EMPIRE</span></span>
-<span id="cb6-28"><a href="#cb6-28"></a><span class="co">#   JEDI</span></span>
-<span id="cb6-29"><a href="#cb6-29"></a><span class="co"># }</span></span>
-<span id="cb6-30"><a href="#cb6-30"></a><span class="co">#</span></span>
-<span id="cb6-31"><a href="#cb6-31"></a><span class="co"># type Droid implements Character {</span></span>
-<span id="cb6-32"><a href="#cb6-32"></a><span class="co">#   id: String!</span></span>
-<span id="cb6-33"><a href="#cb6-33"></a><span class="co">#   name: String</span></span>
-<span id="cb6-34"><a href="#cb6-34"></a><span class="co">#   friends: [Character]</span></span>
-<span id="cb6-35"><a href="#cb6-35"></a><span class="co">#   appearsIn: [Episode]</span></span>
-<span id="cb6-36"><a href="#cb6-36"></a><span class="co">#   primaryFunction: String</span></span>
-<span id="cb6-37"><a href="#cb6-37"></a><span class="co"># }</span></span>
-<span id="cb6-38"><a href="#cb6-38"></a><span class="co">#</span></span>
-<span id="cb6-39"><a href="#cb6-39"></a><span class="co"># type Human implements Character {</span></span>
-<span id="cb6-40"><a href="#cb6-40"></a><span class="co">#   id: String!</span></span>
-<span id="cb6-41"><a href="#cb6-41"></a><span class="co">#   name: String</span></span>
-<span id="cb6-42"><a href="#cb6-42"></a><span class="co">#   friends: [Character]</span></span>
-<span id="cb6-43"><a href="#cb6-43"></a><span class="co">#   appearsIn: [Episode]</span></span>
-<span id="cb6-44"><a href="#cb6-44"></a><span class="co">#   homePlanet: String</span></span>
-<span id="cb6-45"><a href="#cb6-45"></a><span class="co"># }</span></span>
-<span id="cb6-46"><a href="#cb6-46"></a><span class="co">#</span></span>
-<span id="cb6-47"><a href="#cb6-47"></a><span class="co"># type Query {</span></span>
-<span id="cb6-48"><a href="#cb6-48"></a><span class="co">#   hero(episode: Episode): Character</span></span>
-<span id="cb6-49"><a href="#cb6-49"></a><span class="co">#   human(id: String!): Human</span></span>
-<span id="cb6-50"><a href="#cb6-50"></a><span class="co">#   droid(id: String!): Droid</span></span>
-<span id="cb6-51"><a href="#cb6-51"></a><span class="co"># }</span></span>
-<span id="cb6-52"><a href="#cb6-52"></a><span class="co">#</span></span>
-<span id="cb6-53"><a href="#cb6-53"></a><span class="co"># interface Character {</span></span>
-<span id="cb6-54"><a href="#cb6-54"></a><span class="co">#   id: String!</span></span>
-<span id="cb6-55"><a href="#cb6-55"></a><span class="co">#   name: String</span></span>
-<span id="cb6-56"><a href="#cb6-56"></a><span class="co">#   friends: [Character]</span></span>
-<span id="cb6-57"><a href="#cb6-57"></a><span class="co">#   appearsIn: [Episode]</span></span>
-<span id="cb6-58"><a href="#cb6-58"></a><span class="co"># }</span></span>
-<span id="cb6-59"><a href="#cb6-59"></a><span class="co">#</span></span>
-<span id="cb6-60"><a href="#cb6-60"></a><span class="co"># schema {</span></span>
-<span id="cb6-61"><a href="#cb6-61"></a><span class="co">#   query: Query</span></span>
-<span id="cb6-62"><a href="#cb6-62"></a><span class="co"># }</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co"># GET R2-D2 and his friends' names</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="ex">curl</span> <span class="st">'127.0.0.1:8000/graphql?query=%7Bhero%7Bname%7D%7D&amp;pretty=TRUE'</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># {</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#   "data": {</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#     "hero": {</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#       "name": "R2-D2"</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#     }</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#   }</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># }</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co"># POST for R2-D2 and his friends' names (no need to url escape the query)</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="ex">curl</span> --data <span class="st">'{"query":"{hero{name}}"}'</span> <span class="st">'127.0.0.1:8000/graphql'</span> <span class="co"># defaults to parse as JSON</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># {"data":{"hero":{"name":"R2-D2"</span><span class="re">}}}</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="ex">curl</span> --data <span class="st">'{"query":"{hero{name}}"}'</span> <span class="st">'127.0.0.1:8000/graphql'</span> --header <span class="st">"Content-Type:application/json"</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co"># {"data":{"hero":{"name":"R2-D2"</span><span class="re">}}}</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="ex">curl</span> --data <span class="st">'{hero{name}}'</span> <span class="st">'127.0.0.1:8000/graphql'</span> --header <span class="st">"Content-Type:application/graphql"</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="co"># {"data":{"hero":{"name":"R2-D2"</span><span class="re">}}}</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a></span>
+<span id="cb7-22"><a href="#cb7-22"></a></span>
+<span id="cb7-23"><a href="#cb7-23"></a><span class="co"># GET Schema definition</span></span>
+<span id="cb7-24"><a href="#cb7-24"></a><span class="ex">curl</span> <span class="st">'127.0.0.1:8000/'</span></span>
+<span id="cb7-25"><a href="#cb7-25"></a><span class="co"># enum Episode {</span></span>
+<span id="cb7-26"><a href="#cb7-26"></a><span class="co">#   NEWHOPE</span></span>
+<span id="cb7-27"><a href="#cb7-27"></a><span class="co">#   EMPIRE</span></span>
+<span id="cb7-28"><a href="#cb7-28"></a><span class="co">#   JEDI</span></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="co"># }</span></span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="co">#</span></span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="co"># type Droid implements Character {</span></span>
+<span id="cb7-32"><a href="#cb7-32"></a><span class="co">#   id: String!</span></span>
+<span id="cb7-33"><a href="#cb7-33"></a><span class="co">#   name: String</span></span>
+<span id="cb7-34"><a href="#cb7-34"></a><span class="co">#   friends: [Character]</span></span>
+<span id="cb7-35"><a href="#cb7-35"></a><span class="co">#   appearsIn: [Episode]</span></span>
+<span id="cb7-36"><a href="#cb7-36"></a><span class="co">#   primaryFunction: String</span></span>
+<span id="cb7-37"><a href="#cb7-37"></a><span class="co"># }</span></span>
+<span id="cb7-38"><a href="#cb7-38"></a><span class="co">#</span></span>
+<span id="cb7-39"><a href="#cb7-39"></a><span class="co"># type Human implements Character {</span></span>
+<span id="cb7-40"><a href="#cb7-40"></a><span class="co">#   id: String!</span></span>
+<span id="cb7-41"><a href="#cb7-41"></a><span class="co">#   name: String</span></span>
+<span id="cb7-42"><a href="#cb7-42"></a><span class="co">#   friends: [Character]</span></span>
+<span id="cb7-43"><a href="#cb7-43"></a><span class="co">#   appearsIn: [Episode]</span></span>
+<span id="cb7-44"><a href="#cb7-44"></a><span class="co">#   homePlanet: String</span></span>
+<span id="cb7-45"><a href="#cb7-45"></a><span class="co"># }</span></span>
+<span id="cb7-46"><a href="#cb7-46"></a><span class="co">#</span></span>
+<span id="cb7-47"><a href="#cb7-47"></a><span class="co"># type Query {</span></span>
+<span id="cb7-48"><a href="#cb7-48"></a><span class="co">#   hero(episode: Episode): Character</span></span>
+<span id="cb7-49"><a href="#cb7-49"></a><span class="co">#   human(id: String!): Human</span></span>
+<span id="cb7-50"><a href="#cb7-50"></a><span class="co">#   droid(id: String!): Droid</span></span>
+<span id="cb7-51"><a href="#cb7-51"></a><span class="co"># }</span></span>
+<span id="cb7-52"><a href="#cb7-52"></a><span class="co">#</span></span>
+<span id="cb7-53"><a href="#cb7-53"></a><span class="co"># interface Character {</span></span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="co">#   id: String!</span></span>
+<span id="cb7-55"><a href="#cb7-55"></a><span class="co">#   name: String</span></span>
+<span id="cb7-56"><a href="#cb7-56"></a><span class="co">#   friends: [Character]</span></span>
+<span id="cb7-57"><a href="#cb7-57"></a><span class="co">#   appearsIn: [Episode]</span></span>
+<span id="cb7-58"><a href="#cb7-58"></a><span class="co"># }</span></span>
+<span id="cb7-59"><a href="#cb7-59"></a><span class="co">#</span></span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="co"># schema {</span></span>
+<span id="cb7-61"><a href="#cb7-61"></a><span class="co">#   query: Query</span></span>
+<span id="cb7-62"><a href="#cb7-62"></a><span class="co"># }</span></span></code></pre></div>
 </div>
 </div>
 </div>

@@ -54,9 +54,11 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">execute_request</span><span class="op">(</span></span>
 <span>  <span class="va">request</span>,</span>
 <span>  <span class="va">schema</span>,</span>
+<span>  <span class="va">...</span>,</span>
 <span>  operation_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  initial_value <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  initial_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose_errors <span class="op">=</span> <span class="fu">is_interactive</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -69,6 +71,10 @@
 <dt>schema</dt>
 <dd><p>a character string (to be used along side <code>initial_value</code>)
 or a schema object created from <code><a href="gqlr_schema.html">gqlr_schema</a></code></p></dd>
+
+
+<dt>...</dt>
+<dd><p>ignored for paramter expansion</p></dd>
 
 
 <dt>operation_name</dt>
@@ -89,6 +95,10 @@ either be provided and/or combined with the resolve method of the query
 root type or mutation root type.  The value provided should be a named list
 of the field name (key) and a value matching that field name type.  The
 value may be a function that returns a value of the field name type.</p></dd>
+
+
+<dt>verbose_errors</dt>
+<dd><p>logical to determine if error-like messages should be displayed when processing a request that finds unknown structures. Be default, this is only enabled when <code>verbose_errors = rlang::is_interactive()</code> is <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
