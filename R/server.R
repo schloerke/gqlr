@@ -4,14 +4,17 @@
 # http://localhost:8000
 # http://localhost:8000/graphql?query={hero{name,friends{name,id}}}&pretty=TRUE
 
-#' Run basic GraphQL server
+#' Run basic GraphQL server with GraphiQL support
 #'
 #' Run a basic GraphQL server using plumber.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is canceled.
 #'
-#' \code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are three routes implemented:
+#' To view the GraphiQL user interface, navigate to the URL provided when the server is started.  The default location is \code{http://localhost:8000/graphiql/}. By default, this route is only available when running the server interactively (\code{graphiql = rlang::is_interactive()}).
+#'
+#' \code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are four routes implemented:
 #'
 #' \describe{
-#'   \item{\code{'/'}}{GET. Returns a GraphQL formatted schema definition}
+#'   \item{\code{'/'}}{GET. If run interactively, forwards to \code{/graphiql} for user interaction with the GraphQL server. This route is diabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.}
+#'   \item{\code{'/graphiql/'}}{GET. Returns a \href{https://github.com/graphql/graphiql/blob/graphiql\%402.2.0/packages/graphiql/README.md}{GraphiQL formatted schema definition} interface to manually interact with the GraphQL server. By default this route is disabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.}
 #'   \item{\code{'/graphql'}}{GET. Executes a query.  The parameter \code{'query'} (which contains a GraphQL formatted query string) must be included.  Optional parameters include: \code{'variables'} a JSON string containing a dictionary of variables (defaults to an empty named list), \code{'operationName'} name of the particular query operation to execute (defaults to NULL), and \code{'pretty'} boolean to determine if the response should be compact (FALSE, default) or expanded (TRUE)}
 #'   \item{\code{'/graphql'}}{POST. Executes a query.  Must provide Content-Type of either 'application/json' or 'application/graphql'.
 #'
@@ -52,11 +55,13 @@
 #'
 #' @param schema Schema object to use execute requests
 #' @param port web port to serve the server from.  Set port to \code{NULL} to not run the plumber server and return it.
+#' @param ... ignored for paramter expansion
+#' @param graphiql logical to determine if the GraphiQL interface should be enabled.  By default, this route is only available when running the server interactively.
 #' @param log boolean that determines if server logging is done.  Defaults to TRUE
 # nocov start
 #' @param initial_value default value to use in \code{\link{execute_request}()}
 #' @export
-server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
+server <- function(schema, port = 8000L, ..., graphiql = interactive(), log = TRUE, initial_value = NULL) {
 
   if (!requireNamespace("plumber")) {
     stop("plumber must be installed.  `install.packages('plumber')`")
@@ -69,6 +74,7 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
   env$log <- log
   env$schema <- schema
   env$initial_value <- initial_value
+  env$is_interactive <- graphiql
 
   query_string_filter_only <- getFromNamespace("defaultPlumberFilters", "plumber")["queryString"]
 
@@ -86,3 +92,28 @@ server <- function(schema, port = 8000L, log = TRUE, initial_value = NULL) {
 
 }
 # nocov end
+
+
+# rlang::is_bool
+is_bool <- function(x) {
+  is.logical(x, n = 1) && !is.na(x)
+}
+# rlang::is_interactive
+is_interactive <- function () {
+    opt <- getOption("rlang_interactive", NULL)
+    if (!is.null(opt)) {
+        if (!is_bool(opt)) {
+            options(rlang_interactive = NULL)
+            # check_bool(opt, arg = "rlang_interactive")
+            stop("`options(rlang_interactive=)` must be a logical value or `NULL`")
+        }
+        return(opt)
+    }
+    if (isTRUE(getOption("knitr.in.progress", NULL))) {
+        return(FALSE)
+    }
+    if (identical(Sys.getenv("TESTTHAT"), "true")) {
+        return(FALSE)
+    }
+    interactive()
+}

@@ -2,14 +2,25 @@
 % Please edit documentation in R/server.R
 \name{server}
 \alias{server}
-\title{Run basic GraphQL server}
+\title{Run basic GraphQL server with GraphiQL support}
 \usage{
-server(schema, port = 8000L, log = TRUE, initial_value = NULL)
+server(
+  schema,
+  port = 8000L,
+  ...,
+  graphiql = interactive(),
+  log = TRUE,
+  initial_value = NULL
+)
 }
 \arguments{
 \item{schema}{Schema object to use execute requests}
 
 \item{port}{web port to serve the server from.  Set port to \code{NULL} to not run the plumber server and return it.}
+
+\item{...}{ignored for paramter expansion}
+
+\item{graphiql}{logical to determine if the GraphiQL interface should be enabled.  By default, this route is only available when running the server interactively.}
 
 \item{log}{boolean that determines if server logging is done.  Defaults to TRUE}
 
@@ -19,10 +30,13 @@ server(schema, port = 8000L, log = TRUE, initial_value = NULL)
 Run a basic GraphQL server using plumber.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is canceled.
 }
 \details{
-\code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are three routes implemented:
+To view the GraphiQL user interface, navigate to the URL provided when the server is started.  The default location is \code{http://localhost:8000/graphiql/}. By default, this route is only available when running the server interactively (\code{graphiql = rlang::is_interactive()}).
+
+\code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are four routes implemented:
 
 \describe{
-  \item{\code{'/'}}{GET. Returns a GraphQL formatted schema definition}
+  \item{\code{'/'}}{GET. If run interactively, forwards to \code{/graphiql} for user interaction with the GraphQL server. This route is diabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.}
+  \item{\code{'/graphiql/'}}{GET. Returns a \href{https://github.com/graphql/graphiql/blob/graphiql\%402.2.0/packages/graphiql/README.md}{GraphiQL formatted schema definition} interface to manually interact with the GraphQL server. By default this route is disabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.}
   \item{\code{'/graphql'}}{GET. Executes a query.  The parameter \code{'query'} (which contains a GraphQL formatted query string) must be included.  Optional parameters include: \code{'variables'} a JSON string containing a dictionary of variables (defaults to an empty named list), \code{'operationName'} name of the particular query operation to execute (defaults to NULL), and \code{'pretty'} boolean to determine if the response should be compact (FALSE, default) or expanded (TRUE)}
   \item{\code{'/graphql'}}{POST. Executes a query.  Must provide Content-Type of either 'application/json' or 'application/graphql'.
 

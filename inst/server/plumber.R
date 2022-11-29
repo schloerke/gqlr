@@ -86,13 +86,19 @@ function(pr) {
     res$status <- 404
     set_res_json_serializer(res)
 
+    routes <- if (is_interactive) {
+      "'/', '/graphiql/', and '/graphql'"
+    } else {
+      "'/graphql'"
+    }
+
     list(
       data = NULL,
       errors = list(
         list(
           message = str_c(
             "server(): route '", req$PATH_INFO, "' not served.",
-            "  gqlr::server() only understands '/' and '/graphql'" # nolint
+            "  gqlr::server() only understands ", routes # nolint
           )
         )
       )
@@ -110,13 +116,6 @@ function(pr) {
     )
   })
   pr
-}
-
-#* @get /
-## makes it "true" GraphQL, but it can't be viewed in a browser
-#* @serializer contentType list(type="application/graphql")
-function() {
-  format(schema$get_schema())
 }
 
 #* @post /graphql
@@ -167,6 +166,17 @@ function(req, res) {
 
 #* @plumber
 function(pr) {
-  pr %>%
-    pr_static("/graphiql", system.file("graphiql", package = "gqlr"))
+  if (is_interactive) {
+    pr %>%
+      pr_static("/graphiql", system.file("graphiql", package = "gqlr")) %>%
+      pr_get("/", function(req, res) {
+        new_location <- paste0(req$PATH_INFO, "graphiql/")
+        res$status <- 307
+        res$setHeader(name = "Location", value = new_location)
+        res$serializer <- serializer_unboxed_json()
+        return(
+          list(message = "307 - Redirecting to GraphiQL")
+        )
+      })
+  }
 }
