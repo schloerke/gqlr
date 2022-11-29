@@ -167,9 +167,11 @@ execute_request <- function(
   schema,
   operation_name = NULL,
   variables = list(),
-  initial_value = NULL
+  initial_value = NULL,
+  ...,
+  verbose_errors = TRUE
 ) {
-  oh <- ObjectHelpers$new(schema, source = request)
+  oh <- ObjectHelpers$new(schema, source = request, error_list = ErrorList$new(verbose = verbose_errors))
   ret <- Result$new(oh$error_list)
 
   validate_schema(oh = oh)

@@ -9,7 +9,9 @@ execute_request(
   schema,
   operation_name = NULL,
   variables = list(),
-  initial_value = NULL
+  initial_value = NULL,
+  ...,
+  verbose_errors = TRUE
 )
 }
 \arguments{

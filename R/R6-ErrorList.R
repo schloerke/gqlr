@@ -214,7 +214,8 @@ ErrorList <- R6Class("ErrorList",
       }
 
       if (isTRUE(self$verbose)) {
-        message("Error: ", err)
+        errors <- paste0("* ", gsub("\n", "\n  ", err, fixed = TRUE), collapse = "\n")
+        message("Error:\n", errors)
       }
 
       # display all errors
