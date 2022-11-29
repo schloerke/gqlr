@@ -11,7 +11,7 @@ execute_request(
   variables = list(),
   initial_value = NULL,
   ...,
-  verbose_errors = TRUE
+  verbose_errors = is_interactive()
 )
 }
 \arguments{
@@ -33,6 +33,10 @@ either be provided and/or combined with the resolve method of the query
 root type or mutation root type.  The value provided should be a named list
 of the field name (key) and a value matching that field name type.  The
 value may be a function that returns a value of the field name type.}
+
+\item{...}{ignored for paramter expansion}
+
+\item{verbose_errors}{logical to determine if error-like messages should be displayed when processing a request that finds unknown structures. Be default, this is only enabled when \code{verbose_errors = rlang::is_interactive()} is \code{TRUE}.}
 }
 \description{
 Executes a GraphQL server request with the provided request.
