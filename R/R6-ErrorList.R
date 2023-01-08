@@ -53,7 +53,7 @@ for_onload(function() {
 ErrorList <- R6Class("ErrorList",
   private = list(
     # nolint start
-    # https://graphql.github.io/graphql-spec/October2016/
+    # http://spec.graphql.org/October2016/
     # document.querySelectorAll( "#sec-Validation section" ).forEach(
     #  function(x,i){console.log(x.firstChild.innerText)}
     # )
