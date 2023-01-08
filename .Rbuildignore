@@ -16,3 +16,4 @@ lintr_cache
 ^docs$
 ^pkgdown$
 ^\.github$
+^revdep$
