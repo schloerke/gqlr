@@ -32,7 +32,7 @@ Run a basic GraphQL server using plumber.  This server is provided to show basic
 \details{
 To view the GraphiQL user interface, navigate to the URL provided when the server is started.  The default location is \code{http://localhost:8000/graphiql/}. By default, this route is only available when running the server interactively (\code{graphiql = rlang::is_interactive()}).
 
-\code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are four routes implemented:
+\code{server()} implements the basic necessities described in \url{https://graphql.org/learn/serving-over-http/}.  There are four routes implemented:
 
 \describe{
   \item{\code{'/'}}{GET. If run interactively, forwards to \code{/graphiql} for user interaction with the GraphQL server. This route is diabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.}
