@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gqlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,9 +45,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="gqlr-development-version">gqlr (development version)<a class="anchor" aria-label="anchor" href="#gqlr-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="gqlr-010">gqlr 0.1.0<a class="anchor" aria-label="anchor" href="#gqlr-010"></a></h2>
 <div class="section level3">
-<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<h3 id="breaking-changes-0-1-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-1-0"></a></h3>
 <ul><li>
 <code>...</code> has been added into <code><a href="../reference/server.html">server()</a></code> ahead of <code>log=</code> and <code>initial_value=</code>. These two paramters must now be named. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
 <li>
@@ -56,13 +56,13 @@
 <code><a href="../reference/server.html">server()</a></code>’s <code>/</code> route now redirects to <code>/graphiql</code> iff <code>server(graphiql=TRUE)</code>. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-and-improvements-development-version">New features and improvements<a class="anchor" aria-label="anchor" href="#new-features-and-improvements-development-version"></a></h3>
+<h3 id="new-features-and-improvements-0-1-0">New features and improvements<a class="anchor" aria-label="anchor" href="#new-features-and-improvements-0-1-0"></a></h3>
 <ul><li>Add support for <a href="https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md" class="external-link">GraphiQL</a>. To view the GraphiQL interface of your schema, run <code>gqlr::server(MY_SCHEMA, graphiql = TRUE)</code> and visit <code>http://localhost:8000/graphiql/</code>. By default, GraphiQL suport is only enabled when run interactively. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
 <li>Add support for <code>execute_request(verbose_errors=)</code>. If <code>TRUE</code> (legacy behavior), error-like messages will be displayed in real time. By default, this value is <code>TRUE</code> when run interactively. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
 <li>Remove <code>__typename</code> from the fields. This is a meta field that should not be attached to the object structure. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-1-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0"></a></h3>
 <ul><li>Fix bug in mutation execution where the query operation was being used for validation (<a href="https://github.com/schloerke/gqlr/issues/9" class="external-link">#9</a>)</li>
 <li>Add support for introspection type <code>subscriptionType</code> and have the value return <code>NULL</code> to signify that it is not supported. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
 </ul></div>
