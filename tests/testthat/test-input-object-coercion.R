@@ -1,8 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-input-object-coercion.R")); # nolint
 
-
 test_that("small input objects", {
-
   "
   input ExampleInputObject {
     a: String
@@ -22,32 +20,35 @@ test_that("small input objects", {
     query: SearchRoot
   }
   " %>%
-    Schema$new() ->
-  ts
+    Schema$new() -> ts
 
   "{ field(arg: { a: \"abc\", b: 123 }) }" %>% expect_r6(schema = ts)
   "{ field(arg: {b: 123 }) }" %>% expect_r6(schema = ts)
-  "{ field(arg: {a: \"abc\" }) }" %>% expect_err("found missing value", schema = ts)
-  "{ field(arg: {a: \"abc\", b: null }) }" %>% expect_err("found null value", schema = ts)
+  "{ field(arg: {a: \"abc\" }) }" %>%
+    expect_err("found missing value", schema = ts)
+  "{ field(arg: {a: \"abc\", b: null }) }" %>%
+    expect_err("found null value", schema = ts)
 
-  "{ list_field(arg: { a: [5], b: [5], c: [5], d: [5] }) }" %>% expect_r6(schema = ts)
+  "{ list_field(arg: { a: [5], b: [5], c: [5], d: [5] }) }" %>%
+    expect_r6(schema = ts)
   "{ list_field(arg: { a: 5, b: 5, c: 5, d: 5 }) }" %>% expect_r6(schema = ts)
-  "{ list_field(arg: { a: [], b: [], c: [5], d: [5] }) }" %>% expect_r6(schema = ts)
+  "{ list_field(arg: { a: [], b: [], c: [5], d: [5] }) }" %>%
+    expect_r6(schema = ts)
   "{ list_field(arg: { b: [], d: [5] }) }" %>% expect_r6(schema = ts)
   "{ list_field(arg: { b: [null], d: [5] }) }" %>% expect_r6(schema = ts)
   "{ list_field(arg: { b: [], c: [null], d: [5] }) }" %>%
     expect_err("found null value", schema = ts)
-  "{ list_field(arg: { d: [5] }) }" %>% expect_err("found missing value", schema = ts)
-
+  "{ list_field(arg: { d: [5] }) }" %>%
+    expect_err("found missing value", schema = ts)
 })
 
-  # { a: "abc", b: 123 }	null	{ a: "abc", b: 123 }
-  # { a: 123, b: "123" }	null	{ a: "123", b: 123 }
-  # { a: "abc" }	null	Error: Missing required field b
-  # { a: "abc", b: null }	null	Error: b must be non‐null.
-  # { a: null, b: 1 }	null	{ a: null, b: 1 }
-  # { b: $var }	{ var: 123 }	{ b: 123 }
-  # { b: $var }	{}	Error: Missing required field b.
-  # { b: $var }	{ var: null }	Error: b must be non‐null.
-  # { a: $var, b: 1 }	{ var: null }	{ a: null, b: 1 }
-  # { a: $var, b: 1 }	{}	{ b: 1 }
+# { a: "abc", b: 123 }	null	{ a: "abc", b: 123 }
+# { a: 123, b: "123" }	null	{ a: "123", b: 123 }
+# { a: "abc" }	null	Error: Missing required field b
+# { a: "abc", b: null }	null	Error: b must be non‐null.
+# { a: null, b: 1 }	null	{ a: null, b: 1 }
+# { b: $var }	{ var: 123 }	{ b: 123 }
+# { b: $var }	{}	Error: Missing required field b.
+# { b: $var }	{ var: null }	Error: b must be non‐null.
+# { a: $var, b: 1 }	{ var: null }	{ a: null, b: 1 }
+# { a: $var, b: 1 }	{}	{ b: 1 }

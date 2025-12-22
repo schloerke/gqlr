@@ -1,4 +1,3 @@
-
 r6_from_list <- function(
   obj,
   level = 0,
@@ -42,12 +41,12 @@ r6_from_list <- function(
           retList[[activeKey]] <- lapply(seq_along(objVal), function(i) {
             r6_from_list(
               objVal[[i]],
-              keys = keys, level = level,
+              keys = keys,
+              level = level,
               objPos = i,
               verbose = verbose
             )
           })
-
         } else {
           # going into another object, such as "Name" or "Location"
           retList[[activeKey]] <- r6_from_list(

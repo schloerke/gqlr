@@ -1,5 +1,3 @@
-
-
 # nolint start
 
 # 6.1 - Execute request     - DONE
@@ -23,12 +21,6 @@
 
 # nolint end
 
-
-
-
-
-
-
 # 6.1 - Executing Requests
 
 # To execute a request, the executor must have a parsed Document (as defined in
@@ -48,7 +40,6 @@
 #   4. Otherwise if operation is a mutation operation:
 #     a. Return ExecuteMutation(operation, schema, coercedVariableValues, initialValue).
 # nolint end
-
 
 #' Execute GraphQL server response
 #'
@@ -173,26 +164,37 @@ execute_request <- function(
   initial_value = NULL,
   verbose_errors = is_interactive()
 ) {
-  oh <- ObjectHelpers$new(schema, source = request, error_list = ErrorList$new(verbose = verbose_errors))
+  oh <- ObjectHelpers$new(
+    schema,
+    source = request,
+    error_list = ErrorList$new(verbose = verbose_errors)
+  )
   ret <- Result$new(oh$error_list)
 
   validate_schema(oh = oh)
-  if (oh$error_list$has_any_errors()) return(ret)
+  if (oh$error_list$has_any_errors()) {
+    return(ret)
+  }
 
   document_obj <- validate_document(request, oh = oh)
-  if (oh$error_list$has_any_errors()) return(ret)
+  if (oh$error_list$has_any_errors()) {
+    return(ret)
+  }
 
   operation <- get_operation(document_obj, operation_name, oh = oh)
-  if (oh$error_list$has_any_errors()) return(ret)
+  if (oh$error_list$has_any_errors()) {
+    return(ret)
+  }
 
   coerced_variables <- coerce_variable_values(operation, variables, oh = oh)
-  if (oh$error_list$has_any_errors()) return(ret)
+  if (oh$error_list$has_any_errors()) {
+    return(ret)
+  }
   oh$set_coerced_variables(coerced_variables)
 
   operation_type <- operation$operation
   if (identical(operation_type, "query")) {
     data <- execute_query(operation, initial_value, oh = oh)
-
   } else if (identical(operation_type, "mutation")) {
     data <- execute_mutation(operation, initial_value, oh = oh)
   } else {
@@ -202,7 +204,6 @@ execute_request <- function(
   ret$data <- data
   return(ret)
 }
-
 
 
 validate_document <- function(document_obj, ..., oh) {
@@ -250,12 +251,13 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
 
   oh$error_list$add(
     "6.1",
-    "Operation: ", operation_name, " can't be found in the document object"
+    "Operation: ",
+    operation_name,
+    " can't be found in the document object"
     # no loc
   )
   return(NULL)
 }
-
 
 
 # nolint start
@@ -280,7 +282,6 @@ get_operation <- function(document_obj, operation_name = NULL, ..., oh) {
 
 # variable_values is a named list according to the variable name
 coerce_variable_values <- function(operation, variable_values, ..., oh) {
-
   coerced_values <- list()
 
   variable_definitions <- operation$variableDefinitions
@@ -305,7 +306,6 @@ coerce_variable_values <- function(operation, variable_values, ..., oh) {
         next
       }
     } else {
-
       if (inherits(value, "NullValue")) {
         coerced_value <- NULL
       } else {

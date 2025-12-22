@@ -1,29 +1,28 @@
-
 #
 # 5.3.1 - Argument Names                - DONE
 # 5.3.2 - Argument Uniqueness           - DONE
 # 5.3.3.1 - Compatible Values           - DONE
 # 5.3.3.2 - Required Non-Null Arguments - DONE
 validate_arguments <- function(
-  argument_obj_list, field_def_obj,
+  argument_obj_list,
+  field_def_obj,
   ...,
   parent_obj,
   oh,
   skip_variables = FALSE
 ) {
-
   if (
     is.null(argument_obj_list) &&
-    is.null(field_def_obj$arguments)
+      is.null(field_def_obj$arguments)
   ) {
     return(invisible(TRUE))
   }
 
-
   if (is.null(field_def_obj$arguments)) {
     oh$error_list$add(
       "5.3.1",
-      "Arguments supplied, but there are no arguments for field: ", format(field_def_obj$name),
+      "Arguments supplied, but there are no arguments for field: ",
+      format(field_def_obj$name),
       loc = parent_obj$loc
     )
     return(FALSE)
@@ -33,13 +32,11 @@ validate_arguments <- function(
   field_arg_map %>%
     lapply("[[", "name") %>%
     lapply(format) %>%
-    unlist() ->
-  names(field_arg_map)
+    unlist() -> names(field_arg_map)
 
   values_seen <- list()
 
   for (argument_obj in argument_obj_list) {
-
     arg_name <- argument_obj$name
     arg_name_str <- format(arg_name)
 
@@ -47,7 +44,8 @@ validate_arguments <- function(
     if (!is.null(values_seen[[arg_name_str]])) {
       oh$error_list$add(
         "5.3.2",
-        "duplicate arguments with same name: ", arg_name_str,
+        "duplicate arguments with same name: ",
+        arg_name_str,
         loc = parent_obj$loc
       )
       return(FALSE)
@@ -62,14 +60,14 @@ validate_arguments <- function(
     if (is.null(matching_arg_obj)) {
       oh$error_list$add(
         "5.3.1",
-        "could not find matching arg value with label: ", format(arg_name),
-        " for field: ", format(field_def_obj$name),
+        "could not find matching arg value with label: ",
+        format(arg_name),
+        " for field: ",
+        format(field_def_obj$name),
         loc = parent_obj$loc
       )
       return(FALSE)
     }
-
-
 
     # 5.3.3.1 - Compatible Values
     # If value is not a Variable
@@ -86,15 +84,17 @@ validate_arguments <- function(
     }
 
     # check type can be coerced
-    validate_value_can_be_coerced(arg_value, matching_arg_obj$type, oh = oh, rule_code = "5.3.3.1")
-
+    validate_value_can_be_coerced(
+      arg_value,
+      matching_arg_obj$type,
+      oh = oh,
+      rule_code = "5.3.3.1"
+    )
 
     if (inherits(arg_value, "ObjectValue")) {
       validate_input_object_fields(arg_value, oh = oh)
     }
-
   }
-
 
   # 5.3.3.2 - Required Non-Null Arguments
   # For each Field or Directive in the document.
@@ -113,19 +113,20 @@ validate_arguments <- function(
       arg_value <- values_seen[[format(field_arg$name)]]
       if (
         is.null(arg_value) ||
-        inherits(arg_value, "NullValue")
+          inherits(arg_value, "NullValue")
       ) {
         oh$error_list$add(
           "5.3.3.2",
-          "null or missing argument not allowed for argument: ", format(field_arg$name),
-          " for field: ", format(field_def_obj$name),
+          "null or missing argument not allowed for argument: ",
+          format(field_arg$name),
+          " for field: ",
+          format(field_def_obj$name),
           loc = parent_obj$loc
         )
         next
       }
     }
   }
-
 
   invisible(TRUE)
 }

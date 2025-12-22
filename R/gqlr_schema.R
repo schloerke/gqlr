@@ -1,9 +1,5 @@
 #' @include graphql_json.R
 
-
-
-
-
 #' @title Create Schema definitions
 #'
 #' @description Creates a Schema object from the defined GraphQL string and
@@ -234,22 +230,28 @@ gqlr_schema <- function(schema, ...) {
   info_list <- list(...)
 
   if (length(info_list) > 0) {
-    is_named_list(info_list, "gqlr_schema() extra arguments must be uniquely named arguments")
+    is_named_list(
+      info_list,
+      "gqlr_schema() extra arguments must be uniquely named arguments"
+    )
 
     for (item_name in names(info_list)) {
       item <- info_list[[item_name]]
 
       obj <- schema$get_type(item_name)
       if (is.null(obj)) {
-        stop("gqlr_schema() could not find schema definition to match argument name: ", item_name)
+        stop(
+          "gqlr_schema() could not find schema definition to match argument name: ",
+          item_name
+        )
       }
       item_type <- class(obj)[1]
 
       info_names <- names(item)
-      if (!(
-        is.function(item) ||
-        is.list(item)
-      )) {
+      if (
+        !(is.function(item) ||
+          is.list(item))
+      ) {
         stop(
           "gqlr_schema() named arguments should either be a named list of information or a ",
           "function which will be set to the resolve function or resolve_type function accordingly"
@@ -265,7 +267,8 @@ gqlr_schema <- function(schema, ...) {
           )
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: ScalarTypeDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -275,7 +278,6 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else if (item_type == "ObjectTypeDefinition") {
         if (is.function(item)) {
           item <- list(resolve = item)
@@ -283,7 +285,8 @@ gqlr_schema <- function(schema, ...) {
           is_ok <- all(info_names %in% c("description", "fields", "resolve"))
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: ObjectTypeDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -293,7 +296,6 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else if (item_type == "EnumTypeDefinition") {
         if (is.function(item)) {
           item <- list(resolve = item)
@@ -303,7 +305,8 @@ gqlr_schema <- function(schema, ...) {
           )
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: EnumTypeDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -313,16 +316,20 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
-      } else if (item_type == "InterfaceTypeDefinition" || item_type == "UnionTypeDefinition") {
+      } else if (
+        item_type == "InterfaceTypeDefinition" ||
+          item_type == "UnionTypeDefinition"
+      ) {
         if (is.function(item)) {
           item <- list(resolve_type = item)
         } else {
           is_ok <- all(info_names %in% c("description", "resolve_type"))
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
-              " of type: ,", item_type,
+              "gqlr_schema() argument: ",
+              item_name,
+              " of type: ,",
+              item_type,
               " should be a 'resolve_type' function or",
               " a list possibly containing these elements:\n",
               "\tdescription: String\n",
@@ -330,12 +337,13 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else if (item_type == "InputObjectTypeDefinition") {
         if (is.function(item)) {
           stop(
-            "gqlr_schema() argument: ", item_name,
-            " of type: ,", item_type,
+            "gqlr_schema() argument: ",
+            item_name,
+            " of type: ,",
+            item_type,
             " should be a list possibly containing these elements:\n",
             "\tdescription: String\n"
           )
@@ -343,14 +351,15 @@ gqlr_schema <- function(schema, ...) {
           is_ok <- all(info_names %in% c("description"))
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
-              " of type: ,", item_type,
+              "gqlr_schema() argument: ",
+              item_name,
+              " of type: ,",
+              item_type,
               " should be a list possibly containing these elements:\n",
               "\tdescription: String\n"
             )
           }
         }
-
       } else if (item_type == "DirectiveDefinition") {
         if (is.function(item)) {
           item <- list(resolve = item)
@@ -360,7 +369,8 @@ gqlr_schema <- function(schema, ...) {
           )
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: DirectiveDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -369,7 +379,6 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else {
         str(obj)
         stop("unknown schema defintion provided to gqlr_schema()")
@@ -377,11 +386,16 @@ gqlr_schema <- function(schema, ...) {
 
       is_named_list(
         item,
-        str_c("gqlr_schema() argument: '", item_name, "' must be uniquely named arguments")
+        str_c(
+          "gqlr_schema() argument: '",
+          item_name,
+          "' must be uniquely named arguments"
+        )
       )
 
       for (info_name in names(item)) {
-        store_name <- switch(info_name,
+        store_name <- switch(
+          info_name,
           "resolve" = ".resolve",
           "resolve_type" = ".resolve_type",
           "parse_ast" = ".parse_ast",
@@ -395,11 +409,15 @@ gqlr_schema <- function(schema, ...) {
             field_name_obj <- as_type(field_name)
             obj_field <- obj$.get_field(field_name_obj)
             if (is.null(obj_field)) {
-              stop("Could not find field: '", field_name, "' for Object: ", item_name)
+              stop(
+                "Could not find field: '",
+                field_name,
+                "' for Object: ",
+                item_name
+              )
             }
             obj_field$description <- item$fields[[field_name]]
           }
-
         } else if (store_name == "values") {
           for (value_name in names(item$values)) {
             found <- FALSE
@@ -414,7 +432,6 @@ gqlr_schema <- function(schema, ...) {
               stop("Could not find value for Enum: ", item_name)
             }
           }
-
         } else {
           obj[[store_name]] <- item[[info_name]]
         }

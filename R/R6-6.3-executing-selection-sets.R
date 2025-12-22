@@ -18,10 +18,16 @@
 #   4. Return resultMap.
 # nolint end
 
-  # NOTE: responseMap is ordered by which fields appear first in the query. This is explained in greater detail in the Field Collection section below.
+# NOTE: responseMap is ordered by which fields appear first in the query. This is explained in greater detail in the Field Collection section below.
 
-execute_selection_set <- function(selection_set, object_type, object_value, ..., top_level = FALSE, oh) {
-
+execute_selection_set <- function(
+  selection_set,
+  object_type,
+  object_value,
+  ...,
+  top_level = FALSE,
+  oh
+) {
   # 1. Let groupedFieldSet be the result of CollectFields(objectType, selectionSet, variableValues).
   grouped_field_set <- collect_fields(object_type, selection_set, oh = oh)
 
@@ -39,10 +45,15 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
     first_field <- fields[[1]]
     field_name <- first_field$name$value # nolint
     matching_field <-
-      if (field_name == "__typename") Introspection__typename_field
-      else if (top_level && field_name == "__schema") Introspection__schema_field
-      else if (top_level && field_name == "__type") Introspection__type_field
-      else object_obj$.get_field(first_field)
+      if (field_name == "__typename") {
+        Introspection__typename_field
+      } else if (top_level && field_name == "__schema") {
+        Introspection__schema_field
+      } else if (top_level && field_name == "__type") {
+        Introspection__type_field
+      } else {
+        object_obj$.get_field(first_field)
+      }
     # b. Let fieldType be the return type defined for the field fieldName of objectType.
     matching_field_type <- matching_field$type
 
@@ -65,7 +76,13 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
 
     # d. Let responseValue be
     #    ExecuteField(objectType, objectValue, fields, fieldType, variableValues).
-    response_value <- execute_field(object_type, object_value, matching_field_type, fields, oh = oh)
+    response_value <- execute_field(
+      object_type,
+      object_value,
+      matching_field_type,
+      fields,
+      oh = oh
+    )
 
     # e. Set responseValue as the value for responseKey in resultMap.
     result_map[response_key] <- list(response_value)
@@ -74,8 +91,6 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
   # 4. Return resultMap.
   result_map
 }
-
-
 
 
 # The depth‐first‐search order of the field groups produced by CollectFields() is maintained through execution, ensuring that fields appear in the executed response in a stable and predictable order.
@@ -118,21 +133,25 @@ execute_selection_set <- function(selection_set, object_type, object_value, ...,
 #         3. Append all items in fragmentGroup to groupForResponseKey.
 #   4. Return groupedFields.
 # nolint end
-collect_fields <- function(object_type, selection_set, ..., oh, visited_fragments = c()) {
-
+collect_fields <- function(
+  object_type,
+  selection_set,
+  ...,
+  oh,
+  visited_fragments = c()
+) {
   # 2. Initialize groupedFields to an empty ordered map of lists.
   grouped_fields <- list()
 
   # 3. For each selection in selectionSet:
   for (selection in selection_set$selections) {
-
     # nolint start
     # a. If selection provides the directive @skip, let skipDirective be that directive.
-      # i. If skipDirective‘s if argument is true or is a variable in variableValues with the value
-      #    true, continue with the next selection in selectionSet.
+    # i. If skipDirective‘s if argument is true or is a variable in variableValues with the value
+    #    true, continue with the next selection in selectionSet.
     # b. If selection provides the directive @include, let includeDirective be that directive.
-      # i. If includeDirective‘s if argument is not true and is not a variable in variableValues
-      #    with the value true, continue with the next selection in selectionSet.
+    # i. If includeDirective‘s if argument is not true and is not a variable in variableValues
+    #    with the value true, continue with the next selection in selectionSet.
     # if there any directives, solve them as they could be user defined
     # nolint end
     if (!is.null(selection$directives)) {
@@ -171,33 +190,35 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
       # ii. Let groupForResponseKey be the list in groupedFields for responseKey; if no such list
       #     exists, create it as an empty list.
       # iii. Append selection to the groupForResponseKey.
-      group_for_response_key <- append(grouped_fields[[response_key_txt]], selection)
+      group_for_response_key <- append(
+        grouped_fields[[response_key_txt]],
+        selection
+      )
       grouped_fields[[response_key_txt]] <- group_for_response_key
       next
     }
 
     # d. If selection is a FragmentSpread:
-      # i. Let fragmentSpreadName be the name of selection.
-      # ii. If fragmentSpreadName is in visitedFragments, continue with the next selection in
-      #     selectionSet.
-      # iii. Add fragmentSpreadName to visitedFragments.
-      # iv. Let fragment be the Fragment in the current Document whose name is fragmentSpreadName.
-      # v. If no such fragment exists, continue with the next selection in selectionSet.
-      # vi. Let fragmentType be the type condition on fragment.
-      # vii. If DoesFragmentTypeApply(objectType, fragmentType) is false, continue with the next
-      #      selection in selectionSet.
-      # viii. Let fragmentSelectionSet be the top‐level selection set of fragment.
-      # ix. Let fragmentGroupedFieldSet be the result of calling CollectFields(objectType,
-      #     fragmentSelectionSet, visitedFragments).
-      # x. For each fragmentGroup in fragmentGroupedFieldSet:
-        # 1. Let responseKey be the response key shared by all fields in fragmentGroup
-        # 2. Let groupForResponseKey be the list in groupedFields for responseKey; if no such list
-        #    exists, create it as an empty list.
-        # 3. Append all items in fragmentGroup to groupForResponseKey.
+    # i. Let fragmentSpreadName be the name of selection.
+    # ii. If fragmentSpreadName is in visitedFragments, continue with the next selection in
+    #     selectionSet.
+    # iii. Add fragmentSpreadName to visitedFragments.
+    # iv. Let fragment be the Fragment in the current Document whose name is fragmentSpreadName.
+    # v. If no such fragment exists, continue with the next selection in selectionSet.
+    # vi. Let fragmentType be the type condition on fragment.
+    # vii. If DoesFragmentTypeApply(objectType, fragmentType) is false, continue with the next
+    #      selection in selectionSet.
+    # viii. Let fragmentSelectionSet be the top‐level selection set of fragment.
+    # ix. Let fragmentGroupedFieldSet be the result of calling CollectFields(objectType,
+    #     fragmentSelectionSet, visitedFragments).
+    # x. For each fragmentGroup in fragmentGroupedFieldSet:
+    # 1. Let responseKey be the response key shared by all fields in fragmentGroup
+    # 2. Let groupForResponseKey be the list in groupedFields for responseKey; if no such list
+    #    exists, create it as an empty list.
+    # 3. Append all items in fragmentGroup to groupForResponseKey.
     if (inherits(selection, "FragmentSpread")) {
       stop("this should not occur, only inline fragments should be supplied")
     }
-
 
     # e. If selection is an InlineFragment:
     if (inherits(selection, "InlineFragment")) {
@@ -217,17 +238,24 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
 
       # iv. Let fragmentGroupedFieldSet be the result of calling CollectFields(objectType,
       #     fragmentSelectionSet, variableValues, visitedFragments).
-      fragment_grouped_field_set <- collect_fields(object_type, fragment_selection_set, oh = oh)
+      fragment_grouped_field_set <- collect_fields(
+        object_type,
+        fragment_selection_set,
+        oh = oh
+      )
 
       # v. For each fragmentGroup in fragmentGroupedFieldSet:
-        # 1. Let responseKey be the response key shared by all fields in fragmentGroup
+      # 1. Let responseKey be the response key shared by all fields in fragmentGroup
       for (response_key_txt in names(fragment_grouped_field_set)) {
         fragment_group <- fragment_grouped_field_set[[response_key_txt]]
 
         # 2. Let groupForResponseKey be the list in groupedFields for responseKey; if no such list
         #    exists, create it as an empty list.
         # 3. Append all items in fragmentGroup to groupForResponseKey.
-        group_for_response_key <- append(grouped_fields[[response_key_txt]], fragment_group)
+        group_for_response_key <- append(
+          grouped_fields[[response_key_txt]],
+          fragment_group
+        )
         grouped_fields[[response_key_txt]] <- group_for_response_key
       }
 
@@ -244,13 +272,6 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
 }
 
 
-
-
-
-
-
-
-
 # nolint start
 # DoesFragmentTypeApply(objectType, fragmentType)
 #   1. If fragmentType is an Object Type:
@@ -261,24 +282,19 @@ collect_fields <- function(object_type, selection_set, ..., oh, visited_fragment
 #     a. if objectType is a possible type of fragmentType, return true otherwise return false.
 # nolint end
 does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
-
   fragment_type <- get_inner_type(fragment_type)
   object_type <- get_inner_type(object_type)
 
   #   1. If fragmentType is an Object Type:
   #     a. if objectType and fragmentType are the same type, return true, otherwise return false.
-  if (
-    oh$schema$is_object(fragment_type)
-  ) {
+  if (oh$schema$is_object(fragment_type)) {
     ret <- fragment_type$.matches(object_type)
     return(ret)
   }
 
   #   2. If fragmentType is an Interface Type:
   #     a. if objectType is an implementation of fragmentType, return true otherwise return false.
-  if (
-    oh$schema$is_interface(fragment_type)
-  ) {
+  if (oh$schema$is_interface(fragment_type)) {
     obj <- oh$schema$get_object(object_type)
     ret <- obj$.has_interface(fragment_type)
     return(ret)
@@ -286,9 +302,7 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
 
   #   3. If fragmentType is a Union:
   #     a. if objectType is a possible type of fragmentType, return true otherwise return false.
-  if (
-    oh$schema$is_union(fragment_type)
-  ) {
+  if (oh$schema$is_union(fragment_type)) {
     union_obj <- oh$schema$get_union(fragment_type)
     ret <- union_obj$.has_type(object_type)
     return(ret)
@@ -296,5 +310,4 @@ does_fragment_type_apply <- function(object_type, fragment_type, ..., oh) {
 
   str(fragment_type)
   stop("this should not be reached")
-
 }

@@ -61,13 +61,21 @@
 # nocov start
 #' @param initial_value default value to use in \code{\link{execute_request}()}
 #' @export
-server <- function(schema, port = 8000L, ..., graphiql = interactive(), log = TRUE, initial_value = NULL) {
-
+server <- function(
+  schema,
+  port = 8000L,
+  ...,
+  graphiql = interactive(),
+  log = TRUE,
+  initial_value = NULL
+) {
   if (!requireNamespace("plumber")) {
     stop("plumber must be installed.  `install.packages('plumber')`")
   }
   if (utils::packageVersion("plumber") < "1.2.0") {
-    stop("plumber must be version 1.2.0 or greater.  `install.packages('plumber')`")
+    stop(
+      "plumber must be version 1.2.0 or greater.  `install.packages('plumber')`"
+    )
   }
 
   env <- new.env(parent = .GlobalEnv)
@@ -76,7 +84,10 @@ server <- function(schema, port = 8000L, ..., graphiql = interactive(), log = TR
   env$initial_value <- initial_value
   env$is_interactive <- graphiql
 
-  query_string_filter_only <- getFromNamespace("defaultPlumberFilters", "plumber")["queryString"]
+  query_string_filter_only <- getFromNamespace(
+    "defaultPlumberFilters",
+    "plumber"
+  )["queryString"]
 
   pr <- plumber::pr(
     file = system.file("server/plumber.R", package = "gqlr"),
@@ -89,10 +100,8 @@ server <- function(schema, port = 8000L, ..., graphiql = interactive(), log = TR
   }
 
   pr
-
 }
 # nocov end
-
 
 # rlang::is_bool
 is_bool <- function(x) {
@@ -100,20 +109,20 @@ is_bool <- function(x) {
 }
 # rlang::is_interactive
 is_interactive <- function() {
-    opt <- getOption("rlang_interactive", NULL)
-    if (!is.null(opt)) {
-        if (!is_bool(opt)) {
-            options(rlang_interactive = NULL)
-            # check_bool(opt, arg = "rlang_interactive")
-            stop("`options(rlang_interactive=)` must be a logical value or `NULL`")
-        }
-        return(opt)
+  opt <- getOption("rlang_interactive", NULL)
+  if (!is.null(opt)) {
+    if (!is_bool(opt)) {
+      options(rlang_interactive = NULL)
+      # check_bool(opt, arg = "rlang_interactive")
+      stop("`options(rlang_interactive=)` must be a logical value or `NULL`")
     }
-    if (isTRUE(getOption("knitr.in.progress", NULL))) {
-        return(FALSE)
-    }
-    if (identical(Sys.getenv("TESTTHAT"), "true")) {
-        return(FALSE)
-    }
-    interactive()
+    return(opt)
+  }
+  if (isTRUE(getOption("knitr.in.progress", NULL))) {
+    return(FALSE)
+  }
+  if (identical(Sys.getenv("TESTTHAT"), "true")) {
+    return(FALSE)
+  }
+  interactive()
 }

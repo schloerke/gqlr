@@ -1,5 +1,3 @@
-
-
 test_that("lapply works", {
   # works as expected
   run2 <- function() {
@@ -25,9 +23,7 @@ test_that("lapply works", {
   expect_true(ans$A() == "A")
   expect_true(ans$B() == "B")
   expect_true(ans$C() == "C")
-
 })
-
 
 
 test_that("pryr_unenclose works", {
@@ -51,8 +47,6 @@ test_that("pryr_unenclose works", {
   expect_true(ans$B() == "B")
   expect_true(ans$C() == "C")
 
-
-
   ans <- (function() {
     ret_fn <- function(item) {
       function() {
@@ -68,6 +62,4 @@ test_that("pryr_unenclose works", {
   expect_true(ans$A() == "A")
   expect_true(ans$B() == "B")
   expect_true(ans$C() == "C")
-
-
 })

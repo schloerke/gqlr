@@ -1,10 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.3-argument.R")); # nolint
 
-
-
-
 test_that("5.3.1 - Argument Names", {
-
   "
   {
     dog {
@@ -19,7 +15,7 @@ test_that("5.3.1 - Argument Names", {
     isHousetrained(atOtherHomes: true) @include(if: true)
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   {
@@ -31,7 +27,7 @@ test_that("5.3.1 - Argument Names", {
     name(command: CLEAN_UP_HOUSE)
   }
   " %>%
-  expect_err("no arguments for field")
+    expect_err("no arguments for field")
 
   "
   {
@@ -43,7 +39,7 @@ test_that("5.3.1 - Argument Names", {
     doesKnowCommand(command: CLEAN_UP_HOUSE)
   }
   " %>%
-  expect_err("could not find matching arg value")
+    expect_err("could not find matching arg value")
 
   "
   {
@@ -55,8 +51,7 @@ test_that("5.3.1 - Argument Names", {
     isHousetrained(atOtherHomes: true) @include(unless: false)
   }
   " %>%
-  expect_err("could not find matching arg")
-
+    expect_err("could not find matching arg")
 
   # order doesn't matter
   "
@@ -73,13 +68,11 @@ test_that("5.3.1 - Argument Names", {
     second: multipleReqs(y: 1, x: 2)
   }
   " %>%
-  expect_r6()
-
+    expect_r6()
 })
 
 
 test_that("5.3.2 - Argument Uniqueness", {
-
   "
   {
     arguments {
@@ -90,13 +83,11 @@ test_that("5.3.2 - Argument Uniqueness", {
     multipleReqs(x: 1, y: 2, x: 3)
   }
   " %>%
-  expect_err("duplicate arguments with same name")
-
+    expect_err("duplicate arguments with same name")
 })
 
 
 test_that("5.3.3.1 - Compatible Values", {
-
   "
   {
     arguments {
@@ -111,17 +102,11 @@ test_that("5.3.3.1 - Compatible Values", {
     floatArgField(floatArg: 1)
   }
   " %>%
-  expect_r6()
-
-
-
-
+    expect_r6()
 })
 
 
-
 test_that("5.3.3.2 - Require Non-Null Arguments", {
-
   "
   {
     arguments {
@@ -140,7 +125,7 @@ test_that("5.3.3.2 - Require Non-Null Arguments", {
     second: booleanArgField
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   {
@@ -152,7 +137,7 @@ test_that("5.3.3.2 - Require Non-Null Arguments", {
     nonNullBooleanArgField
   }
   " %>%
-  expect_err("null or missing argument not allowed")
+    expect_err("null or missing argument not allowed")
 
   "
   {
@@ -164,8 +149,5 @@ test_that("5.3.3.2 - Require Non-Null Arguments", {
     notNullBooleanArgField(nonNullBooleanArg: null)
   }
   " %>%
-  expect_err("not all requested names are found")
-
-
-
+    expect_err("not all requested names are found")
 })

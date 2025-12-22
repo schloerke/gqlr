@@ -1,10 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-mutation-simple.R")); # nolint
 
-
-
-
 test_that("small counter", {
-
   count_total <- 0
   "
   type Counter {
@@ -34,9 +30,7 @@ test_that("small counter", {
           )
         }
       )
-    ) ->
-  mutation_schema_doc
-
+    ) -> mutation_schema_doc
 
   do_query <- function(i) {
     ans <- execute_request(
@@ -47,7 +41,10 @@ test_that("small counter", {
     )
     expect_true(ans$error_list$has_no_errors())
     expect_equal(ans$data$value, i)
-    expect_equal(format(ans, pretty = FALSE), str_c("{\"data\":{\"value\":", i, "}}"))
+    expect_equal(
+      format(ans, pretty = FALSE),
+      str_c("{\"data\":{\"value\":", i, "}}")
+    )
   }
 
   do_mutation <- function(i) {
@@ -66,13 +63,10 @@ test_that("small counter", {
     do_query(i)
     do_mutation(i + 1)
   }
-
-
 })
 
 # Altered from: https://github.com/schloerke/gqlr/issues/8
 test_that("mutation works with names that are not query names", {
-
   votes <- 3
 
   "
@@ -102,8 +96,7 @@ test_that("mutation works with names that are not query names", {
           TRUE
         })
       }
-    ) ->
-  votes_schema
+    ) -> votes_schema
 
   expect_votes_request <- function(...) {
     expect_request(..., schema = votes_schema)
@@ -115,5 +108,4 @@ test_that("mutation works with names that are not query names", {
     expect_votes_request('{ "data": { "castVote": true } }')
   "{votes}" %>%
     expect_votes_request('{ "data": { "votes": 42 } }')
-
 })

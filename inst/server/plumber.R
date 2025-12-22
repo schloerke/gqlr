@@ -1,8 +1,14 @@
 library(plumber)
 options(plumber.trailingSlash = TRUE)
 
-server_execute_query <- function(req, res, query, variables, operation_name, pretty) {
-
+server_execute_query <- function(
+  req,
+  res,
+  query,
+  variables,
+  operation_name,
+  pretty
+) {
   pretty <- isTRUE(as.logical(ifnull(pretty, FALSE)))
 
   if (!is.character(query) || is.null(query)) {
@@ -35,18 +41,20 @@ server_execute_query <- function(req, res, query, variables, operation_name, pre
 
 set_res_json_serializer <- function(res) {
   res$serializer <- function(val, req, res, errorHandler) {
-    tryCatch({
-      res$setHeader("Content-Type", "application/json")
-      res$body <- to_json(val)
-      return(res$toResponse())
-    }, error = function(e) {
-      errorHandler(req, res, e)
-    })
+    tryCatch(
+      {
+        res$setHeader("Content-Type", "application/json")
+        res$body <- to_json(val)
+        return(res$toResponse())
+      },
+      error = function(e) {
+        errorHandler(req, res, e)
+      }
+    )
   }
 
   invisible(res)
 }
-
 
 
 #' @plumber
@@ -64,8 +72,10 @@ function(pr) {
     pr$registerHook("postroute", function(data, req, res) {
       vars <- ifnull(req[["_gqlr"]], list())
       cat(paste0(
-        date(), " - ",
-        req$REQUEST_METHOD, " ",
+        date(),
+        " - ",
+        req$REQUEST_METHOD,
+        " ",
         paste(
           c(
             req$PATH_INFO,
@@ -97,8 +107,11 @@ function(pr) {
       errors = list(
         list(
           message = str_c(
-            "server(): route '", req$PATH_INFO, "' not served.",
-            "  gqlr::server() only understands ", routes # nolint
+            "server(): route '",
+            req$PATH_INFO,
+            "' not served.",
+            "  gqlr::server() only understands ",
+            routes # nolint
           )
         )
       )
@@ -121,7 +134,6 @@ function(pr) {
 #* @post /graphql
 #* @serializer contentType list(type="application/json")
 function(req, res) {
-
   body <- paste0(req$rook.input$read_lines(), collapse = "\n")
 
   if (identical(req$HEADERS[["content-type"]], "application/graphql")) {
@@ -129,7 +141,6 @@ function(req, res) {
     variables <- list()
     operation_name <- NULL
     pretty <- FALSE
-
   } else {
     if (!jsonlite::validate(body)) {
       stop("non-json body provided to POST /graphql")

@@ -1,10 +1,6 @@
-
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-gqlr_schema.R")); # nolint
 
-
-
 test_that("gqlr_schema information", {
-
   resolve_my_scalar <- function(a, b) {
     "scalar"
   }
@@ -57,8 +53,7 @@ test_that("gqlr_schema information", {
 
   directive @MyDirective(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
   " %>%
-    Schema$new() ->
-  MySchema
+    Schema$new() -> MySchema
 
   schema <- gqlr_schema(
     MySchema,
@@ -74,12 +69,20 @@ test_that("gqlr_schema information", {
 
   expect_equal(schema$get_scalar("MyScalar")$.resolve, resolve_my_scalar)
   expect_equal(schema$get_object("MyObject")$.resolve, resolve_my_object)
-  expect_equal(schema$get_object("MyOtherObject")$.resolve, resolve_my_other_object)
+  expect_equal(
+    schema$get_object("MyOtherObject")$.resolve,
+    resolve_my_other_object
+  )
   expect_equal(schema$get_enum("MyEnum")$.resolve, resolve_my_enum)
-  expect_equal(schema$get_interface("MyInterface")$.resolve_type, resolve_my_interface)
+  expect_equal(
+    schema$get_interface("MyInterface")$.resolve_type,
+    resolve_my_interface
+  )
   expect_equal(schema$get_union("MyUnion")$.resolve_type, resolve_my_union)
-  expect_equal(schema$get_directive("MyDirective")$.resolve, resolve_my_directive)
-
+  expect_equal(
+    schema$get_directive("MyDirective")$.resolve,
+    resolve_my_directive
+  )
 
   expect_equal(schema$get_scalar("MyScalar")$description, NULL)
   expect_equal(schema$get_object("MyObject")$description, NULL)
@@ -92,7 +95,6 @@ test_that("gqlr_schema information", {
 
   expect_equal(schema$get_object("MyObject")$fields[[1]]$description, NULL)
   expect_equal(schema$get_object("MyObject")$fields[[2]]$description, NULL)
-
 
   d <- list(
     MyScalar = "MyScalar desc",
@@ -162,14 +164,22 @@ test_that("gqlr_schema information", {
     )
   )
 
-
   expect_equal(schema$get_scalar("MyScalar")$.resolve, resolve_my_scalar)
   expect_equal(schema$get_object("MyObject")$.resolve, resolve_my_object)
-  expect_equal(schema$get_object("MyOtherObject")$.resolve, resolve_my_other_object)
+  expect_equal(
+    schema$get_object("MyOtherObject")$.resolve,
+    resolve_my_other_object
+  )
   expect_equal(schema$get_enum("MyEnum")$.resolve, resolve_my_enum)
-  expect_equal(schema$get_interface("MyInterface")$.resolve_type, resolve_my_interface)
+  expect_equal(
+    schema$get_interface("MyInterface")$.resolve_type,
+    resolve_my_interface
+  )
   expect_equal(schema$get_union("MyUnion")$.resolve_type, resolve_my_union)
-  expect_equal(schema$get_directive("MyDirective")$.resolve, resolve_my_directive)
+  expect_equal(
+    schema$get_directive("MyDirective")$.resolve,
+    resolve_my_directive
+  )
 
   expect_equal(schema$get_scalar("MyScalar")$description, d$MyScalar)
   expect_equal(schema$get_object("MyObject")$description, d$MyObject)
@@ -183,11 +193,8 @@ test_that("gqlr_schema information", {
   expect_equal(schema$get_object("MyObject")$fields[[1]]$description, d$fieldA)
   expect_equal(schema$get_object("MyObject")$fields[[2]]$description, d$fieldB)
 
-
-
-
-
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         5
@@ -196,7 +203,8 @@ test_that("gqlr_schema information", {
     "must be uniquely named arguments"
   )
 
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         DoesntExist = list(
@@ -207,7 +215,8 @@ test_that("gqlr_schema information", {
     "could not find schema definition"
   )
 
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyScalar = 5
@@ -216,7 +225,8 @@ test_that("gqlr_schema information", {
     "named arguments should either be a named list"
   )
 
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyScalar = list(
@@ -226,7 +236,8 @@ test_that("gqlr_schema information", {
     },
     "ScalarTypeDefinition"
   )
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyObject = list(
@@ -236,7 +247,8 @@ test_that("gqlr_schema information", {
     },
     "ObjectTypeDefinition"
   )
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyEnum = list(
@@ -246,7 +258,8 @@ test_that("gqlr_schema information", {
     },
     "EnumTypeDefinition"
   )
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyInterface = list(
@@ -256,7 +269,8 @@ test_that("gqlr_schema information", {
     },
     "InterfaceTypeDefinition"
   )
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyUnion = list(
@@ -266,7 +280,8 @@ test_that("gqlr_schema information", {
     },
     "UnionTypeDefinition"
   )
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyInput = list(
@@ -276,7 +291,8 @@ test_that("gqlr_schema information", {
     },
     "InputObjectTypeDefinition"
   )
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyDirective = list(
@@ -287,7 +303,8 @@ test_that("gqlr_schema information", {
     "DirectiveDefinition"
   )
 
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyObject = list(
@@ -299,7 +316,8 @@ test_that("gqlr_schema information", {
     "uniquely named"
   )
 
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyObject = list(
@@ -312,7 +330,8 @@ test_that("gqlr_schema information", {
     "Could not find field"
   )
 
-  expect_error({
+  expect_error(
+    {
       gqlr_schema(
         MySchema,
         MyEnum = list(
@@ -324,6 +343,4 @@ test_that("gqlr_schema information", {
     },
     "Could not find value"
   )
-
-
 })

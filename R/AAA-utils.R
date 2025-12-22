@@ -1,5 +1,3 @@
-
-
 str_trim <- function(x) {
   x <- str_replace(x, "^\\s*", "")
   x <- str_replace(x, "\\s*$", "")
@@ -29,9 +27,6 @@ ifnull <- function(a, b) {
     a
   }
 }
-
-
-
 
 
 pryr_unenclose <- function(f) {
