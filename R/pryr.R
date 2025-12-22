@@ -47,6 +47,7 @@ to_env <- function(x, quiet = FALSE) {
 #' @param ... other arguments passed to \code{f}
 #' @return Modified language object
 #' @keywords internal
+#' @noRd
 modify_lang <- function(x, f, ...) {
   recurse <- function(y) {
     lapply(y, modify_lang, f = f, ...)
@@ -92,7 +93,7 @@ modify_lang <- function(x, f, ...) {
 #' @param env The parent environment of the function, defaults to the calling
 #'  environment of \code{make_function}
 #' @return A function
-#' @keywords internal
+#' @noRd
 make_function <- function(args, body, env = parent.frame()) {
   args <- as.pairlist(args)
   stopifnot(
@@ -116,7 +117,7 @@ make_function <- function(args, body, env = parent.frame()) {
 #'   positive integer or name, see \code{\link{as.environment}} for more
 #'   details)
 #' @return Modified call with substitutions applied
-#' @keywords internal
+#' @noRd
 substitute_q <- function(x, env) {
   stopifnot(is.language(x))
   env <- to_env(env)
@@ -132,7 +133,7 @@ substitute_q <- function(x, env) {
 #'
 #' @param f a closure
 #' @return A function with values from the enclosing environment substituted
-#' @keywords internal
+#' @noRd
 unenclose <- function(f) {
   stopifnot(is.function(f))
 
