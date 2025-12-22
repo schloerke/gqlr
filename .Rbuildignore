@@ -17,3 +17,4 @@ lintr_cache
 ^pkgdown$
 ^\.github$
 ^CLAUDE\.md$
+^\.claude$

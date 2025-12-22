@@ -25,3 +25,5 @@ src/*.o
 
 _ignore
 docs
+
+.claude/
