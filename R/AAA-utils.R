@@ -33,7 +33,7 @@ pryr_unenclose <- function(f) {
   stopifnot(is.function(f))
   env <- environment(f)
   body <- pryr::modify_lang(body(f), unenclose_a_to_b(env))
-  make_function(formals(f), body, parent.env(env))
+  pryr::make_function(formals(f), body, parent.env(env))
 }
 
 unenclose_a_to_b <- function(env, ls_env = ls(envir = env)) {
