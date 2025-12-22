@@ -15,9 +15,16 @@ name: Package checks
 jobs:
   website:
     uses: rstudio/shiny-workflows/.github/workflows/website.yaml@v1
+    with:
+      pandoc-version: "3.8.3"
+
   routine:
     uses: rstudio/shiny-workflows/.github/workflows/routine.yaml@v1
     with:
       format-r-code: true
+      pandoc-version: "3.8.3"
+
   R-CMD-check:
     uses: rstudio/shiny-workflows/.github/workflows/R-CMD-check.yaml@v1
+    with:
+      pandoc-version: "3.8.3"
