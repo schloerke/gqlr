@@ -32,7 +32,7 @@ ifnull <- function(a, b) {
 pryr_unenclose <- function(f) {
   stopifnot(is.function(f))
   env <- environment(f)
-  body <- pryr::modify_lang(body(f), unenclose_a_to_b(env))
+  body <- modify_lang(body(f), unenclose_a_to_b(env))
   make_function(formals(f), body, parent.env(env))
 }
 

@@ -8,7 +8,7 @@ test_that("lapply works", {
       my_fn <- function() {
         myItem
       }
-      my_fn <- pryr::unenclose(my_fn)
+      my_fn <- unenclose(my_fn)
       environment(my_fn) <- globalenv()
       my_fn
     })

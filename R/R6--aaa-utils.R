@@ -318,7 +318,7 @@ R6_from_args <- function(
 
   initArgs <- eval(parse(text = initTxt))
 
-  publicList[["initialize"]] <- pryr::make_function(
+  publicList[["initialize"]] <- make_function(
     args = initArgs,
     env = environment(),
     body = quote({
