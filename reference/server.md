@@ -59,44 +59,36 @@ available when running the server interactively
 <http://graphql.org/learn/serving-over-http/>. There are four routes
 implemented:
 
-- `'/'`:
-
-  GET. If run interactively, forwards to `/graphiql` for user
+- `/` (GET) If run interactively, forwards to `/graphiql` for user
   interaction with the GraphQL server. This route is diabled if
   `graphiql = rlang::is_interactive()` is not `TRUE`.
 
-- `'/graphiql/'`:
-
-  GET. Returns a [GraphiQL formatted schema
+- `/graphiql/` (GET) Returns a [GraphiQL formatted schema
   definition](https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md)
   interface to manually interact with the GraphQL server. By default
   this route is disabled if `graphiql = rlang::is_interactive()` is not
   `TRUE`.
 
-- `'/graphql'`:
+- `/graphql` (GET) Executes a query. The parameter `'query'` (which
+  contains a GraphQL formatted query string) must be included. Optional
+  parameters include: `'variables'` a JSON string containing a
+  dictionary of variables (defaults to an empty named list),
+  `'operationName'` name of the particular query operation to execute
+  (defaults to NULL), and `'pretty'` boolean to determine if the
+  response should be compact (FALSE, default) or expanded (TRUE)
 
-  GET. Executes a query. The parameter `'query'` (which contains a
-  GraphQL formatted query string) must be included. Optional parameters
-  include: `'variables'` a JSON string containing a dictionary of
-  variables (defaults to an empty named list), `'operationName'` name of
-  the particular query operation to execute (defaults to NULL), and
-  `'pretty'` boolean to determine if the response should be compact
-  (FALSE, default) or expanded (TRUE)
+- `/graphql` (POST) Executes a query. Must provide Content-Type of
+  either 'application/json' or 'application/graphql'.
 
-- `'/graphql'`:
+  - If 'application/json' is provided, a named JSON list containing
+    'query', 'operationName' (optional, default = `NULL`), 'variables'
+    (optional, default = list()) and 'pretty' (optional, default =
+    `TRUE`). The information will used just the same as the
+    GET-'/graphql' route.
 
-  POST. Executes a query. Must provide Content-Type of either
-  'application/json' or 'application/graphql'.
-
-  If 'application/json' is provided, a named JSON list containing
-  'query', 'operationName' (optional, default = `NULL`), 'variables'
-  (optional, default = list()) and 'pretty' (optional, default =
-  `TRUE`). The information will used just the same as the GET-'/graphql'
-  route.
-
-  If 'application/graphql' is provided, the POST body will be
-  interpreted as the query string. All other possible parameters will
-  take on their default value.
+  - If 'application/graphql' is provided, the POST body will be
+    interpreted as the query string. All other possible parameters will
+    take on their default value.
 
 Using bash's curl, we can ask the server questions:
 

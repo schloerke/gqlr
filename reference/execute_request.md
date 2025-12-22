@@ -26,7 +26,7 @@ execute_request(
 
   a character string (to be used along side `initial_value`) or a schema
   object created from
-  [`gqlr_schema`](http://schloerke.com/gqlr/reference/gqlr_schema.md)
+  [`gqlr_schema()`](http://schloerke.com/gqlr/reference/gqlr_schema.md)
 
 - ...:
 

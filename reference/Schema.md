@@ -5,7 +5,7 @@ definitions, assist in determining definition types, retrieve particular
 definitions, and can combine with other schema definitions.
 
 Typically, Schema class objects are created using
-[`gqlr_schema`](http://schloerke.com/gqlr/reference/gqlr_schema.md).
+[`gqlr_schema()`](http://schloerke.com/gqlr/reference/gqlr_schema.md).
 Creating a `Schema$new()` object should be reserved for when multiple
 Schema objects are combined.
 
@@ -85,4 +85,4 @@ execution. The Schema will remain valid until new definitions are added.
 
 ## See also
 
-[`gqlr_schema`](http://schloerke.com/gqlr/reference/gqlr_schema.md)
+[`gqlr_schema()`](http://schloerke.com/gqlr/reference/gqlr_schema.md)

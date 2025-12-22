@@ -80,23 +80,13 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>To view the GraphiQL user interface, navigate to the URL provided when the server is started.  The default location is <code>http://localhost:8000/graphiql/</code>. By default, this route is only available when running the server interactively (<code>graphiql = rlang::is_interactive()</code>).</p>
-<p><code>server()</code> implements the basic necessities described in <a href="http://graphql.org/learn/serving-over-http/" class="external-link">http://graphql.org/learn/serving-over-http/</a>.  There are four routes implemented:</p>
-<dl><dt><code>'/'</code></dt>
-<dd><p>GET. If run interactively, forwards to <code>/graphiql</code> for user interaction with the GraphQL server. This route is diabled if <code>graphiql = rlang::is_interactive()</code> is not <code>TRUE</code>.</p></dd>
-
-  <dt><code>'/graphiql/'</code></dt>
-<dd><p>GET. Returns a <a href="https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md" class="external-link">GraphiQL formatted schema definition</a> interface to manually interact with the GraphQL server. By default this route is disabled if <code>graphiql = rlang::is_interactive()</code> is not <code>TRUE</code>.</p></dd>
-
-  <dt><code>'/graphql'</code></dt>
-<dd><p>GET. Executes a query.  The parameter <code>'query'</code> (which contains a GraphQL formatted query string) must be included.  Optional parameters include: <code>'variables'</code> a JSON string containing a dictionary of variables (defaults to an empty named list), <code>'operationName'</code> name of the particular query operation to execute (defaults to NULL), and <code>'pretty'</code> boolean to determine if the response should be compact (FALSE, default) or expanded (TRUE)</p></dd>
-
-  <dt><code>'/graphql'</code></dt>
-<dd><p>POST. Executes a query.  Must provide Content-Type of either 'application/json' or 'application/graphql'.</p>
-<p>If 'application/json' is provided, a named JSON list containing 'query', 'operationName' (optional, default = <code>NULL</code>), 'variables' (optional, default = list()) and 'pretty' (optional, default = <code>TRUE</code>).  The information will used just the same as the GET-'/graphql' route.</p>
-<p>If 'application/graphql' is provided, the POST body will be interpreted as the query string.  All other possible parameters will take on their default value.</p></dd>
-
-
-</dl><p>Using bash's curl, we can ask the server questions:</p><div class="sourceCode"><pre><code><span> <span class="co">#R</span></span>
+<p><code>server()</code> implements the basic necessities described in <a href="http://graphql.org/learn/serving-over-http/" class="external-link">http://graphql.org/learn/serving-over-http/</a>.  There are four routes implemented:</p><ul><li><p><code>/</code> (GET) If run interactively, forwards to <code>/graphiql</code> for user interaction with the GraphQL server. This route is diabled if <code>graphiql = rlang::is_interactive()</code> is not <code>TRUE</code>.</p></li>
+<li><p><code>/graphiql/</code> (GET) Returns a <a href="https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md" class="external-link">GraphiQL formatted schema definition</a> interface to manually interact with the GraphQL server. By default this route is disabled if <code>graphiql = rlang::is_interactive()</code> is not <code>TRUE</code>.</p></li>
+<li><p><code>/graphql</code> (GET) Executes a query.  The parameter <code>'query'</code> (which contains a GraphQL formatted query string) must be included.  Optional parameters include: <code>'variables'</code> a JSON string containing a dictionary of variables (defaults to an empty named list), <code>'operationName'</code> name of the particular query operation to execute (defaults to NULL), and <code>'pretty'</code> boolean to determine if the response should be compact (FALSE, default) or expanded (TRUE)</p></li>
+<li><p><code>/graphql</code> (POST) Executes a query. Must provide Content-Type of either 'application/json' or 'application/graphql'.</p><ul><li><p>If 'application/json' is provided, a named JSON list containing 'query', 'operationName' (optional, default = <code>NULL</code>), 'variables' (optional, default = list()) and 'pretty' (optional, default = <code>TRUE</code>).  The information will used just the same as the GET-'/graphql' route.</p></li>
+<li><p>If 'application/graphql' is provided, the POST body will be interpreted as the query string.  All other possible parameters will take on their default value.</p></li>
+</ul></li>
+</ul><p>Using bash's curl, we can ask the server questions:</p><div class="sourceCode"><pre><code><span> <span class="co">#R</span></span>
 <span>  <span class="co"># load Star Wars schema from 'execute_request' example</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">gqlr_schema</span><span class="op">)</span></span>
 <span>  <span class="co"># run server</span></span>

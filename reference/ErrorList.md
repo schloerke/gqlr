@@ -2,8 +2,8 @@
 
 Handles all errors that occur during query validation. This object is
 returned from execute request function
-(`ans <- `[`execute_request`](http://schloerke.com/gqlr/reference/execute_request.md)`(query, schema)`)
-under the field 'error_list' (`ans$error_list`).
+(`ans <- [execute_request](query, schema)`) under the field 'error_list'
+(`ans$error_list`).
 
 ## Usage
 
