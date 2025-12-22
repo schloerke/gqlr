@@ -394,3 +394,7 @@ curl '127.0.0.1:8000/'
 * [ghql](https://github.com/ropensci/ghql)
     * General purpose GraphQL client
     * The `ghql` client could be used to submit requests to `gqlr` server to be executed
+
+## Code of Conduct
+
+Please note that the gqlr project is released with a [Contributor Code of Conduct](http://schloerke.com/gqlr/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
