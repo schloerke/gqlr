@@ -1,6 +1,6 @@
 #' ErrorList
 #'
-#' Handles all errors that occur during query validation. This object is returned from execute request function (\code{ans <- \link{execute_request}(query, schema)}) under the field 'error_list' (\code{ans$error_list}).
+#' Handles all errors that occur during query validation. This object is returned from execute request function (`ans <- [execute_request](query, schema)`) under the field 'error_list' (`ans$error_list`).
 #'
 #' @section Usage:
 #' \preformatted{answer <- execute_request(my_request, my_schema)
@@ -9,27 +9,27 @@
 #'
 #' @section Initialize:
 #' \describe{
-#'   \item{verbose}{boolean that determines if errors will be printed on occurrence.  Defaults to \code{TRUE}}
+#'   \item{verbose}{boolean that determines if errors will be printed on occurrence.  Defaults to `TRUE`}
 #' }
 #'
 #' @section Details:
-#' \code{$n} count of errors received
+#' `$n` count of errors received
 #'
-#' \code{$errors} list of error information
+#' `$errors` list of error information
 #'
-#' \code{$verbose} boolean that determines of errors are printed when received
+#' `$verbose` boolean that determines of errors are printed when received
 #'
-#' \code{$has_no_errors()} helper method to determine if there are no errors
+#' `$has_no_errors()` helper method to determine if there are no errors
 #'
-#' \code{$has_any_errors()} helper method to determine if there are any errors
+#' `$has_any_errors()` helper method to determine if there are any errors
 #'
-#' \code{$get_sub_source(loc)} helper method to display a subsection of source text given Location information
+#' `$get_sub_source(loc)` helper method to display a subsection of source text given Location information
 #'
-#' \code{$add(rule_code, ...)} add a new error according to the \code{rule_code} provided. Remaining arguments are passed directly to \code{paste(..., sep = "")} with extra error rule information
+#' `$add(rule_code, ...)` add a new error according to the `rule_code` provided. Remaining arguments are passed directly to `paste(..., sep = "")` with extra error rule information
 #'
-#' \code{$.format(...)} formats the error list into user friendly text. Remaining arguments are ignored
+#' `$.format(...)` formats the error list into user friendly text. Remaining arguments are ignored
 #'
-#' \code{$print(...)} prints the error list by calling \code{self$format(...)}
+#' `$print(...)` prints the error list by calling `self$format(...)`
 #'
 #' @name ErrorList
 #' @examples
