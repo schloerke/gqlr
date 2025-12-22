@@ -1,8 +1,9 @@
 cache_directory: "_ignore/lintr_cache"
 linters: linters_with_defaults(
+    return_linter = NULL,
     assignment_linter = NULL,
     commented_code_linter = NULL,
     line_length_linter = NULL,
     object_name_linter = NULL,
-    cyclocomp_linter = NULL
+    indentation_linter = NULL
   )

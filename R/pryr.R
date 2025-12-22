@@ -6,7 +6,9 @@
 # Helper functions --------------------------------------------------------
 
 all_named <- function(x) {
-  if (length(x) == 0) return(TRUE)
+  if (length(x) == 0) {
+    return(TRUE)
+  }
   !is.null(names(x)) && all(names(x) != "")
 }
 
@@ -18,10 +20,14 @@ to_env <- function(x, quiet = FALSE) {
   } else if (is.function(x)) {
     environment(x)
   } else if (length(x) == 1 && is.character(x)) {
-    if (!quiet) message("Using environment ", x)
+    if (!quiet) {
+      message("Using environment ", x)
+    }
     as.environment(x)
   } else if (length(x) == 1 && is.numeric(x) && x > 0) {
-    if (!quiet) message("Using environment ", search()[x])
+    if (!quiet) {
+      message("Using environment ", search()[x])
+    }
     as.environment(x)
   } else {
     stop("Input can not be coerced to an environment", call. = FALSE)
@@ -65,8 +71,11 @@ modify_lang <- function(x, f, ...) {
     # shouldn't occur inside tree, but might be useful top-level
     recurse(x)
   } else {
-    stop("Unknown language class: ", paste(class(x), collapse = "/"),
-      call. = FALSE)
+    stop(
+      "Unknown language class: ",
+      paste(class(x), collapse = "/"),
+      call. = FALSE
+    )
   }
 }
 
@@ -88,7 +97,8 @@ make_function <- function(args, body, env = parent.frame()) {
   args <- as.pairlist(args)
   stopifnot(
     all_named(args),
-    is.language(body))
+    is.language(body)
+  )
   env <- to_env(env)
 
   eval(call("function", args, body), env)

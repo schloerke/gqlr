@@ -32,7 +32,6 @@ Encoding: UTF-8
 Config/testthat/edition: 3
 Config/Needs/website: tidyverse/tidytemplate
 Collate:
-    'pryr.R'
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'S3--aaa-setup.R'
@@ -56,6 +55,7 @@ Collate:
     'S3-3.1.2.3-validation-object-type.R'
     'S3-str.R'
     'gqlr-package.R'
+    'pryr.R'
     'server.R'
     'upgrade_query_remove_fragments.R'
     'validation-arguments.R'
