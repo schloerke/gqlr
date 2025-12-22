@@ -44,7 +44,7 @@ to_env <- function(x, quiet = FALSE) {
 #' @param x object to modify: should be a call, expression, function or
 #'   list of the above.
 #' @param f function to apply to leaves
-#' @param ... other arguments passed to \code{f}
+#' @param ... other arguments passed to `f`
 #' @return Modified language object
 #' @keywords internal
 #' @noRd
@@ -87,11 +87,11 @@ modify_lang <- function(x, f, ...) {
 #'
 #' @param args A named list of default arguments.  Note that if you want
 #'  arguments that don't have defaults, you'll need to use the special function
-#'  \code{\link{alist}}, e.g. \code{alist(a = , b = 1)}
+#'  [alist()], e.g. `alist(a = , b = 1)`
 #' @param body A language object representing the code inside the function.
-#'   Usually this will be most easily generated with \code{\link{quote}}
+#'   Usually this will be most easily generated with [quote()]
 #' @param env The parent environment of the function, defaults to the calling
-#'  environment of \code{make_function}
+#'  environment of `make_function`
 #' @return A function
 #' @noRd
 make_function <- function(args, body, env = parent.frame()) {
@@ -108,13 +108,13 @@ make_function <- function(args, body, env = parent.frame()) {
 #' A version of substitute that evaluates its first argument
 #'
 #' Copied from pryr package. This version of substitute is needed because
-#' \code{substitute} does not evaluate its first argument, and it's often
+#' `substitute` does not evaluate its first argument, and it's often
 #' useful to be able to modify a quoted call.
 #'
 #' @param x a quoted call
 #' @param env an environment, or something that behaves like an environment
 #'   (like a list or data frame), or a reference to an environment (like a
-#'   positive integer or name, see \code{\link{as.environment}} for more
+#'   positive integer or name, see [as.environment()] for more
 #'   details)
 #' @return Modified call with substitutions applied
 #' @noRd

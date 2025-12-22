@@ -36,9 +36,9 @@ print.AST <- function(
 
 #' As R6
 #'
-#' Debug method that strips all gqlr classes and assigns the class as \code{'R6'}
+#' Debug method that strips all gqlr classes and assigns the class as `'R6'`
 #'
-#' @param x any object. If it inherits \code{'R6'}, then the class of \code{x} is set to \code{'R6'}
+#' @param x any object. If it inherits `'R6'`, then the class of `x` is set to `'R6'`
 #' @export
 #' @examples
 #' Int <- getFromNamespace("Int", "gqlr")$clone()
