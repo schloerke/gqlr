@@ -20,7 +20,6 @@ BugReports: https://github.com/schloerke/gqlr/issues
 Imports:
     graphql (>= 1.3),
     magrittr,
-    pryr,
     R6,
     jsonlite
 Suggests:
@@ -33,6 +32,7 @@ Encoding: UTF-8
 Config/testthat/edition: 3
 Config/Needs/website: tidyverse/tidytemplate
 Collate:
+    'pryr.R'
     'AAA-utils.R'
     'R6--aaa-utils.R'
     'S3--aaa-setup.R'
