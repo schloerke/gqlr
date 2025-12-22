@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2017
+    COPYRIGHT HOLDER: Barret Schloerke, Ryan Hafen, Facebook (Graphql)
