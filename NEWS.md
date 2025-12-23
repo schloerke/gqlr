@@ -2,21 +2,41 @@
 
 ## Breaking changes
 
-* `...` has been added into `server()` ahead of `log=` and `initial_value=`. These two paramters must now be named. (#11)
-* `...` has been added into `execute_request()` ahead of `operation_name=`, `variables=`, and `initialial_value=`. These parameters must now be named. (#11)
-* `server()`'s `/` route now redirects to `/graphiql` iff `server(graphiql=TRUE)`. (#11)
+* `execute_request()` now requires `operation_name`, `variables`, and
+  `initial_value` to be named arguments, as `...` has been added ahead of
+  these parameters (#11).
 
-## New features and improvements
+* `server()` now requires `log` and `initial_value` to be named arguments, as
+  `...` has been added ahead of these parameters (#11).
 
-* Add support for [GraphiQL](https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md). To view the GraphiQL interface of your schema, run `gqlr::server(MY_SCHEMA, graphiql = TRUE)` and visit `http://localhost:8000/graphiql/`. By default, GraphiQL suport is only enabled when run interactively. (#11)
-* Add support for `execute_request(verbose_errors=)`. If `TRUE` (legacy behavior), error-like messages will be displayed in real time. By default, this value is `TRUE` when run interactively. (#11)
-* Remove `__typename` from the fields. This is a meta field that should not be attached to the object structure. (#11)
-* Remove dependency on `pryr` package (which is being archived). Required functions (`modify_lang()`, `make_function()`, `unenclose()`, `substitute_q()`) have been copied into the package (#16).
+* `server()`'s `/` route now redirects to `/graphiql` only when
+  `graphiql = TRUE` (#11).
 
-## Bug Fixes
+## New features
 
-* Fix bug in mutation execution where the query operation was being used for validation (#9)
-* Add support for introspection type `subscriptionType` and have the value return `NULL` to signify that it is not supported. (#11)
+* `execute_request()` gains a `verbose_errors` argument. When `TRUE`,
+  error-like messages are displayed in real time. By default, this is `TRUE`
+  when run interactively (#11).
+
+* `server()` now supports [GraphiQL](https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md),
+  an interactive GraphQL IDE. To view the GraphiQL interface, run
+  `gqlr::server(MY_SCHEMA, graphiql = TRUE)` and visit
+  `http://localhost:8000/graphiql/`. By default, GraphiQL support is only
+  enabled when run interactively (#11).
+
+## Bug fixes and minor improvements
+
+* The `pryr` package dependency has been removed, as the package is being
+  archived. Required functions (`modify_lang()`, `make_function()`,
+  `unenclose()`, `substitute_q()`) have been copied into the package (#16).
+
+* Introspection now correctly returns `subscriptionType` as `NULL` to indicate
+  that subscriptions are not supported (#11).
+
+* Mutation execution now correctly uses the mutation operation for validation,
+  rather than incorrectly using the query operation (#9).
+
+* The `__typename` meta field is no longer attached to object structures (#11).
 
 # gqlr 0.0.2
 
