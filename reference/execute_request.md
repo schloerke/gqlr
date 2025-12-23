@@ -37,12 +37,12 @@ execute_request(
   name of request operation to execute. If not value is provided it will
   use the operation in the request string. If more than one operations
   exist, an error will be produced. See
-  <https://graphql.github.io/graphql-spec/October2016/#GetOperation()>
+  <https://spec.graphql.org/October2016/#GetOperation()>
 
 - variables:
 
   a named list containing variable values.
-  <https://graphql.github.io/graphql-spec/October2016/#sec-Language.Variables>
+  <https://spec.graphql.org/October2016/#sec-Language.Variables>
 
 - initial_value:
 
@@ -61,7 +61,7 @@ execute_request(
 
 ## References
 
-<https://graphql.github.io/graphql-spec/October2016/#sec-Execution>
+<https://spec.graphql.org/October2016/#sec-Execution>
 
 ## Examples
 
