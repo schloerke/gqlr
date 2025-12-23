@@ -7,20 +7,20 @@
 - **Ryan Hafen**. Thesis advisor.
 
 - **GraphQL**. Copyright holder.  
-  http://graphql.github.io/graphql-spec/
+  http://spec.graphql.org/
 
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/schloerke/gqlr/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/schloerke/gqlr/blob/rc-v0.1.0/DESCRIPTION)
 
 Schloerke B (2025). *gqlr: 'GraphQL' Server in R*. R package version
-0.0.2.9000, <http://schloerke.com/gqlr/>.
+0.1.0, <http://schloerke.com/gqlr/>.
 
     @Manual{,
       title = {gqlr: 'GraphQL' Server in R},
       author = {Barret Schloerke},
       year = {2025},
-      note = {R package version 0.0.2.9000},
+      note = {R package version 0.1.0},
       url = {http://schloerke.com/gqlr/},
     }

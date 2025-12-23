@@ -1,6 +1,6 @@
 # Changelog
 
-## gqlr (development version)
+## gqlr 0.1.0
 
 ### Breaking changes
 

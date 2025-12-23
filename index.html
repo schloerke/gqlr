@@ -13,8 +13,8 @@
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="GraphQL Server in R">
-<meta name="description" content="Server implementation of GraphQL &lt;http://graphql.github.io/graphql-spec/&gt;, a query language originally created by Facebook for describing data requirements on complex application data models. Visit &lt;http://graphql.org&gt; to learn more about GraphQL.">
-<meta property="og:description" content="Server implementation of GraphQL &lt;http://graphql.github.io/graphql-spec/&gt;, a query language originally created by Facebook for describing data requirements on complex application data models. Visit &lt;http://graphql.org&gt; to learn more about GraphQL.">
+<meta name="description" content="Server implementation of GraphQL &lt;http://spec.graphql.org/&gt;, a query language originally created by Facebook for describing data requirements on complex application data models. Visit &lt;https://graphql.org&gt; to learn more about GraphQL.">
+<meta property="og:description" content="Server implementation of GraphQL &lt;http://spec.graphql.org/&gt;, a query language originally created by Facebook for describing data requirements on complex application data models. Visit &lt;https://graphql.org&gt; to learn more about GraphQL.">
 <!-- See https://stackoverflow.com/questions/1865837/whats-the-difference-between-window-location-and-window-location-replace — we use .replace() because we don't want the old url to appear in the browser history. --><script>
   if (!/(\/|html?)$/.test(window.location.href)){
     window.location.replace(window.location.href + '/');
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">gqlr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>GraphQL is a data “query language created by Facebook in 2015 for describing the capabilities and requirements of data models for client‐server applications”. The <a href="https://graphql.github.io/graphql-spec/" class="external-link">GraphQL specification can be read on their hosted GitHub</a>. A <a href="https://github.com/graphql/graphql-spec" class="external-link">cliff notes version is described on GraphQL’s GitHub</a>. To learn more about the GraphQL language, I highly recommend <a href="http://graphql.org/learn/" class="external-link">GraphQL’s website</a>.</p>
+<p>GraphQL is a data “query language created by Facebook in 2015 for describing the capabilities and requirements of data models for client‐server applications”. The <a href="http://spec.graphql.org/" class="external-link">GraphQL specification can be read on their hosted GitHub</a>. A <a href="http://spec.graphql.org/" class="external-link">cliff notes version is described on GraphQL’s GitHub</a>. To learn more about the GraphQL language, I highly recommend <a href="https://graphql.org/learn/" class="external-link">GraphQL’s website</a>.</p>
 <p>This package pulls inspiration from <a href="https://github.com/graphql/graphql-js" class="external-link">graphql-js</a> and <a href="https://github.com/matthewmueller/graph.ql" class="external-link">Mathew Mueller’s graph.ql</a>. I wanted the full functionality of GraphQL, but I didn’t want to force users to write full object definitions when can already be defined with GraphQL syntax.</p>
 <p><code>gqlr</code> merges R’s rapid development speed with the consistent query language of GraphQL.</p>
 </div>
