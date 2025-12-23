@@ -36,24 +36,21 @@
 <h2 class="pkg-version" data-toc-text="0.1.0" id="gqlr-010">gqlr 0.1.0<a class="anchor" aria-label="anchor" href="#gqlr-010"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-1-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-1-0"></a></h3>
-<ul><li>
-<code>...</code> has been added into <code><a href="../reference/server.html">server()</a></code> ahead of <code>log=</code> and <code>initial_value=</code>. These two paramters must now be named. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
-<li>
-<code>...</code> has been added into <code><a href="../reference/execute_request.html">execute_request()</a></code> ahead of <code>operation_name=</code>, <code>variables=</code>, and <code>initialial_value=</code>. These parameters must now be named. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
-<li>
-<code><a href="../reference/server.html">server()</a></code>’s <code>/</code> route now redirects to <code>/graphiql</code> iff <code>server(graphiql=TRUE)</code>. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
+<ul><li><p><code><a href="../reference/execute_request.html">execute_request()</a></code> now requires <code>operation_name</code>, <code>variables</code>, and <code>initial_value</code> to be named arguments, as <code>...</code> has been added ahead of these parameters (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>).</p></li>
+<li><p><code><a href="../reference/server.html">server()</a></code> now requires <code>log</code> and <code>initial_value</code> to be named arguments, as <code>...</code> has been added ahead of these parameters (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>).</p></li>
+<li><p><code><a href="../reference/server.html">server()</a></code>’s <code>/</code> route now redirects to <code>/graphiql</code> only when <code>graphiql = TRUE</code> (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>).</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="new-features-and-improvements-0-1-0">New features and improvements<a class="anchor" aria-label="anchor" href="#new-features-and-improvements-0-1-0"></a></h3>
-<ul><li>Add support for <a href="https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md" class="external-link">GraphiQL</a>. To view the GraphiQL interface of your schema, run <code>gqlr::server(MY_SCHEMA, graphiql = TRUE)</code> and visit <code>http://localhost:8000/graphiql/</code>. By default, GraphiQL suport is only enabled when run interactively. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
-<li>Add support for <code>execute_request(verbose_errors=)</code>. If <code>TRUE</code> (legacy behavior), error-like messages will be displayed in real time. By default, this value is <code>TRUE</code> when run interactively. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
-<li>Remove <code>__typename</code> from the fields. This is a meta field that should not be attached to the object structure. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
-<li>Remove dependency on <code>pryr</code> package (which is being archived). Required functions (<code>modify_lang()</code>, <code>make_function()</code>, <code>unenclose()</code>, <code>substitute_q()</code>) have been copied into the package (<a href="https://github.com/schloerke/gqlr/issues/16" class="external-link">#16</a>).</li>
+<h3 id="new-features-0-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0"></a></h3>
+<ul><li><p><code><a href="../reference/execute_request.html">execute_request()</a></code> gains a <code>verbose_errors</code> argument. When <code>TRUE</code>, error-like messages are displayed in real time. By default, this is <code>TRUE</code> when run interactively (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>).</p></li>
+<li><p><code><a href="../reference/server.html">server()</a></code> now supports <a href="https://github.com/graphql/graphiql/blob/graphiql%402.2.0/packages/graphiql/README.md" class="external-link">GraphiQL</a>, an interactive GraphQL IDE. To view the GraphiQL interface, run <code>gqlr::server(MY_SCHEMA, graphiql = TRUE)</code> and visit <code>http://localhost:8000/graphiql/</code>. By default, GraphiQL support is only enabled when run interactively (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>).</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-1-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0"></a></h3>
-<ul><li>Fix bug in mutation execution where the query operation was being used for validation (<a href="https://github.com/schloerke/gqlr/issues/9" class="external-link">#9</a>)</li>
-<li>Add support for introspection type <code>subscriptionType</code> and have the value return <code>NULL</code> to signify that it is not supported. (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>)</li>
+<h3 id="bug-fixes-and-minor-improvements-0-1-0">Bug fixes and minor improvements<a class="anchor" aria-label="anchor" href="#bug-fixes-and-minor-improvements-0-1-0"></a></h3>
+<ul><li><p>The <code>pryr</code> package dependency has been removed, as the package is being archived. Required functions (<code>modify_lang()</code>, <code>make_function()</code>, <code>unenclose()</code>, <code>substitute_q()</code>) have been copied into the package (<a href="https://github.com/schloerke/gqlr/issues/16" class="external-link">#16</a>).</p></li>
+<li><p>Introspection now correctly returns <code>subscriptionType</code> as <code>NULL</code> to indicate that subscriptions are not supported (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>).</p></li>
+<li><p>Mutation execution now correctly uses the mutation operation for validation, rather than incorrectly using the query operation (<a href="https://github.com/schloerke/gqlr/issues/9" class="external-link">#9</a>).</p></li>
+<li><p>The <code>__typename</code> meta field is no longer attached to object structures (<a href="https://github.com/schloerke/gqlr/issues/11" class="external-link">#11</a>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
