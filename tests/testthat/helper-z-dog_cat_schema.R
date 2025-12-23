@@ -1,5 +1,3 @@
-
-
 "
 enum DogCommand { SIT, DOWN, HEEL }
 
@@ -75,7 +73,6 @@ schema {
   query: SearchRoot
 }
 " %>%
-  gqlr_schema() ->
-dog_cat_schema
+  gqlr_schema() -> dog_cat_schema
 
 dog_cat_doc <- dog_cat_schema$get_schema()

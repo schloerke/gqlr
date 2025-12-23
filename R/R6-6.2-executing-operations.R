@@ -4,7 +4,6 @@
 #
 # If the operation is a query, the result of the operation is the result of executing the query’s top level selection set with the query root object type.
 
-
 # nolint start
 # An initial value may be provided when executing a query.
 # ExecuteQuery(query, schema, variableValues, initialValue)
@@ -16,7 +15,6 @@
 #   6. Return an unordered map containing data and errors.
 # nolint end
 get_initial_value <- function(initial_value, root_type_object, ..., oh) {
-
   resolve_fn <- root_type_object$.resolve
   if (is.function(resolve_fn)) {
     initial_value <- root_type_object$.resolve(initial_value, oh$schema)
@@ -38,7 +36,6 @@ get_initial_value <- function(initial_value, root_type_object, ..., oh) {
 }
 
 execute_query <- function(operation_obj, initial_value, ..., oh) {
-
   root_type_object <- oh$schema$get_query_object()
   root_type <- root_type_object$name
 
@@ -48,11 +45,16 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
   selection_set <- operation_obj$selectionSet
 
   # could parallelize here if wanted
-  data <- execute_selection_set(selection_set, root_type, initial_value, top_level = TRUE, oh = oh)
+  data <- execute_selection_set(
+    selection_set,
+    root_type,
+    initial_value,
+    top_level = TRUE,
+    oh = oh
+  )
 
   return(data)
 }
-
 
 
 # nolint start
@@ -69,7 +71,6 @@ execute_query <- function(operation_obj, initial_value, ..., oh) {
 #   6. Return an unordered map containing data and errors.
 # nolint end
 execute_mutation <- function(operation_obj, initial_value, ..., oh) {
-
   root_type_object <- oh$schema$get_mutation_object()
   root_type <- root_type_object$name
 
@@ -79,7 +80,13 @@ execute_mutation <- function(operation_obj, initial_value, ..., oh) {
   selection_set <- operation_obj$selectionSet
 
   # could parallelize here if wanted
-  data <- execute_selection_set(selection_set, root_type, initial_value, top_level = TRUE, oh = oh)
+  data <- execute_selection_set(
+    selection_set,
+    root_type,
+    initial_value,
+    top_level = TRUE,
+    oh = oh
+  )
 
   return(data)
 }

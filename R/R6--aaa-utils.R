@@ -1,5 +1,3 @@
-
-
 coerce_helper <- function(as_fn, is_fn) {
   fn <- function(value) {
     val <- as_fn(value)
@@ -16,38 +14,33 @@ coerce_helper <- function(as_fn, is_fn) {
 
 # nocov start
 for_onload(function() {
-
-PkgObjsGen <- R6Class(
-  "PkgObjs",
-  public = list(
-    list = list(),
-    is_registered = function(key) {
-      !is.null(self$list[[key]])
-    },
-    add = function(key, value) {
-      self$list[[key]] <- value
-    },
-    get_class_obj = function(key) {
-      obj <- self$list[[key]]
-      if (is.null(obj)) {
-        stop("Could not find object with class: ", key)
+  PkgObjsGen <- R6Class(
+    "PkgObjs",
+    public = list(
+      list = list(),
+      is_registered = function(key) {
+        !is.null(self$list[[key]])
+      },
+      add = function(key, value) {
+        self$list[[key]] <- value
+      },
+      get_class_obj = function(key) {
+        obj <- self$list[[key]]
+        if (is.null(obj)) {
+          stop("Could not find object with class: ", key)
+        }
+        obj
       }
-      obj
-    }
-  ),
-  active = list(
-    names = function() {
-      names(self$list)
-    }
+    ),
+    active = list(
+      names = function() {
+        names(self$list)
+      }
+    )
   )
-)
-PkgObjs <- PkgObjsGen$new()
-
+  PkgObjs <- PkgObjsGen$new()
 }) # end for_onload
 # nocov end
-
-
-
 
 parse_args <- function(txt) {
   if (is.null(txt)) {
@@ -102,7 +95,6 @@ parse_args <- function(txt) {
       list(key = key, value = retItem)
     })
 
-
   keys <- lapply(kvPairs, "[[", "key") %>% unlist()
   ret <- lapply(kvPairs, "[[", "value")
   if (keys[length(keys)] == "") {
@@ -117,22 +109,25 @@ parse_args <- function(txt) {
 }
 
 
-
-
 R6_from_args <- function(
-  type, txt = NULL, inherit = NULL, public = list(), private = list(), active = list()
+  type,
+  txt = NULL,
+  inherit = NULL,
+  public = list(),
+  private = list(),
+  active = list()
 ) {
-
   self_value_wrapper <- function(key, classVal) {
-    possibleClassValues <- strsplit(classVal, "\\|")[[1]] %>% lapply(str_trim) %>% unlist()
+    possibleClassValues <- strsplit(classVal, "\\|")[[1]] %>%
+      lapply(str_trim) %>%
+      unlist()
     function(value) {
       if (missing(value)) {
         return(self$.args[[key]]$value)
       }
 
-
       if (is.null(value)) {
-        if (! self$.args[[key]]$can_be_null) {
+        if (!self$.args[[key]]$can_be_null) {
           stop("Can not set value to NULL for ", classVal, "$", key)
         }
         self$.args[[key]]$value <- value
@@ -141,9 +136,16 @@ R6_from_args <- function(
 
       bad_inherits <- function() {
         stop(
-          "Attempting to set ", class(self)[1], ".", key, ".\n",
-          "Expected value with class of |", classVal, "|.\n",
-          "Received ", paste(class(value), collapse = ", ")
+          "Attempting to set ",
+          class(self)[1],
+          ".",
+          key,
+          ".\n",
+          "Expected value with class of |",
+          classVal,
+          "|.\n",
+          "Received ",
+          paste(class(value), collapse = ", ")
         )
       }
 
@@ -171,7 +173,6 @@ R6_from_args <- function(
     }
   }
 
-
   self_array_wrapper <- function(key, classVal) {
     function(value) {
       if (missing(value)) {
@@ -181,9 +182,17 @@ R6_from_args <- function(
       if (inherits(value, "R6")) {
         obj_out <- capture.output(str(value, 3))
         stop(
-          "Attempting to set ", class(self)[1], ".", key, ".\n",
-          "Expected value should be an array of ", classVal, " objects.\n",
-          "Received ", paste(class(value), collapse = ", "), "\n",
+          "Attempting to set ",
+          class(self)[1],
+          ".",
+          key,
+          ".\n",
+          "Expected value should be an array of ",
+          classVal,
+          " objects.\n",
+          "Received ",
+          paste(class(value), collapse = ", "),
+          "\n",
           "Received object below.\n",
           paste(obj_out, sep = "\n")
         )
@@ -193,9 +202,17 @@ R6_from_args <- function(
         if (!inherits(valItem, classVal)) {
           obj_out <- capture.output(str(value, 3))
           stop(
-            "Attempting to set ", class(self)[1], ".", key, ".\n",
-            "Expected value with class of |", classVal, "|.\n",
-            "Received ", paste(class(valItem), collapse = ", "), "\n",
+            "Attempting to set ",
+            class(self)[1],
+            ".",
+            key,
+            ".\n",
+            "Expected value with class of |",
+            classVal,
+            "|.\n",
+            "Received ",
+            paste(class(valItem), collapse = ", "),
+            "\n",
             "Received object below.\n",
             paste(obj_out, sep = "\n")
           )
@@ -224,10 +241,13 @@ R6_from_args <- function(
         return(self$.args[[key]]$value)
       }
       value <- parse_fn(value)
-      if (! (value %in% values)) {
+      if (!(value %in% values)) {
         stop(
-          "Value supplied to key '", key, "' not in accepted values: ",
-          str_c(values, collapse = ", "), "."
+          "Value supplied to key '",
+          key,
+          "' not in accepted values: ",
+          str_c(values, collapse = ", "),
+          "."
         )
       }
       self$.args[[key]]$value <- value
@@ -235,7 +255,6 @@ R6_from_args <- function(
     }
     fn
   }
-
 
   args <- parse_args(txt)
   args$kind <- NULL
@@ -247,7 +266,8 @@ R6_from_args <- function(
     argType <- argItem$type
 
     if (argType %in% c("any", "string", "number", "boolean", "fn")) {
-      type_fn <- switch(argType,
+      type_fn <- switch(
+        argType,
         string = coerce_helper(as.character, is.character),
         number = coerce_helper(as.numeric, is.numeric),
         any = identity,
@@ -263,12 +283,11 @@ R6_from_args <- function(
       )
 
       possible_values <- argItem$possible_values
-      if (! is.null(possible_values)) {
+      if (!is.null(possible_values)) {
         fn <- self_base_values_wrapper(argName, type_fn, possible_values)
       } else {
         fn <- self_base_wrapper(argName, type_fn)
       }
-
     } else {
       if (argItem$is_array) {
         fn <- self_array_wrapper(argName, argType)
@@ -288,13 +307,12 @@ R6_from_args <- function(
   publicList <- list()
   publicList$.args <- args
 
-
   can_be_null <- lapply(args, "[[", "can_be_null") %>% unlist()
   can_be_null_txt <- rep("", length(can_be_null))
   can_be_null_txt[can_be_null] <- "NULL"
   initTxt <- str_c(
     "alist(",
-      str_c(names(args), can_be_null_txt, sep = " = ", collapse = ", "),
+    str_c(names(args), can_be_null_txt, sep = " = ", collapse = ", "),
     ")"
   )
 
@@ -304,7 +322,6 @@ R6_from_args <- function(
     args = initArgs,
     env = environment(),
     body = quote({
-
       # all vars msut start with a "." to avoid stomp arg values
       for (.argName in self$.argNames) {
         # values that may be not supplied, will default to NULL from function def
@@ -312,28 +329,29 @@ R6_from_args <- function(
         # all the active bindings will validate the object being set
         self[[.argName]] <- tryCatch(
           get(.argName, inherits = FALSE),
-          error = (
-            if (self$.args[[.argName]]$can_be_null) {
-              function(e) {
-                NULL
-              }
-            } else {
-              function(e) {
-                stop(
-                  "Did not receive: '", .argName, "'. ",
-                  "'", .argName, "' must be supplied an object of class: ", class(self)[1]
-                )
-              }
+          error = (if (self$.args[[.argName]]$can_be_null) {
+            function(e) {
+              NULL
             }
-          )
+          } else {
+            function(e) {
+              stop(
+                "Did not receive: '",
+                .argName,
+                "'. ",
+                "'",
+                .argName,
+                "' must be supplied an object of class: ",
+                class(self)[1]
+              )
+            }
+          })
         )
-
       }
 
       return(invisible(self))
     })
   )
-
 
   upgrade_and_overwrite <- function(x, y) {
     if (is.null(y)) {
@@ -342,7 +360,6 @@ R6_from_args <- function(
     x[names(y)] <- y
     x
   }
-
 
   publicList <- upgrade_and_overwrite(publicList, public)
   activeList <- upgrade_and_overwrite(activeList, active)

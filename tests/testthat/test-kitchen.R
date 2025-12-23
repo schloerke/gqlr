@@ -18,7 +18,6 @@ read_kitchen <- function(file_name) {
 }
 
 test_that("formatting", {
-
   schema_txt <- read_kitchen("schema-kitchen-sink.graphql")
   schema_clean_txt <- read_kitchen("schema-kitchen-sink-clean.graphql")
 
@@ -28,7 +27,6 @@ test_that("formatting", {
   # even with comments and different commas sep'ing the fields
   expect_format(schema_txt, schema_clean_txt, parse_schema = TRUE)
 
-
   request_txt <- read_kitchen("request-kitchen-sink.graphql")
   request_clean_txt <- read_kitchen("request-kitchen-sink-clean.graphql")
 
@@ -37,23 +35,30 @@ test_that("formatting", {
 
   # even with comments and different commas sep'ing the fields
   expect_format(request_txt, request_clean_txt)
-
 })
 
 test_that("structure", {
-
-  schema <- read_kitchen("schema-kitchen-sink.graphql") %>% txt_to_obj(parse_schema = TRUE)
+  schema <- read_kitchen("schema-kitchen-sink.graphql") %>%
+    txt_to_obj(parse_schema = TRUE)
 
   # expect structure output to match
   expect_str <- function(s, file, all_fields) {
     tmpfile <- tempfile(fileext = ".txt")
-    on.exit({unlink(tmpfile)}, add = TRUE) # nolint
+    on.exit(
+      {
+        unlink(tmpfile)
+      },
+      add = TRUE
+    ) # nolint
     write(format_str(s, all_fields = all_fields), tmpfile)
-    testthat::expect_snapshot_file(tmpfile, name = file, compare = testthat::compare_file_text)
+    testthat::expect_snapshot_file(
+      tmpfile,
+      name = file,
+      compare = testthat::compare_file_text
+    )
   }
   expect_str(schema, "schema-str.txt", all_fields = FALSE)
   expect_str(schema, "schema-str-all.txt", all_fields = TRUE)
-
 
   request_obj <- read_kitchen("request-kitchen-sink.graphql") %>% txt_to_obj()
   expect_str(request_obj, "request-str.txt", all_fields = FALSE)

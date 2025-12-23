@@ -1,22 +1,18 @@
-
-
-
 # DONE
 # 5.4.1
-  # √5.4.1.1 - Fragment Name Uniqueness
-  # √5.4.1.2 - Fragment Spread Type Existence
-  # √5.4.1.3 - Fragments On Composite Types
-  # √5.4.1.4 - Fragments Must Be Used
+# √5.4.1.1 - Fragment Name Uniqueness
+# √5.4.1.2 - Fragment Spread Type Existence
+# √5.4.1.3 - Fragments On Composite Types
+# √5.4.1.4 - Fragments Must Be Used
 # 5.4.2
-  # √5.4.2.1 - Fragment spread target defined
-  # √5.4.2.2 - Fragment spreads must not form cycles
-  # √5.4.2.3 - Fragment spread is possible
-    # √5.4.2.3.1 - Object Spreads In Object Scope - covered in 5.4.2.3
-    # √5.4.2.3.2 - Abstract Spreads in Object Scope - covered in 5.4.2.3
-    # √5.4.2.3.3 - Object Spreads In Abstract Scope - covered in 5.4.2.3
-    # √5.4.2.3.4 - Abstract Spreads in Abstract Scope - covered in 5.4.2.3
+# √5.4.2.1 - Fragment spread target defined
+# √5.4.2.2 - Fragment spreads must not form cycles
+# √5.4.2.3 - Fragment spread is possible
+# √5.4.2.3.1 - Object Spreads In Object Scope - covered in 5.4.2.3
+# √5.4.2.3.2 - Abstract Spreads in Object Scope - covered in 5.4.2.3
+# √5.4.2.3.3 - Object Spreads In Abstract Scope - covered in 5.4.2.3
+# √5.4.2.3.4 - Abstract Spreads in Abstract Scope - covered in 5.4.2.3
 upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
-
   fragment_list <- list()
   query_mutation_list <- list(
     query = list(),
@@ -36,7 +32,6 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
         query_mutation_list$mutation[[format(operation$name)]] <- operation
       }
     } else {
-
       fragment <- operation
       fragment_name <- format(fragment$name)
 
@@ -44,7 +39,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       if (!is.null(fragment_list[[fragment_name]])) {
         oh$error_list$add(
           "5.4.1.1",
-          "fragments must have a unique name. Found duplicate fragment: ", fragment_name,
+          "fragments must have a unique name. Found duplicate fragment: ",
+          fragment_name,
           loc = fragment$name$loc
         )
         next
@@ -55,7 +51,6 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
   if (oh$error_list$has_any_errors()) {
     return(document_obj)
   }
-
 
   fragment_names <- names(fragment_list)
   fragment_used_once <- rep(FALSE, length(fragment_names))
@@ -68,20 +63,17 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
     seen_fragments = NULL,
     top_level = FALSE
   ) {
-
     new_selections <- list()
     for (field in field_obj$selectionSet$selections) {
-
       if (inherits(field, "Field")) {
         # regular field object
         if (!is.null(field$selectionSet)) {
-
-
           # need to recurse in field objects
           matching_field <- matching_obj$.get_field(field)
           if (top_level && is.null(matching_field)) {
             matching_field <-
-              switch(field$name$value,
+              switch(
+                field$name$value,
                 "__schema" = Introspection__schema_field,
                 "__type" = Introspection__type_field,
                 NULL
@@ -91,24 +83,36 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             # shouldn't be able to be reached?
             oh$error_list$add(
               "5.2.1",
-              "Field: ", format(field$name), " can't be found for object of type: ",
+              "Field: ",
+              format(field$name),
+              " can't be found for object of type: ",
               format(matching_obj$name),
               loc = field$name$loc
             )
             next
           }
 
-          matching_field_obj <- get_object_interface_or_union(matching_field$type, oh$schema)
-          field <- upgrade_fragments_in_field(field, matching_field_obj, seen_fragments)
+          matching_field_obj <- get_object_interface_or_union(
+            matching_field$type,
+            oh$schema
+          )
+          field <- upgrade_fragments_in_field(
+            field,
+            matching_field_obj,
+            seen_fragments
+          )
         }
         new_selections <- append(new_selections, field)
 
-
-        validate_directives(field$directives, field, oh = oh, skip_variables = TRUE)
-
-
-      } else if (inherits(field, "FragmentSpread") || inherits(field, "InlineFragment")) {
-
+        validate_directives(
+          field$directives,
+          field,
+          oh = oh,
+          skip_variables = TRUE
+        )
+      } else if (
+        inherits(field, "FragmentSpread") || inherits(field, "InlineFragment")
+      ) {
         field_seen_fragments <- seen_fragments
 
         # turn all FragmentSpread into InlineFragment; removes lookup at run time
@@ -124,7 +128,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           if (is.null(fragment_obj)) {
             oh$error_list$add(
               "5.4.2.1",
-              "fragment must be defined. Can not find fragment named: ", fragment_spread_name,
+              "fragment must be defined. Can not find fragment named: ",
+              fragment_spread_name,
               loc = field$name$loc
             )
             return(NULL)
@@ -136,7 +141,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             oh$error_list$add(
               "5.4.2.2",
               "fragments can not be circularly defined. ",
-              " Start of cycle: ", str_c(field_seen_fragments, collapse = ", "),
+              " Start of cycle: ",
+              str_c(field_seen_fragments, collapse = ", "),
               loc = field$name$loc
             )
             return(NULL)
@@ -152,13 +158,11 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
             directives = fragment_obj$directives,
             selectionSet = fragment_obj$selectionSet
           )
-
         } else {
           # inline_fragment
           fragment_obj <- field
 
           validate_directives(fragment_obj$directives, fragment_obj, oh = oh)
-
         }
 
         # at this point the fragment_obj is either a inlinefragment or fragment definition
@@ -170,7 +174,10 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           matching_frag_obj <- matching_obj
           matching_type_condition <- matching_obj$name
         } else {
-          matching_frag_obj <- get_object_interface_or_union(fragment_obj$typeCondition, oh$schema)
+          matching_frag_obj <- get_object_interface_or_union(
+            fragment_obj$typeCondition,
+            oh$schema
+          )
           matching_type_condition <- fragment_obj$typeCondition
         }
 
@@ -180,7 +187,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
           oh$error_list$add(
             "5.4.1.3",
             "fragment must supply at object, interface, or union.",
-            " Can not find match for typeCondition: ", format(matching_type_condition),
+            " Can not find match for typeCondition: ",
+            format(matching_type_condition),
             loc = matching_type_condition$loc
           )
           return(NULL)
@@ -205,16 +213,22 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
         fragment_possible_types <- get_possible_types(matching_type_condition)
         parent_possible_types <- get_possible_types(matching_obj$name)
 
-        applicable_types <- intersect(fragment_possible_types, parent_possible_types)
+        applicable_types <- intersect(
+          fragment_possible_types,
+          parent_possible_types
+        )
 
         # 5.4.2.3 - Fragment spread is possible
         if (length(applicable_types) == 0) {
           oh$error_list$add(
             "5.4.2.3",
             "there must be an intersection of \n",
-            "\tfragment possible types: ", str_c(fragment_possible_types, collapse = ", "), "\n",
+            "\tfragment possible types: ",
+            str_c(fragment_possible_types, collapse = ", "),
+            "\n",
             " and \n",
-            "\tparent possible types: ", str_c(parent_possible_types, collapse = ", "),
+            "\tparent possible types: ",
+            str_c(parent_possible_types, collapse = ", "),
             loc = matching_type_condition$loc
           )
           return(NULL)
@@ -236,7 +250,6 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
     field_obj
   }
 
-
   # upgrade all mutation and query objects be full trees, not many fragment objects
   # (circular dependencies are not allowed by graphql definition)
   upgraded_operations <- list()
@@ -252,7 +265,12 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       return(NULL)
     }
     for (mutation_obj in query_mutation_list$mutation) {
-      mutation_obj <- upgrade_fragments_in_field(mutation_obj, mutation_root, NULL, top_level = TRUE)
+      mutation_obj <- upgrade_fragments_in_field(
+        mutation_obj,
+        mutation_root,
+        NULL,
+        top_level = TRUE
+      )
       upgraded_operations <- append(upgraded_operations, mutation_obj)
     }
   }
@@ -268,7 +286,12 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
       return(NULL)
     }
     for (query_obj in query_mutation_list$query) {
-      query_obj <- upgrade_fragments_in_field(query_obj, query_root, NULL, top_level = TRUE)
+      query_obj <- upgrade_fragments_in_field(
+        query_obj,
+        query_root,
+        NULL,
+        top_level = TRUE
+      )
       upgraded_operations <- append(upgraded_operations, query_obj)
     }
   }
@@ -278,7 +301,8 @@ upgrade_query_remove_fragments <- function(document_obj, ..., oh) {
     oh$error_list$add(
       "5.4.1.4",
       "all fragments must be used.",
-      " Fragments not used: ", names(fragment_used_once[!fragment_used_once])
+      " Fragments not used: ",
+      names(fragment_used_once[!fragment_used_once])
       # no loc
     )
     return(document_obj)

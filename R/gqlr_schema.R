@@ -1,9 +1,5 @@
 #' @include graphql_json.R
 
-
-
-
-
 #' @title Create Schema definitions
 #'
 #' @description Creates a Schema object from the defined GraphQL string and
@@ -17,48 +13,48 @@
 #'   information.  What information is needed for each type is described below.
 #'
 #'   ScalarTypeDefinition: \describe{ \item{resolve}{function with two
-#'   parameters: \code{x} (the raw to be parsed, such as 5.0) and \code{schema}
+#'   parameters: `x` (the raw to be parsed, such as 5.0) and `schema`
 #'   (the full Schema definition). Should return a parsed value}
 #'   \item{description}{(optional) single character value that describes the
 #'   Scalar definition} \item{parse_ast}{(optional) function with two
-#'   parameters: \code{obj} (a GraphQL wrapped raw value, such as an object of
-#'   class IntValue with value 5) and \code{schema} (the full Schema
-#'   definition).  If the function returns \code{NULL} then the AST could not be
+#'   parameters: `obj` (a GraphQL wrapped raw value, such as an object of
+#'   class IntValue with value 5) and `schema` (the full Schema
+#'   definition).  If the function returns `NULL` then the AST could not be
 #'   parsed.} }
 #'
 #'   EnumTypeDefinition: \describe{ \item{resolve}{(optional) function with two
-#'   parameters: \code{x} and \code{schema} (the full Schema definition). Should
-#'   return the value \code{x} represents, such as the Star Wars Episode enum
+#'   parameters: `x` and `schema` (the full Schema definition). Should
+#'   return the value `x` represents, such as the Star Wars Episode enum
 #'   value "4" could represent Episode "NEWHOPE". By default,
 #'   EnumTypeDefinitions will return the current value.}
 #'   \item{description}{(optional) single character value that describes the
 #'   Enum definition} \item{values}{(optional) named list of enum value
-#'   descriptions. Such as \code{values = list(ENUMA = "description for ENUMA",
-#'   ENUMZ = "description for ENUMZ")}} }
+#'   descriptions. Such as `values = list(ENUMA = "description for ENUMA",
+#'   ENUMZ = "description for ENUMZ")`} }
 #'
 #'   ObjectTypeDefinition: \describe{ \item{resolve}{function with two
-#'   parameters: \code{x} (place holder value to be expanded into a named list)
-#'   and \code{schema} (the full Schema definition). By using the resolve
+#'   parameters: `x` (place holder value to be expanded into a named list)
+#'   and `schema` (the full Schema definition). By using the resolve
 #'   method, recursive relationships, such as friends, can easily be handled.
 #'   The resolve function should return a fully named list of all the fields the
 #'   definition defines.  Missing fields are automatically interpreted as
-#'   \code{NULL}.
+#'   `NULL`.
 #'
 #'   Values in the returned list may be a function of the form
 #'   \code{function(obj, args, schema) {...}}.  This allows for fields to be
-#'   determined dynamically and lazily. See how \code{add_human} makes a field
-#'   for \code{totalCredits}, while the \code{add_droid} pre computes the
+#'   determined dynamically and lazily. See how `add_human` makes a field
+#'   for `totalCredits`, while the `add_droid` pre computes the
 #'   information.} \item{description}{(optional) single character value that
 #'   describes the object} \item{fields}{(optional) named list of field
-#'   descriptions. Such as \code{fields = list(fieldA = "description for field
-#'   A", fieldB = "description for field B")}} }
+#'   descriptions. Such as `fields = list(fieldA = "description for field
+#'   A", fieldB = "description for field B")`} }
 #'
 #'   InterfaceTypeDefinition and UnionTypeDefinition: \describe{
-#'   \item{resolve_type}{function with two parameters: \code{x} (a pre-resolved
-#'   object value) and \code{schema} (the full Schema definition). This function
+#'   \item{resolve_type}{function with two parameters: `x` (a pre-resolved
+#'   object value) and `schema` (the full Schema definition). This function
 #'   is required to determine which object type is being used.
-#'   \code{resolve_type} is called before any ObjectTypeDefinition
-#'   \code{resolve} methods are called.} \item{description}{(optional) single
+#'   `resolve_type` is called before any ObjectTypeDefinition
+#'   `resolve` methods are called.} \item{description}{(optional) single
 #'   character value that describes the object} }
 #' @export
 #' @examples
@@ -234,22 +230,28 @@ gqlr_schema <- function(schema, ...) {
   info_list <- list(...)
 
   if (length(info_list) > 0) {
-    is_named_list(info_list, "gqlr_schema() extra arguments must be uniquely named arguments")
+    is_named_list(
+      info_list,
+      "gqlr_schema() extra arguments must be uniquely named arguments"
+    )
 
     for (item_name in names(info_list)) {
       item <- info_list[[item_name]]
 
       obj <- schema$get_type(item_name)
       if (is.null(obj)) {
-        stop("gqlr_schema() could not find schema definition to match argument name: ", item_name)
+        stop(
+          "gqlr_schema() could not find schema definition to match argument name: ",
+          item_name
+        )
       }
       item_type <- class(obj)[1]
 
       info_names <- names(item)
-      if (!(
-        is.function(item) ||
-        is.list(item)
-      )) {
+      if (
+        !(is.function(item) ||
+          is.list(item))
+      ) {
         stop(
           "gqlr_schema() named arguments should either be a named list of information or a ",
           "function which will be set to the resolve function or resolve_type function accordingly"
@@ -265,7 +267,8 @@ gqlr_schema <- function(schema, ...) {
           )
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: ScalarTypeDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -275,7 +278,6 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else if (item_type == "ObjectTypeDefinition") {
         if (is.function(item)) {
           item <- list(resolve = item)
@@ -283,7 +285,8 @@ gqlr_schema <- function(schema, ...) {
           is_ok <- all(info_names %in% c("description", "fields", "resolve"))
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: ObjectTypeDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -293,7 +296,6 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else if (item_type == "EnumTypeDefinition") {
         if (is.function(item)) {
           item <- list(resolve = item)
@@ -303,7 +305,8 @@ gqlr_schema <- function(schema, ...) {
           )
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: EnumTypeDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -313,16 +316,20 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
-      } else if (item_type == "InterfaceTypeDefinition" || item_type == "UnionTypeDefinition") {
+      } else if (
+        item_type == "InterfaceTypeDefinition" ||
+          item_type == "UnionTypeDefinition"
+      ) {
         if (is.function(item)) {
           item <- list(resolve_type = item)
         } else {
           is_ok <- all(info_names %in% c("description", "resolve_type"))
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
-              " of type: ,", item_type,
+              "gqlr_schema() argument: ",
+              item_name,
+              " of type: ,",
+              item_type,
               " should be a 'resolve_type' function or",
               " a list possibly containing these elements:\n",
               "\tdescription: String\n",
@@ -330,12 +337,13 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else if (item_type == "InputObjectTypeDefinition") {
         if (is.function(item)) {
           stop(
-            "gqlr_schema() argument: ", item_name,
-            " of type: ,", item_type,
+            "gqlr_schema() argument: ",
+            item_name,
+            " of type: ,",
+            item_type,
             " should be a list possibly containing these elements:\n",
             "\tdescription: String\n"
           )
@@ -343,14 +351,15 @@ gqlr_schema <- function(schema, ...) {
           is_ok <- all(info_names %in% c("description"))
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
-              " of type: ,", item_type,
+              "gqlr_schema() argument: ",
+              item_name,
+              " of type: ,",
+              item_type,
               " should be a list possibly containing these elements:\n",
               "\tdescription: String\n"
             )
           }
         }
-
       } else if (item_type == "DirectiveDefinition") {
         if (is.function(item)) {
           item <- list(resolve = item)
@@ -360,7 +369,8 @@ gqlr_schema <- function(schema, ...) {
           )
           if (!is_ok) {
             stop(
-              "gqlr_schema() argument: ", item_name,
+              "gqlr_schema() argument: ",
+              item_name,
               " of type: DirectiveDefinition,",
               " should be a 'resolve' function or",
               " a list possibly containing these elements:\n",
@@ -369,7 +379,6 @@ gqlr_schema <- function(schema, ...) {
             )
           }
         }
-
       } else {
         str(obj)
         stop("unknown schema defintion provided to gqlr_schema()")
@@ -377,11 +386,16 @@ gqlr_schema <- function(schema, ...) {
 
       is_named_list(
         item,
-        str_c("gqlr_schema() argument: '", item_name, "' must be uniquely named arguments")
+        str_c(
+          "gqlr_schema() argument: '",
+          item_name,
+          "' must be uniquely named arguments"
+        )
       )
 
       for (info_name in names(item)) {
-        store_name <- switch(info_name,
+        store_name <- switch(
+          info_name,
           "resolve" = ".resolve",
           "resolve_type" = ".resolve_type",
           "parse_ast" = ".parse_ast",
@@ -395,11 +409,15 @@ gqlr_schema <- function(schema, ...) {
             field_name_obj <- as_type(field_name)
             obj_field <- obj$.get_field(field_name_obj)
             if (is.null(obj_field)) {
-              stop("Could not find field: '", field_name, "' for Object: ", item_name)
+              stop(
+                "Could not find field: '",
+                field_name,
+                "' for Object: ",
+                item_name
+              )
             }
             obj_field$description <- item$fields[[field_name]]
           }
-
         } else if (store_name == "values") {
           for (value_name in names(item$values)) {
             found <- FALSE
@@ -414,7 +432,6 @@ gqlr_schema <- function(schema, ...) {
               stop("Could not find value for Enum: ", item_name)
             }
           }
-
         } else {
           obj[[store_name]] <- item[[info_name]]
         }

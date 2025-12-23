@@ -1,6 +1,4 @@
-
 result_as_json <- function(result, ...) {
-
   ret <- list(data = result$data)
 
   if (result$error_list$has_any_errors()) {

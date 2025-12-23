@@ -18,7 +18,7 @@ execute_request(
 \item{request}{a valid GraphQL string}
 
 \item{schema}{a character string (to be used along side \code{initial_value})
-or a schema object created from \code{\link{gqlr_schema}}}
+or a schema object created from \code{\link[=gqlr_schema]{gqlr_schema()}}}
 
 \item{...}{ignored for paramter expansion}
 

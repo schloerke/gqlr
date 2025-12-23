@@ -1,8 +1,4 @@
-
-
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-zz-star_wars.R")); # nolint
-
-
 
 expect_sw_err <- function(...) {
   expect_err(..., schema = star_wars_schema) # nolint
@@ -18,11 +14,7 @@ expect_sw_request_err <- function(...) {
 }
 
 
-
-
-
 test_that("star wars test suite", {
-
   "
   query HeroNameQuery {
     hero {
@@ -38,7 +30,6 @@ test_that("star wars test suite", {
       }}'
     )
 
-
   "
   {
     hero {
@@ -53,7 +44,6 @@ test_that("star wars test suite", {
         }
       }}'
     )
-
 
   "
   query HeroNameAndFriendsQuery {
@@ -89,7 +79,6 @@ test_that("star wars test suite", {
         }
       }}'
     )
-
 
   "
   query NestedQuery {
@@ -144,7 +133,6 @@ test_that("star wars test suite", {
       }}'
     )
 
-
   "
   query FetchLukeQuery {
     human(id: \"1000\") {
@@ -178,7 +166,6 @@ test_that("star wars test suite", {
       )
     )
 
-
   "
   query FetchLukeAliased {
     luke: human(id: \"1000\") {
@@ -193,7 +180,6 @@ test_that("star wars test suite", {
         }
       }}'
     )
-
 
   "
   query FetchLukeAndLeiaAliased {
@@ -215,7 +201,6 @@ test_that("star wars test suite", {
         }
       }}'
     )
-
 
   "
   query UseFragment {
@@ -261,7 +246,6 @@ test_that("star wars test suite", {
       }}'
     )
 
-
   "
   query CheckTypeOfR2 {
     hero {
@@ -279,7 +263,6 @@ test_that("star wars test suite", {
       }}'
     )
 
-
   "
   query CheckTypeOfLuke {
     hero(episode: EMPIRE) {
@@ -296,7 +279,6 @@ test_that("star wars test suite", {
         }
       }}'
     )
-
 
   "
   query NestedQueryWithFragment {
@@ -381,13 +363,10 @@ test_that("star wars test suite", {
         }
       }}'
     )
-
 })
 
 
 test_that("validation", {
-
-
   "
   # INVALID: favoriteSpaceship does not exist on Character
   query HeroSpaceshipQuery {
@@ -456,10 +435,7 @@ test_that("validation", {
 })
 
 
-
-
 test_that("introspection", {
-
   "
   query IntrospectionTypeQuery {
     __schema {
@@ -655,14 +631,10 @@ test_that("introspection", {
         }
       }}'
     )
-
-
 })
 
 
-
 test_that("operations", {
-
   "
   query IntrospectionDroidDescriptionQuery {
     __type(name: \"Droid\") {
@@ -708,12 +680,10 @@ test_that("operations", {
       }'
       # nolint end
     )
-
 })
 
 
 test_that("directives", {
-
   "
   query FetchLukeAndLeiaAliased {
     luke: human(id: \"1000\") @skip(if: false)  {
@@ -773,13 +743,10 @@ test_that("directives", {
       }'
       # nolint end
     )
-
 })
 
 
-
 test_that("variables", {
-
   "
   query Variable($someId: String!) {
     __type(name: $someId) {
@@ -867,5 +834,4 @@ test_that("variables", {
       }'
       # nolint end
     )
-
 })

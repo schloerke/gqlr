@@ -1,4 +1,3 @@
-
 # Scalars
 #
 # As expected by the name, a scalar represents a primitive value in GraphQL.
@@ -63,25 +62,23 @@
 # For all types below, with the exception of Non-Null, if the explicit value
 # null is provided, then the result of input coercion is null.
 
-
-
 #' Parse AST
 #'
 #' This is a helper function for Scalars.  Given a particular kind and a resolve
 #' function, it produces a function that will only parse values of a particular
 #' kind.
 #'
-#' Typically, \code{kind} is the same as the class of the Scalar.  When making a
+#' Typically, `kind` is the same as the class of the Scalar.  When making a
 #' new Scalar, parse_ast defaults to use the name of the scalar and the scalar's
 #' parse value function.
 #'
 #' This function should only need to be used when defining a schema in
-#' \code{\link{gqlr_schema}()}
+#' [gqlr_schema()]
 #'
 #' @param kind single character name of a class to parse
 #' @param resolve function to parse the value if the kind is correct
-#' @return function that takes \code{obj} and \code{schema} that will only parse
-#'   the value if the \code{kind} is inherited in the \code{obj}
+#' @return function that takes `obj` and `schema` that will only parse
+#'   the value if the `kind` is inherited in the `obj`
 #' @export
 #' @examples
 #' parse_date_value <- function(obj, schema) {
@@ -114,126 +111,117 @@ parse_ast <- function(kind, resolve) {
 }
 
 for_onload(function() {
+  coerce_int <- function(value, ...) {
+    MAX_INT <- 2147483647
+    MIN_INT <- -2147483648
+    num <- suppressWarnings(as.integer(value))
+    if (!is.na(num)) {
+      if (num <= MAX_INT && num >= MIN_INT) {
+        return(num)
+      }
+    }
+    return(NULL)
+  }
 
-coerce_int <- function(value, ...) {
-  MAX_INT <-  2147483647
-  MIN_INT <- -2147483648
-  num <- suppressWarnings(as.integer(value))
-  if (!is.na(num)) {
-    if (num <= MAX_INT && num >= MIN_INT) {
+  Int <- ScalarTypeDefinition$new(
+    name = Name$new(value = "Int"),
+    description = paste0(
+      "The Int scalar type represents a signed 32-bit numeric non-fractional value. ",
+      "Response formats that support a 32-bit integer or a number type should use that ",
+      "type to represent this scalar."
+    ),
+    .resolve = coerce_int,
+    .parse_ast = parse_ast("IntValue", coerce_int)
+  )
+
+  coerce_float <- function(value, ...) {
+    num <- suppressWarnings(as.numeric(value))
+    if (is.numeric(num)) {
       return(num)
-    }
-  }
-  return(NULL)
-}
-
-
-
-Int <- ScalarTypeDefinition$new(
-  name = Name$new(value = "Int"),
-  description = paste0(
-    "The Int scalar type represents a signed 32-bit numeric non-fractional value. ",
-    "Response formats that support a 32-bit integer or a number type should use that ",
-    "type to represent this scalar."
-  ),
-  .resolve = coerce_int,
-  .parse_ast = parse_ast("IntValue", coerce_int)
-)
-
-
-
-coerce_float <- function(value, ...) {
-  num <- suppressWarnings(as.numeric(value))
-  if (is.numeric(num)) {
-    return(num)
-  } else {
-    return(NULL)
-  }
-}
-Float <- ScalarTypeDefinition$new(
-  name = Name$new(value = "Float"),
-  description = collapse(
-    "The `Float` scalar type represents signed double-precision fractional ",
-    "values as specified by ",
-    "[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point)."
-  ),
-  .resolve = coerce_float,
-  .parse_ast = pryr_unenclose(function(obj, schema) {
-    if (
-      inherits(obj, "IntValue") ||
-      inherits(obj, "FloatValue")
-    ) {
-      coerce_float(obj$value, schema)
     } else {
-      NULL
+      return(NULL)
     }
-  })
-)
+  }
+  Float <- ScalarTypeDefinition$new(
+    name = Name$new(value = "Float"),
+    description = collapse(
+      "The `Float` scalar type represents signed double-precision fractional ",
+      "values as specified by ",
+      "[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point)."
+    ),
+    .resolve = coerce_float,
+    .parse_ast = pryr_unenclose(function(obj, schema) {
+      if (
+        inherits(obj, "IntValue") ||
+          inherits(obj, "FloatValue")
+      ) {
+        coerce_float(obj$value, schema)
+      } else {
+        NULL
+      }
+    })
+  )
 
+  coerce_string <- function(value, ...) {
+    char <- suppressWarnings(as.character(value))
+    if (is.character(char)) {
+      return(char)
+    } else {
+      return(NULL)
+    }
+  }
+  String <- ScalarTypeDefinition$new(
+    name = Name$new(value = "String"),
+    description = collapse(
+      "The `String` scalar type represents textual data, represented as UTF-8 ",
+      "character sequences. The String type is most often used by GraphQL to ",
+      "represent free-form human-readable text."
+    ),
+    .resolve = coerce_string,
+    .parse_ast = parse_ast("StringValue", coerce_string)
+  )
 
-coerce_string <- function(value, ...) {
-  char <- suppressWarnings(as.character(value))
-  if (is.character(char)) {
-    return(char)
-  } else {
+  coerce_boolean <- function(value, ...) {
+    val <- suppressWarnings(as.logical(value))
+    if (is.logical(val)) {
+      if (!is_nullish(val)) {
+        return(val)
+      }
+    }
     return(NULL)
   }
-}
-String <- ScalarTypeDefinition$new(
-  name = Name$new(value = "String"),
-  description = collapse(
-    "The `String` scalar type represents textual data, represented as UTF-8 ",
-    "character sequences. The String type is most often used by GraphQL to ",
-    "represent free-form human-readable text."
-  ),
-  .resolve = coerce_string,
-  .parse_ast = parse_ast("StringValue", coerce_string)
-)
+  Boolean <- ScalarTypeDefinition$new(
+    name = Name$new(value = "Boolean"),
+    description = "The `Boolean` scalar type represents `TRUE` or `FALSE`.",
+    .resolve = coerce_boolean,
+    .parse_ast = parse_ast("BooleanValue", coerce_boolean)
+  )
 
+  # nolint start
 
-coerce_boolean <- function(value, ...) {
-  val <- suppressWarnings(as.logical(value))
-  if (is.logical(val)) {
-    if (!is_nullish(val)) {
-      return(val)
-    }
-  }
-  return(NULL)
-}
-Boolean <- ScalarTypeDefinition$new(
-  name = Name$new(value = "Boolean"),
-  description = "The `Boolean` scalar type represents `TRUE` or `FALSE`.",
-  .resolve = coerce_boolean,
-  .parse_ast = parse_ast("BooleanValue", coerce_boolean)
-)
+  ## Not including in R setup
+  # # no literal AST definition, but defining as such
+  # ID = ScalarTypeDefinition$new(
+  #   name = Name$new(value = "ID"),
+  #   description = collapse(
+  #     "The `ID` scalar type represents a unique identifier, often used to ",
+  #     "refetch an object or as key for a cache. The ID type appears in a JSON ",
+  #     "response as a String; however, it is not intended to be human-readable. ",
+  #     "When expected as an input type, any string (such as `"4"`) or integer ",
+  #     "(such as `4`) input value will be accepted as an ID."
+  #   ),
+  #   .resolve = as.character,
+  #   .parse_ast = function(astObj) {
+  #     if (
+  #       inherits(astObj, "String") ||
+  #       inherits(astObj, "Int")
+  #     ) {
+  #       return(as.character(astObj$value))
+  #     } else {
+  #       return(NULL)
+  #     }
+  #   }
+  # )
 
-
-# nolint start
-
-## Not including in R setup
-# # no literal AST definition, but defining as such
-# ID = ScalarTypeDefinition$new(
-#   name = Name$new(value = "ID"),
-#   description = collapse(
-#     "The `ID` scalar type represents a unique identifier, often used to ",
-#     "refetch an object or as key for a cache. The ID type appears in a JSON ",
-#     "response as a String; however, it is not intended to be human-readable. ",
-#     "When expected as an input type, any string (such as `"4"`) or integer ",
-#     "(such as `4`) input value will be accepted as an ID."
-#   ),
-#   .resolve = as.character,
-#   .parse_ast = function(astObj) {
-#     if (
-#       inherits(astObj, "String") ||
-#       inherits(astObj, "Int")
-#     ) {
-#       return(as.character(astObj$value))
-#     } else {
-#       return(NULL)
-#     }
-#   }
-# )
-
-# nolint end
-
+  # nolint end
 }) # end for_onload

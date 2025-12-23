@@ -1,8 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-z-execute-introspection.R")); # nolint
 
-
 compare_ans_and_expected <- function(ans, name) {
-
   testthat::expect_true(ans$error_list$has_no_errors())
   tmpfile <- tempfile(fileext = ".json")
   on.exit(
@@ -12,7 +10,12 @@ compare_ans_and_expected <- function(ans, name) {
     add = TRUE
   )
   write(to_json(ans$data), tmpfile)
-  testthat::expect_snapshot_file(tmpfile, cran = TRUE, name = name, compare = testthat::compare_file_text)
+  testthat::expect_snapshot_file(
+    tmpfile,
+    cran = TRUE,
+    name = name,
+    compare = testthat::compare_file_text
+  )
   # if (length(ans_txt) != length(expected)) {
   #   e1 <- tempfile()
   #   e2 <- tempfile()
@@ -40,9 +43,11 @@ for (info in list(
   list(name = "star_wars", schema = star_wars_schema)
 )) {
   test_that(paste0(info$name, " introspection"), {
-
     introspection_query <- paste0(
-      readLines(testthat::test_path(file.path("introspection", "execution-introspection.graphql"))),
+      readLines(testthat::test_path(file.path(
+        "introspection",
+        "execution-introspection.graphql"
+      ))),
       collapse = "\n"
     )
 

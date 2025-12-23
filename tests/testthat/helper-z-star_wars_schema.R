@@ -1,8 +1,11 @@
-
-
-
 add_human <- function(human_data, id, name, appear, home, friend) {
-  human <- list(id = id, name = name, appearsIn = appear, friends = friend, homePlanet = home)
+  human <- list(
+    id = id,
+    name = name,
+    appearsIn = appear,
+    friends = friend,
+    homePlanet = home
+  )
   # set up a function to be calculated if the field totalCredits is required
   human$totalCredits <- function(obj, args, schema) {
     length(human$appearsIn)
@@ -11,7 +14,13 @@ add_human <- function(human_data, id, name, appear, home, friend) {
   human_data
 }
 add_droid <- function(droid_data, id, name, appear, pf, friend) {
-  droid <- list(id = id, name = name, appearsIn = appear, friends = friend, primaryFunction = pf)
+  droid <- list(
+    id = id,
+    name = name,
+    appearsIn = appear,
+    friends = friend,
+    primaryFunction = pf
+  )
   # set extra fields manually
   droid$totalCredits <- length(droid$appearsIn)
   droid_data[[id]] <- droid
@@ -19,12 +28,36 @@ add_droid <- function(droid_data, id, name, appear, pf, friend) {
 }
 
 human_data <- list() %>%
-  add_human("1000", "Luke Skywalker", c(4, 5, 6), "Tatooine", c("1002", "1003", "2000", "2001")) %>%
-  add_human("1002", "Han Solo",       c(4, 5, 6), "Corellia", c("1000", "1003", "2001")) %>%
-  add_human("1003", "Leia Organa",    c(4, 5, 6), "Alderaan", c("1000", "1002", "2000", "2001"))
+  add_human(
+    "1000",
+    "Luke Skywalker",
+    c(4, 5, 6),
+    "Tatooine",
+    c("1002", "1003", "2000", "2001")
+  ) %>%
+  add_human(
+    "1002",
+    "Han Solo",
+    c(4, 5, 6),
+    "Corellia",
+    c("1000", "1003", "2001")
+  ) %>%
+  add_human(
+    "1003",
+    "Leia Organa",
+    c(4, 5, 6),
+    "Alderaan",
+    c("1000", "1002", "2000", "2001")
+  )
 
 droid_data <- list() %>%
-  add_droid("2000", "C-3PO", c(4, 5, 6), "Protocol", c("1000", "1002", "1003", "2001")) %>%
+  add_droid(
+    "2000",
+    "C-3PO",
+    c(4, 5, 6),
+    "Protocol",
+    c("1000", "1002", "1003", "2001")
+  ) %>%
   add_droid("2001", "R2-D2", c(4, 5, 6), "Astromech", c("1000", "1002", "1003"))
 
 all_characters <- list() %>% append(human_data) %>% append(droid_data)
@@ -47,7 +80,8 @@ enum Episode { NEWHOPE, EMPIRE, JEDI }
   gqlr_schema(
     Episode = list(
       resolve = function(episode_id, schema) {
-        switch(as.character(episode_id),
+        switch(
+          as.character(episode_id),
           "4" = "NEWHOPE",
           "5" = "EMPIRE",
           "6" = "JEDI",
@@ -153,7 +187,6 @@ schema {
     }
   ) %>%
   star_wars_schema$add()
-
 
 
 # extra testing definitions

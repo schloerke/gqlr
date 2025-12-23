@@ -13,7 +13,7 @@ parse_ast(kind, resolve)
 }
 \value{
 function that takes \code{obj} and \code{schema} that will only parse
-  the value if the \code{kind} is inherited in the \code{obj}
+the value if the \code{kind} is inherited in the \code{obj}
 }
 \description{
 This is a helper function for Scalars.  Given a particular kind and a resolve
@@ -26,7 +26,7 @@ new Scalar, parse_ast defaults to use the name of the scalar and the scalar's
 parse value function.
 
 This function should only need to be used when defining a schema in
-\code{\link{gqlr_schema}()}
+\code{\link[=gqlr_schema]{gqlr_schema()}}
 }
 \examples{
 parse_date_value <- function(obj, schema) {

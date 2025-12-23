@@ -24,25 +24,23 @@ server(
 
 \item{log}{boolean that determines if server logging is done.  Defaults to TRUE}
 
-\item{initial_value}{default value to use in \code{\link{execute_request}()}}
+\item{initial_value}{default value to use in \code{\link[=execute_request]{execute_request()}}}
 }
 \description{
 Run a basic GraphQL server using plumber.  This server is provided to show basic interaction with GraphQL.  The server will run until the function execution is canceled.
 }
 \details{
-To view the GraphiQL user interface, navigate to the URL provided when the server is started.  The default location is \code{http://localhost:8000/graphiql/}. By default, this route is only available when running the server interactively (\code{graphiql = rlang::is_interactive()}).
+To view the GraphiQL user interface, navigate to the URL provided when the server is started.  The default location is \verb{http://localhost:8000/graphiql/}. By default, this route is only available when running the server interactively (\code{graphiql = rlang::is_interactive()}).
 
-\code{server()} implements the basic necessities described in \url{https://graphql.org/learn/serving-over-http/}.  There are four routes implemented:
-
-\describe{
-  \item{\code{'/'}}{GET. If run interactively, forwards to \code{/graphiql} for user interaction with the GraphQL server. This route is diabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.}
-  \item{\code{'/graphiql/'}}{GET. Returns a \href{https://github.com/graphql/graphiql/blob/graphiql\%402.2.0/packages/graphiql/README.md}{GraphiQL formatted schema definition} interface to manually interact with the GraphQL server. By default this route is disabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.}
-  \item{\code{'/graphql'}}{GET. Executes a query.  The parameter \code{'query'} (which contains a GraphQL formatted query string) must be included.  Optional parameters include: \code{'variables'} a JSON string containing a dictionary of variables (defaults to an empty named list), \code{'operationName'} name of the particular query operation to execute (defaults to NULL), and \code{'pretty'} boolean to determine if the response should be compact (FALSE, default) or expanded (TRUE)}
-  \item{\code{'/graphql'}}{POST. Executes a query.  Must provide Content-Type of either 'application/json' or 'application/graphql'.
-
-If 'application/json' is provided, a named JSON list containing 'query', 'operationName' (optional, default = \code{NULL}), 'variables' (optional, default = list()) and 'pretty' (optional, default = \code{TRUE}).  The information will used just the same as the GET-'/graphql' route.
-
-If 'application/graphql' is provided, the POST body will be interpreted as the query string.  All other possible parameters will take on their default value.
+\code{server()} implements the basic necessities described in \url{http://graphql.org/learn/serving-over-http/}.  There are four routes implemented:
+\itemize{
+\item \code{/} (GET) If run interactively, forwards to \verb{/graphiql} for user interaction with the GraphQL server. This route is diabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.
+\item \verb{/graphiql/} (GET) Returns a \href{https://github.com/graphql/graphiql/blob/graphiql\%402.2.0/packages/graphiql/README.md}{GraphiQL formatted schema definition} interface to manually interact with the GraphQL server. By default this route is disabled if \code{graphiql = rlang::is_interactive()} is not \code{TRUE}.
+\item \verb{/graphql} (GET) Executes a query.  The parameter \code{'query'} (which contains a GraphQL formatted query string) must be included.  Optional parameters include: \code{'variables'} a JSON string containing a dictionary of variables (defaults to an empty named list), \code{'operationName'} name of the particular query operation to execute (defaults to NULL), and \code{'pretty'} boolean to determine if the response should be compact (FALSE, default) or expanded (TRUE)
+\item \verb{/graphql} (POST) Executes a query. Must provide Content-Type of either 'application/json' or 'application/graphql'.
+\itemize{
+\item If 'application/json' is provided, a named JSON list containing 'query', 'operationName' (optional, default = \code{NULL}), 'variables' (optional, default = list()) and 'pretty' (optional, default = \code{TRUE}).  The information will used just the same as the GET-'/graphql' route.
+\item If 'application/graphql' is provided, the POST body will be interpreted as the query string.  All other possible parameters will take on their default value.
 }
 }
 

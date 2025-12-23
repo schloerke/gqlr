@@ -11,13 +11,18 @@ to_json <- function(..., pretty = TRUE) {
   )
 }
 from_json <- function(..., simplifyDataFrame = FALSE, simplifyVector = FALSE) {
-  jsonlite::fromJSON(..., simplifyDataFrame = simplifyDataFrame, simplifyVector = simplifyVector)
+  jsonlite::fromJSON(
+    ...,
+    simplifyDataFrame = simplifyDataFrame,
+    simplifyVector = simplifyVector
+  )
 }
 
 clean_json <- function(obj, ...) {
   UseMethod("clean_json")
 }
 
+#' @export
 clean_json.list <- function(obj, ...) {
   if (!is.null(obj$loc)) {
     obj$loc$kind <- "Location"
@@ -34,15 +39,15 @@ clean_json.list <- function(obj, ...) {
   }
   kind <- obj$kind
   ret <- lapply(obj, function(x) clean_json(x))
-  if (! is.null(kind)) {
+  if (!is.null(kind)) {
     class(ret) <- kind
   }
   ret
 }
+#' @export
 clean_json.default <- function(obj, ...) {
   obj
 }
-
 
 
 is_named_list <- function(obj, err) {
@@ -50,8 +55,8 @@ is_named_list <- function(obj, err) {
     obj_names <- names(obj)
     if (
       is.null(obj_names) ||
-      length(unique(obj_names)) != length(obj) ||
-      any(nchar(obj_names) == 0)
+        length(unique(obj_names)) != length(obj) ||
+        any(nchar(obj_names) == 0)
     ) {
       stop(err)
     }

@@ -1,11 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.2-fields.R")); # nolint
 
-
-
-
-
 test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
-
   "
   {
     dog {
@@ -16,7 +11,7 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
     name
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   {
@@ -31,8 +26,7 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
     name
   }
   " %>%
-  expect_r6()
-
+    expect_r6()
 
   "
   {
@@ -44,8 +38,7 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
     meowVolume
   }
   " %>%
-  expect_err("not all requested names are found")
-
+    expect_err("not all requested names are found")
 
   "
   {
@@ -57,8 +50,7 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
     nickname
   }
   " %>%
-  expect_err("not all requested names are found")
-
+    expect_err("not all requested names are found")
 
   "
   {
@@ -76,8 +68,7 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
     }
   }
   " %>%
-  expect_r6()
-
+    expect_r6()
 
   "
   {
@@ -90,18 +81,11 @@ test_that("5.2.1 - Field Selections On Objects, Interfaces, and Union Types", {
     barkVolume
   }
   " %>%
-  expect_err("fields may not be queried directly on a union object")
-
+    expect_err("fields may not be queried directly on a union object")
 })
 
 
-
-
-
-
-
 test_that("5.2.2 - Field Selection Merging", {
-
   "
   {
     dog {
@@ -118,7 +102,7 @@ test_that("5.2.2 - Field Selection Merging", {
     otherName: name
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   {
@@ -131,8 +115,7 @@ test_that("5.2.2 - Field Selection Merging", {
     name
   }
   " %>%
-  expect_err("Two matching return fields must both be NonNullType")
-
+    expect_err("Two matching return fields must both be NonNullType")
 
   "
   query A {
@@ -154,7 +137,7 @@ test_that("5.2.2 - Field Selection Merging", {
     doesKnowCommand(dogCommand: $dogCommand)
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   {
@@ -167,7 +150,7 @@ test_that("5.2.2 - Field Selection Merging", {
     doesKnowCommand(dogCommand: HEEL)
   }
   " %>%
-  expect_err("Two matching return fields must have identical arguments")
+    expect_err("Two matching return fields must have identical arguments")
 
   "
   query A($dogCommand: DogCommand = SIT) {
@@ -180,7 +163,7 @@ test_that("5.2.2 - Field Selection Merging", {
     doesKnowCommand(dogCommand: $dogCommand)
   }
   " %>%
-  expect_err("Two matching return fields must have identical arguments")
+    expect_err("Two matching return fields must have identical arguments")
 
   "
   query A($varOne: DogCommand = SIT, $varTwo: DogCommand = SIT) {
@@ -193,7 +176,7 @@ test_that("5.2.2 - Field Selection Merging", {
     doesKnowCommand(dogCommand: $varTwo)
   }
   " %>%
-  expect_err("Two matching return fields must have identical arguments")
+    expect_err("Two matching return fields must have identical arguments")
 
   "
   # validate fields can merge
@@ -206,7 +189,7 @@ test_that("5.2.2 - Field Selection Merging", {
     }
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   # validate lists can merge
@@ -223,7 +206,7 @@ test_that("5.2.2 - Field Selection Merging", {
     }
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   # validate lists can merge
@@ -242,8 +225,7 @@ test_that("5.2.2 - Field Selection Merging", {
     }
   }
   " %>%
-  expect_r6()
-
+    expect_r6()
 
   "
   {
@@ -269,8 +251,7 @@ test_that("5.2.2 - Field Selection Merging", {
     }
   }
   " %>%
-  expect_r6()
-
+    expect_r6()
 
   "
   {
@@ -289,17 +270,11 @@ test_that("5.2.2 - Field Selection Merging", {
     }
   }
   " %>%
-  expect_err("Two matching return names must return the same types")
-
-
+    expect_err("Two matching return names must return the same types")
 })
 
 
-
-
 test_that("5.2.3 - Leaf Field Selections", {
-
-
   "
   {
     dog {
@@ -310,7 +285,7 @@ test_that("5.2.3 - Leaf Field Selections", {
     barkVolume
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   {
@@ -324,28 +299,26 @@ test_that("5.2.3 - Leaf Field Selections", {
     }
   }
   " %>%
-  expect_err("Not allowed to query deeper into leaf")
-
+    expect_err("Not allowed to query deeper into leaf")
 
   "
   query directQueryOnObjectWithoutSubFields {
     human
   }
   " %>%
-  expect_err("non leaf selection does not have any children")
+    expect_err("non leaf selection does not have any children")
 
   "
   query directQueryOnInterfaceWithoutSubFields {
     pet
   }
   " %>%
-  expect_err("non leaf selection does not have any children")
+    expect_err("non leaf selection does not have any children")
 
   "
   query directQueryOnUnionWithoutSubFields {
     catOrDog
   }
   " %>%
-  expect_err("non leaf selection does not have any children")
-
+    expect_err("non leaf selection does not have any children")
 })

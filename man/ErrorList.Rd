@@ -4,7 +4,7 @@
 \alias{ErrorList}
 \title{ErrorList}
 \description{
-Handles all errors that occur during query validation. This object is returned from execute request function (\code{ans <- \link{execute_request}(query, schema)}) under the field 'error_list' (\code{ans$error_list}).
+Handles all errors that occur during query validation. This object is returned from execute request function (\verb{ans <- [execute_request](query, schema)}) under the field 'error_list' (\code{ans$error_list}).
 }
 \section{Usage}{
 
@@ -16,29 +16,29 @@ answer$error_list
 \section{Initialize}{
 
 \describe{
-  \item{verbose}{boolean that determines if errors will be printed on occurrence.  Defaults to \code{TRUE}}
+\item{verbose}{boolean that determines if errors will be printed on occurrence.  Defaults to \code{TRUE}}
 }
 }
 
 \section{Details}{
 
-\code{$n} count of errors received
+\verb{$n} count of errors received
 
-\code{$errors} list of error information
+\verb{$errors} list of error information
 
-\code{$verbose} boolean that determines of errors are printed when received
+\verb{$verbose} boolean that determines of errors are printed when received
 
-\code{$has_no_errors()} helper method to determine if there are no errors
+\verb{$has_no_errors()} helper method to determine if there are no errors
 
-\code{$has_any_errors()} helper method to determine if there are any errors
+\verb{$has_any_errors()} helper method to determine if there are any errors
 
-\code{$get_sub_source(loc)} helper method to display a subsection of source text given Location information
+\verb{$get_sub_source(loc)} helper method to display a subsection of source text given Location information
 
-\code{$add(rule_code, ...)} add a new error according to the \code{rule_code} provided. Remaining arguments are passed directly to \code{paste(..., sep = "")} with extra error rule information
+\verb{$add(rule_code, ...)} add a new error according to the \code{rule_code} provided. Remaining arguments are passed directly to \code{paste(..., sep = "")} with extra error rule information
 
-\code{$.format(...)} formats the error list into user friendly text. Remaining arguments are ignored
+\verb{$.format(...)} formats the error list into user friendly text. Remaining arguments are ignored
 
-\code{$print(...)} prints the error list by calling \code{self$format(...)}
+\verb{$print(...)} prints the error list by calling \code{self$format(...)}
 }
 
 \examples{

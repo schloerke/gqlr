@@ -9,11 +9,11 @@ coverage:
     patch:
       default:
         branches:
-        - master
+        - main
         - dev
         target: '80'
     project:
       default:
         branches:
-        - master
+        - main
         - dev

@@ -1,10 +1,6 @@
 # load_all(); testthat::test_file(file.path("tests", "testthat", "test-validation-5.6-directives.R")); # nolint
 
-
-
-
 test_that("5.6.1 - Directives Are Defined", {
-
   "
   {
     dog {
@@ -14,8 +10,7 @@ test_that("5.6.1 - Directives Are Defined", {
     }
   }
   " %>%
-  expect_r6()
-
+    expect_r6()
 
   "
   {
@@ -25,13 +20,11 @@ test_that("5.6.1 - Directives Are Defined", {
     }
   }
   " %>%
-  expect_err("Missing defintion for directive")
-
+    expect_err("Missing defintion for directive")
 })
 
 
 test_that("5.6.2 - Directives Are In Valid Locations", {
-
   "
   {
     dog {
@@ -40,7 +33,7 @@ test_that("5.6.2 - Directives Are In Valid Locations", {
     }
   }
   " %>%
-  expect_r6()
+    expect_r6()
 
   "
   query @skip(if: true) {
@@ -49,12 +42,10 @@ test_that("5.6.2 - Directives Are In Valid Locations", {
     }
   }
   " %>%
-  expect_err("directive: 'skip' is being used in a 'QUERY' situation.")
-
+    expect_err("directive: 'skip' is being used in a 'QUERY' situation.")
 })
 
 test_that("5.6.3 - Directives Are Unique Per Location", {
-
   "
   query {
     dog {
@@ -63,6 +54,5 @@ test_that("5.6.3 - Directives Are Unique Per Location", {
     }
   }
   " %>%
-  expect_err("found the following directives: 'skip', 'skip'")
-
+    expect_err("found the following directives: 'skip', 'skip'")
 })
