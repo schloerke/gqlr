@@ -16,5 +16,7 @@ lintr_cache
 ^docs$
 ^pkgdown$
 ^\.github$
+^revdep$
 ^CLAUDE\.md$
 ^\.claude$
+^CRAN-SUBMISSION$

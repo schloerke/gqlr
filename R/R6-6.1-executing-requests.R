@@ -51,9 +51,9 @@
 #' @param operation_name name of request operation to execute. If not value is
 #'   provided it will use the operation in the request string. If more than one
 #'   operations exist, an error will be produced.  See
-#'   <https://graphql.github.io/graphql-spec/October2016/#GetOperation()>
+#'   <https://spec.graphql.org/October2016/#GetOperation()>
 #' @param variables a named list containing variable values.
-#'   <https://graphql.github.io/graphql-spec/October2016/#sec-Language.Variables>
+#'   <https://spec.graphql.org/October2016/#sec-Language.Variables>
 #' @param initial_value default value for executing requests.  This value can
 #'   either be provided and/or combined with the resolve method of the query
 #'   root type or mutation root type.  The value provided should be a named list
@@ -61,7 +61,7 @@
 #'   value may be a function that returns a value of the field name type.
 #' @param ... ignored for paramter expansion
 #' @param verbose_errors logical to determine if error-like messages should be displayed when processing a request that finds unknown structures. Be default, this is only enabled when `verbose_errors = rlang::is_interactive()` is `TRUE`.
-#' @references <https://graphql.github.io/graphql-spec/October2016/#sec-Execution>
+#' @references <https://spec.graphql.org/October2016/#sec-Execution>
 #' @export
 #' @examples
 #' \donttest{
