@@ -3,8 +3,10 @@
 ## Authors
 
 - **[Barret Schloerke](http://schloerke.com)**. Author, maintainer.
+  [](https://orcid.org/0000-0001-9986-114X)
 
 - **Ryan Hafen**. Thesis advisor.
+  [](https://orcid.org/0000-0002-5516-8367)
 
 - **GraphQL**. Copyright holder.  
   http://spec.graphql.org/
