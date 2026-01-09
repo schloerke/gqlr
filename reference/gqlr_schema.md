@@ -158,7 +158,7 @@ all_characters <- list() %>% append(human_data) %>% append(droid_data) %>% print
 #> {
 #>     length(human$appearsIn)
 #> }
-#> <environment: 0x562fb0b6b390>
+#> <environment: 0x562ecba86bc0>
 #> 
 #> 
 #> $`1002`
@@ -182,7 +182,7 @@ all_characters <- list() %>% append(human_data) %>% append(droid_data) %>% print
 #> {
 #>     length(human$appearsIn)
 #> }
-#> <environment: 0x562fb0b66248>
+#> <environment: 0x562ecba85fb8>
 #> 
 #> 
 #> $`1003`
@@ -206,7 +206,7 @@ all_characters <- list() %>% append(human_data) %>% append(droid_data) %>% print
 #> {
 #>     length(human$appearsIn)
 #> }
-#> <environment: 0x562fb0b66de0>
+#> <environment: 0x562ecba851f0>
 #> 
 #> 
 #> $`2000`

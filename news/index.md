@@ -1,5 +1,7 @@
 # Changelog
 
+## gqlr 0.1.1
+
 ## gqlr 0.1.0
 
 ### Breaking changes
