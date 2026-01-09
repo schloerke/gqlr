@@ -2,8 +2,10 @@ Package: gqlr
 Title: 'GraphQL' Server in R
 Version: 0.1.0
 Authors@R: c(
-    person("Barret", "Schloerke", , "schloerke@gmail.com", role = c("aut", "cre")),
-    person("Ryan", "Hafen", , "rhafen@gmail.com", role = "ths"),
+    person("Barret", "Schloerke", , "schloerke@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9986-114X")),
+    person("Ryan", "Hafen", , "rhafen@gmail.com", role = "ths",
+           comment = c(ORCID = "0000-0002-5516-8367")),
     person("GraphQL", role = "cph",
            comment = "http://spec.graphql.org/")
   )
