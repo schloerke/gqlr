@@ -14,7 +14,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/schloerke/gqlr/blob/rc-v0.1.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/schloerke/gqlr/blob/main/DESCRIPTION)
 
 Schloerke B (2026). *gqlr: 'GraphQL' Server in R*. R package version
 0.1.0, <http://schloerke.com/gqlr/>.
