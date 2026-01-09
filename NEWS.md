@@ -1,4 +1,5 @@
-# gqlr 0.1.1
+# gqlr (development version)
+
 
 # gqlr 0.1.0
 
