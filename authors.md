@@ -17,12 +17,12 @@ Source:
 [`DESCRIPTION`](https://github.com/schloerke/gqlr/blob/main/DESCRIPTION)
 
 Schloerke B (2026). *gqlr: 'GraphQL' Server in R*. R package version
-0.1.1, <http://schloerke.com/gqlr/>.
+0.1.0.9000, <http://schloerke.com/gqlr/>.
 
     @Manual{,
       title = {gqlr: 'GraphQL' Server in R},
       author = {Barret Schloerke},
       year = {2026},
-      note = {R package version 0.1.1},
+      note = {R package version 0.1.0.9000},
       url = {http://schloerke.com/gqlr/},
     }
