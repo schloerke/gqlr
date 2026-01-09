@@ -14,13 +14,13 @@
 Source:
 [`DESCRIPTION`](https://github.com/schloerke/gqlr/blob/rc-v0.1.0/DESCRIPTION)
 
-Schloerke B (2025). *gqlr: 'GraphQL' Server in R*. R package version
+Schloerke B (2026). *gqlr: 'GraphQL' Server in R*. R package version
 0.1.0, <http://schloerke.com/gqlr/>.
 
     @Manual{,
       title = {gqlr: 'GraphQL' Server in R},
       author = {Barret Schloerke},
-      year = {2025},
+      year = {2026},
       note = {R package version 0.1.0},
       url = {http://schloerke.com/gqlr/},
     }
