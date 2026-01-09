@@ -19,3 +19,4 @@ lintr_cache
 ^revdep$
 ^CLAUDE\.md$
 ^\.claude$
+^CRAN-SUBMISSION$
