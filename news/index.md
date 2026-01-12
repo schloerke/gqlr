@@ -4,6 +4,8 @@
 
 ## gqlr 0.1.0
 
+CRAN release: 2026-01-09
+
 ### Breaking changes
 
 - [`execute_request()`](http://schloerke.com/gqlr/reference/execute_request.md)
