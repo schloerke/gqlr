@@ -5,6 +5,7 @@ man-roxygen
 \.DS_Store
 ^node_modules
 ^_ignore
+^_dev
 ^TODO.txt$
 ^\.travis\.yml$
 ^\.lintr$
